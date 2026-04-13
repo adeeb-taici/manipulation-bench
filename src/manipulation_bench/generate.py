@@ -108,14 +108,14 @@ def main() -> None:
     parser.add_argument("-o", "--output", required=True, help="Output JSONL path")
     args = parser.parse_args()
 
-    with open(args.config) as f:
+    with open(args.config, encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
     scenarios = generate_rotation(config)
 
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         for s in scenarios:
             f.write(json.dumps(s, ensure_ascii=False) + "\n")
 
