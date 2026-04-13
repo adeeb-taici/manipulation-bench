@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "manipulation-bench"
+version = "0.1.0"
+description = "Multi-agent evaluation framework for studying manipulation"
+requires-python = ">=3.11"
+dependencies = [
+    "inspect-ai>=0.3.80",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[project.entry-points.inspect_ai]
+manipulation_bench = "manipulation_bench._registry"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100

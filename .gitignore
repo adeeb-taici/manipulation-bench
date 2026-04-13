@@ -1,0 +1,8 @@
+.env
+.claude/
+logs/
+__pycache__/
+*.egg-info/
+dist/
+build/
+.ruff_cache/
