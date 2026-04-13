@@ -9,6 +9,7 @@ description = "Multi-agent evaluation framework for studying manipulation"
 requires-python = ">=3.11"
 dependencies = [
     "inspect-ai>=0.3.80",
+    "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
