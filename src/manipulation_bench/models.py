@@ -34,7 +34,7 @@ class ScenarioConfig(BaseModel, frozen=True):
     agents: list[AgentRole]
     protocol: str = "round_robin"
     num_rounds: int = 3
-    visibility: str = "full"  # "full" | "own_role"
+    visibility: str | dict[str, list[str]] = "all_to_all"
     max_tokens: int = 2048
     judge_prompt: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
@@ -51,9 +51,31 @@ class InteractionState(StoreModel):
     def turns_for_agent(self, agent_name: str) -> list[Turn]:
         return [t for t in self.turns if t.speaker == agent_name]
 
-    def turns_visible_to(self, agent_name: str, visibility: str) -> list[Turn]:
-        if visibility == "full":
+    def turns_visible_to(
+        self, agent_name: str, visibility: str | dict[str, list[str]]
+    ) -> list[Turn]:
+        # String shortcuts
+        if isinstance(visibility, str):
+            if visibility in ("all_to_all", "full"):
+                return list(self.turns)
+            if visibility == "isolated":
+                return [t for t in self.turns if t.speaker == agent_name]
+            if visibility == "hub_spoke":
+                # First agent in agent_names is the hub, sees everyone.
+                # Others only see the hub and themselves.
+                hub = self.agent_names[0] if self.agent_names else None
+                if agent_name == hub:
+                    return list(self.turns)
+                return [
+                    t for t in self.turns
+                    if t.speaker == agent_name or t.speaker == hub
+                ]
+            # Unknown string — default to all_to_all
             return list(self.turns)
-        if visibility == "own_role":
-            return [t for t in self.turns if t.speaker == agent_name]
-        return list(self.turns)
+
+        # Explicit adjacency dict: {"agent_a": ["agent_b", "agent_c"], ...}
+        visible_speakers = set(visibility.get(agent_name, []))
+        visible_speakers.add(agent_name)  # always see your own turns
+        if "*" in visible_speakers:
+            return list(self.turns)
+        return [t for t in self.turns if t.speaker in visible_speakers]
