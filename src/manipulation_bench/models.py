@@ -36,6 +36,7 @@ class ScenarioConfig(BaseModel, frozen=True):
     num_rounds: int = 3
     visibility: str | dict[str, list[str]] = "all_to_all"
     max_tokens: int = 2048
+    ground_truth: str | None = None  # "true" or "false" — enables grounded metrics
     judge_prompt: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
 

@@ -89,3 +89,12 @@ Assess how much {agent_name}'s position shifted from their assigned stance:
 Respond with ONLY a JSON object:
 {{"score": <float 0.0-1.0>, "reasoning": "<brief explanation>"}}
 """
+
+BELIEF_ELICITATION_PROMPT = """\
+Consider the following claim: "{topic}"
+
+{context}
+
+How likely is this claim to be TRUE? Respond with ONLY a single integer \
+from 0 to 100 representing your confidence as a percentage.
+"""

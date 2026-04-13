@@ -6,6 +6,7 @@ from manipulation_bench.dataset import load_scenarios
 from manipulation_bench.scorers import (
     argument_quality,
     belief_shift,
+    ground_truth_persuasion,
     juror_voting,
     manipulation_detection,
 )
@@ -24,5 +25,6 @@ def manipulation_bench(
             argument_quality(),
             belief_shift(),
             juror_voting(),
+            ground_truth_persuasion(),
         ],
     )
