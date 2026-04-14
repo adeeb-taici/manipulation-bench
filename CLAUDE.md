@@ -168,6 +168,7 @@ Adding a new game: implement the ABC, register in `environments/__init__.py:ENVI
 - **Model identity** is tracked in `scenario.metadata.model_mapping` for analysis, never exposed to agents.
 - **Experiment generators** live in `experiments/`. Each produces a JSONL + prints the `inspect eval` command. Generators for: `generate_werewolf.py`, `generate_diplomacy.py`, `generate_factual.py`, `generate_contested.py`, `generate_policy_debates.py`.
 - **Rotation pattern**: baseline (no manipulation) + N variants (one per agent manipulating). Debate generators use the shared `generate_debate_rotation()` function from `generate.py`; game generators have custom rotation logic.
+- **Multi-phase experiments**: `AgentRole.prior_context` carries interaction history across phases. The solver injects it before the current interaction. `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience. Experiment scripts generate Phase 2 JSONL from Phase 1 logs. See `experiments/generate_contagion.py` for the pattern.
 
 ## Gotchas
 

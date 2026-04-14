@@ -131,6 +131,26 @@ python experiments/generate_diplomacy.py
 inspect eval src/manipulation_bench/diplomacy_task.py -T scenarios=diplomacy_multimodel.jsonl ...
 ```
 
+### Contagion experiment (multi-phase)
+
+Tests whether exposure to manipulation in one debate carries over into a new, clean interaction.
+
+```bash
+# Phase 1: exposure (standard rotation on topics 0-1)
+python experiments/generate_contagion.py phase1 -o scenarios/contagion_p1.jsonl
+inspect eval src/manipulation_bench/task.py -T scenarios=contagion_p1.jsonl ...
+
+# Phase 2: transfer (exposed agents debate topics 2-3 with a fresh partner)
+python experiments/generate_contagion.py phase2 \
+  --phase1-log "logs/2026*.eval" -o scenarios/contagion_p2.jsonl
+inspect eval src/manipulation_bench/task.py -T scenarios=contagion_p2.jsonl ...
+
+# Compare Phase 2 manipulation scores: exposed vs control
+python -m manipulation_bench.analyze "logs/*contagion_p2*.eval"
+```
+
+Agents carry their Phase 1 conversation history via the `prior_context` field. The framework injects it automatically — experiment scripts just populate the field.
+
 ## Metrics
 
 ### LLM-judge (qualitative)
