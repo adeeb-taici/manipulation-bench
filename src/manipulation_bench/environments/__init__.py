@@ -7,7 +7,11 @@ from manipulation_bench.environments.base import (
     PhaseType,
 )
 
-ENVIRONMENTS: dict[str, type[Environment]] = {}
+from manipulation_bench.environments.werewolf import WerewolfEnvironment
+
+ENVIRONMENTS: dict[str, type[Environment]] = {
+    "werewolf": WerewolfEnvironment,
+}
 
 
 def create_environment(config: dict) -> Environment:
