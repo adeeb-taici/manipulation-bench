@@ -13,6 +13,7 @@ class AgentRole(BaseModel, frozen=True):
     model_role: str
     system_prompt: str
     position: str | None = None
+    prior_context: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 

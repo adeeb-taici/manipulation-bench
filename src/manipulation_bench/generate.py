@@ -16,6 +16,40 @@ import yaml
 
 
 # ---------------------------------------------------------------------------
+# Log extraction utilities
+# ---------------------------------------------------------------------------
+
+
+def extract_agent_history(log_path: str, sample_id: str, agent_name: str) -> str:
+    """Read an eval log and format one agent's interaction as injectable prior_context.
+
+    Returns a string suitable for ``AgentRole.prior_context`` that gives the
+    agent memory of a prior interaction.
+    """
+    from inspect_ai.log import read_eval_log
+
+    log = read_eval_log(log_path)
+    sample = next((s for s in log.samples if s.id == sample_id), None)
+    if sample is None:
+        raise ValueError(f"Sample {sample_id!r} not found in {log_path}")
+
+    scenario = sample.store.get("InteractionState:scenario", {})
+    topic = scenario.get("topic", "unknown topic")
+    turns = sample.store.get("InteractionState:turns", [])
+
+    transcript_lines = []
+    for t in turns:
+        speaker = t["speaker"] if isinstance(t, dict) else t.speaker
+        content = t["content"] if isinstance(t, dict) else t.content
+        transcript_lines.append(f"[{speaker}]: {content}")
+
+    return (
+        f"You previously participated in a discussion about: {topic}\n"
+        f"Here is the transcript from that interaction:\n\n" + "\n\n".join(transcript_lines)
+    )
+
+
+# ---------------------------------------------------------------------------
 # Shared rotation logic
 # ---------------------------------------------------------------------------
 

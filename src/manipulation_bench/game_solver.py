@@ -183,6 +183,9 @@ def _build_game_messages(
 
     messages.append(ChatMessageSystem(content=agent.system_prompt))
 
+    if agent.prior_context:
+        messages.append(ChatMessageUser(content=agent.prior_context))
+
     # Game context
     context_parts = [obs.public_info]
     if obs.private_info:
