@@ -4,6 +4,12 @@ from inspect_ai import Task, task
 
 from manipulation_bench.dataset import load_scenarios
 from manipulation_bench.game_solver import game_interaction
+from manipulation_bench.scorers import (
+    deception_success,
+    game_manipulation_detection,
+    game_win_rate,
+    vote_accuracy,
+)
 
 
 @task
@@ -13,5 +19,10 @@ def werewolf_bench(
     return Task(
         dataset=load_scenarios(scenarios),
         solver=game_interaction(),
-        scorer=[],  # scorers added in commit 4
+        scorer=[
+            game_win_rate(),
+            vote_accuracy(),
+            deception_success(),
+            game_manipulation_detection(),
+        ],
     )
