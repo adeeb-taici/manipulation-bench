@@ -10,9 +10,15 @@ from manipulation_bench.scorers.social_deduction import (
     game_win_rate,
     vote_accuracy,
 )
+from manipulation_bench.scorers.negotiation import (
+    agreement_compliance,
+    negotiation_manipulation,
+    territorial_success,
+)
 from manipulation_bench.scorers.voting import juror_voting
 
 __all__ = [
+    "agreement_compliance",
     "argument_quality",
     "belief_shift",
     "deception_success",
@@ -21,5 +27,7 @@ __all__ = [
     "ground_truth_persuasion",
     "juror_voting",
     "manipulation_detection",
+    "negotiation_manipulation",
+    "territorial_success",
     "vote_accuracy",
 ]
