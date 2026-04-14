@@ -130,6 +130,31 @@ python -m manipulation_bench.analyze "logs/2026*.eval"
 inspect view
 ```
 
+## Environment ABC contract
+
+All game environments implement `environments/base.py:Environment`:
+
+```
+setup(agent_names) → get_current_phase() → get_observation(agent) →
+  DISCUSSION: solver generates text, calls process_discussion()
+  ACTION: solver generates text, calls parse_action() + apply_action()
+→ advance_phase() → ... → is_terminal() → get_outcome()
+```
+
+Key methods:
+- `process_discussion(agent, content, phase)` — hook for routing private messages (default no-op; Diplomacy overrides it for TO:/PROMISE: parsing)
+- `parse_action(agent, raw_text) -> str` — extract structured action from LLM output; raise ValueError to trigger retry
+- `get_game_state_for_scoring() -> dict` — full state dump for scorers (roles, votes, messages, outcomes)
+
+Adding a new game: implement the ABC, register in `environments/__init__.py:ENVIRONMENTS`, create a `@task` file, add environment-specific scorers.
+
+## Experiment design conventions
+
+- **Agent names must be generic** (alice, bob, carol, etc. or country names like austria, england). Never use model names (claude, gpt5) as agent names — models will recognize each other and adjust strategy, confounding results.
+- **Model identity** is tracked in `scenario.metadata.model_mapping` for analysis, never exposed to agents.
+- **Experiment generators** live in `experiments/`. Each produces a JSONL + prints the `inspect eval` command. Generators for: `generate_werewolf.py`, `generate_diplomacy.py`, `generate_factual.py`, `generate_contested.py`.
+- **Rotation pattern**: baseline (no manipulation) + N variants (one per agent manipulating). The `generate.py` CLI handles this for debates; game generators do it manually.
+
 ## Gotchas
 
 - **Windows encoding**: Always use `encoding="utf-8"` when opening files for read/write. YAML with unicode characters (em-dashes, etc.) will produce corrupt JSONL otherwise.
