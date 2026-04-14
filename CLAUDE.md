@@ -57,7 +57,9 @@ Agent roles (name, model, system prompt, position) are defined per-scenario in J
 
 ### Unified solver (`game_solver.py`)
 
-All environments (including debates) use a single phase-aware solver. **DISCUSSION** phases let agents talk (free-form messages routed by the environment). **ACTION** phases require agents to submit structured moves, with retry logic for invalid submissions. The `process_discussion()` hook lets environments process private messages — for example, Diplomacy uses it to route `TO:<name>:` prefixed messages to specific powers and extract `PROMISE: <order>` tags for promise tracking.
+All environments (including debates) use a single phase-aware solver. **DISCUSSION** phases let agents talk (free-form text + optional tool calls). **ACTION** phases require agents to submit structured moves via Inspect AI tool calls, with retry logic for invalid submissions.
+
+Tool calling: environments expose `get_tools(agent, phase)` returning `ToolInfo` schemas with `enum` constraints for valid targets. The solver passes these to `model.generate(tools=..., tool_choice=...)`. ACTION phases use `tool_choice="any"` (must call a tool); Diplomacy DISCUSSION uses `"auto"` (messaging tools are optional). Tool call results are converted to actions via `tool_calls_to_action()` or routed via `process_tool_calls()` (Diplomacy message/promise routing).
 
 The solver injects `scenario.topic`, agent positions, `num_rounds`, and `visibility` into the environment config for backward compatibility with debate scenarios that predate the environment system.
 
@@ -104,7 +106,7 @@ The `generate.py` CLI automates this from a YAML config. Custom generator script
 
 Game environments follow a phase loop (DISCUSSION then ACTION) and produce game-specific metrics rather than debate metrics. Werewolf games run via `game_task.py`; Diplomacy games run via `diplomacy_task.py`.
 
-Diplomacy has a dedicated promise-tracking system: messages use `TO:<name>:` format for private routing (multiple recipients per message are supported — the content is split by `TO:` markers). `PROMISE: <order>` tags are machine-parseable. The `agreement_compliance` scorer computes kept/total promises per agent as a hard mathematical metric (no LLM judge needed).
+Diplomacy has a dedicated promise-tracking system using tool calls: `send_message(recipient, content)` routes private messages between powers, and `make_promise(recipient, order)` records commitments. The `agreement_compliance` scorer computes kept/total promises per agent as a hard mathematical metric (no LLM judge needed).
 
 ### Analysis pipeline
 
@@ -145,14 +147,17 @@ All environments (including debate) implement `environments/base.py:Environment`
 
 ```
 setup(agent_names) → get_current_phase() → get_observation(agent) →
-  DISCUSSION: solver generates text, calls process_discussion()
-  ACTION: solver generates text, calls parse_action() + apply_action()
+  DISCUSSION: solver generates text with tools, calls process_tool_calls() + process_discussion()
+  ACTION: solver generates tool calls, calls tool_calls_to_action() + apply_action()
 → advance_phase() → ... → is_terminal() → get_outcome()
 ```
 
 Key methods:
-- `process_discussion(agent, content, phase)` — hook for routing private messages (default no-op; Diplomacy overrides it to split by `TO:<name>:` markers and extract `PROMISE:` tags; Debate uses it to track first-turn status)
-- `parse_action(agent, raw_text) -> str` — extract structured action from LLM output; raise ValueError to trigger retry
+- `get_tools(agent, phase) -> list[ToolInfo]` — tool schemas for this agent/phase (default: empty; Werewolf returns kill/investigate/vote; Diplomacy returns submit_orders or send_message/make_promise)
+- `get_tool_choice(phase) -> str | None` — `"any"` for ACTION, `None` for DISCUSSION (Diplomacy overrides to `"auto"` for DISCUSSION)
+- `tool_calls_to_action(agent, tool_calls) -> str` — convert tool calls to action string; raise ValueError to trigger retry
+- `process_tool_calls(agent, tool_calls, phase) -> list[str]` — handle DISCUSSION tool calls (Diplomacy message routing, promise recording)
+- `process_discussion(agent, content, phase)` — non-tool text processing (default no-op; Debate uses it to track first-turn status)
 - `get_game_state_for_scoring() -> dict` — full state dump for scorers (roles, votes, messages, outcomes)
 
 Adding a new game: implement the ABC, register in `environments/__init__.py:ENVIRONMENTS`, create a `@task` file, add environment-specific scorers.

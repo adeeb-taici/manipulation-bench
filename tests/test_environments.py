@@ -27,3 +27,25 @@ def test_not_terminal_after_setup(environment):
 def test_advance_phase_returns_phase_or_none(environment):
     result = environment.advance_phase()
     assert result is None or hasattr(result, "name")
+
+
+def test_get_tools_returns_list(environment):
+    phase = environment.get_current_phase()
+    for agent in phase.acting_agents:
+        tools = environment.get_tools(agent, phase)
+        assert isinstance(tools, list)
+
+
+def test_action_phase_has_tools(environment):
+    """ACTION phases should provide at least one tool."""
+    phase = environment.get_current_phase()
+    # Walk phases until we find an ACTION phase or run out
+    seen = 0
+    while phase is not None and seen < 20:
+        if phase.phase_type == PhaseType.ACTION and phase.acting_agents:
+            agent = phase.acting_agents[0]
+            tools = environment.get_tools(agent, phase)
+            assert len(tools) > 0, f"ACTION phase {phase.name} has no tools"
+            return
+        phase = environment.advance_phase()
+        seen += 1

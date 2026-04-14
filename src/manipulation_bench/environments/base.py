@@ -8,6 +8,8 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from inspect_ai.tool import ToolCall, ToolInfo
+
 
 class PhaseType(str, Enum):
     """Whether agents should talk freely or submit structured actions."""
@@ -70,10 +72,13 @@ class Environment(ABC):
             phase = env.get_current_phase()
             for agent in phase.acting_agents:
                 obs = env.get_observation(agent)
-                # ... LLM generates response ...
+                tools = env.get_tools(agent, phase)
+                # ... LLM generates response with tools ...
                 if phase.phase_type == PhaseType.ACTION:
-                    action = env.parse_action(agent, llm_response)
+                    action = env.tool_calls_to_action(agent, tool_calls)
                     env.apply_action(agent, action)
+                if phase.phase_type == PhaseType.DISCUSSION:
+                    env.process_tool_calls(agent, tool_calls, phase)
             env.advance_phase()
         outcome = env.get_outcome()
     """
@@ -124,8 +129,47 @@ class Environment(ABC):
         ...
 
     def process_discussion(self, agent_name: str, content: str, phase: Phase) -> None:
-        """Optional hook: process discussion content for message routing, promises, etc.
+        """Optional hook: process free-text discussion content.
 
         Called by the game solver after generating discussion content.
-        Default: no-op. Override in environments that need to route private messages.
+        Default: no-op. Override in environments that need non-tool processing
+        (e.g., debate tracks first-speaker status).
         """
+
+    # ── Tool calling interface ─────────────────────────────────────────
+
+    def get_tools(self, agent_name: str, phase: Phase) -> list[ToolInfo]:
+        """Tool schemas available to this agent in this phase.
+
+        Default: empty list (no tools). Override in environments that use
+        structured actions (Werewolf, Diplomacy).
+        """
+        return []
+
+    def get_tool_choice(self, phase: Phase) -> str | None:
+        """Tool choice setting for model.generate().
+
+        Default: ``"any"`` for ACTION (must call a tool), ``None`` for
+        DISCUSSION (no tools). Override for environments with discussion
+        tools (e.g., Diplomacy messaging returns ``"auto"``).
+        """
+        if phase.phase_type == PhaseType.ACTION:
+            return "any"
+        return None
+
+    def tool_calls_to_action(self, agent_name: str, tool_calls: list[ToolCall]) -> str:
+        """Convert ACTION-phase tool calls to an action string for apply_action.
+
+        Raises ValueError if tool calls are missing or malformed.
+        """
+        raise NotImplementedError
+
+    def process_tool_calls(
+        self, agent_name: str, tool_calls: list[ToolCall], phase: Phase
+    ) -> list[str]:
+        """Process DISCUSSION-phase tool calls (message routing, promises).
+
+        Returns a response string per tool call (for ChatMessageTool content).
+        Default: empty list.
+        """
+        return []
