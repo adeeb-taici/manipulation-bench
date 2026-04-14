@@ -36,13 +36,8 @@ def detect_environment(log: EvalLog) -> str:
     """
     scorer_names: set[str] = set()
 
-    # Primary: check log.results.scores (list of score objects with .name attr)
-    if log.results and log.results.scores:
-        for score_obj in log.results.scores:
-            scorer_names.add(score_obj.name)
-
-    # Fallback: inspect the first sample's scores dict
-    if not scorer_names and log.samples:
+    # Most reliable: check the first sample's scores dict keys
+    if log.samples:
         scorer_names = set(log.samples[0].scores.keys())
 
     if scorer_names & _WEREWOLF_SCORERS:
