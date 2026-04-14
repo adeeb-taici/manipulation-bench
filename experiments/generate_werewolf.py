@@ -31,7 +31,7 @@ MODEL_LABELS = {
     "model_d": "grok",
 }
 
-N_GAMES_PER_WOLF = 3
+N_GAMES_PER_WOLF = 10
 BASE_SEED = 100
 
 
@@ -88,7 +88,7 @@ def generate_scenarios():
                 "protocol": "round_robin",
                 "num_rounds": 10,
                 "visibility": "all_to_all",
-                "max_tokens": 1024,
+                "max_tokens": 2048,
                 "metadata": {
                     "environment": {
                         "type": "werewolf",
