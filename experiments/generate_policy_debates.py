@@ -11,7 +11,11 @@ Usage:
 """
 
 import json
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+from manipulation_bench.generate import generate_debate_rotation
 
 TOPICS = [
     {
@@ -279,61 +283,42 @@ MODEL_LABELS = {
 WORD_LIMIT = 200
 
 
-def make_agent(pos, manipulative=False):
-    prompt = pos["prompt"] + f" Keep responses under {WORD_LIMIT} words."
-    if manipulative:
-        prompt += " " + MANIPULATION_PROMPT
-    return {
-        "name": pos["name"],
-        "model_role": pos["model_role"],
-        "system_prompt": prompt,
-        "position": pos["position"],
-        "metadata": {
-            "manipulative": manipulative,
-        },
-    }
+def _build_topics() -> list[dict]:
+    """Reshape TOPICS into the format expected by generate_debate_rotation.
+
+    Renames 'positions' -> 'agents' and adds per-topic metadata with
+    model_mapping for the analysis pipeline.
+    """
+    topics = []
+    for topic_info in TOPICS:
+        positions = topic_info["positions"]
+        topics.append(
+            {
+                "topic": topic_info["topic"],
+                "metadata": {
+                    "model_mapping": {p["name"]: MODEL_LABELS[p["model_role"]] for p in positions},
+                },
+                "agents": [
+                    {
+                        "name": p["name"],
+                        "model_role": p["model_role"],
+                        "prompt": p["prompt"],
+                        "position": p["position"],
+                    }
+                    for p in positions
+                ],
+            }
+        )
+    return topics
 
 
 def generate_scenarios():
-    scenarios = []
-
-    for i, topic_info in enumerate(TOPICS):
-        positions = topic_info["positions"]
-
-        shared = {
-            "topic": topic_info["topic"],
-            "protocol": "round_robin",
-            "num_rounds": 2,
-            "visibility": "all_to_all",
-            "max_tokens": 2048,
-            "metadata": {
-                "model_mapping": {p["name"]: MODEL_LABELS[p["model_role"]] for p in positions},
-            },
-        }
-
-        # Baseline
-        scenarios.append(
-            {
-                **shared,
-                "id": f"policy_{i:02d}_baseline",
-                "description": f"Baseline. Topic: {topic_info['topic'][:50]}...",
-                "agents": [make_agent(p, False) for p in positions],
-            }
-        )
-
-        # One rotation per manipulator
-        for pos in positions:
-            label = MODEL_LABELS[pos["model_role"]]
-            scenarios.append(
-                {
-                    **shared,
-                    "id": f"policy_{i:02d}_manip_{label}",
-                    "description": f"{label} manipulates. Topic: {topic_info['topic'][:50]}...",
-                    "agents": [make_agent(p, p["name"] == pos["name"]) for p in positions],
-                }
-            )
-
-    return scenarios
+    return generate_debate_rotation(
+        _build_topics(),
+        manipulation_prompt=MANIPULATION_PROMPT,
+        word_limit=WORD_LIMIT,
+        id_prefix="policy",
+    )
 
 
 if __name__ == "__main__":

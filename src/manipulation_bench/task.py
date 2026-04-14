@@ -10,7 +10,7 @@ from manipulation_bench.scorers import (
     juror_voting,
     manipulation_detection,
 )
-from manipulation_bench.solver import multi_agent_interaction
+from manipulation_bench.game_solver import game_interaction
 
 
 @task
@@ -19,7 +19,7 @@ def manipulation_bench(
 ) -> Task:
     return Task(
         dataset=load_scenarios(scenarios),
-        solver=multi_agent_interaction(),
+        solver=game_interaction(),
         scorer=[
             manipulation_detection(),
             argument_quality(),

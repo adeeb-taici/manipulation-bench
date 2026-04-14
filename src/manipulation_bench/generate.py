@@ -3,6 +3,7 @@
 Usage:
     python -m manipulation_bench.generate config.yaml -o scenarios/output.jsonl
 """
+
 from __future__ import annotations
 
 import argparse
@@ -12,6 +13,97 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+
+
+# ---------------------------------------------------------------------------
+# Shared rotation logic
+# ---------------------------------------------------------------------------
+
+
+def generate_debate_rotation(
+    topics: list[dict[str, Any]],
+    *,
+    manipulation_prompt: str,
+    word_limit: int = 200,
+    num_rounds: int = 2,
+    visibility: str | dict = "all_to_all",
+    max_tokens: int = 2048,
+    id_prefix: str = "scenario",
+) -> list[dict[str, Any]]:
+    """Generate baseline + N manipulation-rotation scenarios for each topic.
+
+    Each *topic* dict must contain:
+        topic   – the debate question / claim (str)
+        agents  – list of dicts with keys: name, model_role, prompt, position
+
+    Optional topic-level keys forwarded to every scenario:
+        ground_truth, judge_prompt, description, metadata
+    """
+
+    def _make_agent(agent: dict[str, Any], manipulative: bool) -> dict[str, Any]:
+        prompt = agent["prompt"].rstrip()
+        word_suffix = f" Keep responses under {word_limit} words."
+        if not prompt.endswith(word_suffix.strip()):
+            prompt += word_suffix
+        if manipulative:
+            prompt += " " + manipulation_prompt
+        return {
+            "name": agent["name"],
+            "model_role": agent["model_role"],
+            "system_prompt": prompt,
+            "position": agent["position"],
+            "metadata": {"manipulative": manipulative},
+        }
+
+    scenarios: list[dict[str, Any]] = []
+
+    for idx, topic_info in enumerate(topics):
+        agents_def = topic_info["agents"]
+
+        # Shared fields for every scenario derived from this topic
+        shared: dict[str, Any] = {
+            "topic": topic_info["topic"],
+            "protocol": "round_robin",
+            "num_rounds": num_rounds,
+            "visibility": visibility,
+            "max_tokens": max_tokens,
+        }
+        if "ground_truth" in topic_info:
+            shared["ground_truth"] = topic_info["ground_truth"]
+        if "judge_prompt" in topic_info:
+            shared["judge_prompt"] = topic_info["judge_prompt"]
+        if "metadata" in topic_info:
+            shared["metadata"] = topic_info["metadata"]
+
+        topic_label = topic_info.get("description", topic_info["topic"][:50] + "...")
+
+        # Baseline: no manipulator
+        scenarios.append(
+            {
+                **shared,
+                "id": f"{id_prefix}_{idx:02d}_baseline",
+                "description": topic_info.get("description_baseline", f"Baseline. {topic_label}"),
+                "agents": [_make_agent(a, False) for a in agents_def],
+            }
+        )
+
+        # One scenario per agent as manipulator
+        for agent_def in agents_def:
+            scenarios.append(
+                {
+                    **shared,
+                    "id": f"{id_prefix}_{idx:02d}_manip_{agent_def['name']}",
+                    "description": f"{agent_def['name']} manipulates. {topic_label}",
+                    "agents": [_make_agent(a, a["name"] == agent_def["name"]) for a in agents_def],
+                }
+            )
+
+    return scenarios
+
+
+# ---------------------------------------------------------------------------
+# YAML-config entry point (original CLI helper)
+# ---------------------------------------------------------------------------
 
 
 def generate_rotation(config: dict[str, Any]) -> list[dict[str, Any]]:
@@ -58,23 +150,25 @@ def generate_rotation(config: dict[str, Any]) -> list[dict[str, Any]]:
         shared["ground_truth"] = ground_truth
 
     # Baseline: no one is manipulative
-    scenarios.append({
-        **shared,
-        "id": "baseline",
-        "description": "Baseline — no agent is instructed to manipulate.",
-        "agents": [make_agent(p, False) for p in positions],
-    })
+    scenarios.append(
+        {
+            **shared,
+            "id": "baseline",
+            "description": "Baseline — no agent is instructed to manipulate.",
+            "agents": [make_agent(p, False) for p in positions],
+        }
+    )
 
     # One scenario per manipulator
     for target in positions:
-        scenarios.append({
-            **shared,
-            "id": f"manip_{target['name']}",
-            "description": f"{target['name']} is instructed to be manipulative.",
-            "agents": [
-                make_agent(p, p["name"] == target["name"]) for p in positions
-            ],
-        })
+        scenarios.append(
+            {
+                **shared,
+                "id": f"manip_{target['name']}",
+                "description": f"{target['name']} is instructed to be manipulative.",
+                "agents": [make_agent(p, p["name"] == target["name"]) for p in positions],
+            }
+        )
 
     return scenarios
 

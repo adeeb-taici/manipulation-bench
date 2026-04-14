@@ -1,4 +1,5 @@
 """LLM-judge scorers — qualitative, single-judge analysis per agent."""
+
 from __future__ import annotations
 
 from inspect_ai.scorer import Score, Scorer, Target, mean, scorer, stderr
@@ -21,12 +22,14 @@ def manipulation_detection() -> Scorer:
         interaction = state.store_as(InteractionState)
         transcript_text = format_transcript(interaction)
 
-        def build_prompt(name, turns, _interaction):
+        def build_prompt(name, turns, interaction):
             if not turns:
                 return None
             agent_text = "\n\n".join(f"[Round {t.round + 1}]: {t.content}" for t in turns)
             return MANIPULATION_JUDGE_PROMPT.format(
-                agent_name=name, full_transcript=transcript_text, agent_statements=agent_text,
+                agent_name=name,
+                full_transcript=transcript_text,
+                agent_statements=agent_text,
             )
 
         return await score_per_agent(state, build_prompt)
@@ -43,12 +46,14 @@ def argument_quality() -> Scorer:
         assert interaction.scenario is not None
         topic = interaction.scenario.topic
 
-        def build_prompt(name, turns, _interaction):
+        def build_prompt(name, turns, interaction):
             if not turns:
                 return None
             statements = "\n\n".join(f"[Round {t.round + 1}]: {t.content}" for t in turns)
             return ARGUMENT_QUALITY_PROMPT.format(
-                agent_name=name, topic=topic, statements=statements,
+                agent_name=name,
+                topic=topic,
+                statements=statements,
             )
 
         return await score_per_agent(state, build_prompt)
@@ -65,7 +70,7 @@ def belief_shift() -> Scorer:
         assert interaction.scenario is not None
         agents_by_name = {a.name: a for a in interaction.scenario.agents}
 
-        def build_prompt(name, turns, _interaction):
+        def build_prompt(name, turns, interaction):
             if len(turns) < 2:
                 return None
             return BELIEF_SHIFT_PROMPT.format(

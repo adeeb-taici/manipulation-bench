@@ -3,14 +3,55 @@
 Usage:
     python -m manipulation_bench.analyze logs/2026-04-13*.eval
 """
+
 from __future__ import annotations
 
 import argparse
 import glob
 import sys
+from collections import defaultdict
 from typing import Any
 
 from inspect_ai.log import EvalLog, EvalLogInfo, read_eval_log
+
+
+# ---------------------------------------------------------------------------
+# Environment detection
+# ---------------------------------------------------------------------------
+
+_WEREWOLF_SCORERS = {
+    "game_win_rate",
+    "vote_accuracy",
+    "deception_success",
+    "game_manipulation_detection",
+}
+_DIPLOMACY_SCORERS = {"territorial_success", "agreement_compliance", "negotiation_manipulation"}
+_DEBATE_SCORERS = {"manipulation_detection", "argument_quality", "belief_shift"}
+
+
+def detect_environment(log: EvalLog) -> str:
+    """Detect the environment type from scorer names present in the eval log.
+
+    Returns one of ``"werewolf"``, ``"diplomacy"``, ``"debate"``, or ``"unknown"``.
+    """
+    scorer_names: set[str] = set()
+
+    # Primary: check log.results.scores (list of score objects with .name attr)
+    if log.results and log.results.scores:
+        for score_obj in log.results.scores:
+            scorer_names.add(score_obj.name)
+
+    # Fallback: inspect the first sample's scores dict
+    if not scorer_names and log.samples:
+        scorer_names = set(log.samples[0].scores.keys())
+
+    if scorer_names & _WEREWOLF_SCORERS:
+        return "werewolf"
+    if scorer_names & _DIPLOMACY_SCORERS:
+        return "diplomacy"
+    if scorer_names & _DEBATE_SCORERS:
+        return "debate"
+    return "unknown"
 
 
 def find_manipulator(sample: Any) -> str | None:
@@ -134,9 +175,7 @@ def print_susceptibility(results: dict[str, Any]) -> None:
     print(f"\n{'=' * 72}")
     print(f"  SUSCEPTIBILITY (baseline vs under manipulation pressure)")
     print(f"{'=' * 72}")
-    print(
-        f"{'Model':<18} {'Contagion':>12} {'Quality Drop':>14} {'Belief Shift':>14}"
-    )
+    print(f"{'Model':<18} {'Contagion':>12} {'Quality Drop':>14} {'Belief Shift':>14}")
     print(f"{'':18} {'(manip delta)':>12} {'(qual delta)':>14} {'(shift delta)':>14}")
     print("-" * 60)
 
@@ -172,6 +211,195 @@ def print_susceptibility(results: dict[str, Any]) -> None:
     print("  Belief Shift: + means agent shifted position MORE under pressure")
 
 
+# ---------------------------------------------------------------------------
+# Werewolf analysis
+# ---------------------------------------------------------------------------
+
+
+def _get_sample_meta(sample: Any) -> dict[str, Any]:
+    """Return the scenario metadata dict from a log sample's store."""
+    scenario = sample.store.get("InteractionState:scenario", {})
+    return scenario.get("metadata", {})
+
+
+def analyze_werewolf(log: EvalLog) -> None:
+    """Print Werewolf game analysis: win rates, deception, vote accuracy by role and model."""
+    samples = log.samples or []
+    if not samples:
+        print("No samples found in log.")
+        return
+
+    # Accumulators keyed by role and by model
+    wins_by_role: dict[str, list[float]] = defaultdict(list)
+    wins_by_model: dict[str, list[float]] = defaultdict(list)
+    deception_by_model: dict[str, list[float]] = defaultdict(list)
+    vote_acc_by_model: dict[str, list[float]] = defaultdict(list)
+
+    for sample in samples:
+        meta = _get_sample_meta(sample)
+        game_state = meta.get("game_state", {})
+        game_outcome = meta.get("game_outcome", {})
+        model_mapping = meta.get("model_mapping", {})
+        roles = game_state.get("roles", {})
+        outcome_scores = game_outcome.get("scores", {})
+
+        # Also pull scorer values from sample.scores for deception/vote_accuracy
+        deception_scores: dict[str, float] = {}
+        vote_acc_scores: dict[str, float] = {}
+        if "deception_success" in sample.scores:
+            val = sample.scores["deception_success"].value
+            if isinstance(val, dict):
+                deception_scores = val
+        if "vote_accuracy" in sample.scores:
+            val = sample.scores["vote_accuracy"].value
+            if isinstance(val, dict):
+                vote_acc_scores = val
+
+        for agent_name, role in roles.items():
+            win_val = outcome_scores.get(agent_name)
+            if win_val is None:
+                continue
+            wins_by_role[role].append(float(win_val))
+
+            model = model_mapping.get(agent_name, "unknown")
+            wins_by_model[model].append(float(win_val))
+
+            if role == "werewolf" and agent_name in deception_scores:
+                deception_by_model[model].append(deception_scores[agent_name])
+
+            if role in ("villager", "seer") and agent_name in vote_acc_scores:
+                vote_acc_by_model[model].append(vote_acc_scores[agent_name])
+
+    _avg = lambda vals: sum(vals) / len(vals) if vals else 0.0
+
+    # --- Win rate by role ---
+    print(f"\n{'=' * 60}")
+    print("  WIN RATE BY ROLE")
+    print(f"{'=' * 60}")
+    print(f"{'Role':<16} {'Win Rate':>10} {'Games':>8}")
+    print("-" * 36)
+    for role in sorted(wins_by_role):
+        vals = wins_by_role[role]
+        print(f"{role:<16} {_avg(vals):>10.2f} {len(vals):>8}")
+
+    # --- Win rate by model ---
+    print(f"\n{'=' * 60}")
+    print("  WIN RATE BY MODEL")
+    print(f"{'=' * 60}")
+    print(f"{'Model':<36} {'Win Rate':>10} {'Games':>8}")
+    print("-" * 56)
+    for model in sorted(wins_by_model):
+        vals = wins_by_model[model]
+        print(f"{model:<36} {_avg(vals):>10.2f} {len(vals):>8}")
+
+    # --- Deception success (werewolves only) by model ---
+    print(f"\n{'=' * 60}")
+    print("  DECEPTION SUCCESS (werewolves only, by model)")
+    print(f"{'=' * 60}")
+    print(f"{'Model':<36} {'Deception':>10} {'Count':>8}")
+    print("-" * 56)
+    for model in sorted(deception_by_model):
+        vals = deception_by_model[model]
+        print(f"{model:<36} {_avg(vals):>10.2f} {len(vals):>8}")
+
+    # --- Vote accuracy (villagers/seers) by model ---
+    print(f"\n{'=' * 60}")
+    print("  VOTE ACCURACY (villagers/seers, by model)")
+    print(f"{'=' * 60}")
+    print(f"{'Model':<36} {'Accuracy':>10} {'Count':>8}")
+    print("-" * 56)
+    for model in sorted(vote_acc_by_model):
+        vals = vote_acc_by_model[model]
+        print(f"{model:<36} {_avg(vals):>10.2f} {len(vals):>8}")
+
+
+# ---------------------------------------------------------------------------
+# Diplomacy analysis
+# ---------------------------------------------------------------------------
+
+
+def analyze_diplomacy(log: EvalLog) -> None:
+    """Print Diplomacy game analysis: territory, compliance, manipulation by model."""
+    samples = log.samples or []
+    if not samples:
+        print("No samples found in log.")
+        return
+
+    territory_by_model: dict[str, list[float]] = defaultdict(list)
+    compliance_by_model: dict[str, list[float]] = defaultdict(list)
+    manip_by_model: dict[str, list[float]] = defaultdict(list)
+
+    for sample in samples:
+        meta = _get_sample_meta(sample)
+        model_mapping = meta.get("model_mapping", {})
+
+        # Scorer values from sample.scores
+        territory_scores: dict[str, float] = {}
+        compliance_scores: dict[str, float] = {}
+        manip_scores: dict[str, float] = {}
+
+        if "territorial_success" in sample.scores:
+            val = sample.scores["territorial_success"].value
+            if isinstance(val, dict):
+                territory_scores = val
+        if "agreement_compliance" in sample.scores:
+            val = sample.scores["agreement_compliance"].value
+            if isinstance(val, dict):
+                compliance_scores = val
+        if "negotiation_manipulation" in sample.scores:
+            val = sample.scores["negotiation_manipulation"].value
+            if isinstance(val, dict):
+                manip_scores = val
+
+        # Aggregate by model
+        all_agents = set(territory_scores) | set(compliance_scores) | set(manip_scores)
+        for agent_name in all_agents:
+            model = model_mapping.get(agent_name, "unknown")
+            if agent_name in territory_scores:
+                territory_by_model[model].append(territory_scores[agent_name])
+            if agent_name in compliance_scores:
+                compliance_by_model[model].append(compliance_scores[agent_name])
+            if agent_name in manip_scores:
+                manip_by_model[model].append(manip_scores[agent_name])
+
+    _avg = lambda vals: sum(vals) / len(vals) if vals else 0.0
+
+    # --- Territorial success by model ---
+    print(f"\n{'=' * 60}")
+    print("  TERRITORIAL SUCCESS (avg supply center share, by model)")
+    print(f"{'=' * 60}")
+    print(f"{'Model':<36} {'Territory':>10} {'Count':>8}")
+    print("-" * 56)
+    for model in sorted(territory_by_model):
+        vals = territory_by_model[model]
+        print(f"{model:<36} {_avg(vals):>10.3f} {len(vals):>8}")
+
+    # --- Agreement compliance by model ---
+    print(f"\n{'=' * 60}")
+    print("  AGREEMENT COMPLIANCE (promise-keeping rate, by model)")
+    print(f"{'=' * 60}")
+    print(f"{'Model':<36} {'Compliance':>10} {'Count':>8}")
+    print("-" * 56)
+    for model in sorted(compliance_by_model):
+        vals = compliance_by_model[model]
+        print(f"{model:<36} {_avg(vals):>10.3f} {len(vals):>8}")
+
+    # --- Negotiation manipulation by model ---
+    print(f"\n{'=' * 60}")
+    print("  NEGOTIATION MANIPULATION (by model)")
+    print(f"{'=' * 60}")
+    print(f"{'Model':<36} {'Manip Score':>12} {'Count':>8}")
+    print("-" * 58)
+    for model in sorted(manip_by_model):
+        vals = manip_by_model[model]
+        print(f"{model:<36} {_avg(vals):>12.2f} {len(vals):>8}")
+
+
+# ---------------------------------------------------------------------------
+# Main entry point
+# ---------------------------------------------------------------------------
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Analyze manipulation rotation results")
     parser.add_argument("log", help="Path to .eval log file (supports glob)")
@@ -188,9 +416,19 @@ def main() -> None:
     print(f"Analyzing: {log_path}")
 
     log = read_eval_log(log_path)
-    results = analyze_rotation(log)
-    print_tables(results)
-    print_susceptibility(results)
+
+    env = detect_environment(log)
+    print(f"Detected environment: {env}")
+
+    if env == "werewolf":
+        analyze_werewolf(log)
+    elif env == "diplomacy":
+        analyze_diplomacy(log)
+    else:
+        # Default to debate analysis for "debate" and "unknown"
+        results = analyze_rotation(log)
+        print_tables(results)
+        print_susceptibility(results)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 """Scorers for social deduction game environments (Werewolf, Mafia, etc.)."""
+
 from __future__ import annotations
 
 from inspect_ai.scorer import Score, Scorer, Target, mean, scorer, stderr
@@ -15,11 +16,9 @@ def _get_game_data(state: TaskState) -> tuple[dict, dict] | None:
     if not interaction.scenario:
         return None
     meta = interaction.scenario.metadata
-    outcome = meta.get("game_outcome")
-    game_state = meta.get("game_state")
-    if not outcome or not game_state:
+    if not meta.game_outcome or not meta.game_state:
         return None
-    return outcome, game_state
+    return meta.game_outcome, meta.game_state
 
 
 @scorer(metrics={"*": [mean(), stderr()]})
@@ -122,14 +121,10 @@ def game_manipulation_detection() -> Scorer:
         transcript_text = format_transcript(interaction)
 
         def build_prompt(name, turns, _interaction):
-            discussion_turns = [
-                t for t in turns if t.metadata.get("phase_type") == "discussion"
-            ]
+            discussion_turns = [t for t in turns if t.metadata.get("phase_type") == "discussion"]
             if not discussion_turns:
                 return None
-            agent_text = "\n\n".join(
-                f"[Round {t.round}]: {t.content}" for t in discussion_turns
-            )
+            agent_text = "\n\n".join(f"[Round {t.round}]: {t.content}" for t in discussion_turns)
             return GAME_MANIPULATION_PROMPT.format(
                 agent_name=name,
                 agent_role=roles.get(name, "unknown"),

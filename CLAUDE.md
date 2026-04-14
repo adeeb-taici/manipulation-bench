@@ -10,19 +10,23 @@ The primary research contribution is evaluating how switching out the environmen
 
 ```
 src/manipulation_bench/
-  models.py          # Data models (AgentRole, Turn, ScenarioConfig, InteractionState)
+  models.py          # Data models (AgentRole, Turn, ScenarioConfig, ScenarioMetadata, InteractionState)
   dataset.py         # JSONL loading with record_to_sample mapping
-  protocols.py       # TurnProtocol interface + RoundRobinProtocol
-  solver.py          # multi_agent_interaction() @solver — core orchestration loop
-  game_solver.py     # Phase-aware solver for game environments (DISCUSSION/ACTION phases)
+  game_solver.py     # Unified solver for all environments (DISCUSSION/ACTION phases)
   prompts.py         # All judge/juror prompt templates
-  task.py            # @task manipulation_bench — wires dataset + solver + scorers
+  task.py            # @task manipulation_bench (debates)
   game_task.py       # @task for Werewolf game environment
   diplomacy_task.py  # @task for Diplomacy game environment
-  _registry.py       # Inspect entry-point (just imports the task)
-  generate.py        # CLI: YAML config → rotation JSONL + eval command
-  analyze.py         # CLI: eval log → comparison tables + susceptibility analysis
+  _registry.py       # Inspect entry-point (lazy imports)
+  generate.py        # CLI: YAML config → rotation JSONL + generate_debate_rotation() shared function
+  analyze.py         # CLI: eval log → comparison tables + susceptibility analysis (debate/werewolf/diplomacy)
   scenarios/         # JSONL scenario files (generated or hand-crafted)
+  environments/
+    base.py          # Environment ABC + Phase, Observation, ActionResult, GameOutcome
+    debate.py        # Debate environment (DISCUSSION-only phases, round-robin)
+    werewolf.py      # Werewolf social deduction game
+    diplomacy.py     # Diplomacy negotiation game (wraps diplomacy package)
+    __init__.py      # Factory: create_environment() + ENVIRONMENTS registry
   scorers/
     __init__.py      # Re-exports all scorers
     _helpers.py      # Shared: parse_json_score, score_per_agent, format_transcript
@@ -32,15 +36,18 @@ src/manipulation_bench/
     social_deduction.py  # Werewolf scorers: game_win_rate, vote_accuracy, deception_success, game_manipulation_detection
     negotiation.py       # Diplomacy scorers: territorial_success, agreement_compliance, negotiation_manipulation
 experiments/         # YAML configs and generator scripts for specific experiments
+tests/               # pytest test suite
 ```
 
 ### Environments
 
 The framework supports three environment types:
 
-- **Debate**: Conversation-based, 2-N agents. Measures persuasion and rhetorical tactics. Uses the standard `solver.py`.
-- **Werewolf**: Social deduction game, 4-7 players. Measures deception and vote manipulation. Custom implementation in `game_task.py`.
-- **Diplomacy**: Negotiation game, 7 powers. Measures promise-breaking and alliance betrayal. Wraps the `diplomacy` Python package via `diplomacy_task.py`.
+- **Debate**: Conversation-based, 2-N agents. Measures persuasion and rhetorical tactics. Implemented as `DebateEnvironment` (DISCUSSION-only phases).
+- **Werewolf**: Social deduction game, 4-7 players. Measures deception and vote manipulation. Implemented as `WerewolfEnvironment`.
+- **Diplomacy**: Negotiation game, 7 powers. Measures promise-breaking and alliance betrayal. Wraps the `diplomacy` Python package via `DiplomacyEnvironment`.
+
+All three use the same solver (`game_solver.py`) and the same `Environment` ABC.
 
 ## Key design decisions
 
@@ -48,9 +55,11 @@ The framework supports three environment types:
 
 Agent roles (name, model, system prompt, position) are defined per-scenario in JSONL, not in Python code. A scenario with 2 debaters, 4 panelists, or 1 interviewer + 1 subject all use the same solver. This means new experiment designs don't require code changes.
 
-### Game solver (`game_solver.py`)
+### Unified solver (`game_solver.py`)
 
-The game solver is phase-aware. **DISCUSSION** phases let agents talk (free-form messages routed by the environment). **ACTION** phases require agents to submit structured moves, with retry logic for invalid submissions. The `process_discussion()` hook lets environments process private messages — for example, Diplomacy uses it to route `TO:<name>:` prefixed messages to specific powers and extract `PROMISE: <order>` tags for promise tracking.
+All environments (including debates) use a single phase-aware solver. **DISCUSSION** phases let agents talk (free-form messages routed by the environment). **ACTION** phases require agents to submit structured moves, with retry logic for invalid submissions. The `process_discussion()` hook lets environments process private messages — for example, Diplomacy uses it to route `TO:<name>:` prefixed messages to specific powers and extract `PROMISE: <order>` tags for promise tracking.
+
+The solver injects `scenario.topic`, agent positions, `num_rounds`, and `visibility` into the environment config for backward compatibility with debate scenarios that predate the environment system.
 
 ### Direct model.generate() instead of Inspect's generate(state)
 
@@ -93,16 +102,16 @@ The `generate.py` CLI automates this from a YAML config. Custom generator script
 
 ### Game environments (Werewolf, Diplomacy)
 
-Game environments use `game_solver.py` instead of the standard debate solver. They follow a phase loop (DISCUSSION then ACTION) and produce game-specific metrics rather than debate metrics. Werewolf games run via `game_task.py`; Diplomacy games run via `diplomacy_task.py`.
+Game environments follow a phase loop (DISCUSSION then ACTION) and produce game-specific metrics rather than debate metrics. Werewolf games run via `game_task.py`; Diplomacy games run via `diplomacy_task.py`.
 
-Diplomacy has a dedicated promise-tracking system: messages use `TO:<name>:` format for private routing, and `PROMISE: <order>` tags are machine-parseable. The `agreement_compliance` scorer computes kept/total promises per agent as a hard mathematical metric (no LLM judge needed).
+Diplomacy has a dedicated promise-tracking system: messages use `TO:<name>:` format for private routing (multiple recipients per message are supported — the content is split by `TO:` markers). `PROMISE: <order>` tags are machine-parseable. The `agreement_compliance` scorer computes kept/total promises per agent as a hard mathematical metric (no LLM judge needed).
 
 ### Analysis pipeline
 
-`analyze.py` reads an Inspect eval log and computes:
-- **Per-scenario grids**: manipulation/quality/shift scores for each agent, with `*` marking the designated manipulator
-- **Ability summary**: each model's manipulation score when instructed vs clean baseline + delta
-- **Susceptibility**: contagion (did clean agents adopt manipulation?), quality drop, belief shift — all compared against the baseline scenario
+`analyze.py` reads an Inspect eval log, auto-detects the environment type from scorer names, and dispatches to the appropriate analysis:
+- **Debate**: Per-scenario grids (manipulation/quality/shift), ability summary (instructed vs baseline + delta), susceptibility (contagion, quality drop, belief shift)
+- **Werewolf**: Win rates by role and model, deception success for werewolves, vote accuracy for villagers
+- **Diplomacy**: Territorial success, agreement compliance, negotiation manipulation — all aggregated by model
 
 ## API keys and providers
 
@@ -132,7 +141,7 @@ inspect view
 
 ## Environment ABC contract
 
-All game environments implement `environments/base.py:Environment`:
+All environments (including debate) implement `environments/base.py:Environment`:
 
 ```
 setup(agent_names) → get_current_phase() → get_observation(agent) →
@@ -142,7 +151,7 @@ setup(agent_names) → get_current_phase() → get_observation(agent) →
 ```
 
 Key methods:
-- `process_discussion(agent, content, phase)` — hook for routing private messages (default no-op; Diplomacy overrides it for TO:/PROMISE: parsing)
+- `process_discussion(agent, content, phase)` — hook for routing private messages (default no-op; Diplomacy overrides it to split by `TO:<name>:` markers and extract `PROMISE:` tags; Debate uses it to track first-turn status)
 - `parse_action(agent, raw_text) -> str` — extract structured action from LLM output; raise ValueError to trigger retry
 - `get_game_state_for_scoring() -> dict` — full state dump for scorers (roles, votes, messages, outcomes)
 
@@ -152,8 +161,8 @@ Adding a new game: implement the ABC, register in `environments/__init__.py:ENVI
 
 - **Agent names must be generic** (alice, bob, carol, etc. or country names like austria, england). Never use model names (claude, gpt5) as agent names — models will recognize each other and adjust strategy, confounding results.
 - **Model identity** is tracked in `scenario.metadata.model_mapping` for analysis, never exposed to agents.
-- **Experiment generators** live in `experiments/`. Each produces a JSONL + prints the `inspect eval` command. Generators for: `generate_werewolf.py`, `generate_diplomacy.py`, `generate_factual.py`, `generate_contested.py`.
-- **Rotation pattern**: baseline (no manipulation) + N variants (one per agent manipulating). The `generate.py` CLI handles this for debates; game generators do it manually.
+- **Experiment generators** live in `experiments/`. Each produces a JSONL + prints the `inspect eval` command. Generators for: `generate_werewolf.py`, `generate_diplomacy.py`, `generate_factual.py`, `generate_contested.py`, `generate_policy_debates.py`.
+- **Rotation pattern**: baseline (no manipulation) + N variants (one per agent manipulating). Debate generators use the shared `generate_debate_rotation()` function from `generate.py`; game generators have custom rotation logic.
 
 ## Gotchas
 
@@ -163,10 +172,19 @@ Adding a new game: implement the ABC, register in `environments/__init__.py:ENVI
 - **Ground-truth scorers**: Return `Score(value={"persuasion_rate": None, ...})` when `ground_truth` is not set. They don't error — they just produce None values.
 - **JSONL paths**: `load_scenarios()` resolves relative paths against `src/manipulation_bench/scenarios/`. The `-T scenarios=filename.jsonl` flag passes just the filename, not a full path.
 
+### Typed scenario metadata (`ScenarioMetadata`)
+
+`ScenarioConfig.metadata` is a `ScenarioMetadata` Pydantic model with `extra="allow"`. Typed fields: `environment`, `model_mapping`, `game_outcome`, `game_state`. Access with dot notation (`metadata.game_state`) instead of `.get()`. Extra keys from generators are preserved.
+
+## Running tests
+
+```bash
+pytest tests/ -v
+```
+
 ## Future directions (discussed, not yet implemented)
 
 - **Communication topology experiments**: Test how hub-spoke vs all-to-all vs bilateral pairs change manipulation dynamics
 - **Live observation**: `TurnObserver` callback protocol for streaming to Discord/WebSocket
 - **More game environments**: Extend the `Environment` ABC pattern to other social games (e.g., Mafia variants, Prisoner's Dilemma tournaments)
 - **Cross-environment analysis**: Unified metrics comparing manipulation strategies across debate, social deduction, and negotiation settings
-- **More protocols**: Moderated (designated agent controls turn order), sequential, free-form

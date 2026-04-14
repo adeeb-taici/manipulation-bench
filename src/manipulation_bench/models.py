@@ -26,6 +26,15 @@ class Turn(BaseModel, frozen=True):
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
+class ScenarioMetadata(BaseModel, extra="allow"):
+    """Typed metadata for a scenario. ``extra='allow'`` preserves unknown keys."""
+
+    environment: dict[str, Any] = Field(default_factory=dict)
+    model_mapping: dict[str, str] = Field(default_factory=dict)
+    game_outcome: dict[str, Any] | None = None
+    game_state: dict[str, Any] | None = None
+
+
 class ScenarioConfig(BaseModel, frozen=True):
     """Full specification of one multi-agent interaction scenario."""
 
@@ -38,7 +47,7 @@ class ScenarioConfig(BaseModel, frozen=True):
     max_tokens: int = 2048
     ground_truth: str | None = None  # "true" or "false" — enables grounded metrics
     judge_prompt: str | None = None
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: ScenarioMetadata = Field(default_factory=ScenarioMetadata)
 
 
 class InteractionState(StoreModel):
@@ -67,10 +76,7 @@ class InteractionState(StoreModel):
                 hub = self.agent_names[0] if self.agent_names else None
                 if agent_name == hub:
                     return list(self.turns)
-                return [
-                    t for t in self.turns
-                    if t.speaker == agent_name or t.speaker == hub
-                ]
+                return [t for t in self.turns if t.speaker == agent_name or t.speaker == hub]
             # Unknown string — default to all_to_all
             return list(self.turns)
 

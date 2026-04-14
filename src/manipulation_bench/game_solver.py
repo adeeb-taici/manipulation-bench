@@ -1,4 +1,5 @@
 """Game-aware solver that interleaves discussion and action phases."""
+
 from __future__ import annotations
 
 from inspect_ai.model import (
@@ -24,7 +25,13 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
         interaction.scenario = scenario
         interaction.agent_names = [a.name for a in scenario.agents]
 
-        env_config = scenario.metadata.get("environment", {})
+        env_config = dict(scenario.metadata.environment)
+        # Inject scenario-level context for environments that need it
+        env_config.setdefault("topic", scenario.topic)
+        env_config.setdefault("agent_positions", {a.name: a.position for a in scenario.agents})
+        # Backward compat: debate scenarios store these at the top level
+        env_config.setdefault("num_rounds", scenario.num_rounds)
+        env_config.setdefault("visibility", scenario.visibility)
         env = create_environment(env_config)
         env.setup(interaction.agent_names)
 
@@ -51,8 +58,10 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                     content = output.completion or ""
                     env.process_discussion(actor_name, content, phase)
                     turn = Turn(
-                        speaker=actor_name, content=content,
-                        round=phase.round, turn_index=turn_index,
+                        speaker=actor_name,
+                        content=content,
+                        round=phase.round,
+                        turn_index=turn_index,
                         metadata={"phase": phase.name, "phase_type": "discussion"},
                     )
                     interaction.turns = [*interaction.turns, turn]
@@ -61,6 +70,7 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                 elif phase.phase_type == PhaseType.ACTION:
                     action = None
                     raw_content = ""
+                    result = None
                     for attempt in range(max_action_retries + 1):
                         output = await model.generate(
                             messages,
@@ -69,25 +79,38 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                         raw_content = output.completion or ""
                         try:
                             action = env.parse_action(actor_name, raw_content)
-                            break
                         except ValueError as e:
                             if attempt < max_action_retries:
                                 messages.append(ChatMessageAssistant(content=raw_content))
-                                messages.append(ChatMessageUser(
-                                    content=f"Invalid action: {e}. Try again."
-                                ))
-                            else:
-                                action = (
-                                    obs.valid_actions[0] if obs.valid_actions else "pass:none"
+                                messages.append(
+                                    ChatMessageUser(content=f"Invalid action: {e}. Try again.")
                                 )
+                                continue
+                            action = obs.valid_actions[0] if obs.valid_actions else "pass:none"
 
-                    result = env.apply_action(actor_name, action)
+                        result = env.apply_action(actor_name, action)
+                        if result.valid or attempt == max_action_retries:
+                            break
+                        # Some orders were invalid — retry with feedback
+                        messages.append(ChatMessageAssistant(content=raw_content))
+                        messages.append(
+                            ChatMessageUser(
+                                content=(
+                                    f"{result.error}. Re-submit ALL orders for "
+                                    f"your units. Try again."
+                                ),
+                            )
+                        )
                     turn = Turn(
-                        speaker=actor_name, content=raw_content,
-                        round=phase.round, turn_index=turn_index,
+                        speaker=actor_name,
+                        content=raw_content,
+                        round=phase.round,
+                        turn_index=turn_index,
                         metadata={
-                            "phase": phase.name, "phase_type": "action",
-                            "action": action, "action_valid": result.valid,
+                            "phase": phase.name,
+                            "phase_type": "action",
+                            "action": action,
+                            "action_valid": result.valid,
                             "action_narrative": result.narrative,
                         },
                     )
@@ -99,14 +122,10 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
         # Store game outcome for scorers
         outcome = env.get_outcome()
         game_state = env.get_game_state_for_scoring()
-        interaction.scenario = ScenarioConfig(
-            **interaction.scenario.model_dump()
-            | {"metadata": {
-                **interaction.scenario.metadata,
-                "game_outcome": outcome.model_dump(),
-                "game_state": game_state,
-            }}
+        new_meta = interaction.scenario.metadata.model_copy(
+            update={"game_outcome": outcome.model_dump(), "game_state": game_state}
         )
+        interaction.scenario = interaction.scenario.model_copy(update={"metadata": new_meta})
 
         state.messages = _build_game_transcript(interaction)
         return state
@@ -137,9 +156,7 @@ def _build_game_messages(
 
     # Prior discussion turns (visible per topology)
     visible_turns = interaction.turns_visible_to(agent.name, scenario.visibility)
-    discussion_turns = [
-        t for t in visible_turns if t.metadata.get("phase_type") == "discussion"
-    ]
+    discussion_turns = [t for t in visible_turns if t.metadata.get("phase_type") == "discussion"]
     for turn in discussion_turns:
         if turn.speaker == agent.name:
             messages.append(ChatMessageAssistant(content=turn.content))
@@ -148,7 +165,8 @@ def _build_game_messages(
 
     # Action events (narrated)
     action_turns = [
-        t for t in visible_turns
+        t
+        for t in visible_turns
         if t.metadata.get("phase_type") == "action" and t.metadata.get("action_narrative")
     ]
     if action_turns:
@@ -157,11 +175,14 @@ def _build_game_messages(
 
     # Phase-specific prompt
     if obs.phase.phase_type == PhaseType.DISCUSSION:
-        messages.append(ChatMessageUser(content="Discuss with the other players."))
+        prompt = obs.engagement_prompt or "Discuss with the other players."
+        messages.append(ChatMessageUser(content=prompt))
     elif obs.phase.phase_type == PhaseType.ACTION:
-        messages.append(ChatMessageUser(
-            content=f"{obs.action_prompt}\nValid actions: {', '.join(obs.valid_actions)}"
-        ))
+        messages.append(
+            ChatMessageUser(
+                content=f"{obs.action_prompt}\nValid actions: {', '.join(obs.valid_actions)}"
+            )
+        )
 
     return messages
 

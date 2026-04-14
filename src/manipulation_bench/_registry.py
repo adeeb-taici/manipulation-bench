@@ -1,4 +1,22 @@
-# Inspect entry-point: import tasks for discovery
-from manipulation_bench.diplomacy_task import diplomacy_bench  # noqa: F401
-from manipulation_bench.game_task import werewolf_bench  # noqa: F401
-from manipulation_bench.task import manipulation_bench  # noqa: F401
+"""Inspect entry-point: import tasks lazily for discovery."""
+
+_TASKS = {
+    "diplomacy_bench": "manipulation_bench.diplomacy_task",
+    "werewolf_bench": "manipulation_bench.game_task",
+    "manipulation_bench": "manipulation_bench.task",
+}
+
+
+def __getattr__(name: str):
+    if name in _TASKS:
+        import importlib
+
+        module = importlib.import_module(_TASKS[name])
+        task = getattr(module, name)
+        globals()[name] = task
+        return task
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def __dir__():
+    return list(_TASKS) + list(globals())

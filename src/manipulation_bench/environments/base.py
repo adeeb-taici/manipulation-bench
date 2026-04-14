@@ -1,4 +1,5 @@
 """Base types and ABC for game environments."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -35,6 +36,7 @@ class Observation(BaseModel, frozen=True):
     valid_actions: list[str] = Field(default_factory=list)
     action_prompt: str = ""
     history_summary: str = ""
+    engagement_prompt: str = ""
 
 
 class ActionResult(BaseModel, frozen=True):

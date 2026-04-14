@@ -194,11 +194,11 @@ Control what each agent can see via the `visibility` field:
 
 ```
 src/manipulation_bench/
-  models.py            AgentRole, Turn, ScenarioConfig, InteractionState
-  solver.py            Debate orchestration loop
-  game_solver.py       Phase-aware solver for game environments (DISCUSSION/ACTION)
+  models.py            AgentRole, Turn, ScenarioConfig, ScenarioMetadata, InteractionState
+  game_solver.py       Unified solver for all environments (DISCUSSION/ACTION phases)
   environments/
-    base.py            Environment ABC (supports code-orchestrated and external APIs)
+    base.py            Environment ABC + Phase, Observation, ActionResult, GameOutcome
+    debate.py           Debate environment (DISCUSSION-only, round-robin)
     werewolf.py        Werewolf social deduction game
     diplomacy.py       Diplomacy negotiation game (wraps diplomacy package)
   scorers/
@@ -207,14 +207,14 @@ src/manipulation_bench/
     grounded.py        Ground-truth persuasion + belief shift
     social_deduction.py  Werewolf scorers
     negotiation.py       Diplomacy scorers
-  protocols.py         Turn-ordering strategies (round_robin, extensible)
   prompts.py           All judge/juror prompt templates
   dataset.py           JSONL scenario loading
   task.py              @task for debates
   game_task.py         @task for Werewolf
   diplomacy_task.py    @task for Diplomacy
-  generate.py          YAML -> rotation JSONL generator (debates)
-  analyze.py           Eval log -> comparison tables
+  generate.py          YAML -> rotation JSONL generator + generate_debate_rotation()
+  analyze.py           Eval log -> comparison tables (debate/werewolf/diplomacy)
   scenarios/           Generated and hand-crafted JSONL files
 experiments/           Experiment configs and generator scripts
+tests/                 pytest test suite
 ```
