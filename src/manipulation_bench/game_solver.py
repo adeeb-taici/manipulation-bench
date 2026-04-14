@@ -49,6 +49,7 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                         config=GenerateConfig(max_tokens=scenario.max_tokens),
                     )
                     content = output.completion or ""
+                    env.process_discussion(actor_name, content, phase)
                     turn = Turn(
                         speaker=actor_name, content=content,
                         round=phase.round, turn_index=turn_index,

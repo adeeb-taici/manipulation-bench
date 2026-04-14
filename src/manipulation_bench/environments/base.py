@@ -120,3 +120,10 @@ class Environment(ABC):
     def get_game_state_for_scoring(self) -> dict[str, Any]:
         """Return full game state for scorers (roles, actions, votes, etc.)."""
         ...
+
+    def process_discussion(self, agent_name: str, content: str, phase: Phase) -> None:
+        """Optional hook: process discussion content for message routing, promises, etc.
+
+        Called by the game solver after generating discussion content.
+        Default: no-op. Override in environments that need to route private messages.
+        """
