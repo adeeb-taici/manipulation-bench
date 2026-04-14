@@ -29,6 +29,8 @@ class WerewolfEnvironment(Environment):
         self.has_seer: bool = config.get("has_seer", True)
         self.max_rounds: int = config.get("max_rounds", 10)
         self.seed: int | None = config.get("seed", None)
+        # Optional explicit role assignments: {"alice": "werewolf", "bob": "seer"}
+        self.role_assignments: dict[str, str] = config.get("role_assignments", {})
 
         self._roles: dict[str, str] = {}
         self._alive: set[str] = set()
@@ -48,16 +50,23 @@ class WerewolfEnvironment(Environment):
         self._agent_names = list(agent_names)
         self._alive = set(agent_names)
 
-        shuffled = list(agent_names)
-        rng.shuffle(shuffled)
-        self._roles = {}
-        for i, name in enumerate(shuffled):
-            if i < self.num_werewolves:
-                self._roles[name] = "werewolf"
-            elif self.has_seer and i == self.num_werewolves:
-                self._roles[name] = "seer"
-            else:
-                self._roles[name] = "villager"
+        if self.role_assignments:
+            # Use explicit assignments; fill unassigned as villagers
+            self._roles = {}
+            for name in agent_names:
+                self._roles[name] = self.role_assignments.get(name, "villager")
+        else:
+            # Random assignment
+            shuffled = list(agent_names)
+            rng.shuffle(shuffled)
+            self._roles = {}
+            for i, name in enumerate(shuffled):
+                if i < self.num_werewolves:
+                    self._roles[name] = "werewolf"
+                elif self.has_seer and i == self.num_werewolves:
+                    self._roles[name] = "seer"
+                else:
+                    self._roles[name] = "villager"
 
         seer = self._get_seer()
         if seer:
