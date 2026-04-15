@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
+
+if TYPE_CHECKING:
+    from manipulation_bench.models import InteractionState
+    from manipulation_bench.network import Network
 
 from inspect_ai.tool import ToolCall, ToolInfo
 
@@ -26,6 +30,7 @@ class Phase(BaseModel, frozen=True):
     round: int
     acting_agents: list[str]
     description: str = ""
+    parallel: bool = False
 
 
 class Observation(BaseModel, frozen=True):
@@ -84,8 +89,14 @@ class Environment(ABC):
     """
 
     @abstractmethod
-    def setup(self, agent_names: list[str]) -> None:
-        """Initialize game state (assign roles, deal cards, etc.)."""
+    def setup(self, agent_names: list[str], network: "Network | None" = None) -> None:
+        """Initialize game state (assign roles, deal cards, etc.).
+
+        Args:
+            agent_names: List of agent names participating.
+            network: Pre-built network from topology config. May be None for
+                backward compatibility during transition.
+        """
         ...
 
     @abstractmethod
@@ -173,3 +184,42 @@ class Environment(ABC):
         Default: empty list.
         """
         return []
+
+    # ── New hooks for channel-based communication ─────────────────
+
+    def setup_channels(self, network: "Network") -> None:
+        """Add environment-specific channels to the network.
+
+        Called after the topology factory builds the base network.
+        Default: no-op (topology channels are sufficient).
+        """
+
+    def extract_opinion(self, agent_name: str, content: str) -> float | None:
+        """Extract a numeric opinion from agent's response.
+
+        Default: None (environment doesn't track numeric opinions).
+        """
+        return None
+
+    def classify_stance(self, agent_name: str, content: str) -> str:
+        """Classify agent's stance from response text.
+
+        Default: 'unknown'.
+        """
+        return "unknown"
+
+    def update_network(self, network: "Network", interaction: "InteractionState") -> None:
+        """Mutate network topology based on current state.
+
+        Called once per round after all agents have acted.
+        Default: no-op (static network).
+        """
+
+    def get_feed_filter(self, agent_name: str):
+        """Return a feed filter function for this agent.
+
+        For algorithmic mediation. Returns a callable that takes
+        list[Turn] and returns filtered list[Turn], or None.
+        Default: None (no filtering).
+        """
+        return None

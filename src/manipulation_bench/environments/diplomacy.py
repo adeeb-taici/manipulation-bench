@@ -7,7 +7,10 @@ the DATC-compliant Diplomacy engine.
 from __future__ import annotations
 
 import re
-from typing import Any, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
+
+if TYPE_CHECKING:
+    from manipulation_bench.network import Network
 
 from diplomacy import Game
 from inspect_ai.tool import ToolCall, ToolInfo, ToolParam, ToolParams
@@ -71,7 +74,7 @@ class DiplomacyEnvironment(Environment):
 
     # ── Setup ───────────────────────────────────────────────────────────
 
-    def setup(self, agent_names: list[str]) -> None:
+    def setup(self, agent_names: list[str], network: "Network | None" = None) -> None:
         if len(agent_names) != 7:
             raise ValueError(f"Diplomacy requires exactly 7 agents, got {len(agent_names)}")
 

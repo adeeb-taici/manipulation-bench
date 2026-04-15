@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from manipulation_bench.network import Network
 
 from manipulation_bench.environments.base import (
     ActionResult,
@@ -39,7 +42,7 @@ class DebateEnvironment(Environment):
         self._terminal: bool = False
         self._has_spoken: set[str] = set()
 
-    def setup(self, agent_names: list[str]) -> None:
+    def setup(self, agent_names: list[str], network: "Network | None" = None) -> None:
         self._agent_names = list(agent_names)
         self._round = 1
 
