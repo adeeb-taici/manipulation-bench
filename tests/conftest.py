@@ -14,7 +14,7 @@ try:
 except ImportError:
     HAS_DIPLOMACY = False
 
-_ENV_PARAMS = ["debate", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
+_ENV_PARAMS = ["debate", "misinformation", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
 
 
 @pytest.fixture(params=_ENV_PARAMS)
@@ -35,6 +35,18 @@ def environment(request):
             }
         )
         env.setup(["alice", "bob", "carol"])
+        return env
+    elif request.param == "misinformation":
+        from manipulation_bench.environments.misinformation import MisinformationEnvironment
+        from manipulation_bench.network import broadcast
+        from manipulation_bench.agents import PersonaCard
+
+        env = MisinformationEnvironment(
+            {"claim": "Test claim for fixture", "seed_agent": "alice", "max_rounds": 3}
+        )
+        personas = [PersonaCard(name=n, role="agent") for n in ["alice", "bob", "carol"]]
+        network = broadcast(personas)
+        env.setup(["alice", "bob", "carol"], network=network)
         return env
     elif request.param == "diplomacy":
         env = DiplomacyEnvironment({"max_years": 1, "negotiation_rounds": 1})

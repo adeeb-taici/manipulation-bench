@@ -9,11 +9,13 @@ from manipulation_bench.environments.base import (
 
 from manipulation_bench.environments.debate import DebateEnvironment
 from manipulation_bench.environments.diplomacy import DiplomacyEnvironment
+from manipulation_bench.environments.misinformation import MisinformationEnvironment
 from manipulation_bench.environments.werewolf import WerewolfEnvironment
 
 ENVIRONMENTS: dict[str, type[Environment]] = {
     "debate": DebateEnvironment,
     "diplomacy": DiplomacyEnvironment,
+    "misinformation": MisinformationEnvironment,
     "werewolf": WerewolfEnvironment,
 }
 
@@ -36,6 +38,7 @@ __all__ = [
     "ActionResult",
     "Environment",
     "GameOutcome",
+    "MisinformationEnvironment",
     "Observation",
     "Phase",
     "PhaseType",
