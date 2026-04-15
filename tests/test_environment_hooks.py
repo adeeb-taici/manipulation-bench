@@ -1,6 +1,6 @@
 """Tests for new optional Environment hooks."""
 
-from manipulation_bench.environments.base import Environment, Phase, PhaseType
+from manipulation_bench.environments.base import Phase, PhaseType
 
 
 class TestPhaseParallel:

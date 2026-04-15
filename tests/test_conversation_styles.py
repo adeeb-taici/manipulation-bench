@@ -4,7 +4,7 @@ from manipulation_bench.conversation_styles import CONVERSATION_STYLES
 from manipulation_bench.conversation_styles.synchronized import Synchronized
 from manipulation_bench.conversation_styles.event_driven import EventDriven
 from manipulation_bench.conversation_styles.turn_based import TurnBased
-from manipulation_bench.network import Node, broadcast, Message
+from manipulation_bench.network import broadcast, Message
 from manipulation_bench.protocols import PromptContext
 
 

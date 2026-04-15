@@ -5,7 +5,6 @@ from manipulation_bench.network import (
     Channel,
     ChannelType,
     Message,
-    Network,
     Node,
     broadcast,
     commons,
