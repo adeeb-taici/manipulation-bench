@@ -81,7 +81,8 @@ def generate_phase2(log_path):
         == "villagers"
     ]
 
-    phase1_sources = wolves_won[:3] + villagers_won[:3]
+    # Use 40 Phase 1 sources (mix of wolf/villager wins) for ~30 villager obs per model
+    phase1_sources = (wolves_won[:20] + villagers_won[:20])[:40]
     role_assignments = make_role_assignments()
     scenarios = []
 
@@ -140,7 +141,7 @@ def generate_phase2(log_path):
         )
 
     # Control games (no prior context, same setup)
-    for i in range(6):
+    for i in range(40):
         agents = []
         for m in MODELS:
             agents.append(
