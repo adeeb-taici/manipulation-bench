@@ -24,23 +24,11 @@ MODELS = [
     {"name": "player_8", "model_role": "small_d", "label": "Grok 3 mini"},
 ]
 
-N_GAMES_PER_PAIR = 2
+N_GAMES_PER_PAIR = 4
 BASE_SEED = 500
 
-# Pick interesting werewolf pairs: large+large, small+small, large+small
-WOLF_PAIRS = [
-    # Large vs large
-    (0, 1),  # Opus + GPT-5
-    (2, 3),  # Gemini + Grok
-    # Small vs small
-    (4, 5),  # Haiku + GPT-5.4 mini
-    (6, 7),  # Flash + Grok mini
-    # Large + small (cross-size)
-    (0, 4),  # Opus + Haiku (same family)
-    (1, 6),  # GPT-5 + Flash (cross-family)
-    (2, 7),  # Gemini + Grok mini (cross-family)
-    (3, 5),  # Grok + GPT-5.4 mini (cross-family)
-]
+# All 28 possible wolf pairs from 8 models
+WOLF_PAIRS = list(combinations(range(len(MODELS)), 2))
 
 
 def make_agent(model, manipulative=False):
