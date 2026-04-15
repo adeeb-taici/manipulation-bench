@@ -29,7 +29,7 @@ MODELS = [
     {"name": "player_4", "model_role": "model_d", "debate_name": "dave"},
 ]
 
-P2_WOLVES = {"player_1", "player_2"}  # Claude + GPT-5 as wolves
+P2_WOLVES = {"player_1"}  # Claude as sole wolf (2 wolves in 4-player = auto-win)
 SEED_BASE = 20000
 N_PER_CONDITION = 40
 
@@ -84,7 +84,7 @@ def make_base_prompt(model):
 def make_env_config(seed):
     return {
         "type": "werewolf",
-        "num_werewolves": 2,
+        "num_werewolves": 1,
         "has_seer": True,
         "max_rounds": 10,
         "seed": seed,

@@ -170,6 +170,10 @@ Adding a new game: implement the ABC, register in `environments/__init__.py:ENVI
 - **Rotation pattern**: baseline (no manipulation) + N variants (one per agent manipulating). Debate generators use the shared `generate_debate_rotation()` function from `generate.py`; game generators have custom rotation logic.
 - **Multi-phase experiments**: `AgentRole.prior_context` carries interaction history across phases. The solver injects it before the current interaction. `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience. Experiment scripts generate Phase 2 JSONL from Phase 1 logs. See `experiments/generate_contagion.py` for the pattern.
 
+## Prior experimental results
+
+See `FINDINGS.md` for all raw experimental results with sample sizes and reproduction commands. Reference this file when the user asks about prior results or wants to build on existing experiments. When new eval runs complete, add results to FINDINGS.md following the established format.
+
 ## Gotchas
 
 - **Windows encoding**: Always use `encoding="utf-8"` when opening files for read/write. YAML with unicode characters (em-dashes, etc.) will produce corrupt JSONL otherwise.

@@ -4,18 +4,16 @@ Raw experimental results from manipulation-bench evaluations. All results use Cl
 
 ## How to use this document
 
-**For researchers**: This is a living record of experimental results. When running new experiments, add a new numbered section following the existing format. Include: experiment description, models used, sample sizes per condition, and raw results tables. Do not remove or modify existing sections — append only.
+This is a living record of experimental results. When running new experiments, add a new numbered section following the existing format. Do not remove or modify existing sections — append only.
 
-**For Claude Code sessions**: Reference this file when the user asks about prior results or wants to build on existing experiments. When new eval runs complete, add results here following the established format. Always include sample sizes (n=X) so future readers can assess statistical reliability. Flag any results with n<20 per condition as preliminary.
-
-**Minimum reporting standards**:
-- Sample size per condition and per model
-- Which models played which roles
-- Which model served as judge
+**Each section must include**:
+- Experiment description and hypothesis
+- Models used and role assignments
+- Sample size per condition and per model (flag n<20 as preliminary)
 - Whether agent names were generic (to avoid model identification confounds)
-- Scenario file and eval command (or generator script) for reproduction
+- Scenario file and eval command for reproduction
 
-**Reproducing results**: All scenario JSONL files are in `src/manipulation_bench/scenarios/`. Generator scripts are in `experiments/`. Model IDs use the format `openrouter/provider/model-name` via the OpenRouter API. Results may vary across runs due to model temperature, API versioning, and non-deterministic sampling.
+All scenario JSONL files are in `src/manipulation_bench/scenarios/`. Generator scripts are in `experiments/`. Model IDs use the format `openrouter/provider/model-name` via the OpenRouter API. Results may vary across runs due to model temperature, API versioning, and non-deterministic sampling.
 
 ---
 
