@@ -14,6 +14,7 @@ class AgentRole(BaseModel, frozen=True):
     system_prompt: str
     position: str | None = None
     prior_context: str | None = None
+    persona: Any | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -36,6 +37,27 @@ class ScenarioMetadata(BaseModel, extra="allow"):
     game_state: dict[str, Any] | None = None
 
 
+class AgentSnapshot(BaseModel):
+    """Per-agent state tracked across rounds."""
+
+    opinions: list[float | None] = Field(default_factory=list)
+    stances: list[str] = Field(default_factory=list)
+    beliefs: dict[str, Any] = Field(default_factory=dict)
+    adopted: bool = False
+    alive: bool = True
+    reputation: dict[str, float] = Field(default_factory=dict)
+
+
+class NetworkSnapshot(BaseModel):
+    """Per-round network state for adaptive network tracking."""
+
+    round: int
+    edges: list[tuple[str, str]] = Field(default_factory=list)
+    channels: list[str] = Field(default_factory=list)
+    adopters: list[str] = Field(default_factory=list)
+    total_messages: int = 0
+
+
 class ScenarioConfig(BaseModel, frozen=True):
     """Full specification of one multi-agent interaction scenario."""
 
@@ -45,6 +67,7 @@ class ScenarioConfig(BaseModel, frozen=True):
     protocol: str = "round_robin"
     num_rounds: int = 3
     visibility: str | dict[str, list[str]] = "all_to_all"
+    topology: str = "broadcast"
     max_tokens: int = 2048
     ground_truth: str | None = None  # "true" or "false" — enables grounded metrics
     judge_prompt: str | None = None
@@ -56,6 +79,8 @@ class InteractionState(StoreModel):
 
     scenario: ScenarioConfig | None = None
     turns: list[Turn] = Field(default_factory=list)
+    agent_states: dict[str, AgentSnapshot] = Field(default_factory=dict)
+    network_snapshots: list[NetworkSnapshot] = Field(default_factory=list)
     current_round: int = 0
     agent_names: list[str] = Field(default_factory=list)
 
@@ -63,8 +88,29 @@ class InteractionState(StoreModel):
         return [t for t in self.turns if t.speaker == agent_name]
 
     def turns_visible_to(
-        self, agent_name: str, visibility: str | dict[str, list[str]]
+        self,
+        agent_name: str,
+        visibility: str | dict[str, list[str]] | None = None,
+        network: Any | None = None,
     ) -> list[Turn]:
+        """Filter turns by visibility.
+
+        Supports two modes:
+        - Channel-based (network provided): filter by channel membership
+        - Legacy string-based (visibility provided): filter by visibility rules
+        """
+        if network is not None:
+            visible_channels = {ch.id for ch in network.node_channels(agent_name)}
+            return [
+                t for t in self.turns
+                if t.metadata.get("channel_id") in visible_channels
+                or t.speaker == agent_name
+            ]
+
+        # Legacy string-based visibility (backward compat)
+        if visibility is None:
+            visibility = "all_to_all"
+
         # String shortcuts
         if isinstance(visibility, str):
             if visibility in ("all_to_all", "full"):
