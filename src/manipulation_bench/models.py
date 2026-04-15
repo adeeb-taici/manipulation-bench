@@ -31,6 +31,7 @@ class ScenarioMetadata(BaseModel, extra="allow"):
     """Typed metadata for a scenario. ``extra='allow'`` preserves unknown keys."""
 
     environment: dict[str, Any] = Field(default_factory=dict)
+    environment_type: str = ""
     model_mapping: dict[str, str] = Field(default_factory=dict)
     game_outcome: dict[str, Any] | None = None
     game_state: dict[str, Any] | None = None

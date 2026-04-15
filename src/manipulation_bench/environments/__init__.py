@@ -9,11 +9,13 @@ from manipulation_bench.environments.base import (
 
 from manipulation_bench.environments.debate import DebateEnvironment
 from manipulation_bench.environments.diplomacy import DiplomacyEnvironment
+from manipulation_bench.environments.village import VillageEnvironment
 from manipulation_bench.environments.werewolf import WerewolfEnvironment
 
 ENVIRONMENTS: dict[str, type[Environment]] = {
     "debate": DebateEnvironment,
     "diplomacy": DiplomacyEnvironment,
+    "village": VillageEnvironment,
     "werewolf": WerewolfEnvironment,
 }
 

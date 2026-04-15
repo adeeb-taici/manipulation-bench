@@ -15,6 +15,11 @@ from manipulation_bench.scorers.negotiation import (
     negotiation_manipulation,
     territorial_success,
 )
+from manipulation_bench.scorers.village import (
+    exploitation_rate,
+    promise_action_gap,
+    village_fairness,
+)
 from manipulation_bench.scorers.voting import juror_voting
 
 __all__ = [
