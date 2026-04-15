@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import random
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from manipulation_bench.network import Network
 
 from inspect_ai.tool import ToolCall, ToolInfo, ToolParam, ToolParams
 
@@ -66,7 +69,7 @@ class WerewolfEnvironment(Environment):
         self._terminal: bool = False
         self._agent_names: list[str] = []
 
-    def setup(self, agent_names: list[str]) -> None:
+    def setup(self, agent_names: list[str], network: "Network | None" = None) -> None:
         rng = random.Random(self.seed)
         self._agent_names = list(agent_names)
         self._alive = set(agent_names)
