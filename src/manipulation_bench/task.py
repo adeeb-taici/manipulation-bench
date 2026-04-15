@@ -3,6 +3,7 @@ from __future__ import annotations
 from inspect_ai import Task, task
 
 from manipulation_bench.dataset import load_scenarios
+from manipulation_bench.game_solver import game_interaction
 from manipulation_bench.scorers import (
     argument_quality,
     belief_shift,
@@ -10,13 +11,17 @@ from manipulation_bench.scorers import (
     juror_voting,
     manipulation_detection,
 )
-from manipulation_bench.game_solver import game_interaction
 
 
 @task
 def manipulation_bench(
     scenarios: str = "debate_2agent.jsonl",
+    juror_roles: str | list[str] = "",
 ) -> Task:
+    if isinstance(juror_roles, list):
+        juror_list = juror_roles or None
+    else:
+        juror_list = [r.strip() for r in juror_roles.split(",") if r.strip()] or None
     return Task(
         dataset=load_scenarios(scenarios),
         solver=game_interaction(),
@@ -25,6 +30,6 @@ def manipulation_bench(
             argument_quality(),
             belief_shift(),
             juror_voting(),
-            ground_truth_persuasion(),
+            ground_truth_persuasion(juror_roles=juror_list),
         ],
     )
