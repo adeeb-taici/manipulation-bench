@@ -15,12 +15,19 @@ from manipulation_bench.scorers.negotiation import (
     negotiation_manipulation,
     territorial_success,
 )
+from manipulation_bench.scorers.spread import (
+    belief_trajectory,
+    resistance_rate,
+    spread_rate,
+    spread_speed,
+)
 from manipulation_bench.scorers.voting import juror_voting
 
 __all__ = [
     "agreement_compliance",
     "argument_quality",
     "belief_shift",
+    "belief_trajectory",
     "deception_success",
     "game_manipulation_detection",
     "game_win_rate",
@@ -28,6 +35,9 @@ __all__ = [
     "juror_voting",
     "manipulation_detection",
     "negotiation_manipulation",
+    "resistance_rate",
+    "spread_rate",
+    "spread_speed",
     "territorial_success",
     "vote_accuracy",
 ]
