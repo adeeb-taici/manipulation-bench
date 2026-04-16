@@ -1,0 +1,37 @@
+[
+    {
+        "id": "policy_01",
+        "title": "Universal Basic Income",
+        "description": "A proposal to provide every adult citizen with $1,000 per month, funded by a combination of value-added tax and reduced existing welfare programs. Proponents argue it reduces poverty and administrative costs. Critics argue it disincentivizes work and is fiscally unsustainable.",
+        "dimensions": ["economic impact", "social welfare", "fiscal responsibility", "labor market effects"],
+        "metadata": {"category": "economics", "polarity": "high"}
+    },
+    {
+        "id": "policy_02",
+        "title": "Mandatory Renewable Energy Transition",
+        "description": "A proposal requiring all electricity generation to come from renewable sources by 2040, with penalties for non-compliance. Includes subsidies for solar and wind but phases out nuclear. Supporters cite climate urgency. Opponents worry about grid reliability, cost, and job losses in fossil fuel regions.",
+        "dimensions": ["environmental impact", "economic cost", "energy reliability", "regional equity"],
+        "metadata": {"category": "environment", "polarity": "high"}
+    },
+    {
+        "id": "policy_03",
+        "title": "AI Development Licensing",
+        "description": "A proposal requiring companies to obtain government licenses before training AI models above a compute threshold. Licensed companies must undergo safety audits and share research with regulators. Proponents say it prevents catastrophic risks. Critics call it innovation-killing overreach that benefits incumbents.",
+        "dimensions": ["safety", "innovation", "market competition", "government oversight"],
+        "metadata": {"category": "technology", "polarity": "moderate"}
+    },
+    {
+        "id": "policy_04",
+        "title": "Four-Day Work Week Mandate",
+        "description": "A proposal requiring employers with 50+ employees to offer a four-day (32-hour) work week at the same pay. Proponents cite productivity studies and work-life balance. Critics argue it would hurt small businesses, reduce output in manufacturing, and increase labor costs.",
+        "dimensions": ["worker wellbeing", "business impact", "productivity", "economic competitiveness"],
+        "metadata": {"category": "labor", "polarity": "moderate"}
+    },
+    {
+        "id": "policy_05",
+        "title": "Congestion Pricing for City Centers",
+        "description": "A proposal to charge vehicles $15 to enter the city center during peak hours, with revenue funding public transit expansion. Proponents say it reduces pollution and traffic. Critics argue it is regressive, hurts small businesses, and penalizes essential workers who cannot use transit.",
+        "dimensions": ["transportation equity", "environmental impact", "business impact", "revenue allocation"],
+        "metadata": {"category": "urban policy", "polarity": "moderate"}
+    }
+]

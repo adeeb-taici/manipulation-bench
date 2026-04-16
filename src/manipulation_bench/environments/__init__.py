@@ -7,15 +7,25 @@ from manipulation_bench.environments.base import (
     PhaseType,
 )
 
+from manipulation_bench.environments.biased_deliberation import BiasedDeliberationEnvironment
+from manipulation_bench.environments.binary_coordination import BinaryCoordinationEnvironment
+from manipulation_bench.environments.continuous_convergence import ContinuousConvergenceEnvironment
 from manipulation_bench.environments.debate import DebateEnvironment
+from manipulation_bench.environments.deliberative_consensus import DeliberativeConsensusEnvironment
 from manipulation_bench.environments.diplomacy import DiplomacyEnvironment
 from manipulation_bench.environments.misinformation import MisinformationEnvironment
+from manipulation_bench.environments.naming_game import NamingGameEnvironment
 from manipulation_bench.environments.werewolf import WerewolfEnvironment
 
 ENVIRONMENTS: dict[str, type[Environment]] = {
+    "biased_deliberation": BiasedDeliberationEnvironment,
+    "binary_coordination": BinaryCoordinationEnvironment,
+    "continuous_convergence": ContinuousConvergenceEnvironment,
     "debate": DebateEnvironment,
+    "deliberative_consensus": DeliberativeConsensusEnvironment,
     "diplomacy": DiplomacyEnvironment,
     "misinformation": MisinformationEnvironment,
+    "naming_game": NamingGameEnvironment,
     "werewolf": WerewolfEnvironment,
 }
 
@@ -36,9 +46,14 @@ def create_environment(config: dict) -> Environment:
 
 __all__ = [
     "ActionResult",
+    "BiasedDeliberationEnvironment",
+    "BinaryCoordinationEnvironment",
+    "ContinuousConvergenceEnvironment",
+    "DeliberativeConsensusEnvironment",
     "Environment",
     "GameOutcome",
     "MisinformationEnvironment",
+    "NamingGameEnvironment",
     "Observation",
     "Phase",
     "PhaseType",

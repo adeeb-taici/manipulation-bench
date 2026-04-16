@@ -1,6 +1,11 @@
 """Inspect entry-point: import tasks lazily for discovery."""
 
 _TASKS = {
+    "binary_coordination_bench": "manipulation_bench.consensus_tasks",
+    "naming_game_bench": "manipulation_bench.consensus_tasks",
+    "continuous_convergence_bench": "manipulation_bench.consensus_tasks",
+    "deliberative_consensus_bench": "manipulation_bench.consensus_tasks",
+    "biased_deliberation_bench": "manipulation_bench.consensus_tasks",
     "diplomacy_bench": "manipulation_bench.diplomacy_task",
     "werewolf_bench": "manipulation_bench.game_task",
     "manipulation_bench": "manipulation_bench.task",

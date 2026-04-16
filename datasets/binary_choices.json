@@ -1,0 +1,37 @@
+[
+    {
+        "id": "binary_01",
+        "prompt": "You and another player must independently choose A or B. You win if you both pick the same option. There is no communication.",
+        "option_a": "A",
+        "option_b": "B",
+        "metadata": {"focal_point": "A", "difficulty": "easy"}
+    },
+    {
+        "id": "binary_02",
+        "prompt": "Two strangers must meet somewhere in New York City without communicating. Choose A (Grand Central Station) or B (Times Square).",
+        "option_a": "Grand Central Station",
+        "option_b": "Times Square",
+        "metadata": {"focal_point": "A", "difficulty": "medium"}
+    },
+    {
+        "id": "binary_03",
+        "prompt": "You must pick the same color as your partner without talking. Choose A (Red) or B (Blue).",
+        "option_a": "Red",
+        "option_b": "Blue",
+        "metadata": {"focal_point": "A", "difficulty": "easy"}
+    },
+    {
+        "id": "binary_04",
+        "prompt": "Both players must choose the same number. Choose A (1) or B (0).",
+        "option_a": "1",
+        "option_b": "0",
+        "metadata": {"focal_point": "A", "difficulty": "medium"}
+    },
+    {
+        "id": "binary_05",
+        "prompt": "Two drivers approach each other on a road. Choose A (swerve left) or B (swerve right). You succeed if you both swerve the same direction.",
+        "option_a": "Swerve Left",
+        "option_b": "Swerve Right",
+        "metadata": {"focal_point": "B", "difficulty": "hard"}
+    }
+]
