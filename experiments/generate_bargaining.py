@@ -42,6 +42,21 @@ VALUATION_PAIRS = [
     (5, 5),
 ]
 
+# Extended 10-pair set used by the 2x2 and neutral-variants experiments
+# (VALUATION_PAIRS + the 5 supplementary pairs from generate_bargaining_supplement).
+VALUATION_PAIRS_10 = [
+    (1, 9),
+    (2, 8),
+    (3, 7),
+    (4, 6),
+    (5, 5),
+    (1, 8),
+    (2, 7),
+    (3, 6),
+    (4, 5),
+    (2, 9),
+]
+
 # Expected penalty levels (in utility units, same currency as payoff).
 # Max realistic manipulation gain is ~80 utility for extreme asymmetry when
 # lying from v=1 -> v=9 (honest: 10 tokens * 1 = 10 util; lying: 50 * 1 = 50;

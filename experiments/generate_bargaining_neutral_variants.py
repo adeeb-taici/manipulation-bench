@@ -36,21 +36,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from generate_bargaining import MODELS
+from generate_bargaining import MODELS, VALUATION_PAIRS_10
 
 # Same 10 valuation pairs as bargaining_2x2 so cells are comparable.
-VALUATION_PAIRS = [
-    (1, 9),
-    (2, 8),
-    (3, 7),
-    (4, 6),
-    (5, 5),
-    (1, 8),
-    (2, 7),
-    (3, 6),
-    (4, 5),
-    (2, 9),
-]
+VALUATION_PAIRS = VALUATION_PAIRS_10
 
 # Two-point incentive axis matching bargaining_2x2.
 PENALTY_LEVELS = [0, 80]

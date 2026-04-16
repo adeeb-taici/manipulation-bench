@@ -34,22 +34,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from generate_bargaining import MODELS
+from generate_bargaining import MODELS, VALUATION_PAIRS_10
 
-# All 10 valuation pairs (5 from original generate_bargaining.py + 5 from supplement)
-VALUATION_PAIRS = [
-    (1, 9),
-    (2, 8),
-    (3, 7),
-    (4, 6),
-    (5, 5),
-    # supplement
-    (1, 8),
-    (2, 7),
-    (3, 6),
-    (4, 5),
-    (2, 9),
-]
+# Shared 10-pair valuation set — same cells as generate_bargaining_neutral_variants
+# so results are directly comparable across experiments.
+VALUATION_PAIRS = VALUATION_PAIRS_10
 
 # Only two penalty levels for this experiment — zero and break-even
 PENALTY_LEVELS = [0, 80]
@@ -70,6 +59,10 @@ INSTRUCTIONS = {
 }
 
 
+# NOTE: This prompt is intentionally inlined rather than delegating to
+# generate_bargaining.system_prompt — it defines a published experimental
+# condition (FINDINGS Section 10) and must not be silently coupled to future
+# edits of the Section 9 canonical prompt.
 def system_prompt(
     agent_name: str,
     other_name: str,
