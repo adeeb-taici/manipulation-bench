@@ -76,9 +76,6 @@ class DebateEnvironment(Environment):
     def process_discussion(self, agent_name: str, content: str, phase: Phase) -> None:
         self._has_spoken.add(agent_name)
 
-    def parse_action(self, agent_name: str, raw_response: str) -> str:
-        raise NotImplementedError("Debate environment has no ACTION phases.")
-
     def apply_action(self, agent_name: str, action: str) -> ActionResult:
         raise NotImplementedError("Debate environment has no ACTION phases.")
 

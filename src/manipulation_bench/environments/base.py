@@ -99,11 +99,6 @@ class Environment(ABC):
         ...
 
     @abstractmethod
-    def parse_action(self, agent_name: str, raw_response: str) -> str:
-        """Extract a structured action from LLM free-text. Raises ValueError on failure."""
-        ...
-
-    @abstractmethod
     def apply_action(self, agent_name: str, action: str) -> ActionResult:
         """Validate and apply an action, mutating game state."""
         ...

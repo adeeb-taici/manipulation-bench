@@ -393,52 +393,6 @@ class DiplomacyEnvironment(Environment):
                 responses.append(f"Unknown tool: {tc.function}")
         return responses
 
-    # ── Legacy text parsing (kept for backward compat) ─────────────────
-
-    def parse_action(self, agent_name: str, raw_response: str) -> str:
-        """Extract ACTION: lines from the last contiguous block.
-
-        Models sometimes second-guess themselves and emit multiple blocks of
-        ACTION: lines separated by reasoning text.  We take only the *last*
-        contiguous block (the model's final intent) and deduplicate.
-        """
-        blocks: list[list[str]] = []
-        current_block: list[str] = []
-
-        for line in raw_response.split("\n"):
-            match = re.match(r"\s*ACTION:\s*(.+)", line, re.IGNORECASE)
-            if match:
-                order = match.group(1).strip()
-                if order:
-                    current_block.append(order)
-            else:
-                if current_block:
-                    blocks.append(current_block)
-                    current_block = []
-        if current_block:
-            blocks.append(current_block)
-
-        if not blocks:
-            raise ValueError(
-                "No ACTION: lines found. Submit one ACTION per unit, e.g., ACTION: A PAR - BUR"
-            )
-
-        # Use the last contiguous block (model's final intent)
-        orders = blocks[-1]
-
-        # Normalize common syntax variants
-        orders = [self._normalize_order(o) for o in orders]
-
-        # Deduplicate while preserving order
-        seen: set[str] = set()
-        unique: list[str] = []
-        for o in orders:
-            if o not in seen:
-                seen.add(o)
-                unique.append(o)
-
-        return ",".join(unique)
-
     @staticmethod
     def _normalize_order(order: str) -> str:
         """Normalize common order syntax variants to match engine format."""
