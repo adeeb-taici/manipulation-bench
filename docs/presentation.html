@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>manipulation-bench: Direction & Architecture</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+
+:root {
+  --ink: #0a0a0c;
+  --paper: #f4f1eb;
+  --paper-warm: #ece8df;
+  --accent: #c44b2b;
+  --accent-muted: #d4816e;
+  --steel: #5a6672;
+  --steel-light: #8a95a0;
+  --rule: #c8c2b6;
+  --code-bg: #1a1b1e;
+  --code-fg: #c9d1d9;
+  --highlight: #ffeaa7;
+  --node-village: #4a7c59;
+  --node-wolf: #c44b2b;
+  --node-neutral: #5a6672;
+  --edge: #c8c2b6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+  background: var(--ink);
+}
+
+body {
+  font-family: 'Source Sans 3', Georgia, serif;
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SLIDE SYSTEM ─────────────────────────────────────── */
+
+.slide {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6vh 10vw;
+  position: relative;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.slide + .slide {
+  border-top: 1px solid var(--rule);
+}
+
+.slide--dark {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.slide--dark .rule { border-color: #2a2b2e; }
+.slide--dark .meta { color: var(--steel-light); }
+.slide--dark h2 { color: var(--paper); }
+.slide--dark .accent { color: var(--accent-muted); }
+
+/* ─── TYPOGRAPHY ───────────────────────────────────────── */
+
+h1 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.4em;
+}
+
+h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5em;
+  color: var(--ink);
+}
+
+h3 {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--steel);
+  margin-bottom: 1.5rem;
+}
+
+p, li {
+  font-size: 1.05rem;
+  max-width: 42em;
+  color: var(--steel);
+}
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--steel);
+  max-width: 38em;
+}
+
+.accent { color: var(--accent); font-weight: 600; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 0.88em; }
+.meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+}
+
+/* ─── LAYOUT ELEMENTS ──────────────────────────────────── */
+
+.rule {
+  width: 4rem;
+  border: none;
+  border-top: 2px solid var(--accent);
+  margin: 1.5rem 0;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.card {
+  padding: 1.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--paper);
+  position: relative;
+}
+
+.card--dark {
+  background: #13141a;
+  border-color: #2a2b2e;
+}
+
+.card__number {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 2.4rem;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.card h4 {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.6rem;
+  color: var(--ink);
+}
+
+.card--dark h4 { color: var(--paper); }
+
+.card p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+/* ─── TABLE ────────────────────────────────────────────── */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  font-size: 0.88rem;
+}
+
+.data-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--steel-light);
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border-bottom: 2px solid var(--rule);
+}
+
+.data-table td {
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--steel);
+  vertical-align: top;
+}
+
+.data-table td:first-child {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.slide--dark .data-table th { border-color: #2a2b2e; color: var(--steel-light); }
+.slide--dark .data-table td { border-color: #2a2b2e; color: var(--steel-light); }
+.slide--dark .data-table td:first-child { color: var(--paper); }
+
+/* ─── LEVEL SPECTRUM ───────────────────────────────────── */
+
+.spectrum {
+  display: flex;
+  gap: 0;
+  margin-top: 2rem;
+  border: 1px solid #2a2b2e;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.spectrum__item {
+  flex: 1;
+  padding: 0.8rem 0.4rem;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  border-right: 1px solid #2a2b2e;
+  transition: all 0.2s;
+  position: relative;
+  cursor: default;
+}
+
+.spectrum__item:last-child { border-right: none; }
+
+.spectrum__item .num {
+  display: block;
+  font-size: 1.1rem;
+  font-family: 'DM Serif Display', Georgia, serif;
+  margin-bottom: 0.3rem;
+  color: var(--paper);
+}
+
+.spectrum__item .label {
+  display: block;
+  color: var(--steel-light);
+  font-size: 0.55rem;
+  line-height: 1.3;
+}
+
+.spectrum__item--low { background: #141820; }
+.spectrum__item--med { background: #1a1520; }
+.spectrum__item--high { background: #201218; }
+
+.spectrum__item:hover {
+  background: var(--accent);
+}
+.spectrum__item:hover .label { color: var(--paper); }
+
+/* ─── ARCHITECTURE DIAGRAM ─────────────────────────────── */
+
+.arch-diagram {
+  margin: 2rem 0;
+  padding: 2.5rem;
+  background: var(--code-bg);
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1.7;
+  color: var(--code-fg);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.arch-diagram .comment { color: #6a737d; }
+.arch-diagram .keyword { color: var(--accent-muted); }
+.arch-diagram .string { color: #a5d6a7; }
+.arch-diagram .type { color: #82b1ff; }
+
+/* ─── NETWORK VIZ (SVG) ───────────────────────────────── */
+
+.network-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.network-container svg {
+  max-width: 100%;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+.slide > * {
+  animation: fadeUp 0.6s ease-out both;
+}
+
+.slide > *:nth-child(1) { animation-delay: 0.05s; }
+.slide > *:nth-child(2) { animation-delay: 0.15s; }
+.slide > *:nth-child(3) { animation-delay: 0.25s; }
+.slide > *:nth-child(4) { animation-delay: 0.35s; }
+.slide > *:nth-child(5) { animation-delay: 0.45s; }
+.slide > *:nth-child(6) { animation-delay: 0.55s; }
+
+/* ─── SLIDE COUNTER ────────────────────────────────────── */
+
+.slide-num {
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: var(--steel-light);
+  opacity: 0.6;
+}
+
+/* ─── RESPONSIVE ───────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .spectrum { flex-wrap: wrap; }
+  .spectrum__item { flex-basis: 20%; }
+  .slide { padding: 4vh 6vw; }
+}
+
+/* ─── BULLET LIST ──────────────────────────────────────── */
+
+ul.clean {
+  list-style: none;
+  padding: 0;
+}
+
+ul.clean li {
+  padding: 0.3rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+ul.clean li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 6px;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* ─── PHASE TIMELINE ───────────────────────────────────── */
+
+.timeline {
+  display: flex;
+  gap: 0;
+  margin-top: 2rem;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 1.4rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rule);
+}
+
+.slide--dark .timeline::before { background: #2a2b2e; }
+
+.timeline__phase {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  padding-top: 2.5rem;
+}
+
+.timeline__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  position: absolute;
+  top: 0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.timeline__dot--done { background: var(--node-village); }
+.timeline__dot--current { background: var(--accent); box-shadow: 0 0 0 4px rgba(196, 75, 43, 0.2); }
+.timeline__dot--future { background: var(--steel-light); }
+
+.timeline__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--steel);
+  margin-bottom: 0.3rem;
+}
+
+.timeline__desc {
+  font-size: 0.75rem;
+  color: var(--steel-light);
+  line-height: 1.4;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 1 — TITLE
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide slide--dark">
+  <span class="meta">TAICI Research &middot; April 2025</span>
+  <h1 style="margin-top: 1rem;">
+    manipulation-bench
+  </h1>
+  <hr class="rule">
+  <p class="lead" style="color: var(--steel-light);">
+    A unified multi-agent framework for measuring how AI systems
+    <span class="accent">manipulate</span>, <span class="accent">persuade</span>,
+    and <span class="accent">reach consensus</span> &mdash; across games,
+    debates, networks, and social simulations.
+  </p>
+  <p style="margin-top: 2rem; color: var(--steel-light); font-size: 0.88rem;">
+    Merging two existing frameworks + adding 9 new consensus game levels.
+  </p>
+  <span class="slide-num">01</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 2 — THE PROBLEM
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide">
+  <h3>The problem</h3>
+  <h2>AI manipulation is becoming cheap,<br>scalable, and hard to measure</h2>
+  <hr class="rule">
+  <div class="grid-2">
+    <div>
+      <p>
+        Frontier models exceed humans at persuasion. States already deploy AI disinformation campaigns.
+        The EU AI Act prohibits manipulation but lacks measurement tools.
+        The International AI Safety Report 2025 identifies manipulation as a major risk
+        but notes the evidence base is insufficient for policy calibration.
+      </p>
+      <p style="margin-top: 1rem;">
+        Existing benchmarks (HarmBench, JailbreakBench) use <span class="accent">binary metrics</span> &mdash;
+        attack succeeded or failed. They don't capture <em>how far</em> a system
+        progresses through staged social engineering, or how group dynamics
+        amplify or resist manipulation.
+      </p>
+    </div>
+    <div>
+      <div class="card">
+        <h4>What's missing</h4>
+        <ul class="clean">
+          <li>Continuous manipulation depth (not binary pass/fail)</li>
+          <li>Multi-agent social dynamics (not single-turn prompts)</li>
+          <li>Consensus measurement (not just attack success)</li>
+          <li>Cross-environment comparison (debate vs. game vs. network)</li>
+          <li>Policy-calibrated metrics (EU AI Act, IAISR 2025)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <span class="slide-num">02</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 3 — TWO PROJECTS → ONE
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide slide--dark">
+  <h3>Integration</h3>
+  <h2>Two projects becoming one</h2>
+  <hr class="rule">
+  <div class="grid-2" style="margin-top: 1.5rem;">
+    <div class="card card--dark">
+      <div class="card__number">01</div>
+      <h4>manipulation-bench</h4>
+      <p style="color: var(--steel-light);">
+        Game-theoretic evaluation lab. Three environments: <strong>Debate</strong>,
+        <strong>Werewolf</strong>, <strong>Diplomacy</strong>. Structured tool-call actions,
+        LLM-judge scorers, Environment ABC, unified solver.
+      </p>
+      <p style="margin-top: 0.8rem; color: var(--accent-muted); font-size: 0.8rem;">
+        Strength: Deep game mechanics, structured actions, rich scoring
+      </p>
+    </div>
+    <div class="card card--dark">
+      <div class="card__number">02</div>
+      <h4>manipulationbench</h4>
+      <p style="color: var(--steel-light);">
+        Social simulation platform. Misinformation spread through agent networks.
+        Trait-based personas, channel routing, pluggable conversation styles,
+        Discord bridge, D3 visualization.
+      </p>
+      <p style="margin-top: 0.8rem; color: var(--accent-muted); font-size: 0.8rem;">
+        Strength: Rich agent modeling, realistic communication, platform integration
+      </p>
+    </div>
+  </div>
+  <p style="margin-top: 2rem; text-align: center; color: var(--steel-light); font-size: 1.1rem;">
+    manipulation-bench absorbs manipulationbench's best features<br>
+    and gains <span class="accent">9 new consensus game levels</span>.
+  </p>
+  <span class="slide-num">03</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 4 — ARCHITECTURE
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide">
+  <h3>Architecture</h3>
+  <h2>One solver, many environments</h2>
+  <hr class="rule">
+  <div class="arch-diagram"><span class="comment">// Every environment uses the same loop</span>
+
+<span class="keyword">while</span> <span class="keyword">not</span> env.<span class="type">is_terminal</span>():
+    phase = env.<span class="type">get_current_phase</span>()
+
+    <span class="keyword">if</span> phase.parallel:
+        <span class="comment">// consensus games: all agents act simultaneously</span>
+        results = <span class="keyword">await</span> <span class="type">collect</span>(*[run_agent(a) <span class="keyword">for</span> a <span class="keyword">in</span> phase.acting_agents])
+    <span class="keyword">else</span>:
+        <span class="comment">// sequential: werewolf night, diplomacy orders</span>
+        <span class="keyword">for</span> actor <span class="keyword">in</span> phase.acting_agents:
+            <span class="keyword">await</span> run_agent(actor)
+
+    env.<span class="type">update_network</span>(network, interaction)   <span class="comment">// adaptive topology</span>
+    env.<span class="type">advance_phase</span>()</div>
+  <div class="grid-3" style="margin-top: 1.5rem;">
+    <div class="card">
+      <h4>Environment ABC</h4>
+      <p>Game rules, phases, observations, actions. Each game is one implementation.</p>
+    </div>
+    <div class="card">
+      <h4>Network + Channels</h4>
+      <p>Broadcast, DMs, faction channels, adaptive topology. Communication is first-class.</p>
+    </div>
+    <div class="card">
+      <h4>PersonaCard + Traits</h4>
+      <p>Credulity, expertise, influence, assertiveness. Continuous [0,1] vectors shape behavior.</p>
+    </div>
+  </div>
+  <span class="slide-num">04</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 5 — CONSENSUS LEVELS
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide slide--dark">
+  <h3>Consensus game levels</h3>
+  <h2>A 10-level complexity spectrum</h2>
+  <hr class="rule">
+  <p class="lead" style="color: var(--steel-light); margin-bottom: 0.5rem;">
+    Each level introduces one new concept. Built sequentially &mdash;
+    each level stress-tests infrastructure the next one needs.
+  </p>
+  <div class="spectrum">
+    <div class="spectrum__item spectrum__item--low">
+      <span class="num">1</span>
+      <span class="label">Binary<br>Coord.</span>
+    </div>
+    <div class="spectrum__item spectrum__item--low">
+      <span class="num">2</span>
+      <span class="label">Naming<br>Game</span>
+    </div>
+    <div class="spectrum__item spectrum__item--low">
+      <span class="num">3</span>
+      <span class="label">Contin.<br>Converg.</span>
+    </div>
+    <div class="spectrum__item spectrum__item--med">
+      <span class="num">4</span>
+      <span class="label">Deliber.<br>Consens.</span>
+    </div>
+    <div class="spectrum__item spectrum__item--med">
+      <span class="num">5</span>
+      <span class="label">Biased<br>Deliber.</span>
+    </div>
+    <div class="spectrum__item spectrum__item--med">
+      <span class="num">6</span>
+      <span class="label">Asym.<br>Info</span>
+    </div>
+    <div class="spectrum__item spectrum__item--med">
+      <span class="num">7</span>
+      <span class="label">Trust &<br>Repute</span>
+    </div>
+    <div class="spectrum__item spectrum__item--high">
+      <span class="num">8</span>
+      <span class="label">Hidden<br>Agenda</span>
+    </div>
+    <div class="spectrum__item spectrum__item--high">
+      <span class="num">9</span>
+      <span class="label">Social<br>Deduct.</span>
+    </div>
+    <div class="spectrum__item spectrum__item--high">
+      <span class="num">10</span>
+      <span class="label">Were-<br>wolf</span>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top: 2rem;">
+    <div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>New concept</th>
+            <th>Infrastructure proved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>No communication</td><td>Minimal env, ACTION-only</td></tr>
+          <tr><td>2</td><td>Pairwise interaction</td><td>Pairwise topology</td></tr>
+          <tr><td>3</td><td>Numeric opinions</td><td>extract_opinion(), trajectories</td></tr>
+          <tr><td>4</td><td>Mixed phases</td><td>DISCUSSION + ACTION</td></tr>
+          <tr><td>5</td><td>Persona-driven</td><td>PersonaCard integration</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>New concept</th>
+            <th>Infrastructure proved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>6</td><td>Asymmetric evidence</td><td>Private info, ground truth</td></tr>
+          <tr><td>7</td><td>Multi-game trust</td><td>Adaptive networks</td></tr>
+          <tr><td>8</td><td>Hidden agendas</td><td>Multi-dimensional opinions</td></tr>
+          <tr><td>9</td><td>Saboteur</td><td>Task quality degradation</td></tr>
+          <tr><td>10</td><td>Full Werewolf</td><td>Adaptive rewiring</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <span class="slide-num">05</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 6 — MEASUREMENT
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide">
+  <h3>Measurement system</h3>
+  <h2>Unified metrics across all environments</h2>
+  <hr class="rule">
+  <div class="grid-2">
+    <div>
+      <h4 style="font-family: 'JetBrains Mono'; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 1rem;">Scorer categories</h4>
+      <table class="data-table" style="margin-top: 0;">
+        <thead>
+          <tr><th>Category</th><th>Metrics</th><th>LLM judge?</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Opinion</td><td>Mean, std, MAD, Esteban-Ray, entropy, bimodality</td><td>No</td></tr>
+          <tr><td>Network</td><td>Interface density, echo chambers, modularity</td><td>No</td></tr>
+          <tr><td>Dynamics</td><td>Time to consensus, change rate, influence asymmetry</td><td>No</td></tr>
+          <tr><td>Behavioral</td><td>Sycophancy, backfire, persona consistency, rhetoric</td><td>Mixed</td></tr>
+          <tr><td>Spread</td><td>Spread rate, speed, resistance, trajectory</td><td>No</td></tr>
+          <tr><td>Qualitative</td><td>Manipulation detection, argument quality, belief shift</td><td>Yes</td></tr>
+          <tr><td>Game</td><td>Win rate, deception, vote accuracy, compliance</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h4>Key insight</h4>
+        <p>
+          Scorers are organized by <strong>what they require</strong>, not by environment.
+          Any level that tracks numeric opinions gets the full opinion suite.
+          Any level with adaptive networks gets network metrics. No duplication.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Reproducibility</h4>
+        <p>
+          Most scorers are pure math &mdash; no LLM judge, fully reproducible.
+          LLM-judge scorers (qualitative assessment) are clearly separated and labeled.
+        </p>
+      </div>
+    </div>
+  </div>
+  <span class="slide-num">06</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 7 — WHAT'S BUILT VS PLANNED
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide slide--dark">
+  <h3>Progress</h3>
+  <h2>Where we are</h2>
+  <hr class="rule">
+
+  <div class="timeline" style="margin-bottom: 2rem;">
+    <div class="timeline__phase">
+      <div class="timeline__dot timeline__dot--done"></div>
+      <div class="timeline__label">Phase 0&ndash;1</div>
+      <div class="timeline__desc" style="color: var(--steel-light);">Infrastructure<br>+ Solver</div>
+    </div>
+    <div class="timeline__phase">
+      <div class="timeline__dot timeline__dot--current"></div>
+      <div class="timeline__label">Phase 2</div>
+      <div class="timeline__desc" style="color: var(--steel-light);">Migrate envs<br>+ Port misinfo</div>
+    </div>
+    <div class="timeline__phase">
+      <div class="timeline__dot timeline__dot--current"></div>
+      <div class="timeline__label">Phase 3</div>
+      <div class="timeline__desc" style="color: var(--steel-light);">Consensus<br>scorers</div>
+    </div>
+    <div class="timeline__phase">
+      <div class="timeline__dot timeline__dot--future"></div>
+      <div class="timeline__label">Phase 4</div>
+      <div class="timeline__desc" style="color: var(--steel-light);">Levels<br>1&ndash;9</div>
+    </div>
+    <div class="timeline__phase">
+      <div class="timeline__dot timeline__dot--future"></div>
+      <div class="timeline__label">Phase 5</div>
+      <div class="timeline__desc" style="color: var(--steel-light);">Experiments<br>+ Analysis</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h4 style="color: var(--node-village); font-family: 'JetBrains Mono'; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1rem;">Completed &mdash; Phase 0&ndash;1</h4>
+      <ul class="clean" style="color: var(--steel-light);">
+        <li>PersonaCard with trait vectors + generate_population()</li>
+        <li>Network/Channel system with 5 topology factories</li>
+        <li>ConversationStyle, ContextStrategy, PlatformBridge protocols</li>
+        <li>3 conversation styles, 4 context strategies, ConsoleBridge</li>
+        <li>Environment ABC: parallel phases + 5 new hooks</li>
+        <li>Unified solver with collect() parallelism</li>
+        <li style="color: var(--node-village); font-weight: 600;">131 tests, full backward compatibility</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color: var(--accent); font-family: 'JetBrains Mono'; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1rem;">In progress &mdash; Phase 2 &amp; 3</h4>
+      <ul class="clean" style="color: var(--steel-light);">
+        <li>Port misinformation environment from manipulationbench</li>
+        <li>Port spread scorers (rate, speed, resistance, trajectory)</li>
+        <li>Port D3/Chart.js visualization module</li>
+        <li>Opinion distribution scorers (7 metrics)</li>
+        <li>Network structure scorers (4 metrics)</li>
+        <li>Dynamics scorers (5 metrics)</li>
+        <li>Behavioral scorers (5 metrics, mixed math + LLM)</li>
+      </ul>
+    </div>
+  </div>
+  <span class="slide-num">07</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 8 — ENVIRONMENTS OVERVIEW
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide">
+  <h3>Environments</h3>
+  <h2>14 environments, one ABC</h2>
+  <hr class="rule">
+  <table class="data-table" style="max-width: 60rem;">
+    <thead>
+      <tr>
+        <th>Environment</th>
+        <th>Type</th>
+        <th>Agents</th>
+        <th>Communication</th>
+        <th>Key metric</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Debate</td><td>Existing</td><td>2&ndash;N</td><td>Broadcast</td><td>Manipulation detection</td></tr>
+      <tr><td>Werewolf</td><td>Existing</td><td>4&ndash;7</td><td>Broadcast + faction</td><td>Deception success</td></tr>
+      <tr><td>Diplomacy</td><td>Existing</td><td>7</td><td>Bilateral DMs</td><td>Agreement compliance</td></tr>
+      <tr><td>Misinformation</td><td>Ported</td><td>3&ndash;50+</td><td>Star/ring/dense</td><td>Spread rate</td></tr>
+      <tr><td style="color: var(--accent);">L1: Binary Coordination</td><td>New</td><td>2</td><td>None</td><td>Focal point convergence</td></tr>
+      <tr><td style="color: var(--accent);">L2: Naming Game</td><td>New</td><td>N</td><td>Pairwise</td><td>Vocabulary collapse</td></tr>
+      <tr><td style="color: var(--accent);">L3: Continuous Convergence</td><td>New</td><td>N</td><td>Pairwise</td><td>Opinion clustering</td></tr>
+      <tr><td style="color: var(--accent);">L4: Deliberative Consensus</td><td>New</td><td>N</td><td>Broadcast</td><td>Time to unanimity</td></tr>
+      <tr><td style="color: var(--accent);">L5: Biased Deliberation</td><td>New</td><td>N</td><td>Broadcast</td><td>Polarization index</td></tr>
+      <tr><td style="color: var(--accent);">L6: Asymmetric Information</td><td>New</td><td>N</td><td>Broadcast</td><td>Info pooling efficiency</td></tr>
+      <tr><td style="color: var(--accent);">L7: Trust &amp; Reputation</td><td>New</td><td>N</td><td>Adaptive</td><td>Trust calibration</td></tr>
+      <tr><td style="color: var(--accent);">L8: Hidden Agenda</td><td>New</td><td>N</td><td>Commons</td><td>Pareto efficiency</td></tr>
+      <tr><td style="color: var(--accent);">L9: Social Deduction Lite</td><td>New</td><td>N</td><td>Broadcast + faction</td><td>Detection rate</td></tr>
+      <tr><td style="color: var(--accent);">L10: Werewolf (adapted)</td><td>Enhanced</td><td>4&ndash;7</td><td>Adaptive</td><td>Echo chamber formation</td></tr>
+    </tbody>
+  </table>
+  <span class="slide-num">08</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 9 — DEFERRED
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide slide--dark">
+  <h3>Future work</h3>
+  <h2>Designed for, not yet built</h2>
+  <hr class="rule">
+  <div class="grid-3">
+    <div class="card card--dark">
+      <div class="card__number">11</div>
+      <h4>Multi-Faction Deception</h4>
+      <p style="color: var(--steel-light);">
+        3+ factions, role conversion, corrupted information, dead agent voting.
+        Infrastructure supports it &mdash; hooks are no-ops until implemented.
+      </p>
+    </div>
+    <div class="card card--dark">
+      <div class="card__number">12</div>
+      <h4>Open Society Simulation</h4>
+      <p style="color: var(--steel-light);">
+        50&ndash;1000+ agents, feed algorithms, persistent memory, external events.
+        get_feed_filter() hook is ready.
+      </p>
+    </div>
+    <div class="card card--dark">
+      <div class="card__number" style="font-size: 1.6rem; padding-top: 0.4rem;">&fnof;(x)</div>
+      <h4>Formal Agent Mode</h4>
+      <p style="color: var(--steel-light);">
+        Run each level with both LLM agents and equation-driven opinion dynamics.
+        Compare macro-outcomes. The core scientific mechanism.
+      </p>
+    </div>
+  </div>
+  <p style="margin-top: 2rem; color: var(--steel-light); font-size: 0.88rem;">
+    All deferred features have designed extension points in the current architecture.
+    No refactoring needed &mdash; just implementation.
+  </p>
+  <span class="slide-num">09</span>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 10 — CLOSING
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide">
+  <h3>Summary</h3>
+  <h2>One framework to measure<br>how AI systems shape belief</h2>
+  <hr class="rule">
+  <div class="grid-2">
+    <div>
+      <p class="lead">
+        manipulation-bench unifies game theory, social simulation, and opinion dynamics
+        into a single evaluation framework. Built on Inspect AI.
+        Every environment shares the same solver, scoring system, and analysis pipeline.
+      </p>
+      <p style="margin-top: 1.5rem;">
+        The key question at each level: <em>does language change the dynamics of collective belief?</em>
+      </p>
+    </div>
+    <div>
+      <div class="card">
+        <h4 style="color: var(--accent);">What makes this different</h4>
+        <ul class="clean">
+          <li><strong>Continuous</strong>, not binary &mdash; measure manipulation depth</li>
+          <li><strong>Multi-agent</strong> &mdash; social dynamics, not single prompts</li>
+          <li><strong>Cross-environment</strong> &mdash; compare across 14 settings</li>
+          <li><strong>Policy-ready</strong> &mdash; EU AI Act, IAISR 2025 aligned</li>
+          <li><strong>Extensible</strong> &mdash; new environments in one file</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top: 3rem;" class="meta">
+    manipulation-bench &middot; built on Inspect AI &middot; Python 3.11+ &middot; github.com/TAICIx
+  </p>
+  <span class="slide-num">10</span>
+</section>
+
+<!-- ─── KEYBOARD NAV ──────────────────────────────────── -->
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function goTo(i) {
+  if (i < 0 || i >= slides.length) return;
+  current = i;
+  slides[i].scrollIntoView({ behavior: 'smooth' });
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    goTo(current + 1);
+  } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    goTo(current - 1);
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    goTo(0);
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    goTo(slides.length - 1);
+  }
+});
+
+// Track current slide on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      current = Array.from(slides).indexOf(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+slides.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

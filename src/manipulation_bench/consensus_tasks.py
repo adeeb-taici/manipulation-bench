@@ -14,6 +14,7 @@ from manipulation_bench.scorers import (
     persona_consistency,
     sycophancy_rate,
     time_to_consensus,
+    vocabulary_convergence,
 )
 
 
@@ -40,7 +41,7 @@ def naming_game_bench(
         dataset=load_scenarios(scenarios),
         solver=game_interaction(),
         scorer=[
-            time_to_consensus(),
+            vocabulary_convergence(),
         ],
     )
 

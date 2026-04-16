@@ -13,6 +13,7 @@ from manipulation_bench.scorers.dynamics import (
     time_to_consensus,
 )
 from manipulation_bench.scorers.grounded import ground_truth_persuasion
+from manipulation_bench.scorers.naming import vocabulary_convergence
 from manipulation_bench.scorers.judges import (
     argument_quality,
     belief_shift,
@@ -100,4 +101,6 @@ __all__ = [
     "spread_speed",
     # Voting
     "juror_voting",
+    # Naming game
+    "vocabulary_convergence",
 ]

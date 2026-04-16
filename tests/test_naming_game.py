@@ -75,38 +75,40 @@ class TestObservation:
 
 class TestClassifyStance:
     def test_accept(self, env):
-        assert env.classify_stance("alice", "Yes, I accept that name. Let's call it a Glowball.") == "accept"
+        assert env.classify_stance("alice", "Sure. <decision>accept</decision>") == "accept"
 
     def test_reject(self, env):
-        assert env.classify_stance("alice", "No, I reject that name. I think we should call it something else.") == "reject"
+        assert env.classify_stance("alice", "Nope. <decision>reject</decision> <proposal>Lumino</proposal>") == "reject"
 
-    def test_ambiguous_defaults_to_accept(self, env):
-        # When agent proposes a name without explicit accept/reject, treat as accept
-        assert env.classify_stance("alice", "I think we should call it a Floater.") == "accept"
+    def test_no_tag_is_neutral(self, env):
+        assert env.classify_stance("alice", "I think we should call it a Floater.") == "neutral"
 
 
 class TestProcessDiscussion:
     def test_speaker_name_added_to_vocabulary(self, env):
         phase = env.get_current_phase()
         speaker = phase.acting_agents[0]
-        env.process_discussion(speaker, "I propose we call it a Glowball.", phase)
+        env.process_discussion(speaker, "I propose <proposal>Glowball</proposal>", phase)
         assert "glowball" in env._vocabularies[speaker]
 
     def test_hearer_accept_adds_name(self, env):
         phase = env.get_current_phase()
         speaker = phase.acting_agents[0]
         hearer = phase.acting_agents[1]
-        env.process_discussion(speaker, "I propose we call it a Glowball.", phase)
-        # Hearer accepts
-        env.process_discussion(hearer, "I accept that name, Glowball works.", phase)
+        env.process_discussion(speaker, "<proposal>Glowball</proposal>", phase)
+        env.process_discussion(hearer, "Works for me. <decision>accept</decision>", phase)
         assert "glowball" in env._vocabularies[hearer]
 
     def test_hearer_reject_does_not_add_name(self, env):
         phase = env.get_current_phase()
         speaker = phase.acting_agents[0]
         hearer = phase.acting_agents[1]
-        env.process_discussion(speaker, "I propose we call it a Glowball.", phase)
-        env.process_discussion(hearer, "No, I reject that. I'd call it a Lumino.", phase)
+        env.process_discussion(speaker, "<proposal>Glowball</proposal>", phase)
+        env.process_discussion(
+            hearer,
+            "Prefer another. <decision>reject</decision> <proposal>Lumino</proposal>",
+            phase,
+        )
         assert "glowball" not in env._vocabularies[hearer]
         assert "lumino" in env._vocabularies[hearer]
 
