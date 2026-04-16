@@ -14,13 +14,27 @@ try:
 except ImportError:
     HAS_DIPLOMACY = False
 
-_ENV_PARAMS = ["binary_coordination", "continuous_convergence", "debate", "deliberative_consensus", "misinformation", "naming_game", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
+_ENV_PARAMS = ["biased_deliberation", "binary_coordination", "continuous_convergence", "debate", "deliberative_consensus", "misinformation", "naming_game", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
 
 
 @pytest.fixture(params=_ENV_PARAMS)
 def environment(request):
     """Parameterized fixture yielding each Environment subclass, already set up."""
-    if request.param == "binary_coordination":
+    if request.param == "biased_deliberation":
+        from manipulation_bench.environments.biased_deliberation import BiasedDeliberationEnvironment
+
+        env = BiasedDeliberationEnvironment(
+            {
+                "proposal_title": "Test policy",
+                "proposal_description": "A test proposal.",
+                "dimensions": ["cost", "benefit"],
+                "initial_positions": {"alice": 30, "bob": 70},
+                "max_rounds": 3,
+            }
+        )
+        env.setup(["alice", "bob"])
+        return env
+    elif request.param == "binary_coordination":
         from manipulation_bench.environments.binary_coordination import BinaryCoordinationEnvironment
 
         env = BinaryCoordinationEnvironment(

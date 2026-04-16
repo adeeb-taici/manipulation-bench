@@ -7,6 +7,7 @@ from manipulation_bench.environments.base import (
     PhaseType,
 )
 
+from manipulation_bench.environments.biased_deliberation import BiasedDeliberationEnvironment
 from manipulation_bench.environments.binary_coordination import BinaryCoordinationEnvironment
 from manipulation_bench.environments.continuous_convergence import ContinuousConvergenceEnvironment
 from manipulation_bench.environments.debate import DebateEnvironment
@@ -17,6 +18,7 @@ from manipulation_bench.environments.naming_game import NamingGameEnvironment
 from manipulation_bench.environments.werewolf import WerewolfEnvironment
 
 ENVIRONMENTS: dict[str, type[Environment]] = {
+    "biased_deliberation": BiasedDeliberationEnvironment,
     "binary_coordination": BinaryCoordinationEnvironment,
     "continuous_convergence": ContinuousConvergenceEnvironment,
     "debate": DebateEnvironment,
@@ -44,6 +46,7 @@ def create_environment(config: dict) -> Environment:
 
 __all__ = [
     "ActionResult",
+    "BiasedDeliberationEnvironment",
     "BinaryCoordinationEnvironment",
     "ContinuousConvergenceEnvironment",
     "DeliberativeConsensusEnvironment",
