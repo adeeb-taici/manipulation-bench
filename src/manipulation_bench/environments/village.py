@@ -55,6 +55,9 @@ class VillageEnvironment(Environment):
         self._penalized: dict[int, list[str]] = {}  # round -> [penalized agents]
         self._pool_history: list[float] = []
         self._payoff_history: dict[int, dict[str, float]] = {}
+        self._private_messages: dict[
+            int, list[dict[str, str]]
+        ] = {}  # round -> [{sender, recipient, content}]
 
         # Current round working state
         self._current_contributions: dict[str, int] = {}
@@ -81,14 +84,14 @@ class VillageEnvironment(Environment):
                 phase_type=PhaseType.DISCUSSION,
                 round=self._round,
                 acting_agents=agents,
-                description="Send private messages to other agents. Form alliances, make promises about contributions.",
+                description="PRIVATE MESSAGING PHASE. Use the send_message tool to send private messages to specific agents. Only the recipient will see each message. You may send multiple messages to different agents.",
             ),
             Phase(
                 name="public_discussion",
                 phase_type=PhaseType.DISCUSSION,
                 round=self._round,
                 acting_agents=agents,
-                description="Public discussion. Share inspection findings, accuse free-riders, or defend yourself. Say 'I accuse <name>' to trigger a penalty vote.",
+                description="PUBLIC DISCUSSION PHASE. Everything you say here is visible to ALL agents. Share inspection findings, accuse free-riders (say 'I accuse <name>'), or defend yourself. Do NOT include private messages here.",
             ),
             Phase(
                 name="contribute_and_inspect",
@@ -109,7 +112,29 @@ class VillageEnvironment(Environment):
     def get_tools(self, agent_name: str, phase: Phase) -> list[ToolInfo]:
         others = [a for a in self._agent_names if a != agent_name]
 
-        if phase.name == "contribute_and_inspect":
+        if phase.name == "private_messaging":
+            return [
+                ToolInfo(
+                    name="send_message",
+                    description="Send a private message to one other agent. Only the recipient will see it.",
+                    parameters=ToolParams(
+                        type="object",
+                        properties={
+                            "recipient": ToolParam(
+                                type="string",
+                                description="Agent to message",
+                                enum=others,
+                            ),
+                            "content": ToolParam(
+                                type="string",
+                                description="Your private message",
+                            ),
+                        },
+                        required=["recipient", "content"],
+                    ),
+                ),
+            ]
+        elif phase.name == "contribute_and_inspect":
             return [
                 ToolInfo(
                     name="contribute",
@@ -173,6 +198,8 @@ class VillageEnvironment(Environment):
     def get_tool_choice(self, phase: Phase) -> str | None:
         if phase.phase_type == PhaseType.ACTION:
             return "any"
+        if phase.name == "private_messaging":
+            return "auto"  # optional, can send multiple messages
         return None
 
     def tool_calls_to_action(self, agent_name: str, tool_calls: list[ToolCall]) -> str:
@@ -197,8 +224,29 @@ class VillageEnvironment(Environment):
     def process_tool_calls(
         self, agent_name: str, tool_calls: list[ToolCall], phase: Phase
     ) -> list[str]:
-        # No discussion tools — messaging is free-text
-        return []
+        responses = []
+        for tc in tool_calls:
+            if tc.function == "send_message":
+                recipient = tc.arguments.get("recipient", "")
+                content = tc.arguments.get("content", "")
+                name_map = {n.lower(): n for n in self._agent_names}
+                recipient = name_map.get(recipient.lower(), recipient)
+                if recipient in self._agent_names and recipient != agent_name:
+                    if self._round not in self._private_messages:
+                        self._private_messages[self._round] = []
+                    self._private_messages[self._round].append(
+                        {
+                            "sender": agent_name,
+                            "recipient": recipient,
+                            "content": content,
+                        }
+                    )
+                    responses.append(f"Message sent to {recipient}.")
+                else:
+                    responses.append(f"Invalid recipient: {recipient}")
+            else:
+                responses.append("")
+        return responses
 
     # ── Discussion processing ───────────────────────────────────────────
 
@@ -283,13 +331,28 @@ class VillageEnvironment(Environment):
                         f"Your inspection last round: {target} contributed {found} tokens."
                     )
 
+        # Deliver private messages received this round
+        for msg in self._private_messages.get(self._round, []):
+            if msg["recipient"] == agent_name:
+                private_parts.append(f"[Private message from {msg['sender']}]: {msg['content']}")
+
+        # Engagement prompt varies by phase
+        engagement = ""
+        if phase.name == "private_messaging":
+            engagement = "Use the send_message tool to send private messages. You may send to multiple agents."
+        elif phase.name == "public_discussion":
+            engagement = "Speak publicly. Everything you say is visible to all agents. Say 'I accuse <name>' to trigger a penalty vote."
+        elif phase.name == "contribute_and_inspect":
+            engagement = "Use the contribute tool to set your contribution (0-20). Optionally use inspect_agent to audit someone."
+
         return Observation(
             agent_name=agent_name,
             phase=phase,
             public_info="\n".join(public_parts),
             private_info="\n".join(private_parts),
-            valid_actions=[],  # handled by tools
+            valid_actions=[],
             action_prompt="",
+            engagement_prompt=engagement,
         )
 
     def parse_action(self, agent_name: str, raw_response: str) -> str:
@@ -307,14 +370,14 @@ class VillageEnvironment(Environment):
                 amount = int(part.split(":")[1])
                 amount = max(0, min(self.tokens_per_round, amount))
                 self._current_contributions[agent_name] = amount
-                narratives.append(f"{agent_name} made their contribution.")
+                narratives.append(f"{agent_name} submitted their contribution.")
 
             elif part.startswith("inspect:"):
                 target = part.split(":")[1]
                 if target in self._agent_names and target != agent_name:
-                    # Inspection resolves after all contributions are in
                     self._current_inspections[agent_name] = (target, -1)  # -1 = pending
-                    narratives.append(f"{agent_name} is inspecting someone.")
+                    # Don't reveal WHO is inspecting or WHO is being inspected
+                    narratives.append(f"{agent_name} took an action.")
 
             elif part.startswith("penalize:"):
                 target = part.split(":")[1]
@@ -469,6 +532,7 @@ class VillageEnvironment(Environment):
             "pool_history": list(self._pool_history),
             "payoff_history": {str(r): dict(p) for r, p in self._payoff_history.items()},
             "promises": {str(r): dict(p) for r, p in self._promises.items()},
+            "private_messages": {str(r): list(msgs) for r, msgs in self._private_messages.items()},
             "tokens_per_round": self.tokens_per_round,
             "pool_multiplier": self.pool_multiplier,
             "outcome": self.get_outcome().model_dump(),
