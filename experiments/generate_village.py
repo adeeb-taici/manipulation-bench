@@ -101,7 +101,7 @@ def generate_scenarios():
                 "protocol": "round_robin",
                 "num_rounds": 8,
                 "visibility": "all_to_all",
-                "max_tokens": 1024,
+                "max_tokens": 4096,
                 "metadata": {
                     "environment": {
                         "type": "village",
@@ -132,7 +132,7 @@ def generate_scenarios():
                         "protocol": "round_robin",
                         "num_rounds": 8,
                         "visibility": "all_to_all",
-                        "max_tokens": 1024,
+                        "max_tokens": 4096,
                         "metadata": {
                             "environment": {
                                 "type": "village",

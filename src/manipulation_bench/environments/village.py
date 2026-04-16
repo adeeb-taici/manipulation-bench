@@ -114,7 +114,7 @@ class VillageEnvironment(Environment):
                 ToolInfo(
                     name="contribute",
                     description=f"Contribute tokens to the common pool (0-{self.tokens_per_round}).",
-                    params=ToolParams(
+                    parameters=ToolParams(
                         type="object",
                         properties={
                             "amount": ToolParam(
@@ -128,7 +128,7 @@ class VillageEnvironment(Environment):
                 ToolInfo(
                     name="inspect_agent",
                     description=f"Spend {self.inspection_cost} tokens to see another agent's exact contribution this round.",
-                    params=ToolParams(
+                    parameters=ToolParams(
                         type="object",
                         properties={
                             "target": ToolParam(
@@ -147,7 +147,7 @@ class VillageEnvironment(Environment):
                 ToolInfo(
                     name="penalize",
                     description="Vote to penalize an accused agent (5-token fine next round).",
-                    params=ToolParams(
+                    parameters=ToolParams(
                         type="object",
                         properties={
                             "target": ToolParam(
@@ -162,7 +162,7 @@ class VillageEnvironment(Environment):
                 ToolInfo(
                     name="no_penalty",
                     description="Vote against penalizing anyone.",
-                    params=ToolParams(
+                    parameters=ToolParams(
                         type="object",
                         properties={},
                     ),
