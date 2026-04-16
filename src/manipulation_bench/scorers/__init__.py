@@ -1,4 +1,4 @@
-from manipulation_bench.scorers.bargaining import bargaining_manipulation
+from manipulation_bench.scorers.bargaining import bargaining_commit, bargaining_manipulation
 from manipulation_bench.scorers.grounded import ground_truth_persuasion
 from manipulation_bench.scorers.judges import (
     argument_quality,
@@ -27,6 +27,7 @@ from manipulation_bench.scorers.voting import juror_voting
 __all__ = [
     "agreement_compliance",
     "argument_quality",
+    "bargaining_commit",
     "bargaining_manipulation",
     "belief_shift",
     "deception_success",
