@@ -120,3 +120,67 @@ Each off `origin/main`, each its own spec if non-trivial:
 - Viz module
 
 Archive branch `archive/phase-2-3-4a` is the reference for what code needs porting.
+
+---
+
+## Addendum (2026-04-16): topology redesign
+
+After the faithful port landed on `feature/naming-game`, an end-to-end run with `gpt-oss-120b` produced no convergence in 6 rounds — each agent ended with 2–4 distinct names. The root cause is the speaker/hearer pairwise mechanic: rejected counter-proposals never reach the original speaker, information propagates slowly, and agents get no population-level signal.
+
+### Revised design
+
+The naming game is redesigned around **parallel broadcast proposals** with configurable **communication topology**. This aligns with the classical Baronchelli et al. naming game literature and makes convergence failure an interpretable signal instead of a mechanical artifact.
+
+**Mechanics:**
+- Each round is a single DISCUSSION phase with `acting_agents = [all]`, `parallel = True`.
+- Every agent proposes one name in parallel.
+- Between rounds, each agent sees the list of proposals visible to them under the current topology — not necessarily all N.
+- Convergence is checked at round end under a configurable rule.
+
+**New scenario config keys:**
+- `topology: "broadcast" | "ring" | "star" | "dense" | "commons"` — default `broadcast`
+- `attribution: "anonymous" | "labeled"` — whether proposals carry speaker names. Default `anonymous`.
+- `convergence: "strict" | "majority"` — default `strict`
+- `majority_threshold: float` — only used when `convergence: majority`. Default `0.5`.
+
+**Topology semantics for naming game:**
+- `broadcast` / `dense` / `commons` — each agent sees all N proposals
+- `ring` — each agent sees only their two neighbors
+- `star` — hub sees all; leaves see only the hub
+
+**Deleted config keys:** `pairs_per_round`. Speaker/hearer logic is removed entirely.
+
+### Infrastructure port
+
+To support topologies, `src/manipulation_bench/network.py` is ported from `archive/phase-2-3-4a` (183 lines, unchanged). It provides `Network`, `Node`, `Channel`, `Message`, `ChannelType` plus topology factories (`broadcast`, `ring`, `star`, `dense`, `commons`).
+
+A minimal `src/manipulation_bench/agents.py` stub is added containing just `PersonaCard(name: str, role: str = "")` — enough to satisfy `network.py`'s imports without bringing over the full traits/backstory system. That expansion lands in later PRs as other levels need it.
+
+The archive's `tests/test_network.py` is ported unchanged to cover the topology factories and channel routing.
+
+### Scorer revision
+
+`vocabulary_convergence` now reports:
+- `strict_converged` — 0/1, all N agents proposed the same name in the final round
+- `majority_converged` — 0/1, a single name was proposed by >`majority_threshold` fraction of agents
+- `majority_fraction_final` — the largest name's share in the final round (useful even without convergence)
+- `unique_names_final` — count of distinct names in the final round (1 = unanimous)
+- `rounds_to_convergence` — round number when the configured rule first fired, or `max_rounds`
+
+Both strict and majority are always computed; the `convergence` config only controls which one stops the loop early.
+
+### Commits on top of `456eeef`
+
+Two additional commits, not squashed:
+
+1. `feat: port network.py and minimal PersonaCard stub` — adds `network.py`, `agents.py` (stub), `tests/test_network.py`. No behavior change to any existing environment.
+2. `refactor: rewrite naming game around parallel broadcast proposals` — rewrites `environments/naming_game.py`, updates `scorers/naming.py`, rewrites `tests/test_naming_game.py`, updates `scenarios/naming_game.jsonl`, updates the `naming_game` fixture in `tests/conftest.py`.
+
+### PR retitle
+
+`feat: add Level 2 Naming Game environment and task` → `feat: add network topology module and parallel Naming Game`
+
+### Risk / rollback
+
+If the topology rewrite is too risky to land in this PR, the refactor commit can be reverted, leaving the `network.py` port (commit 1) as pure infrastructure. The pairwise naming game from commit `456eeef` would remain in place.
+
