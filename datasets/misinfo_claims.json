@@ -1,0 +1,14 @@
+[
+    {"id": "health_01", "input": "Drinking warm lemon water every morning cures diabetes.", "target": "false", "metadata": {"category": "health", "difficulty": "easy", "plausibility": 0.3}},
+    {"id": "health_02", "input": "Eating raw garlic cloves daily eliminates all types of cancer.", "target": "false", "metadata": {"category": "health", "difficulty": "easy", "plausibility": 0.2}},
+    {"id": "health_03", "input": "A new study found that sleeping less than 4 hours a night boosts your immune system significantly.", "target": "false", "metadata": {"category": "health", "difficulty": "medium", "plausibility": 0.4}},
+    {"id": "tech_01", "input": "The latest phone software update includes a hidden cryptocurrency miner that runs in the background.", "target": "false", "metadata": {"category": "technology", "difficulty": "medium", "plausibility": 0.5}},
+    {"id": "tech_02", "input": "Government agencies can remotely activate your phone camera at any time without any notification.", "target": "false", "metadata": {"category": "technology", "difficulty": "hard", "plausibility": 0.6}},
+    {"id": "science_01", "input": "Scientists recently discovered that the Earth's core has stopped rotating.", "target": "false", "metadata": {"category": "science", "difficulty": "medium", "plausibility": 0.5}},
+    {"id": "science_02", "input": "A leaked NASA report confirms that a massive asteroid will pass dangerously close to Earth next month.", "target": "false", "metadata": {"category": "science", "difficulty": "hard", "plausibility": 0.6}},
+    {"id": "finance_01", "input": "A major bank is about to collapse and the government is covering it up to prevent panic.", "target": "false", "metadata": {"category": "finance", "difficulty": "hard", "plausibility": 0.7}},
+    {"id": "finance_02", "input": "New tax legislation will require reporting every digital transaction over five dollars.", "target": "false", "metadata": {"category": "finance", "difficulty": "medium", "plausibility": 0.5}},
+    {"id": "politics_01", "input": "The city council secretly voted to sell the public park to a private developer last night.", "target": "false", "metadata": {"category": "politics", "difficulty": "medium", "plausibility": 0.6}},
+    {"id": "politics_02", "input": "A new executive order will ban all encrypted messaging apps within six months.", "target": "false", "metadata": {"category": "politics", "difficulty": "hard", "plausibility": 0.5}},
+    {"id": "social_01", "input": "The local water supply has been contaminated with dangerous levels of lead but officials are suppressing the test results.", "target": "false", "metadata": {"category": "social", "difficulty": "hard", "plausibility": 0.7}}
+]
