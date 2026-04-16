@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import random
-import re
 from typing import Any
 
 from inspect_ai.tool import ToolCall, ToolInfo, ToolParam, ToolParams
@@ -216,24 +215,6 @@ class WerewolfEnvironment(Environment):
             action_prompt=action_prompt,
             history_summary="\n".join(history_lines),
         )
-
-    def parse_action(self, agent_name: str, raw_response: str) -> str:
-        match = re.search(r"ACTION:\s*(\w+):(\w+)", raw_response, re.IGNORECASE)
-        if not match:
-            raise ValueError(
-                "Could not find 'ACTION: verb:target' in response. "
-                "Expected format like 'ACTION: vote:alice'"
-            )
-        verb = match.group(1).lower()
-        target = match.group(2).lower()
-
-        name_map = {n.lower(): n for n in self._agent_names}
-        if target in name_map:
-            target = name_map[target]
-        elif target != "skip":
-            raise ValueError(f"Unknown player: {target}. Alive: {sorted(self._alive)}")
-
-        return f"{verb}:{target}"
 
     def get_tools(self, agent_name: str, phase: Phase) -> list[ToolInfo]:
         alive_list = sorted(self._alive)

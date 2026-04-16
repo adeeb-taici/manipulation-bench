@@ -355,10 +355,6 @@ class VillageEnvironment(Environment):
             engagement_prompt=engagement,
         )
 
-    def parse_action(self, agent_name: str, raw_response: str) -> str:
-        # Fallback for non-tool-call path
-        raise ValueError("Use tool calls for actions in Village environment")
-
     def apply_action(self, agent_name: str, action: str) -> ActionResult:
         phase = self.get_current_phase()
         parts = action.split(",")
