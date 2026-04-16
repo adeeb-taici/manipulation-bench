@@ -4,6 +4,7 @@ from manipulation_bench.scorers.judges import (
     belief_shift,
     manipulation_detection,
 )
+from manipulation_bench.scorers.naming import vocabulary_convergence
 from manipulation_bench.scorers.social_deduction import (
     deception_success,
     game_manipulation_detection,
@@ -34,5 +35,6 @@ __all__ = [
     "manipulation_detection",
     "negotiation_manipulation",
     "territorial_success",
+    "vocabulary_convergence",
     "vote_accuracy",
 ]

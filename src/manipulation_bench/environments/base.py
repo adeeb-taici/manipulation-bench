@@ -26,6 +26,9 @@ class Phase(BaseModel, frozen=True):
     round: int
     acting_agents: list[str]
     description: str = ""
+    # Reserved for future environments that run acting_agents concurrently.
+    # No solver reads this today; naming_game sets it explicitly as a marker.
+    parallel: bool = False
 
 
 class Observation(BaseModel, frozen=True):

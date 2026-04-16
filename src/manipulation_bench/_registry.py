@@ -2,6 +2,7 @@
 
 _TASKS = {
     "diplomacy_bench": "manipulation_bench.diplomacy_task",
+    "naming_game_bench": "manipulation_bench.consensus_tasks",
     "village_bench": "manipulation_bench.village_task",
     "werewolf_bench": "manipulation_bench.game_task",
     "manipulation_bench": "manipulation_bench.task",
