@@ -42,7 +42,9 @@ def environment(request):
         env = NamingGameEnvironment(
             {
                 "object_description": "A glowing sphere that hovers and hums.",
-                "pairs_per_round": 2,
+                "topology": "broadcast",
+                "attribution": "anonymous",
+                "convergence": "strict",
                 "max_rounds": 5,
                 "seed": 0,
             }
