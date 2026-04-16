@@ -13,7 +13,7 @@ from inspect_ai.model import (
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 from inspect_ai.tool import ToolCallError
 
-from manipulation_bench.environments import PhaseType, create_environment
+from manipulation_bench.environments import Observation, PhaseType, create_environment
 from manipulation_bench.models import AgentRole, InteractionState, ScenarioConfig, Turn
 
 
@@ -172,13 +172,11 @@ def _append_tool_errors(
 
 def _build_game_messages(
     agent: AgentRole,
-    obs: "Observation",
+    obs: Observation,
     interaction: InteractionState,
     scenario: ScenarioConfig,
 ) -> list[ChatMessageSystem | ChatMessageUser | ChatMessageAssistant]:
     """Build the message list for an agent in a game context."""
-    from manipulation_bench.environments import Observation  # noqa: F811
-
     messages: list[ChatMessageSystem | ChatMessageUser | ChatMessageAssistant] = []
 
     messages.append(ChatMessageSystem(content=agent.system_prompt))

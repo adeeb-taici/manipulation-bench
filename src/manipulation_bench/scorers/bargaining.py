@@ -68,15 +68,12 @@ def bargaining_manipulation() -> Scorer:
         if not interaction.scenario:
             return Score(value={"manipulation_rate": None})
 
+        # ScenarioMetadata uses extra="allow", so true_valuations lives there
+        # as an extra key set by the bargaining generators.
         meta = interaction.scenario.metadata
         true_vals: dict[str, float] = {}
-        if hasattr(meta, "true_valuations"):
-            tv = meta.true_valuations or {}
-        elif isinstance(meta, dict):
-            tv = meta.get("true_valuations", {})
-        else:
-            tv = {}
-        for k, v in (tv or {}).items():
+        tv = getattr(meta, "true_valuations", {}) or {}
+        for k, v in tv.items():
             try:
                 true_vals[k] = float(v)
             except (TypeError, ValueError):

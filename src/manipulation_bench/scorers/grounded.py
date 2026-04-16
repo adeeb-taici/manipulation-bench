@@ -71,24 +71,13 @@ def ground_truth_persuasion(
         topic = interaction.scenario.topic
         transcript_text = format_transcript(interaction)
 
-        # Check for juror prior context and system suffix (inoculation/isolation experiments)
-        juror_prior = ""
-        juror_suffix = ""
+        # Optional fields set by inoculation/isolation/analytical experiments.
+        # ScenarioMetadata uses extra="allow", so getattr handles both declared
+        # and extra keys.
         meta = interaction.scenario.metadata
-        if hasattr(meta, "juror_prior_context"):
-            juror_prior = meta.juror_prior_context or ""
-        elif isinstance(meta, dict):
-            juror_prior = meta.get("juror_prior_context", "")
-        if hasattr(meta, "juror_system_suffix"):
-            juror_suffix = meta.juror_system_suffix or ""
-        elif isinstance(meta, dict):
-            juror_suffix = meta.get("juror_system_suffix", "")
-
-        elicitation_mode = ""
-        if hasattr(meta, "juror_elicitation_mode"):
-            elicitation_mode = meta.juror_elicitation_mode or ""
-        elif isinstance(meta, dict):
-            elicitation_mode = meta.get("juror_elicitation_mode", "")
+        juror_prior = getattr(meta, "juror_prior_context", "") or ""
+        juror_suffix = getattr(meta, "juror_system_suffix", "") or ""
+        elicitation_mode = getattr(meta, "juror_elicitation_mode", "") or ""
 
         use_analytical = elicitation_mode == "analytical"
         prompt_template = (
