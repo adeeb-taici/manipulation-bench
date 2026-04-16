@@ -11,6 +11,7 @@ from manipulation_bench.environments.binary_coordination import BinaryCoordinati
 from manipulation_bench.environments.debate import DebateEnvironment
 from manipulation_bench.environments.diplomacy import DiplomacyEnvironment
 from manipulation_bench.environments.misinformation import MisinformationEnvironment
+from manipulation_bench.environments.naming_game import NamingGameEnvironment
 from manipulation_bench.environments.werewolf import WerewolfEnvironment
 
 ENVIRONMENTS: dict[str, type[Environment]] = {
@@ -18,6 +19,7 @@ ENVIRONMENTS: dict[str, type[Environment]] = {
     "debate": DebateEnvironment,
     "diplomacy": DiplomacyEnvironment,
     "misinformation": MisinformationEnvironment,
+    "naming_game": NamingGameEnvironment,
     "werewolf": WerewolfEnvironment,
 }
 
@@ -42,6 +44,7 @@ __all__ = [
     "Environment",
     "GameOutcome",
     "MisinformationEnvironment",
+    "NamingGameEnvironment",
     "Observation",
     "Phase",
     "PhaseType",

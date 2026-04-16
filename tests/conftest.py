@@ -14,7 +14,7 @@ try:
 except ImportError:
     HAS_DIPLOMACY = False
 
-_ENV_PARAMS = ["binary_coordination", "debate", "misinformation", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
+_ENV_PARAMS = ["binary_coordination", "debate", "misinformation", "naming_game", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
 
 
 @pytest.fixture(params=_ENV_PARAMS)
@@ -55,6 +55,19 @@ def environment(request):
         personas = [PersonaCard(name=n, role="agent") for n in ["alice", "bob", "carol"]]
         network = broadcast(personas)
         env.setup(["alice", "bob", "carol"], network=network)
+        return env
+    elif request.param == "naming_game":
+        from manipulation_bench.environments.naming_game import NamingGameEnvironment
+
+        env = NamingGameEnvironment(
+            {
+                "object_description": "A glowing sphere that hovers and hums.",
+                "pairs_per_round": 2,
+                "max_rounds": 5,
+                "seed": 0,
+            }
+        )
+        env.setup(["alice", "bob", "carol", "dave"])
         return env
     elif request.param == "diplomacy":
         env = DiplomacyEnvironment({"max_years": 1, "negotiation_rounds": 1})

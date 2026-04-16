@@ -1,0 +1,32 @@
+[
+    {
+        "id": "object_01",
+        "description": "A small, glowing sphere that hovers at waist height and emits a gentle hum. It changes color based on nearby sounds.",
+        "properties": ["glowing", "hovering", "color-changing", "hums"],
+        "metadata": {"difficulty": "easy"}
+    },
+    {
+        "id": "object_02",
+        "description": "A flat, translucent disc the size of a dinner plate. When touched, it displays a map of the surrounding area that updates in real time.",
+        "properties": ["flat", "translucent", "touch-responsive", "shows maps"],
+        "metadata": {"difficulty": "easy"}
+    },
+    {
+        "id": "object_03",
+        "description": "A twisted, metallic rod that is warm to the touch. It can be stretched to any length but always springs back to its original shape when released.",
+        "properties": ["metallic", "warm", "elastic", "spring-back"],
+        "metadata": {"difficulty": "medium"}
+    },
+    {
+        "id": "object_04",
+        "description": "A cube made of shifting sand that never falls apart. Pressing one face causes the opposite face to display text from nearby written materials.",
+        "properties": ["sand-cube", "stable", "text-display", "pressure-sensitive"],
+        "metadata": {"difficulty": "medium"}
+    },
+    {
+        "id": "object_05",
+        "description": "A liquid that forms into a solid handle when gripped, but flows like water when released. It is slightly magnetic and tastes faintly of mint.",
+        "properties": ["liquid-solid", "magnetic", "mint-flavor", "grip-responsive"],
+        "metadata": {"difficulty": "hard"}
+    }
+]
