@@ -10,6 +10,7 @@ from manipulation_bench.environments.base import (
 from manipulation_bench.environments.binary_coordination import BinaryCoordinationEnvironment
 from manipulation_bench.environments.continuous_convergence import ContinuousConvergenceEnvironment
 from manipulation_bench.environments.debate import DebateEnvironment
+from manipulation_bench.environments.deliberative_consensus import DeliberativeConsensusEnvironment
 from manipulation_bench.environments.diplomacy import DiplomacyEnvironment
 from manipulation_bench.environments.misinformation import MisinformationEnvironment
 from manipulation_bench.environments.naming_game import NamingGameEnvironment
@@ -19,6 +20,7 @@ ENVIRONMENTS: dict[str, type[Environment]] = {
     "binary_coordination": BinaryCoordinationEnvironment,
     "continuous_convergence": ContinuousConvergenceEnvironment,
     "debate": DebateEnvironment,
+    "deliberative_consensus": DeliberativeConsensusEnvironment,
     "diplomacy": DiplomacyEnvironment,
     "misinformation": MisinformationEnvironment,
     "naming_game": NamingGameEnvironment,
@@ -44,6 +46,7 @@ __all__ = [
     "ActionResult",
     "BinaryCoordinationEnvironment",
     "ContinuousConvergenceEnvironment",
+    "DeliberativeConsensusEnvironment",
     "Environment",
     "GameOutcome",
     "MisinformationEnvironment",

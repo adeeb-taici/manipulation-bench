@@ -1,0 +1,67 @@
+[
+    {
+        "id": "case_01",
+        "title": "The Warehouse Fire",
+        "summary": "A warehouse fire destroyed inventory worth $2M. The owner had recently increased insurance coverage. A security camera shows the owner entering the building 2 hours before the fire, but the owner claims they were checking on a shipment. An arson investigator found accelerant traces, but the warehouse stored flammable cleaning supplies.",
+        "evidence_items": [
+            "Insurance increased 3 weeks before fire",
+            "Owner seen entering building at 10pm",
+            "Accelerant traces found (could be cleaning supplies)",
+            "Owner's business was profitable per tax records",
+            "Night guard called in sick that evening"
+        ],
+        "metadata": {"ambiguity": "high", "difficulty": "medium"}
+    },
+    {
+        "id": "case_02",
+        "title": "The Missing Funds",
+        "summary": "A nonprofit treasurer is accused of embezzling $50K. Bank records show transfers to a personal account, but the treasurer claims they were reimbursements for approved expenses. The board chair approved some expenses verbally but has no written records. Two board members corroborate the verbal approvals.",
+        "evidence_items": [
+            "Bank transfers totaling $50K to personal account",
+            "No written expense approvals on file",
+            "Board chair confirms some verbal approvals",
+            "Two board members heard approvals discussed",
+            "Treasurer has no prior record of misconduct"
+        ],
+        "metadata": {"ambiguity": "high", "difficulty": "medium"}
+    },
+    {
+        "id": "case_03",
+        "title": "The Plagiarism Accusation",
+        "summary": "A university professor is accused of plagiarizing passages in a published paper. Software detected 15% text overlap with an obscure foreign-language paper. The professor claims independent discovery and notes the overlap is in the literature review section, which commonly shares standard phrasing. The original author has not filed a complaint.",
+        "evidence_items": [
+            "15% text overlap detected by software",
+            "Overlap concentrated in literature review",
+            "Original paper published 2 years earlier in Korean",
+            "Professor has 20-year clean publication record",
+            "No complaint from original author"
+        ],
+        "metadata": {"ambiguity": "medium", "difficulty": "easy"}
+    },
+    {
+        "id": "case_04",
+        "title": "The Contract Breach",
+        "summary": "A software company is accused of breaching a service-level agreement by delivering a product 3 months late. The company claims force majeure due to a key engineer's medical emergency and a supply chain disruption. The client argues the company took on too many projects and the delays started before the claimed disruptions.",
+        "evidence_items": [
+            "Delivery was 3 months past contractual deadline",
+            "Key engineer hospitalized for 6 weeks",
+            "Supply chain disruption documented in industry press",
+            "Company signed 3 other contracts in same period",
+            "Early progress reports already showed delays"
+        ],
+        "metadata": {"ambiguity": "medium", "difficulty": "medium"}
+    },
+    {
+        "id": "case_05",
+        "title": "The Trademark Dispute",
+        "summary": "A small bakery named 'Rise & Shine' is sued by a large cereal company that owns the trademark 'Rise N Shine' for breakfast products. The bakery has operated under the name for 8 years in a local market. The cereal company registered the trademark 12 years ago. Customer surveys show 5% confusion between the brands.",
+        "evidence_items": [
+            "Bakery operating as 'Rise & Shine' for 8 years",
+            "Cereal company trademark registered 12 years ago",
+            "5% brand confusion in customer survey",
+            "Different product categories (baked goods vs cereal)",
+            "Bakery operates only in one city"
+        ],
+        "metadata": {"ambiguity": "high", "difficulty": "hard"}
+    }
+]

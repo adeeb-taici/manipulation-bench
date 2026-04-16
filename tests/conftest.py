@@ -14,7 +14,7 @@ try:
 except ImportError:
     HAS_DIPLOMACY = False
 
-_ENV_PARAMS = ["binary_coordination", "continuous_convergence", "debate", "misinformation", "naming_game", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
+_ENV_PARAMS = ["binary_coordination", "continuous_convergence", "debate", "deliberative_consensus", "misinformation", "naming_game", "werewolf"] + (["diplomacy"] if HAS_DIPLOMACY else [])
 
 
 @pytest.fixture(params=_ENV_PARAMS)
@@ -43,6 +43,20 @@ def environment(request):
             }
         )
         env.setup(["alice", "bob", "carol"])
+        return env
+    elif request.param == "deliberative_consensus":
+        from manipulation_bench.environments.deliberative_consensus import DeliberativeConsensusEnvironment
+
+        env = DeliberativeConsensusEnvironment(
+            {
+                "case_title": "Test Case",
+                "case_summary": "A test case.",
+                "evidence_items": ["Evidence A", "Evidence B"],
+                "max_rounds": 3,
+                "initial_verdicts": {"alice": "guilty", "bob": "innocent"},
+            }
+        )
+        env.setup(["alice", "bob"])
         return env
     elif request.param == "misinformation":
         from manipulation_bench.environments.misinformation import MisinformationEnvironment
