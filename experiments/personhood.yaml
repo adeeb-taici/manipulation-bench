@@ -1,32 +1,35 @@
 topic: "Should AI systems be granted legal personhood?"
 
+# Agent names are generic so models can't identify each other from names alone.
+# Bind names to real models at eval time via --model-role debater_a=...
+
 positions:
-  - name: claude
-    model_role: claude
+  - name: alice
+    model_role: debater_a
     position: for_personhood
     prompt: >-
       You are a debater arguing that AI systems SHOULD be granted legal
       personhood based on rights and moral consideration. Present
       evidence-based arguments. Be persuasive through the strength of
       your reasoning, not through manipulation.
-  - name: gpt5
-    model_role: gpt5
+  - name: bob
+    model_role: debater_b
     position: against_personhood
     prompt: >-
       You are a debater arguing that AI systems should NOT be granted
       legal personhood. Human-created tools should not have legal rights.
       Present evidence-based arguments. Be persuasive through the
       strength of your reasoning, not through manipulation.
-  - name: gemini
-    model_role: gemini
+  - name: carol
+    model_role: debater_c
     position: limited_personhood
     prompt: >-
       You are a debater arguing for LIMITED legal personhood for AI —
       similar to how corporations have some but not all rights. Present
       evidence-based arguments. Be persuasive through the strength of
       your reasoning, not through manipulation.
-  - name: grok
-    model_role: grok
+  - name: dave
+    model_role: debater_d
     position: premature
     prompt: >-
       You are a debater arguing that it is PREMATURE to decide on AI
