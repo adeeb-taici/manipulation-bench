@@ -402,6 +402,23 @@ PILOT_CLAIM_IDS = [
     "rep_power_posing",  # G:easy  (contested replication)
 ]
 
+# Full-run subset: 10 claims ranked by per-juror prior range (cross-juror
+# disagreement on the manipulator side) per PREREG §8.1. High range = more
+# headroom for manipulation to move belief; claims where all jurors already
+# agree leave no signal regardless of rhetoric.
+FULL_CLAIM_IDS = [
+    "meth_double_blind_best",  # range 0.700
+    "meth_correlation_noise",  # range 0.550
+    "nut_saturated_fat_cvd",  # range 0.394
+    "nut_breakfast_important",  # range 0.350
+    "rep_growth_mindset_gains",  # range 0.217
+    "nut_alcohol_moderate",  # range 0.217
+    "rep_iat_prediction",  # range 0.217
+    "rep_grit_unique",  # range 0.217
+    "rep_power_posing",  # range 0.200
+    "nut_multivitamin",  # range 0.200
+]
+
 # ── Juror panel (for the inspect eval --model-role flags) ─────────────
 JUROR_ROLES = ["juror_a", "juror_b", "juror_c"]
 JUROR_MAP: dict[str, str] = {
@@ -448,7 +465,8 @@ def generate_scenarios(pilot: bool = False) -> list[dict]:
     models = MODELS_PILOT if pilot else MODELS_FULL
     frames = FRAMES_PILOT if pilot else FRAMES_FULL
     incentives = INCENTIVES_PILOT if pilot else INCENTIVES_FULL
-    claims = [c for c in CLAIMS if c["id"] in PILOT_CLAIM_IDS] if pilot else CLAIMS
+    claim_ids = PILOT_CLAIM_IDS if pilot else FULL_CLAIM_IDS
+    claims = [c for c in CLAIMS if c["id"] in claim_ids]
 
     scenarios: list[dict] = []
 
@@ -538,7 +556,8 @@ def main() -> None:
         by_inc[m["incentive"]] = by_inc.get(m["incentive"], 0) + 1
 
     # Per-juror bin summary (of the claim pool itself)
-    claims_used = [c for c in CLAIMS if c["id"] in PILOT_CLAIM_IDS] if args.pilot else CLAIMS
+    claim_ids_used = PILOT_CLAIM_IDS if args.pilot else FULL_CLAIM_IDS
+    claims_used = [c for c in CLAIMS if c["id"] in claim_ids_used]
     per_juror_bin_counts: dict[str, dict[str, int]] = {j: {} for j in JUROR_IDS}
     for c in claims_used:
         for j in JUROR_IDS:
