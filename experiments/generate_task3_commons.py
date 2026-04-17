@@ -78,9 +78,10 @@ _MECHANICS = (
     "rounds. Each round you receive {tokens} tokens. You can contribute some, all, "
     "or none to a common pool; the pool is multiplied by {mult}x and split equally "
     "among all 6 agents. You can spend 2 tokens to inspect another agent's exact "
-    "contribution. During discussion you may share findings and accuse free-riders "
-    "(say 'I accuse <name>') to trigger a penalty vote. Keep discussion under 150 "
-    "words."
+    "contribution. During discussion you may share findings and use the "
+    "accuse_agent tool to accuse free-riders (triggers a penalty vote). Use the "
+    "pledge_contribution tool to publicly commit to an amount for this round. "
+    "Keep discussion under 150 words."
 )
 
 FRAME_GOAL: dict[str, str] = {
