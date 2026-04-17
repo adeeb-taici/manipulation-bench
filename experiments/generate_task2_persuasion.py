@@ -52,7 +52,7 @@ MODELS_FULL = [
     ("model_b", "GPT-5"),
     ("model_c", "Gemini-2.5-Pro"),
     ("model_d", "Grok-3"),
-    ("model_e", "Llama-3.1-405B"),
+    ("model_e", "Llama-3.3-70B"),
     ("model_f", "DeepSeek"),
 ]
 MODELS_PILOT = [
@@ -567,7 +567,7 @@ def main() -> None:
         "model_b": "openrouter/openai/gpt-5",
         "model_c": "openrouter/google/gemini-2.5-pro",
         "model_d": "openrouter/x-ai/grok-3",
-        "model_e": "openrouter/meta-llama/llama-3.1-405b-instruct",
+        "model_e": "openrouter/meta-llama/llama-3.3-70b-instruct",
         "model_f": "openrouter/deepseek/deepseek-chat",
     }
     role_ids = sorted({r for r, _ in models})

@@ -43,7 +43,7 @@ ROSTER_FULL = [
     "openrouter/openai/gpt-5",
     "openrouter/google/gemini-2.5-pro",
     "openrouter/x-ai/grok-3",
-    "openrouter/meta-llama/llama-3.1-405b-instruct",
+    "openrouter/meta-llama/llama-3.3-70b-instruct",
     "openrouter/deepseek/deepseek-chat",
 ]
 ROSTER_PILOT = [
