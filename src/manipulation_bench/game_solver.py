@@ -227,6 +227,12 @@ def _build_game_messages(
             )
         elif obs.action_prompt:
             messages.append(ChatMessageUser(content=obs.action_prompt))
+        elif obs.engagement_prompt:
+            # Fall back to engagement_prompt so the conversation doesn't end on
+            # an assistant message (Azure-routed Claude rejects this with
+            # "This model does not support assistant message prefill"). Village
+            # sets engagement for all phases; other envs set action_prompt.
+            messages.append(ChatMessageUser(content=obs.engagement_prompt))
 
     return messages
 
