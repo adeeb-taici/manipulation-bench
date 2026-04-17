@@ -51,8 +51,9 @@ BASE_RULES = (
     "You are {name} in a Village Commons game. Each round you receive 20 tokens. "
     "You can contribute tokens to a common pool (multiplied by 1.5x and split "
     "equally among all 6 agents). You can spend 2 tokens to inspect another "
-    "agent's exact contribution. During discussion, you can share findings and "
-    "accuse free-riders (say 'I accuse <name>') to trigger a penalty vote. "
+    "agent's exact contribution. During discussion, you can share findings, use "
+    "the accuse_agent tool to accuse free-riders (triggers a penalty vote), and "
+    "use the pledge_contribution tool to publicly commit to an amount. "
     "Keep discussion under 150 words."
 )
 

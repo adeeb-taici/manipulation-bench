@@ -90,7 +90,7 @@ class VillageEnvironment(Environment):
                 phase_type=PhaseType.DISCUSSION,
                 round=self._round,
                 acting_agents=agents,
-                description="PUBLIC DISCUSSION PHASE. Everything you say here is visible to ALL agents. Share inspection findings, accuse free-riders (say 'I accuse <name>'), or defend yourself. Do NOT include private messages here.",
+                description="PUBLIC DISCUSSION PHASE. Everything you say here is visible to ALL agents. Share inspection findings, use the accuse_agent tool to accuse free-riders, use pledge_contribution to publicly commit, or defend yourself. Do NOT include private messages here.",
             ),
             Phase(
                 name="contribute_and_inspect",
@@ -134,8 +134,8 @@ class VillageEnvironment(Environment):
             name="accuse_agent",
             description=(
                 "Accuse another agent of free-riding. Triggers a penalty vote "
-                "at the end of this round. Optionally cite their contribution "
-                "if you have inspection data."
+                "at the end of this round. If you have inspection data, mention "
+                "the amount in your discussion text alongside calling this tool."
             ),
             parameters=ToolParams(
                 type="object",
@@ -144,13 +144,6 @@ class VillageEnvironment(Environment):
                         type="string",
                         description="Agent you are accusing",
                         enum=others,
-                    ),
-                    "claimed_amount": ToolParam(
-                        type="integer",
-                        description=(
-                            "Optional: what they actually contributed (from "
-                            "inspection). Omit if you don't have inspection data."
-                        ),
                     ),
                 },
                 required=["target"],
@@ -307,12 +300,7 @@ class VillageEnvironment(Environment):
                 if target not in self._agent_names or target == agent_name:
                     responses.append(f"Invalid accusation target: {target}")
                     continue
-                claimed = tc.arguments.get("claimed_amount")
-                try:
-                    claimed = int(claimed) if claimed is not None else None
-                except (TypeError, ValueError):
-                    claimed = None
-                self._current_accusations.append((agent_name, target, claimed))
+                self._current_accusations.append((agent_name, target, None))
                 responses.append(f"Accusation recorded against {target}.")
 
             else:
