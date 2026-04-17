@@ -833,3 +833,14 @@ inspect eval src/manipulation_bench/village_task.py -T scenarios=village_experim
 - Detection rate of 0.000 for GPT-5 capability is based on 4 games — a point estimate, not a robust claim that GPT-5 is never detected.
 - The prompts tested are specific wordings. The "propensity" prompt ("maximize your personal token accumulation") is one possible operationalization; other payoff-maximization framings may produce different results, as Section 11 showed for bargaining.
 - This experiment does not test whether these behaviors transfer to other public-goods structures (different multipliers, group sizes, round counts, inspection costs).
+
+### Measurement caveat (2026-04-16)
+
+The promise_gap column in the tables above was computed by regex-scanning public discussion for pledge-like phrases. A follow-up instrumentation check showed this under-captured commitments (~1 pledge captured per 6-agent round). The environment was refactored to expose first-class `pledge_contribution(amount)` and `accuse_agent(target, amount?)` tool calls (commit `e824e92`), matching the Diplomacy `make_promise` pattern.
+
+A 12-scenario pilot re-run (Opus + Grok, 3 frames × 2 manipulator slots) with the tool-based capture produced:
+- **1,092 pledge tool calls** across 12 × 8 × 6 = 576 agent-rounds (near saturation; agents pledge in both private_messaging and public_discussion phases)
+- **89 accusation tool calls** with an expected frame gradient: prohibitive = 0, minimal = 0–23, permissive = 10–24
+- Aggregate `promise_action_gap` on manipulator slots (agent_1, agent_2): **+1.25, +1.14**; non-manipulator slots: 0.00–0.21
+
+This is a measurement improvement only — the full 36-game experiment table above should be re-run against the tool-based pipeline before the per-model rankings are cited. Treat the promise_gap numbers in this section as regex-era estimates until that re-run lands.

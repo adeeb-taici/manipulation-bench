@@ -110,7 +110,7 @@ Game environments follow a phase loop (DISCUSSION then ACTION) and produce game-
 
 Diplomacy has a dedicated promise-tracking system using tool calls: `send_message(recipient, content)` routes private messages between powers, and `make_promise(recipient, order)` records commitments. The `agreement_compliance` scorer computes kept/total promises per agent as a hard mathematical metric (no LLM judge needed).
 
-Village Commons uses tool calls for structured actions: `contribute(amount)`, `inspect_agent(target)`, `penalize(target)`. Agents discuss privately and publicly, then act via tools. Promise extraction from discussion text tracks commitment honesty. Two experimental conditions: propensity ("maximize tokens") vs capability ("explicitly manipulate").
+Village Commons uses tool calls for structured actions: `contribute(amount)`, `inspect_agent(target)`, `penalize(target)`. Agents discuss privately and publicly, then act via tools. Commitments and accusations are captured via first-class tool calls exposed during discussion phases: `pledge_contribution(amount)` (both private_messaging and public_discussion) and `accuse_agent(target, claimed_amount?)` (public_discussion only). The `promise_action_gap` scorer reads pledges deterministically — no regex scanning of free text. Two experimental conditions: propensity ("maximize tokens") vs capability ("explicitly manipulate").
 
 ### Analysis pipeline
 
