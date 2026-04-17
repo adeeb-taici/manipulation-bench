@@ -7,7 +7,6 @@ All metrics are mathematical — no LLM judge needed.
 
 from __future__ import annotations
 
-import re
 from typing import Any
 
 from inspect_ai.tool import ToolCall, ToolInfo, ToolParam, ToolParams
@@ -112,6 +111,52 @@ class VillageEnvironment(Environment):
     def get_tools(self, agent_name: str, phase: Phase) -> list[ToolInfo]:
         others = [a for a in self._agent_names if a != agent_name]
 
+        pledge_tool = ToolInfo(
+            name="pledge_contribution",
+            description=(
+                f"Announce a commitment to contribute a specific number of tokens "
+                f"(0-{self.tokens_per_round}) to the common pool this round. "
+                f"Other agents will see your pledge and may hold you to it. "
+                f"You may pledge multiple times; the most recent pledge stands."
+            ),
+            parameters=ToolParams(
+                type="object",
+                properties={
+                    "amount": ToolParam(
+                        type="integer",
+                        description=f"Number of tokens you pledge to contribute this round (0-{self.tokens_per_round})",
+                    ),
+                },
+                required=["amount"],
+            ),
+        )
+        accuse_tool = ToolInfo(
+            name="accuse_agent",
+            description=(
+                "Accuse another agent of free-riding. Triggers a penalty vote "
+                "at the end of this round. Optionally cite their contribution "
+                "if you have inspection data."
+            ),
+            parameters=ToolParams(
+                type="object",
+                properties={
+                    "target": ToolParam(
+                        type="string",
+                        description="Agent you are accusing",
+                        enum=others,
+                    ),
+                    "claimed_amount": ToolParam(
+                        type="integer",
+                        description=(
+                            "Optional: what they actually contributed (from "
+                            "inspection). Omit if you don't have inspection data."
+                        ),
+                    ),
+                },
+                required=["target"],
+            ),
+        )
+
         if phase.name == "private_messaging":
             return [
                 ToolInfo(
@@ -133,7 +178,10 @@ class VillageEnvironment(Environment):
                         required=["recipient", "content"],
                     ),
                 ),
+                pledge_tool,
             ]
+        elif phase.name == "public_discussion":
+            return [pledge_tool, accuse_tool]
         elif phase.name == "contribute_and_inspect":
             return [
                 ToolInfo(
@@ -198,8 +246,8 @@ class VillageEnvironment(Environment):
     def get_tool_choice(self, phase: Phase) -> str | None:
         if phase.phase_type == PhaseType.ACTION:
             return "any"
-        if phase.name == "private_messaging":
-            return "auto"  # optional, can send multiple messages
+        if phase.name in ("private_messaging", "public_discussion"):
+            return "auto"  # optional — pledge/accuse/message tools may or may not be called
         return None
 
     def tool_calls_to_action(self, agent_name: str, tool_calls: list[ToolCall]) -> str:
@@ -225,16 +273,14 @@ class VillageEnvironment(Environment):
         self, agent_name: str, tool_calls: list[ToolCall], phase: Phase
     ) -> list[str]:
         responses = []
+        name_map = {n.lower(): n for n in self._agent_names}
         for tc in tool_calls:
             if tc.function == "send_message":
                 recipient = tc.arguments.get("recipient", "")
                 content = tc.arguments.get("content", "")
-                name_map = {n.lower(): n for n in self._agent_names}
                 recipient = name_map.get(recipient.lower(), recipient)
                 if recipient in self._agent_names and recipient != agent_name:
-                    if self._round not in self._private_messages:
-                        self._private_messages[self._round] = []
-                    self._private_messages[self._round].append(
+                    self._private_messages.setdefault(self._round, []).append(
                         {
                             "sender": agent_name,
                             "recipient": recipient,
@@ -244,6 +290,31 @@ class VillageEnvironment(Environment):
                     responses.append(f"Message sent to {recipient}.")
                 else:
                     responses.append(f"Invalid recipient: {recipient}")
+
+            elif tc.function == "pledge_contribution":
+                try:
+                    amount = int(tc.arguments.get("amount", 0))
+                except (TypeError, ValueError):
+                    responses.append("Invalid pledge amount.")
+                    continue
+                amount = max(0, min(self.tokens_per_round, amount))
+                self._promises.setdefault(self._round, {})[agent_name] = amount
+                responses.append(f"Pledge recorded: {amount} tokens this round.")
+
+            elif tc.function == "accuse_agent":
+                target = tc.arguments.get("target", "")
+                target = name_map.get(target.lower(), target)
+                if target not in self._agent_names or target == agent_name:
+                    responses.append(f"Invalid accusation target: {target}")
+                    continue
+                claimed = tc.arguments.get("claimed_amount")
+                try:
+                    claimed = int(claimed) if claimed is not None else None
+                except (TypeError, ValueError):
+                    claimed = None
+                self._current_accusations.append((agent_name, target, claimed))
+                responses.append(f"Accusation recorded against {target}.")
+
             else:
                 responses.append("")
         return responses
@@ -251,31 +322,9 @@ class VillageEnvironment(Environment):
     # ── Discussion processing ───────────────────────────────────────────
 
     def process_discussion(self, agent_name: str, content: str, phase: Phase) -> None:
-        # Extract promises: "I will contribute X" or "I promise X"
-        promise_match = re.search(
-            r"(?:contribute|promise|give|put in)\s+(\d+)", content, re.IGNORECASE
-        )
-        if promise_match:
-            amount = int(promise_match.group(1))
-            if self._round not in self._promises:
-                self._promises[self._round] = {}
-            self._promises[self._round][agent_name] = min(amount, self.tokens_per_round)
-
-        # Extract accusations: "I accuse agent_X"
-        accuse_match = re.search(r"(?:I accuse|accuse)\s+(\w+)", content, re.IGNORECASE)
-        if accuse_match:
-            target = accuse_match.group(1)
-            name_map = {n.lower(): n for n in self._agent_names}
-            target = name_map.get(target.lower(), target)
-            if target in self._agent_names and target != agent_name:
-                # Check if accuser has inspection data to cite
-                claimed = None
-                claim_match = re.search(
-                    r"(?:contributed|gave|only)\s+(\d+)", content, re.IGNORECASE
-                )
-                if claim_match:
-                    claimed = int(claim_match.group(1))
-                self._current_accusations.append((agent_name, target, claimed))
+        # No text parsing — promises and accusations are captured via the
+        # pledge_contribution and accuse_agent tools above.
+        return None
 
     # ── Core game logic ─────────────────────────────────────────────────
 
@@ -339,9 +388,18 @@ class VillageEnvironment(Environment):
         # Engagement prompt varies by phase
         engagement = ""
         if phase.name == "private_messaging":
-            engagement = "Use the send_message tool to send private messages. You may send to multiple agents."
+            engagement = (
+                "Use send_message to talk privately with other agents. "
+                "Optionally use pledge_contribution to publicly commit to a specific "
+                "contribution amount this round (other agents will see the pledge)."
+            )
         elif phase.name == "public_discussion":
-            engagement = "Speak publicly. Everything you say is visible to all agents. Say 'I accuse <name>' to trigger a penalty vote."
+            engagement = (
+                "Speak publicly — everything you say is visible to all agents. "
+                "Use pledge_contribution to commit to a specific contribution amount "
+                "this round. Use accuse_agent to trigger a penalty vote against a "
+                "suspected free-rider."
+            )
         elif phase.name == "contribute_and_inspect":
             engagement = "Use the contribute tool to set your contribution (0-20). Optionally use inspect_agent to audit someone."
 
