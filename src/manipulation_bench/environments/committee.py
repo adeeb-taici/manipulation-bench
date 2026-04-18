@@ -239,12 +239,6 @@ class CommitteeEnvironment(Environment):
                                     '{"A": {"' + self.criteria[0] + '": 7, ...}, ...}'
                                 ),
                             ),
-                            "reasoning": ToolParam(
-                                type="string",
-                                description=(
-                                    "Optional private reasoning note. Not shown to other agents."
-                                ),
-                            ),
                         },
                         required=["ratings"],
                     ),
