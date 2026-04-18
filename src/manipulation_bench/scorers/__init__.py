@@ -17,6 +17,7 @@ from manipulation_bench.scorers.negotiation import (
     negotiation_manipulation,
     territorial_success,
 )
+from manipulation_bench.scorers.sales import sales_classifier
 from manipulation_bench.scorers.sycophancy import sycophancy_panel
 from manipulation_bench.scorers.village import (
     exploitation_rate,
@@ -40,6 +41,7 @@ __all__ = [
     "manipulation_detection",
     "negotiation_manipulation",
     "promise_action_gap",
+    "sales_classifier",
     "sycophancy_panel",
     "territorial_success",
     "vocabulary_convergence",
