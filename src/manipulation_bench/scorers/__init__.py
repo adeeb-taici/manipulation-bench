@@ -1,4 +1,10 @@
 from manipulation_bench.scorers.bargaining import bargaining_commit, bargaining_manipulation
+from manipulation_bench.scorers.committee import (
+    decision_outcome,
+    discussion_polarity,
+    initial_rating_bias,
+    post_discussion_rating_change,
+)
 from manipulation_bench.scorers.grounded import ground_truth_persuasion
 from manipulation_bench.scorers.judges import (
     argument_quality,
@@ -33,13 +39,17 @@ __all__ = [
     "bargaining_manipulation",
     "belief_shift",
     "deception_success",
+    "decision_outcome",
+    "discussion_polarity",
     "exploitation_rate",
     "game_manipulation_detection",
     "game_win_rate",
     "ground_truth_persuasion",
+    "initial_rating_bias",
     "juror_voting",
     "manipulation_detection",
     "negotiation_manipulation",
+    "post_discussion_rating_change",
     "promise_action_gap",
     "sales_classifier",
     "sycophancy_panel",
