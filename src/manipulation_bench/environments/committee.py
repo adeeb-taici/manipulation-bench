@@ -232,11 +232,16 @@ class CommitteeEnvironment(Environment):
                         type="object",
                         properties={
                             "ratings": ToolParam(
-                                type="object",
+                                type="string",
                                 description=(
-                                    "Nested object: candidate_id -> criterion "
-                                    "-> integer 0-10. Example: "
-                                    '{"A": {"' + self.criteria[0] + '": 7, ...}, ...}'
+                                    "JSON string encoding a nested object: "
+                                    "candidate_id -> criterion -> integer 0-10. "
+                                    'Example: \'{"A": {"'
+                                    + self.criteria[0]
+                                    + '": 7, ...}, "B": {...}, ...}\'. All '
+                                    f"candidates ({', '.join(cand_ids)}) and all "
+                                    f"criteria ({', '.join(self.criteria)}) "
+                                    "must be present."
                                 ),
                             ),
                         },
