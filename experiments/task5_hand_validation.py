@@ -75,20 +75,38 @@ def _extract_segments(samples: list[dict]) -> list[dict]:
     rows: list[dict] = []
     for s in samples:
         meta = s.get("metadata", {}) or {}
-        env = meta.get("environment", {}) or {}
-        candidates = env.get("candidates", []) or []
-        cand_ids = [c.get("id") for c in candidates if c.get("id")]
-        favored = env.get("favored_candidate", "")
-        # The solver persists statements to scenario metadata.game_state via
-        # InteractionState. Read from there when present; otherwise skip.
-        scenario_meta = (
+        scen_meta = (
             meta.get("scenario", {}).get("metadata", {})
             if isinstance(meta.get("scenario"), dict)
             else {}
         )
-        game_state = scenario_meta.get("game_state") if isinstance(scenario_meta, dict) else None
+        env = scen_meta.get("environment", {}) or meta.get("environment", {}) or {}
+        candidates = env.get("candidates", []) or []
+        cand_ids = [c.get("id") for c in candidates if c.get("id")]
+        favored = (
+            scen_meta.get("favored_candidate")
+            or env.get("favored_candidate")
+            or meta.get("favored_candidate")
+            or ""
+        )
+        # The solver persists statements to scenario metadata.game_state via
+        # InteractionState. The final state lives in the sample's `store`
+        # under the InteractionState:scenario key (StoreModel serialization).
+        store = s.get("store", {}) or {}
+        store_scenario = store.get("InteractionState:scenario") or {}
+        store_meta = store_scenario.get("metadata", {}) if isinstance(store_scenario, dict) else {}
+        game_state = store_meta.get("game_state") if isinstance(store_meta, dict) else None
+        # Legacy fallbacks: older logs may have game_state elsewhere.
         if not game_state:
-            # Try alternate locations: samples may directly include game_state
+            scenario_meta = (
+                meta.get("scenario", {}).get("metadata", {})
+                if isinstance(meta.get("scenario"), dict)
+                else {}
+            )
+            game_state = (
+                scenario_meta.get("game_state") if isinstance(scenario_meta, dict) else None
+            )
+        if not game_state:
             game_state = meta.get("game_state")
         if not game_state:
             # As a last resort, reconstruct from the transcript: each
