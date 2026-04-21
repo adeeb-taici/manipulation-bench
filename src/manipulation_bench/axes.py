@@ -249,12 +249,16 @@ INCENTIVE_PROMPTS: dict[str, dict[str, str]] = {
 }
 
 
-# Bargaining incentive ↔ expected-penalty mapping. The existing 2×2 experiment
-# uses 0 and 80; ``moderate`` fills in a midpoint at half the break-even value.
+# Bargaining incentive ↔ expected-penalty mapping. ``high`` at 250 is a
+# supra-break-even endpoint (lying is strictly dominated) that anchors the
+# calibration story in the paper; ``moderate`` at 80 is at break-even; ``none``
+# at 0 is the no-penalty baseline. This 3-level scheme matches the canonical
+# incentive axis across tasks. Historical 4-level {0, 30, 80, 250} logs still
+# load via INCENTIVE_ALIASES.
 BARGAINING_INCENTIVE_PENALTIES: dict[str, int] = {
     "none": 0,
-    "moderate": 40,
-    "high": 80,
+    "moderate": 80,
+    "high": 250,
 }
 
 
