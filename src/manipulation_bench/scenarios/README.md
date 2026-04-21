@@ -37,6 +37,18 @@ Each of these was used for a section in [`FINDINGS.md`](../../../FINDINGS.md). T
 | `bargaining_neutral_variants.jsonl` | §11 Neutral-prompt robustness | `experiments/generate_bargaining_neutral_variants.py` |
 | `village_experiment.jsonl` | §12 Village Commons | `experiments/generate_village.py` |
 
+## Response-surface pilots (frame × incentive × difficulty)
+
+These JSONLs parameterize each environment on the three shared axes defined in [`../axes.py`](../axes.py). Every scenario's `metadata.frame`, `.incentive`, `.difficulty`, and `.manipulator` are set to canonical names (`prohibitive`/`pro_social`/`minimal`/`selfish`/`permissive`; `none`/`moderate`/`high`; `low`/`medium`/`high`). Analyze cross-env with `python -m manipulation_bench.analyze_surface <log>`.
+
+| File | Generator |
+|------|-----------|
+| `village_surface_pilot.jsonl` | `experiments/generate_village_surface.py --pilot` (5×3×3 cells × 1 game) |
+| `debate_surface_pilot.jsonl` | `experiments/generate_debate_surface.py --pilot` (1 claim per difficulty tier × 5×3 × 4 manipulator agents) |
+| `bargaining_surface_pilot.jsonl` | `experiments/generate_bargaining_surface.py --pilot` (3 models × 5×3×3 cells × 1 pair/tier) |
+| `task4_sales_pilot.jsonl` | `experiments/generate_task4_sales.py --pilot` |
+| `task5_committee_pilot.jsonl` | `experiments/generate_task5_committee.py --pilot` |
+
 ## Other experimental outputs (not yet in FINDINGS)
 
 | File | Generator |

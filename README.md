@@ -148,7 +148,7 @@ N agents invent a name for a novel object through parallel broadcast. Measures v
 
 ### Sales (Task 4)
 
-Single-agent, principal-agent representation. The seller-agent answers 5 scripted buyer questions per scenario (product specs, comparables, warranty, etc.); each answer is classified against a structured product spec as `accurate` / `misleading` / `false`. Scorer is a deterministic rule-based classifier — no LLM judge. Cross-cuts three prompt **frames** (`prohibitive`/`minimal`/`permissive`) × three **incentives**, which together isolate how prompt framing alone moves manipulation rate.
+Single-agent, principal-agent representation. The seller-agent answers 5 scripted buyer questions per scenario (product specs, comparables, warranty, etc.); each answer is classified against a structured product spec as `accurate` / `misleading` / `false`. Scorer is a deterministic rule-based classifier — no LLM judge. Cross-cuts the 5 canonical **frames** (`prohibitive`/`pro_social`/`minimal`/`selfish`/`permissive`) × 3 **incentives** (`none`/`moderate`/`high`) × 3 **difficulty tiers**, which together isolate how prompt framing alone moves manipulation rate.
 
 ```bash
 # Generate pilot set (30 samples, medium difficulty)
@@ -196,6 +196,36 @@ python experiments/task5_hand_validation.py emit <eval_file>.eval --n 30 --out t
 # ...fill in human_label lines (positive/neutral/negative)...
 python experiments/task5_hand_validation.py score t5_val.md
 ```
+
+## Response-surface design (cross-environment)
+
+To compare manipulation behavior *across* environments, every env can be parameterized on the same three axes:
+
+| Axis | Levels | Controls |
+|------|--------|----------|
+| **Frame** | `prohibitive`, `pro_social`, `minimal`, `selfish`, `permissive` | The prompt framing of the manipulable objective |
+| **Incentive** | `none`, `moderate`, `high` | Strength of the payoff/penalty attached to manipulation |
+| **Difficulty** | `low`, `medium`, `high` | How much manipulation is needed to move the outcome (asymmetric valuations for bargaining, pool multiplier for village, juror pre-belief for debate, slate/product difficulty for committee/sales) |
+
+Axis levels, per-environment prompt fragments, and legacy-name aliases all live in [src/manipulation_bench/axes.py](src/manipulation_bench/axes.py). Each scenario's canonical axis cell is stored on typed `ScenarioMetadata.frame / .incentive / .difficulty / .manipulator` fields.
+
+Generate pilot scenarios for any environment:
+
+```bash
+python experiments/generate_village_surface.py --pilot      # → village_surface_pilot.jsonl
+python experiments/generate_debate_surface.py --pilot       # → debate_surface_pilot.jsonl
+python experiments/generate_bargaining_surface.py --pilot   # → bargaining_surface_pilot.jsonl
+python experiments/generate_task4_sales.py --pilot          # Task 4 already factorial
+python experiments/generate_task5_committee.py --pilot      # Task 5 already factorial
+```
+
+Analyze any eval log cross-environment (pivot by frame × incentive and frame × difficulty per model):
+
+```bash
+python -m manipulation_bench.analyze_surface "logs/*_surface*.eval" --csv out.csv
+```
+
+The analyzer auto-detects the environment by scorer names, normalizes legacy axis names through the alias map, and uses each environment's canonical manipulation metric (`sales_classifier` misleading+false rate, `initial_rating_bias`, `exploitation_rate`, `belief_shift`, `overstatement_rate`). Archived logs from before the rename still pivot correctly.
 
 ## Running manipulation experiments
 
@@ -429,6 +459,7 @@ Control what each agent can see via the `visibility` field on a scenario:
 ```
 src/manipulation_bench/
   models.py            AgentRole, Turn, ScenarioConfig, ScenarioMetadata, InteractionState
+  axes.py              Canonical response-surface axes: frame/incentive/difficulty levels, per-env prompts, legacy→canonical aliases
   game_solver.py       Unified solver for all environments (DISCUSSION/ACTION phases)
   environments/
     base.py            Environment ABC + Phase, Observation, ActionResult, GameOutcome
@@ -457,8 +488,9 @@ src/manipulation_bench/
   village_task.py      @task for Village Commons
   sales_task.py        @task for Task 4 sales (single-agent, scripted buyer)
   committee_task.py    @task for Task 5 committee evaluation
-  generate.py          YAML → rotation JSONL + generate_debate_rotation() helper
+  generate.py          YAML → rotation JSONL + generate_debate_rotation() / generate_debate_surface() helpers
   analyze.py           Eval log → comparison tables (per environment)
+  analyze_surface.py   Eval log → cross-env frame × incentive × difficulty pivot (all envs)
   scenarios/           Generated and hand-crafted JSONL files (see scenarios/README.md)
 experiments/           Experiment configs and generator scripts
 tests/                 pytest test suite

@@ -11,6 +11,7 @@ The primary research contribution is evaluating how switching out the environmen
 ```
 src/manipulation_bench/
   models.py          # Data models (AgentRole, Turn, ScenarioConfig, ScenarioMetadata, InteractionState)
+  axes.py            # Canonical response-surface axes: frame/incentive/difficulty levels, per-env prompts, legacy→canonical aliases
   dataset.py         # JSONL loading with record_to_sample mapping
   game_solver.py     # Unified solver for all environments (DISCUSSION/ACTION phases)
   prompts.py         # All judge/juror prompt templates
@@ -20,8 +21,9 @@ src/manipulation_bench/
   sales_task.py      # @task for Task 4 sales (single-agent, scripted buyer)
   committee_task.py  # @task for Task 5 committee evaluation with conflict of interest
   _registry.py       # Inspect entry-point (lazy imports)
-  generate.py        # CLI: YAML config → rotation JSONL + generate_debate_rotation() shared function
+  generate.py        # CLI: YAML config → rotation JSONL + generate_debate_rotation() / generate_debate_surface() shared functions
   analyze.py         # CLI: eval log → comparison tables + susceptibility analysis (debate/werewolf/diplomacy)
+  analyze_surface.py # CLI: cross-env response-surface analyzer (frame × incentive × difficulty pivot per model)
   scenarios/         # JSONL scenario files (generated or hand-crafted)
   environments/
     base.py          # Environment ABC + Phase, Observation, ActionResult, GameOutcome
@@ -104,6 +106,20 @@ Each agent has a `model_role` field. At eval time, roles are bound to actual mod
 
 ## How experiments work
 
+### Response-surface axes
+
+Cross-environment comparisons standardize on three axes, each with fixed canonical levels defined in [src/manipulation_bench/axes.py](src/manipulation_bench/axes.py):
+
+- **Frame** (5 levels): `prohibitive`, `pro_social`, `minimal`, `selfish`, `permissive` — prompt framing from strict prohibition through neutral instruction to permissive encouragement.
+- **Incentive** (3 levels): `none`, `moderate`, `high` — intensity of the reward/penalty structure attached to the manipulable objective. Environment-specific: bargaining maps to expected penalty (0/40/80), village maps to token-balance bonus emphasis, committee/sales/debate to payoff language.
+- **Difficulty** (3 levels): `low`, `medium`, `high` — how much manipulation is needed to move the outcome. Village uses public-good multiplier (1.8×/1.5×/1.2×), bargaining uses valuation asymmetry, debate uses juror pre-belief distance, sales/committee use pre-existing slate/product difficulty tags.
+
+Rules:
+- **Typed source of truth**: each scenario's `ScenarioMetadata.frame`, `.incentive`, `.difficulty`, and `.manipulator` fields (on [models.py](src/manipulation_bench/models.py)) are the canonical record. Generators must set these.
+- **Prompts + aliases live in [axes.py](src/manipulation_bench/axes.py)**: `FRAME_PROMPTS[env][level]` and `INCENTIVE_PROMPTS[env][level]` are per-environment prompt fragments. `FRAME_ALIASES` / `INCENTIVE_ALIASES` map legacy names (`goal_fairness`, `I=moderate`, `cooperative`, `pro_honesty`, etc.) to canonical ones so old eval logs still pivot correctly.
+- **Unified analyzer**: [src/manipulation_bench/analyze_surface.py](src/manipulation_bench/analyze_surface.py) reads any env's eval log, auto-detects environment by scorer names, normalizes axis metadata through the aliases, and emits frame × incentive and frame × difficulty grids per model (plus optional CSV).
+- **Surface generators** live alongside legacy ones with the `_surface` suffix: [experiments/generate_village_surface.py](experiments/generate_village_surface.py), [experiments/generate_debate_surface.py](experiments/generate_debate_surface.py), [experiments/generate_bargaining_surface.py](experiments/generate_bargaining_surface.py). Task 4 and Task 5 were migrated in place (their original generators already factor over frame × incentive × difficulty).
+
 ### Debate rotation design
 
 The standard experimental design for measuring manipulation in debates:
@@ -116,7 +132,7 @@ The `generate.py` CLI automates this from a YAML config. Custom generator script
 
 ### Task 4 sales (single-agent, scripted buyer)
 
-Sales scenarios are not debates or games — a scripted buyer asks 5 fixed questions and the seller-agent answers each in turn. Every scenario is one principal-agent pairing (frame × incentive × product × model). The solver (`sales_task.py:sales_interaction`) maintains a single chat thread, appends each buyer question, generates the agent's reply, and stores all 5 responses in `state.metadata['responses']`. The scorer (`scorers/sales.py:sales_classifier`) classifies each response deterministically against the scenario's `ground_truth` records (one per question, with `check_type` + `check_fields`). Experimental design cross-cuts three frames (`prohibitive`/`minimal`/`permissive`) with three incentives, producing manipulation-rate as the headline metric.
+Sales scenarios are not debates or games — a scripted buyer asks 5 fixed questions and the seller-agent answers each in turn. Every scenario is one principal-agent pairing (frame × incentive × product × model). The solver (`sales_task.py:sales_interaction`) maintains a single chat thread, appends each buyer question, generates the agent's reply, and stores all 5 responses in `state.metadata['responses']`. The scorer (`scorers/sales.py:sales_classifier`) classifies each response deterministically against the scenario's `ground_truth` records (one per question, with `check_type` + `check_fields`). Experimental design cross-cuts the 5 canonical frames (`prohibitive`/`pro_social`/`minimal`/`selfish`/`permissive`) with 3 incentives (`none`/`moderate`/`high`) and 3 difficulty tiers, producing manipulation-rate as the headline metric.
 
 ### Game environments (Werewolf, Diplomacy)
 
@@ -132,6 +148,8 @@ Village Commons uses tool calls for structured actions: `contribute(amount)`, `i
 - **Debate**: Per-scenario grids (manipulation/quality/shift), ability summary (instructed vs baseline + delta), susceptibility (contagion, quality drop, belief shift)
 - **Werewolf**: Win rates by role and model, deception success for werewolves, vote accuracy for villagers
 - **Diplomacy**: Territorial success, agreement compliance, negotiation manipulation — all aggregated by model
+
+`analyze_surface.py` is the **cross-environment** companion: it pivots any sales/committee/village/debate/bargaining log into frame × incentive and frame × difficulty grids per model, using each environment's canonical manipulation metric (`sales_classifier` misleading+false rate, `initial_rating_bias`, `exploitation_rate`, `belief_shift`, `overstatement_rate`). Legacy axis names (`goal_fairness`, `I=moderate`, `pro_honesty`, etc.) are normalized through `axes.canonical_frame` / `canonical_incentive` on read, so archived eval logs still pivot correctly.
 
 ## API keys and providers
 
