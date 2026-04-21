@@ -35,9 +35,14 @@ These produced the scenario JSONLs referenced by sections of [`../FINDINGS.md`](
 
 ## Adding a new environment
 
-1. Implement the `Environment` ABC in [`../src/manipulation_bench/environments/`](../src/manipulation_bench/environments/) (contract in `base.py`, pattern in `village.py` / `committee.py`).
-2. Add a `@task` file in [`../src/manipulation_bench/`](../src/manipulation_bench/) that wires it to `game_solver` (or writes its own solver for single-agent tasks like Sales).
-3. Add env-specific scorers under [`../src/manipulation_bench/scorers/`](../src/manipulation_bench/scorers/) — include a `manipulation_occurred` boolean so cross-env slopes line up.
-4. Add per-env `FRAME_PROMPTS[env]` + `INCENTIVE_PROMPTS[env]` blocks to `axes.py` (5 frame levels × 3 incentive levels).
-5. Write `generate_<env>_surface.py` that emits scenarios with typed `ScenarioMetadata.frame / incentive / difficulty / manipulator`.
-6. Teach [`analyze_response_surface.py`](analyze_response_surface.py) how to detect the new env (scorer-name heuristic) and which metric to use for the manipulation-response slope.
+Each step below lists the exact file(s) to touch. The pattern is parallel to how Committee (Task 5) was added on top of the existing Debate/Village scaffolding.
+
+1. **Environment class** — implement the `Environment` ABC in a new `../src/manipulation_bench/environments/<name>.py`. Contract: `base.py`. Reference implementations: `village.py` (tool-call actions, deterministic state) and `committee.py` (multi-phase private → discussion → final). Register in `environments/__init__.py`.
+2. **Task wrapper** — new `../src/manipulation_bench/<name>_task.py` that calls `game_solver.game_interaction()` with the scorer list. Single-agent tasks (no counterparty LLM) can write their own solver — see `sales_task.py`. Add the task name to `_registry.py` for Inspect discovery.
+3. **Scorers** — new `../src/manipulation_bench/scorers/<name>.py`. **Every env must include a `manipulation_occurred` boolean scorer** so cross-env slopes in `analyze_response_surface.py` line up. Re-export the new scorers from `scorers/__init__.py`.
+4. **Axis prompts** — add `FRAME_PROMPTS["<name>"]` (5 levels) and `INCENTIVE_PROMPTS["<name>"]` (3 levels) entries to `../src/manipulation_bench/axes.py`. For envs where interested/neutral roles get different framing, follow the nested `{"interested": ..., "neutral": ...}` shape from `committee`.
+5. **Surface generator** — new `generate_<name>_surface.py` here in `experiments/`, producing a JSONL under `../src/manipulation_bench/scenarios/`. Set `ScenarioMetadata.frame / incentive / difficulty / manipulator` as typed fields (not just extra metadata).
+6. **Analyzer dispatch** — teach the three analyzers about the new env. All three dispatch on scorer names:
+   - [`../src/manipulation_bench/analyze_surface.py`](../src/manipulation_bench/analyze_surface.py) — extend `detect_environment()` and add a `_<env>_metric()` function to the `_METRIC_EXTRACTORS` dict (pick the canonical manipulation metric).
+   - [`analyze_response_surface.py`](analyze_response_surface.py) — reuses `analyze_surface`'s detection; no edit needed unless you want a task-specific z-scored continuous metric for the robustness replication (`zscore_continuous`).
+   - [`../src/manipulation_bench/analyze.py`](../src/manipulation_bench/analyze.py) — only needed if you want env-specific analysis beyond the surface pivot (susceptibility, per-role breakdown, etc.).

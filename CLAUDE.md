@@ -232,7 +232,5 @@ pytest tests/ -v
 
 ## Future directions (discussed, not yet implemented)
 
-- **Communication topology experiments**: Test how hub-spoke vs all-to-all vs bilateral pairs change manipulation dynamics
 - **Live observation**: `TurnObserver` callback protocol for streaming to Discord/WebSocket
 - **More game environments**: Extend the `Environment` ABC pattern to other social games (e.g., Mafia variants, Prisoner's Dilemma tournaments)
-- **Cross-environment analysis**: Unified metrics comparing manipulation strategies across debate, social deduction, and negotiation settings

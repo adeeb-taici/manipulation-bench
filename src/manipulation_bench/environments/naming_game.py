@@ -26,7 +26,7 @@ from manipulation_bench.environments.base import (
     Phase,
     PhaseType,
 )
-from manipulation_bench.network import Network
+from manipulation_bench.environments.network import Network
 
 _PROPOSAL_RE = re.compile(r"<proposal>\s*([^<\n]+?)\s*</proposal>", re.IGNORECASE)
 
@@ -137,8 +137,7 @@ class NamingGameEnvironment(Environment):
             round=self._round,
             acting_agents=list(self._agent_names),
             description=(
-                f"Round {self._round} of {self._max_rounds}: "
-                f"all agents propose a name in parallel."
+                f"Round {self._round} of {self._max_rounds}: all agents propose a name in parallel."
             ),
             parallel=True,
         )
@@ -206,9 +205,8 @@ class NamingGameEnvironment(Environment):
         # Check convergence on this round's proposals.
         self._check_convergence(finalised)
 
-        early_stop = (
-            (self._convergence_mode == "strict" and self._strict_converged)
-            or (self._convergence_mode == "majority" and self._majority_converged)
+        early_stop = (self._convergence_mode == "strict" and self._strict_converged) or (
+            self._convergence_mode == "majority" and self._majority_converged
         )
         if early_stop:
             self._terminal = True
@@ -298,9 +296,7 @@ class NamingGameEnvironment(Environment):
         top = counts.most_common(1)[0] if counts else ("", 0)
         return {
             "game_type": "naming_game",
-            "round_proposals": {
-                r: dict(p) for r, p in self._round_proposals.items()
-            },
+            "round_proposals": {r: dict(p) for r, p in self._round_proposals.items()},
             "total_rounds": max(self._round_proposals) if self._round_proposals else 0,
             "strict_converged": self._strict_converged,
             "majority_converged": self._majority_converged,

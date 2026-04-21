@@ -1,4 +1,4 @@
-"""Network graph, topologies, and message routing."""
+"""Network graph, topologies, and message routing for the naming-game environment."""
 
 from __future__ import annotations
 
@@ -6,7 +6,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable
 
-from manipulation_bench.agents import PersonaCard
+
+@dataclass
+class PersonaCard:
+    """Agent identity used by the network layer for labelled routing."""
+
+    name: str
+    role: str = ""
 
 
 class ChannelType(str, Enum):

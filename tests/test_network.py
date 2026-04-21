@@ -1,11 +1,11 @@
 """Tests for Network, Channel, Message, and topology factories."""
 
-from manipulation_bench.agents import PersonaCard
-from manipulation_bench.network import (
+from manipulation_bench.environments.network import (
     Channel,
     ChannelType,
     Message,
     Node,
+    PersonaCard,
     broadcast,
     commons,
     dense,
