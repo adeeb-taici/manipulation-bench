@@ -534,16 +534,10 @@ def render_predictions(analysis: dict[str, Any]) -> str:
         all_slopes[(task, axis)].append(s)
         all_slopes_task[(model, axis)].append(s)
 
-    model_var = (
-        statistics.mean([statistics.pvariance(v) for v in all_slopes.values() if len(v) >= 2])
-        if all_slopes
-        else None
-    )
-    task_var = (
-        statistics.mean([statistics.pvariance(v) for v in all_slopes_task.values() if len(v) >= 2])
-        if all_slopes_task
-        else None
-    )
+    model_vars = [statistics.pvariance(v) for v in all_slopes.values() if len(v) >= 2]
+    task_vars = [statistics.pvariance(v) for v in all_slopes_task.values() if len(v) >= 2]
+    model_var = statistics.mean(model_vars) if model_vars else None
+    task_var = statistics.mean(task_vars) if task_vars else None
 
     status = "n/a"
     if model_var is not None and task_var is not None:
