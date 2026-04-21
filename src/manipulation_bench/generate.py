@@ -148,6 +148,131 @@ def generate_debate_rotation(
 
 
 # ---------------------------------------------------------------------------
+# Response-surface rotation (frame × incentive × difficulty)
+# ---------------------------------------------------------------------------
+
+
+def generate_debate_surface(
+    topics: list[dict[str, Any]],
+    *,
+    frames: list[str],
+    incentives: list[str],
+    word_limit: int = 200,
+    num_rounds: int = 2,
+    visibility: str | dict = "all_to_all",
+    max_tokens: int = 2048,
+    id_prefix: str = "debate_surface",
+) -> list[dict[str, Any]]:
+    """Generate response-surface scenarios: frame × incentive × manipulator
+    per topic. Non-manipulators always get the shared ``minimal`` frame and
+    ``none`` incentive so the design isolates the manipulator's axis cell.
+
+    Each *topic* dict must contain ``topic``, ``agents`` (list of {name,
+    model_role, prompt, position}). Optional keys: ``ground_truth``,
+    ``judge_prompt``, ``description``, ``difficulty``, ``metadata``.
+
+    ``difficulty`` is carried through from the topic (use the pre-validation
+    juror-disagreement label); it is not cross-producted here since a single
+    topic has one difficulty.
+    """
+    from manipulation_bench.axes import FRAME_PROMPTS, INCENTIVE_PROMPTS
+
+    def _make_agent(
+        agent: dict[str, Any],
+        is_manipulator: bool,
+        frame: str,
+        incentive: str,
+    ) -> dict[str, Any]:
+        prompt = agent["prompt"].rstrip()
+        word_suffix = f" Keep responses under {word_limit} words."
+        if not prompt.endswith(word_suffix.strip()):
+            prompt += word_suffix
+        # Everyone gets a framing line. Manipulator carries the cell's frame/
+        # incentive; others get the shared neutral midpoint.
+        agent_frame = frame if is_manipulator else "minimal"
+        agent_incentive = incentive if is_manipulator else "none"
+        prompt += "\n\n" + FRAME_PROMPTS["debate"][agent_frame]
+        incentive_text = INCENTIVE_PROMPTS["debate"][agent_incentive]
+        if incentive_text:
+            prompt += "\n\n" + incentive_text
+        return {
+            "name": agent["name"],
+            "model_role": agent["model_role"],
+            "system_prompt": prompt,
+            "position": agent["position"],
+            "metadata": {"manipulator": is_manipulator},
+        }
+
+    scenarios: list[dict[str, Any]] = []
+
+    for topic_idx, topic_info in enumerate(topics):
+        agents_def = topic_info["agents"]
+        difficulty = topic_info.get("difficulty")
+        topic_label = topic_info.get("description", topic_info["topic"][:50] + "...")
+
+        shared: dict[str, Any] = {
+            "topic": topic_info["topic"],
+            "protocol": "round_robin",
+            "num_rounds": num_rounds,
+            "visibility": visibility,
+            "max_tokens": max_tokens,
+        }
+        if "ground_truth" in topic_info:
+            shared["ground_truth"] = topic_info["ground_truth"]
+        if "judge_prompt" in topic_info:
+            shared["judge_prompt"] = topic_info["judge_prompt"]
+
+        base_metadata = dict(topic_info.get("metadata", {}))
+
+        # Baseline: no manipulator, all agents on minimal / none
+        scenarios.append(
+            {
+                **shared,
+                "id": f"{id_prefix}_{topic_idx:02d}_baseline",
+                "description": f"Baseline ({topic_label})",
+                "agents": [_make_agent(a, False, "minimal", "none") for a in agents_def],
+                "metadata": {
+                    **base_metadata,
+                    "frame": None,
+                    "incentive": None,
+                    "difficulty": difficulty,
+                    "manipulator": None,
+                },
+            }
+        )
+
+        # One scenario per (frame, incentive, manipulator-agent) cell
+        for frame in frames:
+            for incentive in incentives:
+                for manip in agents_def:
+                    scenarios.append(
+                        {
+                            **shared,
+                            "id": (
+                                f"{id_prefix}_{topic_idx:02d}_{frame}_{incentive}_{manip['name']}"
+                            ),
+                            "description": (
+                                f"{manip['name']} manipulates (frame={frame}, "
+                                f"incentive={incentive}); {topic_label}"
+                            ),
+                            "agents": [
+                                _make_agent(a, a["name"] == manip["name"], frame, incentive)
+                                for a in agents_def
+                            ],
+                            "metadata": {
+                                **base_metadata,
+                                "frame": frame,
+                                "incentive": incentive,
+                                "difficulty": difficulty,
+                                "manipulator": manip["name"],
+                            },
+                        }
+                    )
+
+    return scenarios
+
+
+# ---------------------------------------------------------------------------
 # YAML-config entry point (original CLI helper)
 # ---------------------------------------------------------------------------
 

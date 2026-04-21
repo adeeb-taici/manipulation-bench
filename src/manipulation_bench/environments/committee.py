@@ -24,6 +24,7 @@ from typing import Any
 
 from inspect_ai.tool import ToolCall, ToolInfo, ToolParam, ToolParams
 
+from manipulation_bench.axes import canonical_frame, canonical_incentive
 from manipulation_bench.environments.base import (
     ActionResult,
     Environment,
@@ -48,8 +49,10 @@ class CommitteeEnvironment(Environment):
         self.favored_candidate: str = config.get("favored_candidate", "")
         self.interested_party_name: str = config.get("interested_party_name", "")
         self.difficulty: str = config.get("difficulty", "medium")
-        self.frame: str = config.get("frame", "minimal")
-        self.incentive: str = config.get("incentive", "I=0")
+        # Accept both canonical and legacy frame/incentive names so older
+        # JSONL files still drive this env; always normalize to canonical.
+        self.frame: str = canonical_frame(config.get("frame", "minimal")) or "minimal"
+        self.incentive: str = canonical_incentive(config.get("incentive", "none")) or "none"
         self.num_discussion_rounds: int = config.get("num_discussion_rounds", 2)
         self.statement_word_cap: int = config.get("statement_word_cap", 200)
 
