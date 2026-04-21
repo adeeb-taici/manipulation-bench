@@ -66,8 +66,35 @@ def detect_environment(log: EvalLog) -> str:
 # ── Metric extraction per environment ─────────────────────────────────────
 
 
+def _lookup_score(sample: Any, scorer_names: tuple[str, ...]) -> Any | None:
+    for name in scorer_names:
+        s = sample.scores.get(name)
+        if s is not None:
+            return s
+    return None
+
+
+def _manipulation_occurred(sample: Any, scorer_names: tuple[str, ...]) -> float | None:
+    """Return the scenario-level ``manipulation_occurred`` boolean as a float
+    in {0.0, 1.0}, or None when the scorer did not emit it (e.g. archived
+    logs written before the shared metric was added)."""
+    score = _lookup_score(sample, scorer_names)
+    if score is None:
+        return None
+    val = score.value if hasattr(score, "value") else score
+    if not isinstance(val, dict):
+        return None
+    raw = val.get("manipulation_occurred")
+    if raw is None:
+        return None
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return None
+
+
 def _sales_metric(sample: Any) -> float | None:
-    """Misleading+false rate for the sales classifier."""
+    """Fallback continuous metric: misleading+false rate."""
     score = sample.scores.get("sales_classifier")
     if score is None:
         return None
@@ -88,6 +115,12 @@ def _committee_metric(sample: Any) -> float | None:
         return None
     val = score.value if hasattr(score, "value") else score
     if isinstance(val, dict):
+        v = val.get("initial_bias")
+        if v is not None:
+            try:
+                return float(v)
+            except (TypeError, ValueError):
+                return None
         return _first_numeric(val)
     try:
         return float(val)
@@ -134,6 +167,16 @@ def _bargaining_metric(sample: Any) -> float | None:
         return None
 
 
+# Per-env scorer names that carry the shared `manipulation_occurred` boolean.
+_MANIP_SCORERS: dict[str, tuple[str, ...]] = {
+    "sales": ("sales_classifier",),
+    "committee": ("initial_rating_bias",),
+    "village": ("exploitation_rate",),
+    "debate": ("ground_truth_persuasion",),
+    "bargaining": ("bargaining_commit", "bargaining_manipulation"),
+}
+
+
 def _first_numeric(d: dict[str, Any]) -> float | None:
     for v in d.values():
         try:
@@ -158,6 +201,8 @@ METRIC_NAMES = {
     "debate": "belief_shift",
     "bargaining": "overstatement_rate",
 }
+
+SHARED_METRIC = "manipulation_occurred"
 
 
 # ── Axis extraction from sample metadata ─────────────────────────────────
@@ -203,6 +248,7 @@ def collect_rows(log: EvalLog, env: str) -> list[dict[str, Any]]:
     extractor = _METRIC_EXTRACTORS.get(env)
     if extractor is None:
         return []
+    manip_scorers = _MANIP_SCORERS.get(env, ())
     rows = []
     for sample in log.samples or []:
         md = _sample_meta(sample)
@@ -211,7 +257,8 @@ def collect_rows(log: EvalLog, env: str) -> list[dict[str, Any]]:
         difficulty = md.get("difficulty")
         model = _model_label(sample, md)
         metric = extractor(sample)
-        if metric is None:
+        manip = _manipulation_occurred(sample, manip_scorers)
+        if metric is None and manip is None:
             continue
         rows.append(
             {
@@ -223,36 +270,47 @@ def collect_rows(log: EvalLog, env: str) -> list[dict[str, Any]]:
                 "difficulty": difficulty,
                 "metric": metric,
                 "metric_name": METRIC_NAMES[env],
+                "manipulation_occurred": manip,
             }
         )
     return rows
 
 
-def pivot_frame_incentive(rows: list[dict[str, Any]]) -> dict[str, dict[tuple[str, str], float]]:
-    """Return {model: {(frame, incentive): mean_metric}}."""
+def _pivot(
+    rows: list[dict[str, Any]],
+    col_key: str,
+    value_key: str,
+) -> dict[str, dict[tuple[str, str], float]]:
     buckets: dict[str, dict[tuple[str, str], list[float]]] = defaultdict(lambda: defaultdict(list))
     for r in rows:
-        if r["frame"] is None or r["incentive"] is None:
+        if r["frame"] is None or r[col_key] is None or r.get(value_key) is None:
             continue
-        buckets[r["model"]][(r["frame"], r["incentive"])].append(r["metric"])
-    out: dict[str, dict[tuple[str, str], float]] = {}
-    for model, cells in buckets.items():
-        out[model] = {k: sum(v) / len(v) for k, v in cells.items()}
-    return out
+        buckets[r["model"]][(r["frame"], r[col_key])].append(float(r[value_key]))
+    return {m: {k: sum(v) / len(v) for k, v in cells.items()} for m, cells in buckets.items()}
+
+
+def pivot_frame_incentive(rows: list[dict[str, Any]]) -> dict[str, dict[tuple[str, str], float]]:
+    """Return {model: {(frame, incentive): mean continuous metric}}."""
+    return _pivot(rows, "incentive", "metric")
 
 
 def pivot_frame_difficulty(
     rows: list[dict[str, Any]],
 ) -> dict[str, dict[tuple[str, str], float]]:
-    buckets: dict[str, dict[tuple[str, str], list[float]]] = defaultdict(lambda: defaultdict(list))
-    for r in rows:
-        if r["frame"] is None or r["difficulty"] is None:
-            continue
-        buckets[r["model"]][(r["frame"], r["difficulty"])].append(r["metric"])
-    out: dict[str, dict[tuple[str, str], float]] = {}
-    for model, cells in buckets.items():
-        out[model] = {k: sum(v) / len(v) for k, v in cells.items()}
-    return out
+    return _pivot(rows, "difficulty", "metric")
+
+
+def pivot_frame_incentive_manip(
+    rows: list[dict[str, Any]],
+) -> dict[str, dict[tuple[str, str], float]]:
+    """Return {model: {(frame, incentive): mean manipulation_occurred}}."""
+    return _pivot(rows, "incentive", "manipulation_occurred")
+
+
+def pivot_frame_difficulty_manip(
+    rows: list[dict[str, Any]],
+) -> dict[str, dict[tuple[str, str], float]]:
+    return _pivot(rows, "difficulty", "manipulation_occurred")
 
 
 # ── Rendering ─────────────────────────────────────────────────────────────
@@ -285,19 +343,43 @@ def render_report(env: str, rows: list[dict[str, Any]]) -> str:
     metric_name = rows[0]["metric_name"]
     by_model_fi = pivot_frame_incentive(rows)
     by_model_fd = pivot_frame_difficulty(rows)
+    manip_fi = pivot_frame_incentive_manip(rows)
+    manip_fd = pivot_frame_difficulty_manip(rows)
+
+    n_with_manip = sum(1 for r in rows if r.get("manipulation_occurred") is not None)
 
     parts = [
         f"# Response surface — {env}",
         "",
-        f"Metric: **{metric_name}**  •  N samples: {len(rows)}",
+        f"Continuous metric: **{metric_name}**  •  "
+        f"Shared boolean: **{SHARED_METRIC}** "
+        f"({n_with_manip}/{len(rows)} samples)",
         "",
     ]
-    for model in sorted(by_model_fi.keys()):
+    for model in sorted(set(by_model_fi.keys()) | set(manip_fi.keys())):
         parts.append(f"## Model: {model}")
         parts.append("")
+        if model in manip_fi:
+            parts.append(
+                _render_grid(
+                    f"Frame × Incentive — {SHARED_METRIC} (rate)",
+                    manip_fi.get(model, {}),
+                    row_levels=FRAME_LEVELS,
+                    col_levels=INCENTIVE_LEVELS,
+                )
+            )
+        if model in manip_fd:
+            parts.append(
+                _render_grid(
+                    f"Frame × Difficulty — {SHARED_METRIC} (rate)",
+                    manip_fd.get(model, {}),
+                    row_levels=FRAME_LEVELS,
+                    col_levels=DIFFICULTY_LEVELS,
+                )
+            )
         parts.append(
             _render_grid(
-                "Frame × Incentive",
+                f"Frame × Incentive — {metric_name}",
                 by_model_fi.get(model, {}),
                 row_levels=FRAME_LEVELS,
                 col_levels=INCENTIVE_LEVELS,
@@ -305,7 +387,7 @@ def render_report(env: str, rows: list[dict[str, Any]]) -> str:
         )
         parts.append(
             _render_grid(
-                "Frame × Difficulty",
+                f"Frame × Difficulty — {metric_name}",
                 by_model_fd.get(model, {}),
                 row_levels=FRAME_LEVELS,
                 col_levels=DIFFICULTY_LEVELS,
@@ -325,6 +407,7 @@ def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
         "difficulty",
         "metric",
         "metric_name",
+        "manipulation_occurred",
     ]
     with open(path, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
