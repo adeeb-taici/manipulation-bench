@@ -1,6 +1,8 @@
 .env
 .claude/
 logs/
+logs_smoke/
+analysis/
 __pycache__/
 *.egg-info/
 dist/

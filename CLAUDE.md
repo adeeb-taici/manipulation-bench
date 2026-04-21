@@ -25,6 +25,8 @@ src/manipulation_bench/
   analyze.py         # CLI: eval log → comparison tables + susceptibility analysis (debate/werewolf/diplomacy)
   analyze_surface.py # CLI: cross-env response-surface analyzer (frame × incentive × difficulty pivot per model)
   scenarios/         # JSONL scenario files (generated or hand-crafted)
+  # Paper statistical pipeline (sensitivity slopes + 15-dim profile vectors + cross-task correlations)
+  # lives at experiments/analyze_response_surface.py — imports utilities from analyze_surface.py.
   environments/
     base.py          # Environment ABC + Phase, Observation, ActionResult, GameOutcome
     debate.py        # Debate environment (DISCUSSION-only phases, round-robin)

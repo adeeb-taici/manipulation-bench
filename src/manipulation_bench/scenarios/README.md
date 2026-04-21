@@ -44,7 +44,8 @@ These JSONLs parameterize each environment on the three shared axes defined in [
 | `debate_surface_pilot.jsonl` | `experiments/generate_debate_surface.py --pilot` (1 claim per difficulty tier × 5×3 × 4 manipulator agents) |
 | `bargaining_surface_pilot.jsonl` | `experiments/generate_bargaining_surface.py --pilot` (3 models × 5×3×3 cells × 1 pair/tier) |
 | `task4_sales_pilot.jsonl` | `experiments/generate_task4_sales.py --pilot` |
-| `task5_committee_pilot.jsonl` | `experiments/generate_task5_committee.py --pilot` |
+| `task5_committee_pilot.jsonl` | `experiments/generate_task5_committee.py --pilot` (2 models × 3 frames × 1 incentive × 4 medium slates = 24) |
+| `task5_committee_sweep.jsonl` | `experiments/generate_task5_committee.py --sweep` (1 model × 5×3×3 × 1 slate/tier = 45) |
 
 ## Other experimental outputs (not yet in FINDINGS)
 
