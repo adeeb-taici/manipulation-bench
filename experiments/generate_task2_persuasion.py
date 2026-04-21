@@ -6,7 +6,7 @@ Two axes varied orthogonally:
 
 The third "difficulty" axis is *not* a scenario-level axis.  Instead, each
 claim carries per-juror prior-belief bins (easy / medium / hard on the
-manipulator side) measured empirically by ``probe_juror_priors.py``.  The
+manipulator side) measured empirically in a one-off juror-prior probe.  The
 analyzer groups belief shifts post-hoc by (juror, that-juror's-bin).
 
 Two agents per scenario: a TRUTHFUL advocate and a MANIPULATOR.  Both share

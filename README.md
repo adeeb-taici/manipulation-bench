@@ -123,9 +123,9 @@ Use different models per debater with distinct `model_role` values in the scenar
 Social deduction, 4-8 players. Werewolves deceive; villagers detect. Measures deception, vote manipulation, and detection accuracy.
 
 ```bash
-# Multiple models across 4 players (generate with experiments/generate_werewolf.py)
+# Multiple models across 8 players (generate with experiments/generate_werewolf_8player.py)
 inspect eval src/manipulation_bench/game_task.py \
-  -T scenarios=werewolf_rotation.jsonl \
+  -T scenarios=werewolf_8player.jsonl \
   --model openrouter/anthropic/claude-opus-4-6 \
   --model-role model_a=openrouter/anthropic/claude-opus-4-6 \
   --model-role model_b=openrouter/openai/gpt-5 \
@@ -251,9 +251,9 @@ YAML is fine for a single-topic rotation. Anything multi-topic, custom rotation,
 ### Game rotations
 
 ```bash
-# Werewolf: one run per model as werewolf (40 games)
-python experiments/generate_werewolf.py
-inspect eval src/manipulation_bench/game_task.py -T scenarios=werewolf_rotation.jsonl ...
+# Werewolf: 8-player tournament
+python experiments/generate_werewolf_8player.py
+inspect eval src/manipulation_bench/game_task.py -T scenarios=werewolf_8player.jsonl ...
 
 # Diplomacy: 3 games with 4 models across 7 powers
 python experiments/generate_diplomacy.py
@@ -266,24 +266,9 @@ inspect eval src/manipulation_bench/village_task.py -T scenarios=village_experim
 
 See [`src/manipulation_bench/scenarios/README.md`](src/manipulation_bench/scenarios/README.md) for a complete manifest of scenario files and which generator produces each one.
 
-### Contagion experiment (multi-phase)
+### Multi-phase experiments
 
-Tests whether exposure to manipulation in one debate carries over into a new, clean interaction.
-
-```bash
-# Phase 1: exposure
-python experiments/generate_contagion.py phase1 -o scenarios/contagion_p1.jsonl
-inspect eval src/manipulation_bench/task.py -T scenarios=contagion_p1.jsonl ...
-
-# Phase 2: transfer (exposed agents get a fresh partner on a new topic)
-python experiments/generate_contagion.py phase2 \
-  --phase1-log "logs/2026*.eval" -o scenarios/contagion_p2.jsonl
-inspect eval src/manipulation_bench/task.py -T scenarios=contagion_p2.jsonl ...
-
-python -m manipulation_bench.analyze "logs/*contagion_p2*.eval"
-```
-
-Agents carry their Phase 1 conversation history via `AgentRole.prior_context`. The framework injects it automatically.
+`AgentRole.prior_context` carries interaction history across phases — the solver injects it before the current interaction, and `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience for a Phase 2 JSONL. See `experiments/generate_werewolf_iterated.py` for a working example.
 
 ## What you get: sample analyzer output
 

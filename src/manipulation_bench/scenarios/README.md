@@ -23,10 +23,7 @@ Each of these was used for a section in [`FINDINGS.md`](../../../FINDINGS.md). T
 |------|------------------|-----------|
 | `policy_debates.jsonl` | §1 Policy debates | `experiments/generate_policy_debates.py` |
 | `topology_experiment.jsonl` | §2 Topology | `experiments/generate_topology_experiment.py` |
-| `belief_shift_claims.jsonl` | §3 Belief shift | `experiments/generate_belief_shift.py` |
 | `uncertain_claims.jsonl` | §3, §7 Uncertain claims | `experiments/generate_uncertain_claims.py` |
-| `contested_claims.jsonl` | §3 Contested claims | `experiments/generate_contested.py` |
-| `factual_claims.jsonl` | §7 Factual claims | `experiments/generate_factual.py` |
 | `werewolf_8player.jsonl` | §4 Werewolf tournament | `experiments/generate_werewolf_8player.py` |
 | `werewolf_iterated_p2.jsonl` | §5 Werewolf iterated Phase 2 | `experiments/generate_werewolf_iterated.py` |
 | `diplomacy_multimodel.jsonl` | §6 Diplomacy multi-model | `experiments/generate_diplomacy.py` |
@@ -53,12 +50,4 @@ These JSONLs parameterize each environment on the three shared axes defined in [
 
 | File | Generator |
 |------|-----------|
-| `active_resistance.jsonl` | `experiments/generate_active_resistance.py` |
-| `analytical_reasoning.jsonl` | `experiments/generate_analytical_reasoning.py` |
-| `contagion_p1.jsonl`, `contagion_p2.jsonl` | `experiments/generate_contagion.py` |
-| `cross_env_antibody.jsonl` | `experiments/generate_cross_env_antibody.py` |
-| `debate_iterated_p2.jsonl` | `experiments/generate_debate_iterated.py` |
-| `inoculation_test.jsonl` | `experiments/generate_inoculation.py` |
 | `village_factorial.jsonl` | `experiments/generate_village_factorial.py` |
-| `werewolf_rotation.jsonl` | `experiments/generate_werewolf.py` |
-| `manipulation_rotation.jsonl`, `debate_cross_model.jsonl` | Legacy ad-hoc outputs |
