@@ -3,6 +3,8 @@
 logs/
 logs_smoke/
 analysis/
+!paper/**/analysis/
+!paper/**/analysis/**
 __pycache__/
 *.egg-info/
 dist/

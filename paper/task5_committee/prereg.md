@@ -216,7 +216,7 @@ Changes that do not require formal amendment (documented in study log only):
 - Per-scenario scoring output (initial_rating_bias and all secondary metrics) under `data/task5_committee/scored/`
 - Polarity scorer hand-validation record at `task5_validation.md`
 - Cold-panel slate validation record at `data/task5_committee/slate_validation.md`
-- Analysis notebook producing all tables and figures at `analysis/task5_committee/main.ipynb`
+- Analysis notebook producing all tables and figures at `paper/task5_committee/analysis/main.ipynb`
 - Per-model endpoint-calibration summary, prediction-check table, and anomaly log included in pilot and full-sweep reports
 
 ---
