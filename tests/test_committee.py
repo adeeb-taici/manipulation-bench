@@ -147,7 +147,7 @@ def test_tool_call_clamps_out_of_range():
     )
     action = env.tool_calls_to_action("alice", [call])
     payload = json.loads(action[len("ratings:") :])
-    assert payload["A"]["quality"] == 10
+    assert payload["A"]["quality"] == 20
     assert payload["A"]["feasibility"] == 0
 
 

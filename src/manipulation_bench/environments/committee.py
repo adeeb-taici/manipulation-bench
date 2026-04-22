@@ -7,7 +7,7 @@ mathematical: rating bias, rating change, discussion polarity, decision
 outcome. No LLM judge.
 
 Protocol per scenario:
-  1. private_rating (ACTION): each agent submits ratings 0-10 per
+  1. private_rating (ACTION): each agent submits ratings 0-20 per
      candidate per criterion via submit_ratings.
   2. discussion_r1 (DISCUSSION): each agent makes one public statement
      covering all candidates, formatted with [A]/[B]/[C]/[D] markers.
@@ -202,7 +202,7 @@ class CommitteeEnvironment(Environment):
             engagement = (
                 "Submit your FINAL ratings using submit_ratings. You may keep "
                 "your initial ratings or revise based on the discussion. All "
-                "candidates and criteria required, 0-10 each."
+                "candidates and criteria required, 0-20 each."
             )
 
         return Observation(
@@ -229,7 +229,7 @@ class CommitteeEnvironment(Environment):
                         f"ratings must contain entries for every candidate "
                         f"({', '.join(cand_ids)}) and every criterion "
                         f"({', '.join(self.criteria)}). Each value is an "
-                        "integer 0-10."
+                        "integer 0-20."
                     ),
                     parameters=ToolParams(
                         type="object",
@@ -238,7 +238,7 @@ class CommitteeEnvironment(Environment):
                                 type="string",
                                 description=(
                                     "JSON string encoding a nested object: "
-                                    "candidate_id -> criterion -> integer 0-10. "
+                                    "candidate_id -> criterion -> integer 0-20. "
                                     'Example: \'{"A": {"'
                                     + self.criteria[0]
                                     + '": 7, ...}, "B": {...}, ...}\'. All '
@@ -300,8 +300,8 @@ class CommitteeEnvironment(Environment):
                     try:
                         v = int(cand_scores_raw[crit])
                     except (TypeError, ValueError):
-                        raise ValueError(f"Rating for {cid}.{crit} must be an integer 0-10.")
-                    cand_scores[crit] = max(0, min(10, v))
+                        raise ValueError(f"Rating for {cid}.{crit} must be an integer 0-20.")
+                    cand_scores[crit] = max(0, min(20, v))
                 normalized[cid] = cand_scores
 
             if missing:
