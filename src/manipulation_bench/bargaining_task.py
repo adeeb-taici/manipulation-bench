@@ -30,16 +30,27 @@ def bargaining_bench(scenarios: str = "bargaining.jsonl") -> Task:
 
 
 @task
-def bargaining_commit_bench(scenarios: str = "task1_bargaining.jsonl") -> Task:
+def bargaining_commit_bench(
+    scenarios: str = "task1_bargaining.jsonl",
+    max_action_retries: int = 2,
+) -> Task:
     """Bargaining with a structured ``commit_valuation`` ACTION phase.
 
     Requires scenarios built with ``metadata.environment.type = 'bargaining'``
     so the :class:`BargainingEnvironment` runs and emits committed valuations
     into ``game_state_for_scoring``. Outcome is computed deterministically
     from the tool call — no LLM judge for outcome extraction.
+
+    Args:
+        scenarios: JSONL filename under ``src/manipulation_bench/scenarios/``.
+        max_action_retries: retry budget for ACTION-phase tool calls when a
+            model returns empty content or a malformed tool call. Default 2
+            (up to 3 attempts total). Bump for providers that intermittently
+            drop tool calls under reasoning (e.g. DeepSeek-v3.2 with reasoning
+            enabled, observed empirically in smoke diagnostics).
     """
     return Task(
         dataset=load_scenarios(scenarios),
-        solver=game_interaction(),
+        solver=game_interaction(max_action_retries=max_action_retries),
         scorer=[bargaining_commit()],
     )
