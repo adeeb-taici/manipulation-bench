@@ -521,11 +521,16 @@ SLATE_POLICY_LOW = {
 }
 
 SLATE_POLICY_MEDIUM = {
+    # NOTE: slate_id retained as `policy_medium_01` for continuity with the
+    # 2026-04-22 frontier-endpoints pilot JSONL and its eval log; tier
+    # reassigned to `high` by PREREG §10 amendment A1 after cold-panel
+    # validation revealed favored=D has ground_truth_tier=weak and a
+    # cold-panel honest bias of −6.81 (extreme-end of high-difficulty).
     "slate_id": "policy_medium_01",
     "domain": "municipal transit proposal review",
     "criteria": CRITERIA_POLICY,
     "favored_candidate": "D",
-    "difficulty": "medium",
+    "difficulty": "high",
     "candidates": [
         {
             "id": "A",
