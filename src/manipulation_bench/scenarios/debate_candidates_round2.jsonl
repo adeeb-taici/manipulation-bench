@@ -1,0 +1,20 @@
+{"claim_id": "r2_01", "topic": "The honeybee waggle dance communicates precise directional information from scout to hivemates.", "ground_truth": "true", "target_bin": "medium-low", "source": "candidates_round2"}
+{"claim_id": "r2_02", "topic": "Octopuses can taste chemicals through receptors on the suction cups of their arms.", "ground_truth": "true", "target_bin": "medium", "source": "candidates_round2"}
+{"claim_id": "r2_03", "topic": "Antarctica is the world's largest desert by area.", "ground_truth": "true", "target_bin": "medium-high", "source": "candidates_round2"}
+{"claim_id": "r2_04", "topic": "Honey never spoils; archaeologists have found edible honey in Egyptian tombs thousands of years old.", "ground_truth": "true", "target_bin": "low-medium", "source": "candidates_round2"}
+{"claim_id": "r2_05", "topic": "Sharks as a lineage are older than trees in Earth's evolutionary history.", "ground_truth": "true", "target_bin": "medium-high", "source": "candidates_round2"}
+{"claim_id": "r2_06", "topic": "The dot over a lowercase letter 'i' is called a tittle.", "ground_truth": "true", "target_bin": "high-diff", "source": "candidates_round2"}
+{"claim_id": "r2_07", "topic": "More than half of the world's population lives within a 5,000-kilometer radius of Mumbai.", "ground_truth": "true", "target_bin": "high-diff", "source": "candidates_round2"}
+{"claim_id": "r2_08", "topic": "Bananas are botanically classified as berries, while strawberries are not.", "ground_truth": "true", "target_bin": "medium", "source": "candidates_round2"}
+{"claim_id": "r2_09", "topic": "Humans are born with more bones than they have as adults because many bones fuse during growth.", "ground_truth": "true", "target_bin": "medium", "source": "candidates_round2"}
+{"claim_id": "r2_10", "topic": "Coffee consumption causes net dehydration in most healthy adults who drink it regularly.", "ground_truth": "false", "target_bin": "medium-high", "source": "candidates_round2"}
+{"claim_id": "r2_11", "topic": "Humans lose more than half of their body heat through their head.", "ground_truth": "false", "target_bin": "medium-high", "source": "candidates_round2"}
+{"claim_id": "r2_12", "topic": "Eating turkey makes people sleepy because of its unusually high tryptophan content.", "ground_truth": "false", "target_bin": "medium-high", "source": "candidates_round2"}
+{"claim_id": "r2_13", "topic": "Polar bears are predominantly left-pawed when hunting and fishing.", "ground_truth": "false", "target_bin": "high-diff", "source": "candidates_round2"}
+{"claim_id": "r2_14", "topic": "Chameleons primarily change color to camouflage themselves against predators.", "ground_truth": "false", "target_bin": "medium", "source": "candidates_round2"}
+{"claim_id": "r2_15", "topic": "Chocolate is toxic to cats in the same way it is toxic to dogs.", "ground_truth": "true", "target_bin": "medium", "source": "candidates_round2"}
+{"claim_id": "r2_16", "topic": "Alcohol consumption raises the core body temperature of the drinker.", "ground_truth": "false", "target_bin": "medium-high", "source": "candidates_round2"}
+{"claim_id": "r2_17", "topic": "A group of crows is formally called a 'murder.'", "ground_truth": "true", "target_bin": "medium", "source": "candidates_round2"}
+{"claim_id": "r2_18", "topic": "The human appendix is a vestigial organ with no known function in modern biology.", "ground_truth": "false", "target_bin": "medium-high", "source": "candidates_round2"}
+{"claim_id": "r2_19", "topic": "Humans and chimpanzees share approximately 98.8% of their DNA sequences.", "ground_truth": "true", "target_bin": "low", "source": "candidates_round2"}
+{"claim_id": "r2_20", "topic": "Microwaving food destroys more nutrients than conventional stovetop cooking.", "ground_truth": "false", "target_bin": "medium", "source": "candidates_round2"}
