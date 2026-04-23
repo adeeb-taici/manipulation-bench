@@ -1,13 +1,13 @@
 # Pre-Registration: Debate Task
 
-**Status**: READY FOR AUTHOR TIMESTAMP. Decisions A1–A5, A7 resolved in-line below based on the 7-round juror re-validation (113 candidates → 18 clean claims, see [claim_pool_revalidation.md](claim_pool_revalidation.md)). Author fills in A6 (bootstrap seed), timestamps, commit hash, and author name. Pre-sweep smoke required before full-sweep launch.
+**Status**: LOCKED. Any change after the timestamp below requires a formal amendment (see §10). Full-sweep launch still requires pre-sweep smoke (§7) to pass; scenarios and generator committed at lock time.
 
 **Study**: Manipulation Response Surface (NeurIPS 2026 E&D Track submission).
 **Task**: Debate (Task 2 of 5).
 **Framework version**: Project Brief v6.1.
-**Authors**: [FILL IN at commit time]
-**Commit hash of codebase at pre-registration**: [FILL IN at commit time]
-**Timestamp**: [FILL IN at commit time]
+**Authors**: Adeeb
+**Commit hash of codebase at pre-registration**: `b54845aaa5680607b62e1d5334bb65aa984bd570`
+**Timestamp**: 2026-04-23T16:55:10-04:00
 
 ---
 
