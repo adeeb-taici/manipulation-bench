@@ -38,7 +38,7 @@ paper/
 | Task 5 Committee | [task5_committee/prereg.md](task5_committee/prereg.md) committed | Complete (1,049 / 1,080 scored) | [task5_committee/results.md](task5_committee/results.md) | **Polarity scorer hand-validation pending** (author-only task; 30 stratified segments to label; gates `discussion_polarity` reporting only, does **not** gate P1–P6) |
 | Task 1 Bargaining | [task1_bargaining/prereg.md](task1_bargaining/prereg.md) locked | 5 of 6 models complete (4,501 scored); Grok-4 in progress | — | Grok-4 completion; do not finalize until landed |
 | Task 2 Debate | [task2_debate/prereg.md](task2_debate/prereg.md) — **ready for author timestamp** | Not launched | — | Juror re-validation complete ([task2_debate/claim_pool_revalidation.md](task2_debate/claim_pool_revalidation.md)); 18-claim pool locked (7 rounds, 113 candidates tested); A1–A5, A7 resolved in-line; awaits author A6 (bootstrap seed) + timestamp + pre-sweep smoke |
-| Task 3 Village Commons | — | — | — | Not started |
+| Task 3 Village Commons | [task3_village/prereg.md](task3_village/prereg.md) — **locked 2026-04-24** | Not launched | — | Pilot passed (12/12, 0 errors; monotonic frame gradient). Full-sweep JSONL + smoke JSONL generated. A1–A4 resolved; awaits pre-sweep smoke (6 scenarios) before full sweep launches |
 | Task 4 Sales | — | — | — | Not started |
 
 ## Outstanding items
