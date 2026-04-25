@@ -37,10 +37,31 @@ Across all 4,501 scored Task 1 samples (5 of 6 models complete + retries applied
 
 Aggregate: **0 / 4,501 = 0.00%**. Well under the PREREG `§6` ceiling of 3%. Grok-4 data when it completes may shift this slightly but all 271 Grok samples scored so far are clean.
 
+## 2026-04-24 — Grok-4 completion
+
+**Event**: Grok-4 split sweep finished cleanly. Status `success`, **899/899 scored**, **0 errors**. Wall-clock ~38 hours at `--max-connections 3` (slow but stable; reasoning-stall pathology never recurred at this concurrency).
+
+**Sample size note**: the Grok JSONL contained 899 scenarios rather than 900. One scenario was already in the original 2,700-sample launch's eval file before it stalled, so the remaining-Grok JSONL was carved with that scenario excluded. Effective Grok sample size is 899 (not 900); Task 1 paper-wide aggregate is **5,399 / 5,400 = 99.98%**.
+
+**Final aggregate sample-failure rate** (all 6 models + retries applied): **0 / 5,399 = 0.00%**. PREREG §6 ceiling 3%; comfortably under.
+
+Final per-model:
+
+| Model | Scored | Failures |
+|---|---|---|
+| Claude Opus 4.7 | 900 | 0 |
+| GPT-5 | 900 | 0 |
+| Gemini 3.1 Pro | 900 | 0 |
+| Grok-4 | **899** | 0 |
+| Llama 3.3 70B | 900 | 0 (after retries=10 retry) |
+| DeepSeek v3.2 | 900 | 0 (reasoning-off per A1) |
+
+Task 1 raw-data collection is **complete**; results.md authorship can proceed.
+
 ## Logs referenced
 
 - `logs/task1_fullsweep_20260422/` — original launch (2,700 valid samples before stall)
 - `logs/task1_fullsweep_20260422_batch1/` — Llama + DeepSeek + Gemini straggler (1,801 samples)
 - `logs/task1_fullsweep_20260422_llama_retry/` — 98-scenario Llama retry at retries=10 (98/98 recovered)
-- `logs/task1_fullsweep_20260422_grok/` — Grok-only batch at `--max-connections 3` (in progress)
+- `logs/task1_fullsweep_20260422_grok/` — Grok-only split at `--max-connections 3` (899/899 scored, 0 errors, status=success)
 - `logs/task1_v61_dsdiag/`, `logs/task1_v61_dsverify/` — pre-sweep diagnostics that established Amendment A1
