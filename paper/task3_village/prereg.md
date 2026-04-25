@@ -234,6 +234,41 @@ DeepSeek-chat has a 64K context window. By round 7–8 of long Village discussio
 
 **Sample-failure ceiling re-baseline**: §6 ceiling of ≤3% is now measured against the post-amendment full sweep, not the pre-amendment partial.
 
+### Amendment A2 — Truncate cumulative-transcript context for bystanders + lower bystander_haiku max_tokens (2026-04-25)
+
+**Triggering event**: After Amendment A1 was applied and the remaining-443 sweep was relaunched, 8 new failures appeared at 212 / 443 scored (3.8%, breaching the §6 ceiling). Two distinct failure modes, both worse than A1's:
+
+1. **`bystander_dschat` 64K context cap** (4 errors), but at *much* larger inputs than pre-halt — 131K–133K tokens of input vs. ~52K pre-halt. A1's max_tokens reduction freed 8K of headroom, but the input itself had grown 2.5× and now exceeded the 64K cap by 2×.
+2. **`bystander_haiku` 200K context cap** (3 errors): inputs of 218K–221K tokens, exceeding Anthropic Haiku 4.5's 200K window. Not anticipated in A1.
+
+The root cause is **cumulative-transcript explosion**: every agent's turn in the Village game carries the full prior transcript in its message context. With 8 rounds × 6 agents × 4 phases × verbose-frame chatter (selfish / permissive on reasoning manipulators), the running transcript at late-round bystander turns can exceed any model's context window.
+
+The 8 errors were correlated with verbose-manipulator behavior (selfish/permissive frames + reasoning models), so losing them would systematically bias the cell toward less-chatty manipulators. Fixing the cause is preferred to accepting the breach.
+
+**Amendment**:
+
+(a) **`game_solver._build_game_messages` adds optional per-agent transcript truncation.** When `agent.metadata['input_char_budget']` is set, the visible-turn portion of the message context is truncated (oldest turns dropped first) until total content character count is under the budget. Anchor messages (system prompt, prior_context, current game-state context, final phase-specific prompt) are always retained. Manipulators (`agent_1`) have no budget set → full transcript preserved.
+
+(b) **All bystanders receive `input_char_budget = 200_000`** (≈ 50K tokens at ~4 chars/token). This is well under DeepSeek-chat's 64K cap and Anthropic Haiku's 200K cap, with comfortable headroom for tool definitions and output budget. 50K tokens corresponds to roughly the most recent 5 of 8 game rounds of full transcript — sufficient context for cooperative bystander behavior.
+
+(c) **`bystander_haiku` max_tokens lowered 16384 → 8192** (matching Amendment A1's `bystander_dschat` change). Justification identical to A1: bystander turns are prompt-capped at ~150 words (~200 tokens), so 8K is 40× per-turn need.
+
+**Justification (why this is not a behavioral change for the manipulator)**:
+1. Truncation applies to bystander context only. The manipulator (`agent_1`) sees the full transcript at all times — its decisions are unaffected.
+2. Bystanders are cheap-tier cooperative models (Haiku, GPT-5-mini, Gemini Flash, DeepSeek-chat) whose role is to provide a *cooperative baseline*. Their behavior is reactive to the most recent state, not to deep historical context.
+3. The 50K-token budget retains roughly 5 of 8 rounds of recent transcript. Empirical bystander accusations and inspections in early-round logs reference recent events, not round 1–2 events.
+4. The truncation behavior is opt-in via metadata — pre-amendment scenarios with no `input_char_budget` still see full context.
+
+**Data recovery**:
+- 309 already-scored samples retained (97 from original sweep + 212 from remaining-v1).
+- Remaining-v2 JSONL = 231 scenarios = 540 − 309. The 11 errored samples (3 from original + 8 from remaining-v1) are re-included for retry under the amended config.
+
+**Re-launch**:
+- `task3_village_v61_full_remaining_v2.jsonl` with `input_char_budget=200_000` on all 5 bystander roles, plus `max_tokens=8192` on `bystander_haiku` and `bystander_dschat`.
+- All metadata baked into the JSONL; eval-time CLI flags unchanged.
+
+**Affected predictions**: None. As with A1, this is an infrastructure fix; manipulator behavior, scoring, and response-surface design are unchanged. P1–P7 remain as written.
+
 ## 11. Deliverables
 
 - Raw transcripts, tool-call records, per-agent contributions and wealth committed under `data/task3_village/`

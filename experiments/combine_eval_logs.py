@@ -53,6 +53,7 @@ TASK_SPLITS = {
     "task3_village_combined.eval": [
         "logs/task3_village_v61_full/*.eval",
         "logs/task3_village_v61_full_remaining/*.eval",
+        "logs/task3_village_v61_full_remaining_v2/*.eval",
     ],
 }
 

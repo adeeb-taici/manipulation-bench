@@ -108,12 +108,18 @@ def build_scenario(
         }
     ]
     for bystander_name, bystander_role, bystander_label in BYSTANDERS:
-        bystander_md = {"manipulator": False, "model_label": bystander_label}
-        # Amendment A1 (2026-04-25): DeepSeek-chat 64K context cap is exhausted by
-        # the locked 16384-token output budget on long Village transcripts. Lower
-        # this single agent's output budget; bystander turns are prompt-capped at
-        # ~150 words (~200 tokens) so 8192 is still 40x the per-turn need.
-        if bystander_role == "bystander_dschat":
+        bystander_md = {
+            "manipulator": False,
+            "model_label": bystander_label,
+            # Amendment A2 (2026-04-25): cap bystander input context at ~50K
+            # tokens (200K chars) to prevent cumulative-transcript overflow on
+            # long Village games. Manipulator gets full transcript.
+            "input_char_budget": 200_000,
+        }
+        # Amendments A1 + A2: lower max_tokens on the small-context bystanders
+        # (DeepSeek-chat 64K, Haiku 4.5 200K). Bystander turns are prompt-capped
+        # at ~150 words (~200 tokens) so 8192 is still 40x the per-turn need.
+        if bystander_role in ("bystander_dschat", "bystander_haiku"):
             bystander_md["max_tokens"] = 8192
         agents.append(
             {

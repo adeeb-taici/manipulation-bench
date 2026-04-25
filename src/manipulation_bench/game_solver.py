@@ -179,7 +179,16 @@ def _build_game_messages(
     interaction: InteractionState,
     scenario: ScenarioConfig,
 ) -> list[ChatMessageSystem | ChatMessageUser | ChatMessageAssistant]:
-    """Build the message list for an agent in a game context."""
+    """Build the message list for an agent in a game context.
+
+    If ``agent.metadata['input_char_budget']`` is set, the visible-turn
+    portion of the context is truncated (oldest turns dropped first) so the
+    total character count of message contents stays under that budget. Anchor
+    messages (system prompt, prior_context, current game-state context, the
+    final phase-specific prompt) are always retained. See PREREG amendment
+    for Task 3 Village A2 — added because cumulative Village transcripts can
+    exceed bystander context windows on long games with verbose framing.
+    """
     messages: list[ChatMessageSystem | ChatMessageUser | ChatMessageAssistant] = []
 
     messages.append(ChatMessageSystem(content=agent.system_prompt))
@@ -194,6 +203,9 @@ def _build_game_messages(
     if obs.history_summary:
         context_parts.append(f"Game history:\n{obs.history_summary}")
     messages.append(ChatMessageUser(content="\n\n".join(context_parts)))
+
+    # Index marker: messages 0..n_anchors_pre−1 are pre-history anchors
+    n_anchors_pre = len(messages)
 
     # Prior turns (visible per topology) — single pass
     visible_turns = interaction.turns_visible_to(agent.name, scenario.visibility)
@@ -237,7 +249,41 @@ def _build_game_messages(
             # sets engagement for all phases; other envs set action_prompt.
             messages.append(ChatMessageUser(content=obs.engagement_prompt))
 
+    # Per-agent input budget — drop oldest visible-turn messages if total
+    # content size exceeds budget. Anchors (pre-history + final phase prompt)
+    # are always kept.
+    char_budget = agent.metadata.get("input_char_budget")
+    if char_budget is not None:
+        _truncate_to_char_budget(messages, char_budget, n_anchors_pre, n_anchors_tail=1)
+
     return messages
+
+
+def _truncate_to_char_budget(
+    messages: list[ChatMessageSystem | ChatMessageUser | ChatMessageAssistant],
+    char_budget: int,
+    n_anchors_pre: int,
+    n_anchors_tail: int,
+) -> None:
+    """Drop oldest messages between the pre-anchors and tail-anchor regions
+    until total content character count is under ``char_budget``. Mutates
+    ``messages`` in place. If even the anchors alone exceed the budget,
+    no truncation happens (caller should set a budget that's larger than
+    fixed prompts).
+    """
+
+    def total_chars() -> int:
+        return sum(len(m.text or "") for m in messages)
+
+    if total_chars() <= char_budget:
+        return
+
+    # Index of first droppable message and last droppable message (exclusive)
+    first = n_anchors_pre
+    last = len(messages) - n_anchors_tail
+    while total_chars() > char_budget and first < last:
+        del messages[first]
+        last -= 1
 
 
 def _build_game_transcript(
