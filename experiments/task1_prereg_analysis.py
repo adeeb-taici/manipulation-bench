@@ -25,11 +25,10 @@ from statistics import mean, stdev
 
 from inspect_ai.log import read_eval_log
 
+# Single canonical combined log per task. Originals remain in their split
+# folders for provenance; experiments/combine_eval_logs.py produced the merge.
 LOG_PATTERNS = [
-    "logs/task1_fullsweep_20260422/*.eval",
-    "logs/task1_fullsweep_20260422_batch1/*.eval",
-    "logs/task1_fullsweep_20260422_llama_retry/*.eval",
-    "logs/task1_fullsweep_20260422_grok/*.eval",
+    "logs/task1_bargaining_combined.eval",
 ]
 
 OUT_DIR = Path("paper/task1_bargaining/analysis")

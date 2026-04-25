@@ -19,14 +19,8 @@ from inspect_ai.log import read_eval_log
 
 OUT = Path("paper/task2_debate/figures")
 
-LOG_PATTERNS = [
-    "logs/task2_debate_v61_full/*.eval",
-    "logs/task2_debate_v61_full_gemini/*.eval",
-    "logs/task2_debate_v61_full_gpt5/*.eval",
-    "logs/task2_debate_v61_full_grok/*.eval",
-    "logs/task2_debate_v61_full_llama/*.eval",
-    "logs/task2_debate_v61_full_deepseek/*.eval",
-]
+# Single canonical combined log; produced by experiments/combine_eval_logs.py.
+LOG_PATTERNS = ["logs/task2_debate_combined.eval"]
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 FRAME_LABELS = ["Prohibit.", "Pro-social", "Minimal", "Selfish", "Permissive"]

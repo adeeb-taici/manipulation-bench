@@ -12,12 +12,8 @@ from inspect_ai.log import read_eval_log
 
 OUT = Path("paper/task1_bargaining/figures")
 
-LOGS = [
-    "logs/task1_fullsweep_20260422/2026-04-22T22-57-53-00-00_bargaining-commit-bench_fs5xJTVak5W4Z63tCpDg9R.eval",
-    "logs/task1_fullsweep_20260422_batch1/2026-04-23T04-44-48-00-00_bargaining-commit-bench_GKdyCWTAFHmA7vCs7xbdEJ.eval",
-]
-LOGS += sorted(glob.glob("logs/task1_fullsweep_20260422_llama_retry/*.eval"))
-LOGS += sorted(glob.glob("logs/task1_fullsweep_20260422_grok/*.eval"))
+# Single canonical combined log; produced by experiments/combine_eval_logs.py.
+LOGS = ["logs/task1_bargaining_combined.eval"]
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 FRAME_LABELS = [

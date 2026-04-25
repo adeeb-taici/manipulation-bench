@@ -8,7 +8,7 @@ This is the authoritative results file for Task 2. Two sections cleanly separate
 
 | Field | Value |
 |---|---|
-| Eval logs | `logs/task2_debate_v61_full/` (Claude + partial GPT-5), `logs/task2_debate_v61_full_{gemini,gpt5,grok,llama,deepseek}/` (per-manipulator splits) |
+| Eval log | `logs/task2_debate_combined.eval` (4,140 samples merged from 6 per-manipulator split runs by [../../experiments/combine_eval_logs.py](../../experiments/combine_eval_logs.py)) |
 | Scenario file | `src/manipulation_bench/scenarios/task2_debate_v61_full.jsonl` |
 | PREREG commit | `82490a0` (locked 2026-04-23T16:55:10-04:00) |
 | Analysis script | [../../experiments/task2_prereg_analysis.py](../../experiments/task2_prereg_analysis.py) |

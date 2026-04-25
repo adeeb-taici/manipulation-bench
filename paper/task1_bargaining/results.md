@@ -8,7 +8,7 @@ This is the authoritative results file for Task 1. Two sections cleanly separate
 
 | Field | Value |
 |---|---|
-| Eval logs | `logs/task1_fullsweep_20260422/`, `logs/task1_fullsweep_20260422_batch1/`, `logs/task1_fullsweep_20260422_llama_retry/`, `logs/task1_fullsweep_20260422_grok/` |
+| Eval log | `logs/task1_bargaining_combined.eval` (5,400 samples merged from 4 split runs by [../../experiments/combine_eval_logs.py](../../experiments/combine_eval_logs.py); split chronology in [pipeline_log.md](pipeline_log.md)) |
 | Scenario file | `src/manipulation_bench/scenarios/task1_bargaining_v61_full.jsonl` |
 | PREREG commit | `49310ea` (Amendment A1: DeepSeek reasoning-off) |
 | Analysis script | [../../experiments/task1_prereg_analysis.py](../../experiments/task1_prereg_analysis.py) |
