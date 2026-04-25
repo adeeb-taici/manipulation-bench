@@ -41,9 +41,9 @@ Aggregate: **0 / 4,501 = 0.00%**. Well under the PREREG `§6` ceiling of 3%. Gro
 
 **Event**: Grok-4 split sweep finished cleanly. Status `success`, **899/899 scored**, **0 errors**. Wall-clock ~38 hours at `--max-connections 3` (slow but stable; reasoning-stall pathology never recurred at this concurrency).
 
-**Sample size note**: the Grok JSONL contained 899 scenarios rather than 900. One scenario was already in the original 2,700-sample launch's eval file before it stalled, so the remaining-Grok JSONL was carved with that scenario excluded. Effective Grok sample size is 899 (not 900); Task 1 paper-wide aggregate is **5,399 / 5,400 = 99.98%**.
+**Sample size note**: the Grok split JSONL contained 899 scenarios. One Grok scenario was already scored in the original 2,700-sample launch's eval file before that run stalled, so the remaining-Grok JSONL excluded it. Combined: **1 (orig) + 899 (split) = 900 unique Grok samples** after deduplication by sample id. Task 1 paper-wide aggregate is **5,400 / 5,400 = 100.0%**.
 
-**Final aggregate sample-failure rate** (all 6 models + retries applied): **0 / 5,399 = 0.00%**. PREREG §6 ceiling 3%; comfortably under.
+**Final aggregate sample-failure rate** (all 6 models + retries applied): **0 / 5,400 = 0.00%**. PREREG §6 ceiling 3%; comfortably under.
 
 Final per-model:
 
@@ -52,7 +52,7 @@ Final per-model:
 | Claude Opus 4.7 | 900 | 0 |
 | GPT-5 | 900 | 0 |
 | Gemini 3.1 Pro | 900 | 0 |
-| Grok-4 | **899** | 0 |
+| Grok-4 | 900 (1 from orig + 899 from split) | 0 |
 | Llama 3.3 70B | 900 | 0 (after retries=10 retry) |
 | DeepSeek v3.2 | 900 | 0 (reasoning-off per A1) |
 

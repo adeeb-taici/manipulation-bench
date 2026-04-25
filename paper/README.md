@@ -36,8 +36,8 @@ paper/
 | Task | PREREG | Full sweep | Results | Blockers |
 |---|---|---|---|---|
 | Task 5 Committee | [task5_committee/prereg.md](task5_committee/prereg.md) committed | Complete (1,049 / 1,080 scored) | [task5_committee/results.md](task5_committee/results.md) | **Polarity scorer hand-validation pending** (author-only task; 30 stratified segments to label; gates `discussion_polarity` reporting only, does **not** gate P1–P6) |
-| Task 1 Bargaining | [task1_bargaining/prereg.md](task1_bargaining/prereg.md) locked | **Complete (5,399 / 5,400 scored, 0 failures)** | In progress | None — analysis underway |
-| Task 2 Debate | [task2_debate/prereg.md](task2_debate/prereg.md) locked | **Complete (4,140 / 4,140 scored, 0 failures)** | In progress | None — analysis underway |
+| Task 1 Bargaining | [task1_bargaining/prereg.md](task1_bargaining/prereg.md) locked | **Complete (5,400 / 5,400 scored, 0 failures)** | [task1_bargaining/results.md](task1_bargaining/results.md) | None |
+| Task 2 Debate | [task2_debate/prereg.md](task2_debate/prereg.md) locked | **Complete (4,140 / 4,140 scored, 0 failures)** | [task2_debate/results.md](task2_debate/results.md) | None |
 | Task 3 Village Commons | [task3_village/prereg.md](task3_village/prereg.md) — **locked 2026-04-24** | Pre-sweep smoke passed ([task3_village/smoke_log.md](task3_village/smoke_log.md), 6/6, 0 errors); full sweep launched 2026-04-24 | — | Full sweep in progress (540 scenarios) |
 | Task 4 Sales | — | — | — | Not started |
 

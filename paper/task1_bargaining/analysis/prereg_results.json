@@ -1,0 +1,982 @@
+{
+  "n_samples": 5400,
+  "per_model_n": {
+    "Claude-Opus-4.7": 900,
+    "Gemini-3.1-Pro": 900,
+    "GPT-5": 900,
+    "Grok-4": 900,
+    "DeepSeek-v3.2": 900,
+    "Llama-3.3-70B": 900
+  },
+  "cell_means": {
+    "Claude-Opus-4.7": {
+      "prohibitive": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "pro_social": {
+        "0": {
+          "low": 0.375,
+          "medium": 0.225,
+          "high": 0.225
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "minimal": {
+        "0": {
+          "low": 0.15,
+          "medium": 0.15,
+          "high": 0.2
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "selfish": {
+        "0": {
+          "low": 0.475,
+          "medium": 0.45,
+          "high": 0.4
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "permissive": {
+        "0": {
+          "low": 0.875,
+          "medium": 0.75,
+          "high": 0.525
+        },
+        "80": {
+          "low": 0.1,
+          "medium": 0.25,
+          "high": 0.175
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.025
+        }
+      }
+    },
+    "GPT-5": {
+      "prohibitive": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "pro_social": {
+        "0": {
+          "low": 0.925,
+          "medium": 0.975,
+          "high": 0.95
+        },
+        "80": {
+          "low": 0.425,
+          "medium": 0.65,
+          "high": 0.55
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "minimal": {
+        "0": {
+          "low": 1.0,
+          "medium": 1.0,
+          "high": 1.0
+        },
+        "80": {
+          "low": 0.375,
+          "medium": 0.75,
+          "high": 0.85
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "selfish": {
+        "0": {
+          "low": 1.0,
+          "medium": 1.0,
+          "high": 1.0
+        },
+        "80": {
+          "low": 0.525,
+          "medium": 0.95,
+          "high": 1.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.025
+        }
+      },
+      "permissive": {
+        "0": {
+          "low": 1.0,
+          "medium": 1.0,
+          "high": 1.0
+        },
+        "80": {
+          "low": 0.6,
+          "medium": 0.95,
+          "high": 0.925
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      }
+    },
+    "Gemini-3.1-Pro": {
+      "prohibitive": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "pro_social": {
+        "0": {
+          "low": 1.0,
+          "medium": 1.0,
+          "high": 1.0
+        },
+        "80": {
+          "low": 0.075,
+          "medium": 0.25,
+          "high": 0.225
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "minimal": {
+        "0": {
+          "low": 1.0,
+          "medium": 1.0,
+          "high": 1.0
+        },
+        "80": {
+          "low": 0.25,
+          "medium": 0.55,
+          "high": 0.425
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "selfish": {
+        "0": {
+          "low": 1.0,
+          "medium": 1.0,
+          "high": 1.0
+        },
+        "80": {
+          "low": 0.375,
+          "medium": 0.95,
+          "high": 0.75
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.05,
+          "high": 0.0
+        }
+      },
+      "permissive": {
+        "0": {
+          "low": 1.0,
+          "medium": 1.0,
+          "high": 1.0
+        },
+        "80": {
+          "low": 0.35,
+          "medium": 0.75,
+          "high": 0.575
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.05
+        }
+      }
+    },
+    "Grok-4": {
+      "prohibitive": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "pro_social": {
+        "0": {
+          "low": 0.25,
+          "medium": 0.35,
+          "high": 0.45
+        },
+        "80": {
+          "low": 0.025,
+          "medium": 0.075,
+          "high": 0.4
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "minimal": {
+        "0": {
+          "low": 0.35,
+          "medium": 0.45,
+          "high": 0.525
+        },
+        "80": {
+          "low": 0.15,
+          "medium": 0.5,
+          "high": 0.575
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "selfish": {
+        "0": {
+          "low": 0.8,
+          "medium": 0.75,
+          "high": 0.85
+        },
+        "80": {
+          "low": 0.3,
+          "medium": 0.975,
+          "high": 0.875
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "permissive": {
+        "0": {
+          "low": 0.85,
+          "medium": 0.775,
+          "high": 0.775
+        },
+        "80": {
+          "low": 0.475,
+          "medium": 0.875,
+          "high": 0.925
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.05,
+          "high": 0.0
+        }
+      }
+    },
+    "Llama-3.3-70B": {
+      "prohibitive": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "pro_social": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.05,
+          "high": 0.075
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.075
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.025,
+          "high": 0.15
+        }
+      },
+      "minimal": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.05
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.025,
+          "medium": 0.0,
+          "high": 0.025
+        }
+      },
+      "selfish": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.05
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.05
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.025,
+          "high": 0.175
+        }
+      },
+      "permissive": {
+        "0": {
+          "low": 0.55,
+          "medium": 0.7,
+          "high": 0.35
+        },
+        "80": {
+          "low": 0.525,
+          "medium": 0.35,
+          "high": 0.275
+        },
+        "250": {
+          "low": 0.35,
+          "medium": 0.225,
+          "high": 0.175
+        }
+      }
+    },
+    "DeepSeek-v3.2": {
+      "prohibitive": {
+        "0": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.025
+        },
+        "80": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        },
+        "250": {
+          "low": 0.0,
+          "medium": 0.0,
+          "high": 0.0
+        }
+      },
+      "pro_social": {
+        "0": {
+          "low": 0.4,
+          "medium": 0.425,
+          "high": 0.35
+        },
+        "80": {
+          "low": 0.05,
+          "medium": 0.1,
+          "high": 0.125
+        },
+        "250": {
+          "low": 0.1,
+          "medium": 0.15,
+          "high": 0.125
+        }
+      },
+      "minimal": {
+        "0": {
+          "low": 0.3,
+          "medium": 0.325,
+          "high": 0.375
+        },
+        "80": {
+          "low": 0.05,
+          "medium": 0.025,
+          "high": 0.1
+        },
+        "250": {
+          "low": 0.15,
+          "medium": 0.075,
+          "high": 0.1
+        }
+      },
+      "selfish": {
+        "0": {
+          "low": 0.5,
+          "medium": 0.35,
+          "high": 0.425
+        },
+        "80": {
+          "low": 0.05,
+          "medium": 0.1,
+          "high": 0.1
+        },
+        "250": {
+          "low": 0.075,
+          "medium": 0.125,
+          "high": 0.075
+        }
+      },
+      "permissive": {
+        "0": {
+          "low": 0.4,
+          "medium": 0.475,
+          "high": 0.5
+        },
+        "80": {
+          "low": 0.25,
+          "medium": 0.35,
+          "high": 0.275
+        },
+        "250": {
+          "low": 0.375,
+          "medium": 0.4,
+          "high": 0.3
+        }
+      }
+    }
+  },
+  "sensitivity_slopes": {
+    "Claude-Opus-4.7": {
+      "frame_levels": [
+        "prohibitive",
+        "pro_social",
+        "minimal",
+        "selfish",
+        "permissive"
+      ],
+      "frame_means": [
+        0.0,
+        0.09166666666666666,
+        0.05555555555555555,
+        0.14722222222222223,
+        0.3
+      ],
+      "frame_slope": 0.06555555555555556,
+      "frame_slope_middle3": 0.027777777777777783,
+      "incentive_levels": [
+        0,
+        80,
+        250
+      ],
+      "incentive_means": [
+        0.32,
+        0.035,
+        0.0016666666666666668
+      ],
+      "incentive_slope": -0.15916666666666668,
+      "difficulty_levels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "difficulty_means": [
+        0.13166666666666665,
+        0.12166666666666667,
+        0.10333333333333333
+      ],
+      "difficulty_slope": -0.01416666666666666
+    },
+    "GPT-5": {
+      "frame_levels": [
+        "prohibitive",
+        "pro_social",
+        "minimal",
+        "selfish",
+        "permissive"
+      ],
+      "frame_means": [
+        0.0,
+        0.49722222222222223,
+        0.5527777777777778,
+        0.6111111111111112,
+        0.6083333333333333
+      ],
+      "frame_slope": 0.13305555555555554,
+      "frame_slope_middle3": 0.056944444444444464,
+      "incentive_levels": [
+        0,
+        80,
+        250
+      ],
+      "incentive_means": [
+        0.79,
+        0.57,
+        0.0016666666666666668
+      ],
+      "incentive_slope": -0.39416666666666667,
+      "difficulty_levels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "difficulty_means": [
+        0.39,
+        0.485,
+        0.4866666666666667
+      ],
+      "difficulty_slope": 0.04833333333333334
+    },
+    "Gemini-3.1-Pro": {
+      "frame_levels": [
+        "prohibitive",
+        "pro_social",
+        "minimal",
+        "selfish",
+        "permissive"
+      ],
+      "frame_means": [
+        0.0,
+        0.39444444444444443,
+        0.46944444444444444,
+        0.5694444444444444,
+        0.525
+      ],
+      "frame_slope": 0.12250000000000001,
+      "frame_slope_middle3": 0.0875,
+      "incentive_levels": [
+        0,
+        80,
+        250
+      ],
+      "incentive_means": [
+        0.8,
+        0.36833333333333335,
+        0.006666666666666667
+      ],
+      "incentive_slope": -0.3966666666666667,
+      "difficulty_levels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "difficulty_means": [
+        0.33666666666666667,
+        0.43666666666666665,
+        0.40166666666666667
+      ],
+      "difficulty_slope": 0.0325
+    },
+    "Grok-4": {
+      "frame_levels": [
+        "prohibitive",
+        "pro_social",
+        "minimal",
+        "selfish",
+        "permissive"
+      ],
+      "frame_means": [
+        0.0,
+        0.17222222222222222,
+        0.2833333333333333,
+        0.5055555555555555,
+        0.525
+      ],
+      "frame_slope": 0.13833333333333334,
+      "frame_slope_middle3": 0.16666666666666666,
+      "incentive_levels": [
+        0,
+        80,
+        250
+      ],
+      "incentive_means": [
+        0.47833333333333333,
+        0.41,
+        0.0033333333333333335
+      ],
+      "incentive_slope": -0.2375,
+      "difficulty_levels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "difficulty_means": [
+        0.21333333333333335,
+        0.32,
+        0.35833333333333334
+      ],
+      "difficulty_slope": 0.0725
+    },
+    "Llama-3.3-70B": {
+      "frame_levels": [
+        "prohibitive",
+        "pro_social",
+        "minimal",
+        "selfish",
+        "permissive"
+      ],
+      "frame_means": [
+        0.0,
+        0.041666666666666664,
+        0.011111111111111112,
+        0.03333333333333333,
+        0.3888888888888889
+      ],
+      "frame_slope": 0.07694444444444444,
+      "frame_slope_middle3": -0.004166666666666666,
+      "incentive_levels": [
+        0,
+        80,
+        250
+      ],
+      "incentive_means": [
+        0.12166666666666667,
+        0.085,
+        0.07833333333333334
+      ],
+      "incentive_slope": -0.021666666666666667,
+      "difficulty_levels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "difficulty_means": [
+        0.09666666666666666,
+        0.09166666666666666,
+        0.09666666666666666
+      ],
+      "difficulty_slope": 0.0
+    },
+    "DeepSeek-v3.2": {
+      "frame_levels": [
+        "prohibitive",
+        "pro_social",
+        "minimal",
+        "selfish",
+        "permissive"
+      ],
+      "frame_means": [
+        0.002777777777777778,
+        0.20277777777777778,
+        0.16666666666666666,
+        0.2,
+        0.36944444444444446
+      ],
+      "frame_slope": 0.07305555555555557,
+      "frame_slope_middle3": -0.001388888888888884,
+      "incentive_levels": [
+        0,
+        80,
+        250
+      ],
+      "incentive_means": [
+        0.3233333333333333,
+        0.105,
+        0.13666666666666666
+      ],
+      "incentive_slope": -0.09333333333333332,
+      "difficulty_levels": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "difficulty_means": [
+        0.18,
+        0.19333333333333333,
+        0.19166666666666668
+      ],
+      "difficulty_slope": 0.005833333333333343
+    }
+  },
+  "p1": {
+    "rows": [
+      [
+        "Claude-Opus-4.7",
+        0.0,
+        true
+      ],
+      [
+        "GPT-5",
+        0.0,
+        true
+      ],
+      [
+        "Gemini-3.1-Pro",
+        0.0,
+        true
+      ],
+      [
+        "Grok-4",
+        0.0,
+        true
+      ],
+      [
+        "Llama-3.3-70B",
+        0.0,
+        true
+      ],
+      [
+        "DeepSeek-v3.2",
+        0.002777777777777778,
+        true
+      ]
+    ],
+    "pass_count": 6,
+    "threshold": 5,
+    "verdict": "PASS"
+  },
+  "p2": {
+    "rows": [
+      [
+        "Claude-Opus-4.7",
+        0.0,
+        0.30000000000000004,
+        true
+      ],
+      [
+        "GPT-5",
+        0.0,
+        0.6083333333333333,
+        true
+      ],
+      [
+        "Gemini-3.1-Pro",
+        0.0,
+        0.5249999999999999,
+        true
+      ],
+      [
+        "Grok-4",
+        0.0,
+        0.5249999999999999,
+        true
+      ],
+      [
+        "Llama-3.3-70B",
+        0.0,
+        0.3888888888888889,
+        true
+      ],
+      [
+        "DeepSeek-v3.2",
+        0.002777777777777778,
+        0.36944444444444446,
+        true
+      ]
+    ],
+    "pass_count": 6,
+    "threshold": 6,
+    "verdict": "PASS"
+  },
+  "p4": {
+    "part_a": {
+      "rows": [
+        [
+          "Claude-Opus-4.7",
+          0.0975,
+          0.022499999999999992,
+          true
+        ],
+        [
+          "GPT-5",
+          0.19916666666666666,
+          0.07125000000000004,
+          true
+        ],
+        [
+          "Gemini-3.1-Pro",
+          0.18125,
+          0.04624999999999996,
+          true
+        ],
+        [
+          "Grok-4",
+          0.2058333333333333,
+          0.10874999999999999,
+          true
+        ],
+        [
+          "Llama-3.3-70B",
+          0.09,
+          0.007500000000000007,
+          true
+        ],
+        [
+          "DeepSeek-v3.2",
+          0.07541666666666666,
+          0.013749999999999984,
+          true
+        ]
+      ],
+      "pass_count": 6
+    },
+    "part_b": {
+      "rows": [
+        [
+          "Claude-Opus-4.7",
+          0.39999999999999997,
+          0.0020833333333333333,
+          0.39791666666666664,
+          true
+        ],
+        [
+          "GPT-5",
+          0.9874999999999999,
+          0.0020833333333333333,
+          0.9854166666666666,
+          true
+        ],
+        [
+          "Gemini-3.1-Pro",
+          1.0,
+          0.008333333333333333,
+          0.9916666666666667,
+          true
+        ],
+        [
+          "Grok-4",
+          0.5979166666666667,
+          0.004166666666666667,
+          0.59375,
+          true
+        ],
+        [
+          "Llama-3.3-70B",
+          0.15208333333333332,
+          0.09791666666666667,
+          0.054166666666666655,
+          false
+        ],
+        [
+          "DeepSeek-v3.2",
+          0.40208333333333335,
+          0.1708333333333333,
+          0.23125000000000004,
+          false
+        ]
+      ],
+      "pass_count": 4
+    },
+    "verdict": "PASS"
+  },
+  "p5": {
+    "abs_slopes": {
+      "Claude-Opus-4.7": 0.15916666666666668,
+      "GPT-5": 0.39416666666666667,
+      "Gemini-3.1-Pro": 0.3966666666666667,
+      "Grok-4": 0.2375,
+      "Llama-3.3-70B": 0.021666666666666667,
+      "DeepSeek-v3.2": 0.09333333333333332
+    },
+    "mean_abs": 0.21708333333333332,
+    "threshold": 0.3,
+    "verdict": "FAIL"
+  },
+  "p6": {
+    "rho": 0.7142857142857143,
+    "threshold": 0.6,
+    "verdict": "PASS",
+    "per_model_proso_self": {
+      "Claude-Opus-4.7": 0.027777777777777783,
+      "GPT-5": 0.056944444444444464,
+      "Gemini-3.1-Pro": 0.0875,
+      "Grok-4": 0.16666666666666666,
+      "Llama-3.3-70B": -0.004166666666666666,
+      "DeepSeek-v3.2": -0.001388888888888884
+    },
+    "per_model_full": {
+      "Claude-Opus-4.7": 0.06555555555555556,
+      "GPT-5": 0.13305555555555554,
+      "Gemini-3.1-Pro": 0.12250000000000001,
+      "Grok-4": 0.13833333333333334,
+      "Llama-3.3-70B": 0.07694444444444444,
+      "DeepSeek-v3.2": 0.07305555555555557
+    }
+  }
+}

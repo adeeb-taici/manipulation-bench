@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inspect_ai.log import read_eval_log
 
-OUT = Path("logs/task1_fullsweep_20260422/figures")
+OUT = Path("paper/task1_bargaining/figures")
 
 LOGS = [
     "logs/task1_fullsweep_20260422/2026-04-22T22-57-53-00-00_bargaining-commit-bench_fs5xJTVak5W4Z63tCpDg9R.eval",
