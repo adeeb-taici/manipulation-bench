@@ -39,7 +39,7 @@ paper/
 | Task 1 Bargaining | [task1_bargaining/prereg.md](task1_bargaining/prereg.md) locked | **Complete (5,400 / 5,400 scored, 0 failures)** | [task1_bargaining/results.md](task1_bargaining/results.md) | None |
 | Task 2 Debate | [task2_debate/prereg.md](task2_debate/prereg.md) locked | **Complete (4,140 / 4,140 scored, 0 failures)** | [task2_debate/results.md](task2_debate/results.md) | None |
 | Task 3 Village Commons | [task3_village/prereg.md](task3_village/prereg.md) — **locked 2026-04-24** + Amendment A1 (2026-04-25) | 97/540 under original config + remaining 443 in progress under amended config (DeepSeek-chat max_tokens 16384→8192 to fit 64K context cap) | — | Full sweep in progress on remaining JSONL |
-| Task 4 Sales | [task4_sales/prereg.md](task4_sales/prereg.md) — **locked 2026-04-25** | Pilot passed (30/30, 0 errors; monotonic frame gradient). Full-sweep + smoke JSONLs generated. A1–A4 resolved; awaits pre-sweep smoke (6 scenarios) before full sweep launches | — | Pre-sweep smoke pending |
+| Task 4 Sales | [task4_sales/prereg.md](task4_sales/prereg.md) — **locked 2026-04-25** | Pilot passed; smoke passed ([task4_sales/smoke_log.md](task4_sales/smoke_log.md), 6/6, 0 errors). Full sweep launched 2026-04-25 (1,350 scenarios) | — | Full sweep in progress |
 
 ## Outstanding items
 
