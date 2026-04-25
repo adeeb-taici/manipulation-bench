@@ -55,12 +55,15 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                 tools = env.get_tools(actor_name, phase)
                 tool_choice = env.get_tool_choice(phase) if tools else None
 
+                # Per-agent max_tokens override (e.g., DeepSeek-chat 64K context cap)
+                agent_max_tokens = agent_config.metadata.get("max_tokens", scenario.max_tokens)
+
                 if phase.phase_type == PhaseType.DISCUSSION:
                     output = await model.generate(
                         messages,
                         tools=tools,
                         tool_choice=tool_choice,
-                        config=GenerateConfig(max_tokens=scenario.max_tokens),
+                        config=GenerateConfig(max_tokens=agent_max_tokens),
                     )
                     content = output.completion or ""
 
@@ -90,7 +93,7 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                             messages,
                             tools=tools,
                             tool_choice=tool_choice,
-                            config=GenerateConfig(max_tokens=scenario.max_tokens),
+                            config=GenerateConfig(max_tokens=agent_max_tokens),
                         )
                         raw_content = output.completion or ""
 

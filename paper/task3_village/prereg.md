@@ -65,7 +65,7 @@ Bystanders receive the `minimal` frame + `none` incentive uniformly, isolating m
 Applied uniformly:
 
 - `temperature: 0.7` for agent generation (discussion + actions)
-- `max_tokens: 16384`
+- `max_tokens: 16384` (uniform — see §10 Amendment A1 for the post-launch override on `bystander_dschat`)
 - OpenRouter default provider routing (no locks)
 - Per-scenario seeds: `seed: N` field present in scenario metadata
 - `max_action_retries: 2` — Village ACTION phases use forced tool calls (`contribute`, `inspect_agent`, `penalize`), but unlike Bargaining's simple-schema `commit_valuation` these tools have never demonstrated reasoning-model refusal in the existing Village runs. Default retry budget kept.
@@ -205,6 +205,34 @@ Changes requiring formal amendment:
 - Primary or secondary metric definition change
 - Communication topology change
 - Number of rounds change
+
+### Amendment A1 — Lower `bystander_dschat` max_tokens (2026-04-25)
+
+**Triggering event**: Full-sweep launch 2026-04-24T20:51 reached 97/540 scored (18%) before `bystander_dschat` (`openrouter/deepseek/deepseek-chat`) began returning provider 400 errors with the message:
+
+> `This endpoint's maximum context length is 64000 tokens. However, you requested about 68842 tokens (52273 of text input, 185 of tool input, 16384 in the output).`
+
+DeepSeek-chat has a 64K context window. By round 7–8 of long Village discussions (especially under permissive/selfish framing), the running transcript at the bystander's turn approaches ~52K tokens, and the locked 16384-token output budget overflows the cap.
+
+**Sample-failure trajectory before halt**: 3 errored / 97 scored = 3.1% — at the §6 ceiling, with monotonic upward trend expected as later cells run.
+
+**Amendment**: For `bystander_dschat` specifically, lower `max_tokens` from 16384 → **8192**. All other roles retain 16384.
+
+**Justification (why this is not a behavioral change)**:
+1. Bystanders are prompt-capped at "≤150 words per turn" (~200 tokens) by the Village base prompt. 8192 is 40× the per-turn need.
+2. Of the 97 successful samples scored before the halt, **none** of `bystander_dschat`'s outputs approached even 4K tokens (let alone the 8K new cap), as evidenced by the fact that they did not error on the 64K input limit (which would have fired at any output >~12K tokens given the 52K typical input).
+3. The change frees ~8K input headroom (52K + 200 + 8K = 60K, comfortably under the 64K cap), eliminating the failure mode for late rounds.
+
+**Data recovery**: The 97 already-scored samples (87 Claude + 10 GPT-5) are scientifically equivalent to having been run under the amended config — empirically, `bystander_dschat`'s output never hit the new 8K cap in any of those samples (else they would have errored on the 64K input cap when output budget shrank input headroom). Those samples are retained.
+
+**Re-launch plan**:
+- Build `task3_village_v61_full_remaining.jsonl` (443 scenarios = 540 dispatched − 97 scored, including the 3 errored which are re-included for retry).
+- Re-launch on the remaining JSONL with the amended `bystander_dschat` config.
+- Final analysis reads both eval logs (original + remaining), same pattern as Task 1's split-by-model recovery in [../task1_bargaining/pipeline_log.md](../task1_bargaining/pipeline_log.md).
+
+**Affected predictions**: None. The amendment is a pure infrastructure fix; it does not change manipulator behavior, bystander policy, scoring, or the response-surface design. P1–P7 remain as written.
+
+**Sample-failure ceiling re-baseline**: §6 ceiling of ≤3% is now measured against the post-amendment full sweep, not the pre-amendment partial.
 
 ## 11. Deliverables
 
