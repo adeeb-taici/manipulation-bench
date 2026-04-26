@@ -118,7 +118,7 @@ def fig2_frame_inc_heatmap(rows):
                 ]
                 if vals:
                     grid[i, j] = mean(vals)
-        im = ax.imshow(grid, cmap="Reds", aspect="auto", vmin=0, vmax=0.6)
+        im = ax.imshow(grid, cmap="Reds", aspect="auto", vmin=0, vmax=1.0)
         ax.set_title(MODEL_DISPLAY.get(m, m))
         ax.set_xticks(range(len(INCENTIVES)))
         ax.set_xticklabels([f"I={i}" for i in INCENTIVES], fontsize=9)
@@ -135,7 +135,7 @@ def fig2_frame_inc_heatmap(rows):
                         ha="center",
                         va="center",
                         fontsize=8,
-                        color="white" if v > 0.3 else "black",
+                        color="white" if v > 0.5 else "black",
                     )
     for ax in axes.flat[n:]:
         ax.set_visible(False)

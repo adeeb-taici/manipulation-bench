@@ -1,6 +1,6 @@
 """Generate visualizations of Task 5 committee results.
 
-Outputs PNGs to logs/committee_fullsweep_20260422/figures/.
+Outputs PNGs to paper/task5_committee/figures/.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ import numpy as np
 from inspect_ai.log import read_eval_log
 
 LOG = "logs/committee_fullsweep_20260422/2026-04-22T15-20-47-00-00_committee-bench_nMe8xyseb5QPSzdS8rjvE7.eval"
-OUT = Path("logs/committee_fullsweep_20260422/figures")
+OUT = Path("paper/task5_committee/figures")
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 DIFFS = ("low", "medium", "high")
@@ -159,7 +159,9 @@ def fig3_frame_vs_difficulty_heatmap(rows):
     """Heatmap grid: 6 models × (frame × difficulty)."""
     models = sorted({r["model"] for r in rows})
     fig, axes = plt.subplots(2, 3, figsize=(14, 8), sharex=True, sharey=True)
-    vmin, vmax = -10, 20
+    # Bias range is theoretically [-20, +20]; use the full metric scale for
+    # cross-task consistency (every heatmap on its metric's natural full range).
+    vmin, vmax = -20, 20
 
     for ax, model in zip(axes.flat, models):
         grid = np.full((len(FRAMES), len(DIFFS)), np.nan)
