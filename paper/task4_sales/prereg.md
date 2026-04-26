@@ -190,6 +190,18 @@ Changes requiring formal amendment:
 - Any product scenario or question-bank change
 - Primary or secondary metric definition change
 
+### Amendment A1 — Replace `model_b` slug from `openai/gpt-5` to `openai/gpt-5.5-20260423` (2026-04-26)
+
+**Triggering event**: GPT-5.5 was released by OpenAI on 2026-04-23, after the Task 4 full sweep completed.
+
+**Amendment**: Replace the `model_b` (`gpt5`) slug from `openai/gpt-5` to `openai/gpt-5.5-20260423` with `reasoning_enabled=true` retained.
+
+**Justification**: Same-slot-different-version model swap. Preserves the 6-model roster structure while updating the OpenAI representative to the current frontier model. Original GPT-5 eval data remains in `logs/task4_sales_v61_full/` for reproducibility / generation-contrast analysis.
+
+**Affected predictions**: P1–P7 verdicts for the GPT-5 row recomputed against GPT-5.5 measurements. P3 (saturation) and P4 (frame > incentive) verdicts may change since GPT-5 was the primary saturation-cell driver in the original sweep (21 saturated cells, all GPT-5).
+
+**Re-run scope**: 225 scenarios (`task4_sales_gpt55.jsonl`).
+
 ## 11. Deliverables
 
 - Raw transcripts and per-question classifications committed under `data/task4_sales/`

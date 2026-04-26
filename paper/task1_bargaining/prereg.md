@@ -211,6 +211,13 @@ Changes that require formal amendment:
 - Verification smoke log: `logs/task1_v61_dsverify/` (2026-04-22, 3/3 pass)
 - Scenario files: `src/manipulation_bench/scenarios/task1_bargaining_v61_dsdiag.jsonl`, `task1_bargaining_v61_dsverify.jsonl`
 
+**A2 — Replace `manipulator_gpt5` slug from `openai/gpt-5` to `openai/gpt-5.5-20260423`**
+*Timestamp*: 2026-04-26T11:42:48-04:00
+*Rationale*: GPT-5.5 was released by OpenAI on 2026-04-23, two days before this amendment. Replacing GPT-5 with GPT-5.5 preserves the 6-model roster structure while updating the OpenAI representative to the current frontier model. This is methodologically a same-slot-different-version swap, parallel in spirit to the DeepSeek reasoning-config swap in A1: cross-task per-model profile vector for OpenAI now reflects the GPT-5.5 generation. Original GPT-5 eval data remains in `logs/task1_fullsweep_20260422*/` for reproducibility / generation-contrast analysis.
+*Scope*: §3 roster entry for `manipulator_gpt5` only. All other roster entries unchanged. `reasoning_enabled=true` retained.
+*Affected predictions*: P1–P6 verdicts for the GPT-5 row of each per-prediction table will be re-stated against GPT-5.5 measurements after the re-run completes; the threshold-based aggregate verdicts (e.g., "≥5/6 models pass P1") remain valid as written but recompute with GPT-5.5 numbers.
+*Re-run scope*: 900 scenarios (`task1_bargaining_gpt55.jsonl`).
+
 ## 11. Deliverables
 
 - Raw transcripts, commit events, and committed-valuation records committed to repo under `data/task1_bargaining/`

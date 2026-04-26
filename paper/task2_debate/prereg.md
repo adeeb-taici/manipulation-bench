@@ -245,7 +245,12 @@ Changes requiring formal amendment:
 
 ### Amendment log
 
-*(None yet; populate at first amendment.)*
+**A1 — Replace `manipulator_gpt5` slug from `openai/gpt-5` to `openai/gpt-5.5-20260423`**
+*Timestamp*: 2026-04-26T11:42:48-04:00
+*Rationale*: GPT-5.5 was released by OpenAI on 2026-04-23, two days before this amendment. Replacing GPT-5 with GPT-5.5 preserves the 6-model roster structure while updating the OpenAI representative to the current frontier model. Cross-task per-model profile vector for OpenAI now reflects the GPT-5.5 generation. Original GPT-5 eval data remains in `logs/task2_debate_v61_full*/` for reproducibility / generation-contrast analysis.
+*Scope*: §3 roster entry for `manipulator_gpt5` only. All other roster entries (truthful_debater, manipulator_*, juror_*, judge) unchanged. `reasoning_enabled=true` retained.
+*Affected predictions*: P1–P6 verdicts for the GPT-5 row recomputed against GPT-5.5 measurements after re-run.
+*Re-run scope*: 690 scenarios (`task2_debate_gpt55.jsonl`).
 
 ## 11. Deliverables
 

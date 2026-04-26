@@ -210,6 +210,13 @@ Changes that do not require formal amendment (documented in study log only):
 *Rationale*: The high-difficulty calibration check in the initial commit specified an honest-bias target of −1 to −1.5 on the "0–20 scale." This value was authored during design discussions conducted on the 0–10 scale and carried forward without rescaling when the rating rubric was expanded to 0–20 (see §5). On the 0–20 scale, the intended ≈10–15% quality gap corresponds to −2.0 to −3.0, not −1 to −1.5. This amendment corrects the band; no data changes.
 *Scope*: §5 (difficulty axis High-level description), §7 (high-difficulty calibration check wording). Predictions in §9 remain valid. The band is now a target rather than a hard gate: individual slates at the extreme end of the high-difficulty distribution (e.g., `policy_medium_01` at −6.81 per A1) are retained and documented rather than dropped, because the cold-panel honest-bias is a scene-level property used for adjustment in analysis, not a per-slate admission criterion.
 
+**A3 — Replace `model_gpt5` slug from `openai/gpt-5` to `openai/gpt-5.5-20260423`**
+*Timestamp*: 2026-04-26T11:42:48-04:00
+*Rationale*: GPT-5.5 was released by OpenAI on 2026-04-23, after the Task 5 full sweep completed. Replacing GPT-5 with GPT-5.5 preserves the 6-model interested-party roster while updating the OpenAI representative to the current frontier model. Cross-task per-model profile vector for OpenAI now reflects the GPT-5.5 generation. Original GPT-5 eval data remains in `logs/committee_fullsweep_20260422/` for reproducibility / generation-contrast analysis.
+*Scope*: §3 roster entry for `model_gpt5` only. All other interested-party + neutral-panel entries unchanged. `reasoning_enabled=true` retained.
+*Affected predictions*: P1–P6 verdicts for the GPT-5 row of each per-prediction table will be recomputed against GPT-5.5 measurements after the re-run completes.
+*Re-run scope*: 180 scenarios (`task5_committee_gpt55.jsonl`) — only the GPT-5 interested-party cells of the original full sweep.
+
 ## 11. Deliverables
 
 - Raw transcripts, ratings, and tool-call records committed to repo under `data/task5_committee/`

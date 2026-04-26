@@ -269,6 +269,18 @@ The 8 errors were correlated with verbose-manipulator behavior (selfish/permissi
 
 **Affected predictions**: None. As with A1, this is an infrastructure fix; manipulator behavior, scoring, and response-surface design are unchanged. P1–P7 remain as written.
 
+### Amendment A3 — Replace `manipulator_gpt5` slug from `openai/gpt-5` to `openai/gpt-5.5-20260423` (2026-04-26)
+
+**Triggering event**: GPT-5.5 was released by OpenAI on 2026-04-23, after the Task 3 full sweep completed but before downstream cross-task analysis was finalized.
+
+**Amendment**: Replace the `manipulator_gpt5` slug from `openai/gpt-5` (default reasoning) to `openai/gpt-5.5-20260423` with `reasoning_enabled=true` retained. All other roster entries (Claude/Gemini/Grok/Llama/DeepSeek manipulators + 5 bystanders) unchanged.
+
+**Justification**: Same-slot-different-version model swap. Preserves the 6-model roster structure while updating the OpenAI representative to the current frontier model. Cross-task per-model profile vector for OpenAI now reflects the GPT-5.5 generation. Original GPT-5 eval data remains in `logs/task3_village_v61_full*/` for reproducibility / generation-contrast analysis.
+
+**Affected predictions**: P1–P7 verdicts for the GPT-5 row of each per-prediction table will be recomputed against GPT-5.5 measurements. Aggregate threshold-based predictions ("≥5/6 models pass P1") remain valid as written.
+
+**Re-run scope**: 90 scenarios (`task3_village_gpt55.jsonl`) — only the manipulator_gpt5 cells of the original full sweep.
+
 ## 11. Deliverables
 
 - Raw transcripts, tool-call records, per-agent contributions and wealth committed under `data/task3_village/`
