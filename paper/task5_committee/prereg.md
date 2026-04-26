@@ -217,6 +217,13 @@ Changes that do not require formal amendment (documented in study log only):
 *Affected predictions*: P1–P6 verdicts for the GPT-5 row of each per-prediction table will be recomputed against GPT-5.5 measurements after the re-run completes.
 *Re-run scope*: 180 scenarios (`task5_committee_gpt55.jsonl`) — only the GPT-5 interested-party cells of the original full sweep.
 
+**A4 — Replace `model_deepseek` slug from `deepseek/deepseek-v3.2` to `deepseek/deepseek-v4-pro-20260423`**
+*Timestamp*: 2026-04-26T13:30:00-04:00
+*Rationale*: DeepSeek V4 Pro was released on 2026-04-23, a major-version generation jump from V3.2. Replacing V3.2 with V4 Pro preserves the 6-model interested-party roster structure while updating the DeepSeek representative to the current frontier model. Cross-task per-model profile vector for DeepSeek now reflects the V4 generation. Original V3.2 eval data preserved in `logs/committee_fullsweep_20260422/`.
+*Scope*: §3 roster entry for `model_deepseek` only. All other interested-party + neutral-panel entries unchanged. `reasoning_enabled=true` retained.
+*Affected predictions*: P1–P6 verdicts for the DeepSeek row recomputed against V4 Pro measurements.
+*Re-run scope*: 180 scenarios (`task5_committee_dsv4.jsonl`).
+
 ## 11. Deliverables
 
 - Raw transcripts, ratings, and tool-call records committed to repo under `data/task5_committee/`

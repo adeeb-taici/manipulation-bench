@@ -17,11 +17,11 @@ See [cross_task_aggregate.md](cross_task_aggregate.md) for the full machine-gene
 
 | Task | Frame | Incentive | Difficulty | Dominant axis | Dominance ratio |
 |---|---:|---:|---:|---|---:|
-| T1 Bargaining | 0.102 | **0.217** | 0.029 | incentive | 2.1× |
-| T2 Debate | 0.011 | 0.012 | **0.064** | difficulty | 5.3× |
-| T3 Village | **0.157** | 0.044 | 0.016 | **frame** | 3.6× |
-| T4 Sales | 0.030 | 0.014 | **0.190** | difficulty | 6.2× |
-| T5 Committee | 0.312 | 0.173 | **0.643** | difficulty | 2.1× |
+| T1 Bargaining | 0.106 | **0.208** | 0.030 | incentive | 2.0× |
+| T2 Debate | 0.010 | 0.012 | **0.061** | difficulty | 5.2× |
+| T3 Village | **0.155** | 0.054 | 0.024 | **frame** | 2.9× |
+| T4 Sales | 0.027 | 0.013 | **0.130** | difficulty | 4.9× |
+| T5 Committee | 0.325 | 0.183 | **0.607** | difficulty | 1.9× |
 
 (T5 numbers are on a 0–20 bias scale, not a 0–1 rate scale, so absolute magnitudes aren't directly comparable to T1-T4.)
 
@@ -32,7 +32,7 @@ The PREREG predicted incentive sensitivity would be a per-task continuum, with S
 | Cluster | Tasks | Mean \|incentive slope\| | Why |
 |---|---|---:|---|
 | **Binding** | Bargaining, Committee | 0.22, 0.17 | **Structural reward integration** — penalty math affecting payoff (Bargaining); competition outcome determining win/loss (Committee) |
-| **Inert** | Village, Sales, Debate | 0.04, 0.01, 0.01 | **Verbal emphasis only** — "your final score is X" or "you earn N points per Y" doesn't change the agent's actual reward function |
+| **Inert** | Village, Sales, Debate | 0.05, 0.01, 0.01 | **Verbal emphasis only** — "your final score is X" or "you earn N points per Y" doesn't change the agent's actual reward function |
 
 This refines the cross-task incentive theory: **incentive language only binds when it introduces NEW reward structure**. When it's just a verbal restatement of the natural objective ("your final token balance is your only score" — but token balance is *already* the natural objective in Village), models treat it as redundant. This was a P5 failure across three of five tasks (Village, Sales, Debate); only Bargaining and Committee passed P5 as predicted.
 
@@ -43,7 +43,7 @@ See [figures/per_model_profiles.png](figures/per_model_profiles.png) for the sma
 A few notable per-model patterns:
 
 - **Gemini 3.1 Pro** is the most frame-sensitive model in 4 of 5 tasks (Bargaining, Village, Sales, Committee), but saturates early on permissive frames (Sales, Village, Committee all hit ≥ 0.85 at the permissive endpoint), making it the easiest model to push to extreme manipulation.
-- **GPT-5** has the highest *prohibitive baseline* across tasks — particularly on Sales (0.51 prohibitive manipulation rate, 10× any other model) and Bargaining (0.99 manipulation rate at E=0 averaged across non-prohibitive frames). Its frame slope is moderate but its baseline is high; the response surface starts elevated and stays there.
+- **GPT-5.5** is the most-aligned model on Sales (0.03 prohibitive manipulation rate, comparable to Claude/Grok) — a major reversal from GPT-5, which had a 0.51 prohibitive manipulation rate driven by a "commercial-omission default" (selectively omitting comparables and known defects). On Bargaining, GPT-5.5 keeps GPT-5's clean 0.000 prohibitive endpoint but reads pro-social/minimal middle-frames ~30pp better. On Debate/Village/Committee the alignment shift is smaller and task-dependent.
 - **Claude Opus 4.7** is the most prohibitive-compliant model across tasks (≤ 0.05 on T1/T2 prohibitive averages) and never saturates a high-manipulation cell on T3 Village or T4 Sales. Frame slopes are also middling — Claude's overall manipulation envelope is the smallest of the six.
 - **Llama 3.3 70B** and **DeepSeek v3.2** show a parallel pattern: weak prompt-following on Village (both fail P1, prohibitive 0.42 and 0.51 respectively) and weak incentive sensitivity on Bargaining. **Within the six-model roster, these two consistently behave as "less prompt-responsive"** across multiple tasks. This is a candidate paper-level finding worth flagging in Methods/Discussion.
 - **Grok 4** behaves close to Claude on prompt-compliance baselines but has a steeper permissive endpoint. On Village Grok jumps from 0.00 prohibitive to 0.96 permissive — a 96-percentage-point swing, the largest endpoint range in T3.
@@ -55,10 +55,10 @@ A few notable per-model patterns:
 | T1 Bargaining | ✓ | ✓ | (deferred) | partial (4/6) | ✗ | ✓ | — |
 | T2 Debate | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | — |
 | T3 Village | ✗ | ✗ | ✓ | **✓** | ✗ | ✓ | ✓ |
-| T4 Sales | ✗ | ✗ | ✓ | ✓ | ✗ | ✓ | (deferred) |
+| T4 Sales | **✓** | ✗ | **✗** | ✓ | ✗ | ✓ | (deferred) |
 | T5 Committee | ✓ | ✓ | weak | ✗ | ✓ | (FAIL ρ=−0.83) | — |
 
-P1/P2 fail in 3/5 tasks. The pattern: predictions that "prohibitive will land below 5%" are correct on Bargaining and Committee (where prohibitive is a hard constraint on a single act) but fail on Debate, Village, and Sales (where prohibitive doesn't fully prevent manipulation because it doesn't change the manipulator's underlying *role* — they're still arguing the false side, still defecting from cooperation, still selling a bad product).
+P1/P2 fail in 2/5 tasks (Debate, Village, with Sales now passing P1 after GPT-5.5 swap). The pattern: predictions that "prohibitive will land below 5%" are correct on Bargaining and Committee (where prohibitive is a hard constraint on a single act) but fail on Debate, Village, and Sales (where prohibitive doesn't fully prevent manipulation because it doesn't change the manipulator's underlying *role* — they're still arguing the false side, still defecting from cooperation, still selling a bad product).
 
 ## What's NOT in this file
 

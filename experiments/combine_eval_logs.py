@@ -41,6 +41,10 @@ TASK_SPLITS = {
         "logs/task1_fullsweep_20260422_batch1/*.eval",
         "logs/task1_fullsweep_20260422_llama_retry/*.eval",
         "logs/task1_fullsweep_20260422_grok/*.eval",
+        # GPT-5.5 swap (PREREG Amendment A2). Same scenario IDs as the original
+        # GPT-5 batch — dedup by sample id keeps the GPT-5.5 samples (later wins),
+        # so the OpenAI row reflects GPT-5.5 in the combined log.
+        "logs/task1_gpt55/*.eval",
     ],
     "task2_debate_combined.eval": [
         "logs/task2_debate_v61_full/*.eval",
@@ -49,11 +53,21 @@ TASK_SPLITS = {
         "logs/task2_debate_v61_full_grok/*.eval",
         "logs/task2_debate_v61_full_llama/*.eval",
         "logs/task2_debate_v61_full_deepseek/*.eval",
+        "logs/task2_gpt55/*.eval",
     ],
     "task3_village_combined.eval": [
         "logs/task3_village_v61_full/*.eval",
         "logs/task3_village_v61_full_remaining/*.eval",
         "logs/task3_village_v61_full_remaining_v2/*.eval",
+        "logs/task3_gpt55/*.eval",
+    ],
+    "task4_sales_combined.eval": [
+        "logs/task4_sales_v61_full/*.eval",
+        "logs/task4_gpt55/*.eval",
+    ],
+    "task5_committee_combined.eval": [
+        "logs/committee_fullsweep_20260422/*.eval",
+        "logs/task5_gpt55/*.eval",
     ],
 }
 

@@ -42,7 +42,7 @@ AXES = ("frame", "incentive", "difficulty")
 
 CANONICAL_MODELS = (
     "Claude-Opus-4.7",
-    "GPT-5",
+    "GPT-5.5",
     "Gemini-3.1-Pro",
     "Grok-4",
     "Llama-3.3-70B",
@@ -51,7 +51,7 @@ CANONICAL_MODELS = (
 
 T4_MODEL_MAP = {
     "claude": "Claude-Opus-4.7",
-    "gpt5": "GPT-5",
+    "gpt55": "GPT-5.5",
     "gemini": "Gemini-3.1-Pro",
     "grok": "Grok-4",
     "llama": "Llama-3.3-70B",
@@ -59,11 +59,12 @@ T4_MODEL_MAP = {
 }
 
 # Task 5's analysis script doesn't emit prereg_results.json in the same shape,
-# so embed its slopes directly from results.md §A.4 (preserved here for
-# reproducibility — regenerate from experiments/task5_prereg_analysis.py).
+# so embed its slopes directly from results.md §A.4 (recompute from
+# experiments/task5_prereg_analysis.py if data changes). Updated 2026-04-26
+# to reflect the GPT-5 → GPT-5.5 swap (PREREG Amendment A3).
 T5_SLOPES = {
     "Claude-Opus-4.7": {"frame": 0.281, "incentive": 0.117, "difficulty": -0.911},
-    "GPT-5": {"frame": 0.233, "incentive": 0.143, "difficulty": -0.893},
+    "GPT-5.5": {"frame": 0.307, "incentive": 0.202, "difficulty": -0.676},
     "Gemini-3.1-Pro": {"frame": 0.434, "incentive": 0.430, "difficulty": 0.016},
     "Grok-4": {"frame": 0.372, "incentive": 0.135, "difficulty": -0.537},
     "Llama-3.3-70B": {"frame": 0.287, "incentive": 0.018, "difficulty": -0.713},

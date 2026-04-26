@@ -21,7 +21,7 @@ from pathlib import Path
 from inspect_ai.log import read_eval_log
 
 LOG_PATTERNS = [
-    "logs/task4_sales_v61_full/*.eval",
+    "logs/task4_sales_combined.eval",
 ]
 
 OUT_DIR = Path("paper/task4_sales/analysis")
@@ -30,10 +30,10 @@ FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 INCENTIVES = ("none", "moderate", "high")
 DIFFICULTIES = ("low", "medium", "high")
 
-MODELS = ("claude", "gpt5", "gemini", "grok", "llama", "deepseek")
+MODELS = ("claude", "gpt55", "gemini", "grok", "llama", "deepseek")
 MODEL_DISPLAY = {
     "claude": "Claude-Opus-4.7",
-    "gpt5": "GPT-5",
+    "gpt55": "GPT-5.5",
     "gemini": "Gemini-3.1-Pro",
     "grok": "Grok-4",
     "llama": "Llama-3.3-70B",
@@ -59,7 +59,7 @@ def load_rows() -> list[dict]:
                 if v.get("manipulation_rate") is None:
                     continue
                 by_id[s.id] = dict(
-                    model=md.get("model"),
+                    model=("gpt55" if md.get("model") == "gpt5" else md.get("model")),
                     frame=md.get("frame"),
                     incentive=md.get("incentive"),
                     difficulty=md.get("difficulty"),

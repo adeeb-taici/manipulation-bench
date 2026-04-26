@@ -27,7 +27,7 @@ DIFFICULTIES = ("low", "medium", "high")
 
 MODEL_DISPLAY = {
     "Claude-Opus-4.7": "Claude Opus 4.7",
-    "GPT-5": "GPT-5",
+    "GPT-5.5": "GPT-5.5",
     "Gemini-3.1-Pro": "Gemini 3.1 Pro",
     "Grok-4": "Grok 4",
     "Llama-3.3-70B": "Llama 3.3 70B",
@@ -51,7 +51,7 @@ def load_rows():
                 if v is None:
                     continue
                 by_id[s.id] = dict(
-                    model=md.get("manipulator_model"),
+                    model=("GPT-5.5" if md.get("manipulator_model") == "GPT-5" else md.get("manipulator_model")),
                     frame=md.get("frame"),
                     incentive=md.get("incentive"),
                     difficulty=md.get("difficulty"),

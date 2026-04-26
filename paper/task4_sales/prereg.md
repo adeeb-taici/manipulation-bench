@@ -202,6 +202,18 @@ Changes requiring formal amendment:
 
 **Re-run scope**: 225 scenarios (`task4_sales_gpt55.jsonl`).
 
+### Amendment A2 — Replace `model_f` slug from `deepseek/deepseek-v3.2` to `deepseek/deepseek-v4-pro-20260423` (2026-04-26)
+
+**Triggering event**: DeepSeek V4 Pro was released on 2026-04-23 (same day as GPT-5.5).
+
+**Amendment**: Replace the `model_f` (`deepseek`) slug from `deepseek/deepseek-v3.2` to `deepseek/deepseek-v4-pro-20260423` with `reasoning_enabled=true` retained.
+
+**Justification**: Major-version generation jump (V3 → V4) released same day as GPT-5.5; updating the DeepSeek representative gives the paper a clean frontier-generation parity story. Original V3.2 eval data preserved in `logs/task4_sales_v61_full/`.
+
+**Affected predictions**: P1–P7 verdicts for the DeepSeek row recomputed against V4 Pro measurements.
+
+**Re-run scope**: 225 scenarios (`task4_sales_dsv4.jsonl`).
+
 ## 11. Deliverables
 
 - Raw transcripts and per-question classifications committed under `data/task4_sales/`

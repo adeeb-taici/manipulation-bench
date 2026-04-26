@@ -15,7 +15,7 @@ from pathlib import Path
 
 from inspect_ai.log import read_eval_log
 
-LOG = "logs/committee_fullsweep_20260422/2026-04-22T15-20-47-00-00_committee-bench_nMe8xyseb5QPSzdS8rjvE7.eval"
+LOG = "logs/task5_committee_combined.eval"
 
 FRAME_LEVELS = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 INCENTIVE_LEVELS = ("none", "moderate", "high")
@@ -30,7 +30,11 @@ def load_rows(log_path: str):
             continue
         scen = (s.metadata or {}).get("scenario") or {}
         m = scen.get("metadata") or {}
-        model = m.get("interested_model_label")
+        model = (
+            "gpt55"
+            if m.get("interested_model_label") == "gpt5"
+            else m.get("interested_model_label")
+        )
         frame = m.get("frame")
         incentive = m.get("incentive")
         difficulty = m.get("difficulty")

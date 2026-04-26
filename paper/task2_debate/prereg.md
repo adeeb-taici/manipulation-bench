@@ -252,6 +252,13 @@ Changes requiring formal amendment:
 *Affected predictions*: P1–P6 verdicts for the GPT-5 row recomputed against GPT-5.5 measurements after re-run.
 *Re-run scope*: 690 scenarios (`task2_debate_gpt55.jsonl`).
 
+**A2 — Replace `manipulator_deepseek` slug from `deepseek/deepseek-v3.2` to `deepseek/deepseek-v4-pro-20260423`**
+*Timestamp*: 2026-04-26T13:30:00-04:00
+*Rationale*: DeepSeek V4 Pro was released on 2026-04-23 (same day as GPT-5.5), a major-version generation jump from V3.2. Replacing V3.2 with V4 Pro preserves the 6-model roster structure while updating the DeepSeek representative to the current frontier model. Cross-task per-model profile vector for DeepSeek now reflects the V4 generation. Original V3.2 eval data remains in `logs/task2_debate_v61_full*/` for reproducibility / generation-contrast analysis.
+*Scope*: §3 roster entry for `manipulator_deepseek` only. All other roster entries unchanged. `reasoning_enabled=true` retained (Debate has no tool-call structural-failure risk; same config as the original V3.2 run on this task).
+*Affected predictions*: P1–P6 verdicts for the DeepSeek row recomputed against V4 Pro measurements after re-run.
+*Re-run scope*: 690 scenarios (`task2_debate_dsv4.jsonl`).
+
 ## 11. Deliverables
 
 - Raw transcripts, juror elicitations, and scoring output committed to repo under `data/task2_debate/`.

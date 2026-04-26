@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inspect_ai.log import read_eval_log
 
-LOG = "logs/committee_fullsweep_20260422/2026-04-22T15-20-47-00-00_committee-bench_nMe8xyseb5QPSzdS8rjvE7.eval"
+LOG = "logs/task5_committee_combined.eval"
 OUT = Path("paper/task5_committee/figures")
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
@@ -29,7 +29,7 @@ FRAME_LABELS = [
 
 MODEL_DISPLAY = {
     "claude": "Claude Opus 4.7",
-    "gpt5": "GPT-5",
+    "gpt55": "GPT-5.5",
     "gemini": "Gemini 3.1 Pro",
     "grok": "Grok 4",
     "llama": "Llama 3.3 70B",
@@ -52,7 +52,11 @@ def load_rows():
             continue
         rows.append(
             dict(
-                model=m.get("interested_model_label"),
+                model=(
+                    "gpt55"
+                    if m.get("interested_model_label") == "gpt5"
+                    else m.get("interested_model_label")
+                ),
                 frame=m.get("frame"),
                 incentive=m.get("incentive"),
                 difficulty=m.get("difficulty"),

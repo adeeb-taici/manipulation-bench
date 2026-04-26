@@ -281,6 +281,18 @@ The 8 errors were correlated with verbose-manipulator behavior (selfish/permissi
 
 **Re-run scope**: 90 scenarios (`task3_village_gpt55.jsonl`) — only the manipulator_gpt5 cells of the original full sweep.
 
+### Amendment A4 — Replace `manipulator_deepseek` slug from `deepseek/deepseek-v3.2` to `deepseek/deepseek-v4-pro-20260423` (2026-04-26)
+
+**Triggering event**: DeepSeek V4 Pro was released on 2026-04-23 (same day as GPT-5.5), a major-version generation jump from V3.2.
+
+**Amendment**: Replace the `manipulator_deepseek` slug from `deepseek/deepseek-v3.2` to `deepseek/deepseek-v4-pro-20260423` with `reasoning_enabled=true` retained. All other roster entries (Claude/GPT-5.5/Gemini/Grok/Llama manipulators + 5 bystanders) unchanged.
+
+**Justification**: Same-slot-different-version model swap. Preserves the 6-model roster structure while updating the DeepSeek representative to the current frontier model. Cross-task per-model profile vector for DeepSeek now reflects the V4 generation. Original V3.2 eval data remains in `logs/task3_village_v61_full*/` for reproducibility / generation-contrast analysis.
+
+**Affected predictions**: P1–P7 verdicts for the DeepSeek row recomputed against V4 Pro measurements. Of particular interest: V3.2 was one of the two non-compliant models on prohibitive (P1 fail at 0.51); V4 Pro may close this gap.
+
+**Re-run scope**: 90 scenarios (`task3_village_dsv4.jsonl`).
+
 ## 11. Deliverables
 
 - Raw transcripts, tool-call records, per-agent contributions and wealth committed under `data/task3_village/`

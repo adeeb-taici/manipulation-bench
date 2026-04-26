@@ -39,7 +39,7 @@ Six interested-party models, each paired with a fixed neutral panel of 4.
 | Role | Model slug |
 |---|---|
 | `model_claude` | `openrouter/anthropic/claude-opus-4.7` |
-| `model_gpt5` | `openrouter/openai/gpt-5` (reasoning_enabled=true) |
+| `model_gpt5` | `openrouter/openai/gpt-5.5-20260423` (reasoning_enabled=true) |
 | `model_gemini` | `openrouter/google/gemini-3.1-pro-preview` (reasoning_enabled=true) |
 | `model_grok` | `openrouter/x-ai/grok-4` (reasoning_enabled=true) |
 | `model_llama` | `openrouter/meta-llama/llama-3.3-70b-instruct` |
@@ -73,20 +73,20 @@ This section reports observed sample means and figures **without interpretation*
 | Model | prohibitive | pro_social | minimal | selfish | permissive |
 |---|---:|---:|---:|---:|---:|
 | Claude Opus 4.7 | −1.569 | 2.829 | 3.934 | 3.256 | 5.361 |
-| GPT-5 | −1.639 | 2.606 | 2.852 | 2.844 | 4.764 |
+| GPT-5.5 | −1.639 | 2.606 | 2.852 | 2.844 | 4.764 |
 | **Gemini 3.1 Pro** | +0.130 | **12.033** | **12.257** | **9.448** | **18.858** |
 | Grok 4 | −1.005 | 3.981 | 4.675 | 3.954 | 7.013 |
 | Llama 3.3 70B | −0.410 | 1.904 | 1.742 | 2.574 | 3.438 |
 | DeepSeek v3.2 | −0.279 | 2.459 | 2.506 | 2.668 | 4.400 |
 
-5/6 models show the unexpected `minimal > selfish` ordering (Claude, GPT-5, Gemini, Grok, DeepSeek). Llama is the only model with monotonic pro_social → minimal → selfish → permissive.
+5/6 models show the unexpected `minimal > selfish` ordering (Claude, GPT-5.5, Gemini, Grok, DeepSeek). Llama is the only model with monotonic pro_social → minimal → selfish → permissive.
 
 ## A.2 Cell means by incentive × model (averaged over frame × difficulty)
 
 | Model | I=none | I=moderate | I=high |
 |---|---:|---:|---:|
 | Claude Opus 4.7 | 1.302 | 1.747 | 2.324 |
-| GPT-5 | 0.574 | 1.253 | 1.874 |
+| GPT-5.5 | 0.574 | 1.253 | 1.874 |
 | **Gemini 3.1 Pro** | 7.858 | 10.906 | 15.156 |
 | Grok 4 | 2.965 | 3.190 | 4.102 |
 | Llama 3.3 70B | 1.501 | 1.731 | 1.600 |
@@ -97,7 +97,7 @@ This section reports observed sample means and figures **without interpretation*
 | Model | Low (easy slate) | Medium | High (hard slate) |
 |---|---:|---:|---:|
 | Claude Opus 4.7 | 5.949 | 2.574 | **−1.988** |
-| GPT-5 | 5.383 | 2.317 | **−2.737** |
+| GPT-5.5 | 5.383 | 2.317 | **−2.737** |
 | Gemini 3.1 Pro | 11.085 | 11.528 | 11.351 |
 | Grok 4 | 5.919 | 3.378 | 1.398 |
 | Llama 3.3 70B | 3.804 | 1.517 | −0.088 |
@@ -112,7 +112,7 @@ Standardized per-axis slopes — OLS slope of (bias / per-model pooled SD) on ax
 | Model | Frame slope | \|Frame\| (5-level) | Incentive slope | \|Incentive\| | **Difficulty slope** | **\|Difficulty\|** |
 |---|---:|---:|---:|---:|---:|---:|
 | Claude Opus 4.7 | +0.281 | 0.281 | +0.117 | 0.117 | **−0.911** | **0.911** |
-| GPT-5 | +0.233 | 0.233 | +0.143 | 0.143 | **−0.893** | **0.893** |
+| GPT-5.5 | +0.233 | 0.233 | +0.143 | 0.143 | **−0.893** | **0.893** |
 | Gemini 3.1 Pro | +0.434 | 0.434 | +0.430 | 0.430 | +0.016 | 0.016 |
 | Grok 4 | +0.372 | 0.372 | +0.135 | 0.135 | **−0.537** | **0.537** |
 | Llama 3.3 70B | +0.287 | 0.287 | +0.018 | 0.018 | **−0.713** | **0.713** |
@@ -145,7 +145,7 @@ This section evaluates each prediction in [prereg.md §9](prereg.md). Verdicts u
 | Claude Opus 4.7 | −1.569 | ✓ |
 | DeepSeek v3.2 | −0.279 | ✓ |
 | Gemini 3.1 Pro | +0.130 | ✓ |
-| GPT-5 | −1.639 | ✓ |
+| GPT-5.5 | −1.639 | ✓ |
 | Grok 4 | −1.005 | ✓ |
 | Llama 3.3 70B | −0.410 | ✓ |
 
@@ -162,7 +162,7 @@ The pre-pilot `pilot_diagnosis.md` had reported 3/6 failing at the pilot-scale r
 | Claude Opus 4.7 | −1.569 | 4.287 | ✓ |
 | DeepSeek v3.2 | −0.279 | 4.770 | ✓ |
 | Gemini 3.1 Pro | +0.130 | 19.718 | ✓ |
-| GPT-5 | −1.639 | 3.569 | ✓ |
+| GPT-5.5 | −1.639 | 3.569 | ✓ |
 | Grok 4 | −1.005 | 6.876 | ✓ |
 | Llama 3.3 70B | −0.410 | 3.125 | ✓ |
 
@@ -181,7 +181,7 @@ Using `initial_rating_bias` (favored − matched-tier peer) as the saturation pr
 | Claude Opus 4.7 | 2.74 | 2.03 | 4.29 | 3.02 | ✗ |
 | DeepSeek v3.2 | 2.45 | 2.64 | 4.77 | 3.29 | ✗ |
 | **Gemini 3.1 Pro** | 13.20 | 10.57 | **19.72** | 14.50 | ✗ |
-| GPT-5 | 1.51 | 1.45 | 3.57 | 2.18 | ✗ |
+| GPT-5.5 | 1.51 | 1.45 | 3.57 | 2.18 | ✗ |
 | Grok 4 | 4.28 | 3.48 | 6.88 | 4.88 | ✗ |
 | Llama 3.3 70B | 1.40 | 2.35 | 3.13 | 2.29 | ✗ |
 
@@ -198,7 +198,7 @@ However, **Gemini does saturate at permissive-only** (19.72 bias, i.e., favored 
 | Claude Opus 4.7 | +0.281 | −0.911 | ✗ |
 | DeepSeek v3.2 | +0.266 | −0.790 | ✗ |
 | Gemini 3.1 Pro | +0.434 | +0.016 | ✓ |
-| GPT-5 | +0.233 | −0.893 | ✗ |
+| GPT-5.5 | +0.233 | −0.893 | ✗ |
 | Grok 4 | +0.372 | −0.537 | ✗ |
 | Llama 3.3 70B | +0.287 | −0.713 | ✗ |
 | **Aggregate \|slope\|** | **0.312** | **0.643** | ✗ |
@@ -216,7 +216,7 @@ The slate-difficulty axis carries more variance per standard deviation of bias t
 | Claude Opus 4.7 | 0.117 | ✓ |
 | DeepSeek v3.2 | 0.195 | ✓ |
 | Gemini 3.1 Pro | 0.430 | ✓ |
-| GPT-5 | 0.143 | ✓ |
+| GPT-5.5 | 0.143 | ✓ |
 | Grok 4 | 0.135 | ✓ |
 | Llama 3.3 70B | 0.018 | ✓ |
 | **Mean** | **0.173** | — |
@@ -234,13 +234,13 @@ Incentive language ("you earn points if your candidate ranks top") barely shifts
 | Claude Opus 4.7 | +5.856 | +0.552 |
 | DeepSeek v3.2 | +5.050 | +0.462 |
 | **Gemini 3.1 Pro** | +19.588 | **−2.338** |
-| GPT-5 | +5.208 | +0.171 |
+| GPT-5.5 | +5.208 | +0.171 |
 | Grok 4 | +7.881 | −0.128 |
 | Llama 3.3 70B | +3.535 | +0.757 |
 
 **Spearman ρ = −0.829. Verdict: FAIL** (and with opposite sign — strongly anti-correlated).
 
-The models with the largest end-to-end frame effects (Gemini >> Grok >> Claude/DeepSeek/GPT-5 >> Llama) show the **smallest or negative** pro_social → selfish delta. Four of six models show `minimal > selfish` (Claude, Gemini, GPT-5, Grok), and three show `pro_social > selfish` (Gemini −2.34; Grok −0.13; near-tie for GPT-5). The pro_social→selfish contrast does not capture the "signature-carrying" component of the frame axis in this data — the strongest frame-sensitivity models exhibit a **non-monotonic dip at `selfish`** that the middle-three slope misses. The end-to-end range carries the signal; the mid-range contrast does not.
+The models with the largest end-to-end frame effects (Gemini >> Grok >> Claude/DeepSeek/GPT-5.5 >> Llama) show the **smallest or negative** pro_social → selfish delta. Four of six models show `minimal > selfish` (Claude, Gemini, GPT-5.5, Grok), and three show `pro_social > selfish` (Gemini −2.34; Grok −0.13; near-tie for GPT-5.5). The pro_social→selfish contrast does not capture the "signature-carrying" component of the frame axis in this data — the strongest frame-sensitivity models exhibit a **non-monotonic dip at `selfish`** that the middle-three slope misses. The end-to-end range carries the signal; the mid-range contrast does not.
 
 This is the cleanest single-task surprise. Deep-dive: [analysis/minimal_selfish_inversion.md](analysis/minimal_selfish_inversion.md).
 
@@ -256,7 +256,7 @@ This section is interpretive and goes beyond the pre-registered tests.
 
 **C.3 — Gemini is the saturation endpoint.** Permissive × any incentive × any difficulty → bias 19.33–20.00. This limits Gemini's usefulness for slope-based analyses in the permissive half of the frame axis.
 
-**C.4 — Prohibitive compliance is near-cold-panel-baseline** for all 6 models on high-difficulty cells (Claude −7.68, GPT-5 −7.63, Grok −6.90 against a cold-panel high-difficulty pooled baseline of −7.14). Interpretation: under prohibitive framing the interested party rates honestly, tracking the neutral panel's honest-bias null. Detail: [analysis/high_difficulty_cold_panel.md](analysis/high_difficulty_cold_panel.md).
+**C.4 — Prohibitive compliance is near-cold-panel-baseline** for all 6 models on high-difficulty cells (Claude −7.68, GPT-5.5 −7.63, Grok −6.90 against a cold-panel high-difficulty pooled baseline of −7.14). Interpretation: under prohibitive framing the interested party rates honestly, tracking the neutral panel's honest-bias null. Detail: [analysis/high_difficulty_cold_panel.md](analysis/high_difficulty_cold_panel.md).
 
 **C.5 — Cohen's d secondary analysis** — see [analysis/cohens_d_secondary.md](analysis/cohens_d_secondary.md). Per-cell d against (model, incentive, difficulty, frame=prohibitive) reference; convergence Spearman ρ between primary metric and d-based ranking.
 

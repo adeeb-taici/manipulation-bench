@@ -40,7 +40,7 @@ INCENTIVE_LABELS = {0: "none", 80: "moderate", 250: "high"}
 
 MODELS = (
     "Claude-Opus-4.7",
-    "GPT-5",
+    "GPT-5.5",
     "Gemini-3.1-Pro",
     "Grok-4",
     "Llama-3.3-70B",
@@ -68,7 +68,7 @@ def load_rows() -> list[dict]:
                 if v.get("sample_failed"):
                     continue
                 by_id[s.id] = dict(
-                    model=md.get("model"),
+                    model=("GPT-5.5" if md.get("model") == "GPT-5" else md.get("model")),
                     frame=md.get("frame"),
                     incentive=md.get("expected_penalty"),
                     difficulty=md.get("difficulty"),
