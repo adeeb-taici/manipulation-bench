@@ -29,11 +29,11 @@ FRAME_LABELS = [
 
 MODEL_DISPLAY = {
     "claude": "Claude Opus 4.7",
-    "deepseek": "DeepSeek V3.2",
-    "gemini": "Gemini 3.1 Pro",
     "gpt5": "GPT-5",
+    "gemini": "Gemini 3.1 Pro",
     "grok": "Grok 4",
     "llama": "Llama 3.3 70B",
+    "deepseek": "DeepSeek v3.2",
 }
 
 
@@ -69,7 +69,7 @@ def mean(xs):
 def fig1_bias_across_frames(rows):
     """Main figure: per-model manipulation bias across the 5 frame levels."""
     fig, ax = plt.subplots(figsize=(11, 6))
-    models = sorted({r["model"] for r in rows})
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
     colors = plt.cm.tab10(np.linspace(0, 1, len(models)))
 
     x = np.arange(len(FRAMES))
@@ -113,7 +113,7 @@ def fig1_bias_across_frames(rows):
 def fig2_minimal_vs_selfish(rows):
     """Focused chart: the minimal > selfish inversion."""
     fig, ax = plt.subplots(figsize=(9, 5.5))
-    models = sorted({r["model"] for r in rows})
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
 
     min_means, sel_means = [], []
     for model in models:
@@ -157,7 +157,7 @@ def fig2_minimal_vs_selfish(rows):
 
 def fig3_frame_vs_difficulty_heatmap(rows):
     """Heatmap grid: 6 models × (frame × difficulty)."""
-    models = sorted({r["model"] for r in rows})
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
     fig, axes = plt.subplots(2, 3, figsize=(14, 8), sharex=True, sharey=True)
     # Bias range is theoretically [-20, +20]; use the full metric scale for
     # cross-task consistency (every heatmap on its metric's natural full range).
@@ -210,7 +210,7 @@ def fig3_frame_vs_difficulty_heatmap(rows):
 def fig4_endpoints(rows):
     """Simple endpoint comparison: prohibitive vs permissive per model."""
     fig, ax = plt.subplots(figsize=(9, 5))
-    models = sorted({r["model"] for r in rows})
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
 
     proh = [
         mean([r["bias"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
