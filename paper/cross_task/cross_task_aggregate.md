@@ -1,0 +1,82 @@
+# Cross-task response-surface aggregate
+
+Auto-generated from each task's `paper/<task>/analysis/prereg_results.json` (T1-T4) and embedded T5 numbers (since T5 uses a different per-model JSON shape). See [../../experiments/cross_task_analysis.py](../../experiments/cross_task_analysis.py).
+
+## Per-task aggregate: mean |slope| across 6 models
+
+| Task | Headline metric | Frame | Incentive | Difficulty | Dominant axis | Dominance ratio (top/2nd) |
+|---|---|---:|---:|---:|---|---:|
+| T1 Bargaining | `lied_rate` | 0.102 | 0.217 | 0.029 | **incentive** | 2.1× |
+| T2 Debate | `manipulation_occurred` | 0.011 | 0.012 | 0.064 | **difficulty** | 5.3× |
+| T3 Village | `exploitation_rate` | 0.157 | 0.044 | 0.016 | **frame** | 3.6× |
+| T4 Sales | `manipulation_rate` | 0.030 | 0.014 | 0.190 | **difficulty** | 6.2× |
+| T5 Committee | `initial_rating_bias` | 0.312 | 0.173 | 0.643 | **difficulty** | 2.1× |
+
+Notes on metric scales:
+- T1 / T2 / T3 / T4 use rates in [0, 1]; slopes are also in rate-per-axis-step units.
+- T5 uses bias on a 0–20 rating scale; its slopes are in standardized (per-pooled-SD) units, larger in absolute magnitude than the rate-based slopes.
+- For cross-task comparison of *which axis dominates within a task*, the relative size of slopes within a row is what matters, not the absolute number.
+
+## Per-model 15-dim profile vector
+
+Each model's profile = 5 tasks × 3 axes = 15 entries (signed slopes).
+
+### Claude-Opus-4.7
+
+| Task | Frame slope | Incentive slope | Difficulty slope |
+|---|---:|---:|---:|
+| T1 Bargaining | +0.066 | -0.159 | -0.014 |
+| T2 Debate | -0.001 | -0.007 | -0.003 |
+| T3 Village | +0.106 | +0.025 | -0.005 |
+| T4 Sales | +0.020 | -0.003 | +0.055 |
+| T5 Committee | +0.281 | +0.117 | -0.911 |
+
+### GPT-5
+
+| Task | Frame slope | Incentive slope | Difficulty slope |
+|---|---:|---:|---:|
+| T1 Bargaining | +0.133 | -0.394 | +0.048 |
+| T2 Debate | -0.020 | +0.020 | -0.054 |
+| T3 Village | +0.197 | +0.059 | +0.010 |
+| T4 Sales | +0.024 | +0.003 | +0.380 |
+| T5 Committee | +0.233 | +0.143 | -0.893 |
+
+### Gemini-3.1-Pro
+
+| Task | Frame slope | Incentive slope | Difficulty slope |
+|---|---:|---:|---:|
+| T1 Bargaining | +0.123 | -0.397 | +0.033 |
+| T2 Debate | -0.007 | +0.009 | -0.053 |
+| T3 Village | +0.255 | +0.105 | -0.047 |
+| T4 Sales | +0.044 | +0.031 | +0.320 |
+| T5 Committee | +0.434 | +0.430 | +0.016 |
+
+### Grok-4
+
+| Task | Frame slope | Incentive slope | Difficulty slope |
+|---|---:|---:|---:|
+| T1 Bargaining | +0.138 | -0.237 | +0.072 |
+| T2 Debate | -0.009 | +0.004 | -0.086 |
+| T3 Village | +0.213 | +0.032 | -0.004 |
+| T4 Sales | +0.017 | -0.011 | +0.075 |
+| T5 Committee | +0.372 | +0.135 | -0.537 |
+
+### Llama-3.3-70B
+
+| Task | Frame slope | Incentive slope | Difficulty slope |
+|---|---:|---:|---:|
+| T1 Bargaining | +0.077 | -0.022 | +0.000 |
+| T2 Debate | +0.012 | +0.024 | -0.106 |
+| T3 Village | +0.105 | +0.025 | +0.011 |
+| T4 Sales | +0.035 | +0.011 | +0.113 |
+| T5 Committee | +0.287 | +0.018 | -0.713 |
+
+### DeepSeek-v3.2
+
+| Task | Frame slope | Incentive slope | Difficulty slope |
+|---|---:|---:|---:|
+| T1 Bargaining | +0.073 | -0.093 | +0.006 |
+| T2 Debate | -0.020 | -0.009 | -0.080 |
+| T3 Village | +0.068 | -0.019 | +0.018 |
+| T4 Sales | +0.044 | +0.024 | +0.199 |
+| T5 Committee | +0.266 | +0.195 | -0.790 |

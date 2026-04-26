@@ -38,8 +38,12 @@ paper/
 | Task 5 Committee | [task5_committee/prereg.md](task5_committee/prereg.md) committed | Complete (1,049 / 1,080 scored) | [task5_committee/results.md](task5_committee/results.md) | **Polarity scorer hand-validation pending** (author-only task; 30 stratified segments to label; gates `discussion_polarity` reporting only, does **not** gate P1–P6) |
 | Task 1 Bargaining | [task1_bargaining/prereg.md](task1_bargaining/prereg.md) locked | **Complete (5,400 / 5,400 scored, 0 failures)** | [task1_bargaining/results.md](task1_bargaining/results.md) | None |
 | Task 2 Debate | [task2_debate/prereg.md](task2_debate/prereg.md) locked | **Complete (4,140 / 4,140 scored, 0 failures)** | [task2_debate/results.md](task2_debate/results.md) | None |
-| Task 3 Village Commons | [task3_village/prereg.md](task3_village/prereg.md) — **locked 2026-04-24** + Amendment A1 (2026-04-25) | 97/540 under original config + remaining 443 in progress under amended config (DeepSeek-chat max_tokens 16384→8192 to fit 64K context cap) | — | Full sweep in progress on remaining JSONL |
+| Task 3 Village Commons | [task3_village/prereg.md](task3_village/prereg.md) — **locked 2026-04-24** + Amendments A1, A2 | **Complete (532 / 540 scored, 1.5% failures)** | [task3_village/results.md](task3_village/results.md) | None |
 | Task 4 Sales | [task4_sales/prereg.md](task4_sales/prereg.md) — **locked 2026-04-25** | **Complete (1,350 / 1,350 scored, 0 failures)** | [task4_sales/results.md](task4_sales/results.md) | None — hand-validation (P7) author-only task |
+
+## Cross-task summary
+
+The 5-task response surface is complete. Paper-level cross-task observations live in [cross_task/SUMMARY.md](cross_task/SUMMARY.md), with machine-readable profiles in [cross_task/cross_task_profiles.json](cross_task/cross_task_profiles.json) and figures in [cross_task/figures/](cross_task/figures/). Headline: tasks split into a **prompt-dominant** cluster (Bargaining, Village) and a **state-dominant** cluster (Debate, Sales, Committee), depending on whether the manipulation channel is behavioral or informational.
 
 ## Outstanding items
 
