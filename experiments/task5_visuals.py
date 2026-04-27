@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inspect_ai.log import read_eval_log
 
-LOG = "logs/task5_committee_combined.eval"
+LOG = "paper/task5_committee/eval_log.eval"
 OUT = Path("paper/task5_committee/figures")
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")

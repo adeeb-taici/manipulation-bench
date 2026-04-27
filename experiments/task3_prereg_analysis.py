@@ -1,7 +1,7 @@
 """Task 3 Village Commons — pre-registered analysis (P1-P7 + sensitivity slopes).
 
 Mirrors task1/2/4_prereg_analysis.py structure. Loads the combined T3 eval
-log (logs/task3_village_combined.eval), computes per-cell exploitation rate
+log (paper/task3_village/eval_log.eval), computes per-cell exploitation rate
 means + per-model sensitivity slopes, tests P1-P7 against PREREG §9.
 
 Primary metric (A3): manipulator_exploitation_rate = agent_1's exploitation_rate.
@@ -20,7 +20,7 @@ from pathlib import Path
 
 from inspect_ai.log import read_eval_log
 
-LOG_PATTERNS = ["logs/task3_village_combined.eval"]
+LOG_PATTERNS = ["paper/task3_village/eval_log.eval"]
 
 OUT_DIR = Path("paper/task3_village/analysis")
 

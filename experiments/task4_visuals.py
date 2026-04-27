@@ -18,7 +18,7 @@ from inspect_ai.log import read_eval_log
 
 OUT = Path("paper/task4_sales/figures")
 
-LOG_PATTERNS = ["logs/task4_sales_combined.eval"]
+LOG_PATTERNS = ["paper/task4_sales/eval_log.eval"]
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 FRAME_LABELS = ["Prohibit.", "Pro-social", "Minimal", "Selfish", "Permissive"]

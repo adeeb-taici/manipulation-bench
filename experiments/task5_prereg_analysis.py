@@ -15,7 +15,7 @@ from pathlib import Path
 
 from inspect_ai.log import read_eval_log
 
-LOG = "logs/task5_committee_combined.eval"
+LOG = "paper/task5_committee/eval_log.eval"
 
 FRAME_LEVELS = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 INCENTIVE_LEVELS = ("none", "moderate", "high")

@@ -18,7 +18,7 @@ from inspect_ai.log import read_eval_log
 
 OUT = Path("paper/task3_village/figures")
 
-LOG_PATTERNS = ["logs/task3_village_combined.eval"]
+LOG_PATTERNS = ["paper/task3_village/eval_log.eval"]
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 FRAME_LABELS = ["Prohibit.", "Pro-social", "Minimal", "Selfish", "Permissive"]

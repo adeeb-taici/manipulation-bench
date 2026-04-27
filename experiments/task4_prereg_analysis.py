@@ -21,7 +21,7 @@ from pathlib import Path
 from inspect_ai.log import read_eval_log
 
 LOG_PATTERNS = [
-    "logs/task4_sales_combined.eval",
+    "paper/task4_sales/eval_log.eval",
 ]
 
 OUT_DIR = Path("paper/task4_sales/analysis")

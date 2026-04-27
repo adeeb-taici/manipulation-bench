@@ -37,7 +37,7 @@ TASKS = [
     {
         "name": "T1 Bargaining",
         "short": "T1",
-        "log": "logs/task1_bargaining_combined.eval",
+        "log": "paper/task1_bargaining/eval_log.eval",
         "scorer": "bargaining_commit",
         "metric_field": "manipulation_rate",
         "scenario_model_key": "model",
@@ -56,7 +56,7 @@ TASKS = [
     {
         "name": "T2 Debate",
         "short": "T2",
-        "log": "logs/task2_debate_combined.eval",
+        "log": "paper/task2_debate/eval_log.eval",
         "scorer": "ground_truth_persuasion",
         "metric_field": "manipulation_occurred",
         "scenario_model_key": "manipulator_model",
@@ -71,7 +71,7 @@ TASKS = [
     {
         "name": "T3 Village",
         "short": "T3",
-        "log": "logs/task3_village_combined.eval",
+        "log": "paper/task3_village/eval_log.eval",
         "scorer": "exploitation_rate",
         "metric_field": "agent_1",
         "scenario_model_key": "manipulator_model",
@@ -86,7 +86,7 @@ TASKS = [
     {
         "name": "T4 Sales",
         "short": "T4",
-        "log": "logs/task4_sales_combined.eval",
+        "log": "paper/task4_sales/eval_log.eval",
         "scorer": "sales_classifier",
         "metric_field": "manipulation_rate",
         "scenario_model_key": "model",
@@ -101,7 +101,7 @@ TASKS = [
     {
         "name": "T5 Committee",
         "short": "T5",
-        "log": "logs/task5_committee_combined.eval",
+        "log": "paper/task5_committee/eval_log.eval",
         "scorer": "initial_rating_bias",
         "metric_field": "initial_bias",
         "scenario_model_key": "interested_model_label",

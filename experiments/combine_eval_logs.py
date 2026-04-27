@@ -6,9 +6,9 @@ having a single canonical .eval per task makes provenance reporting and
 ``inspect view`` cleaner — it's "as if they weren't run separately".
 
 What this script produces:
-    logs/task1_bargaining_combined.eval     — all 5,400 Task 1 samples
-    logs/task2_debate_combined.eval         — all 4,140 Task 2 samples
-    logs/task3_village_combined.eval        — all Task 3 samples (orig + post-Amend-A1)
+    paper/task1_bargaining/eval_log.eval     — all 5,400 Task 1 samples
+    paper/task2_debate/eval_log.eval         — all 4,140 Task 2 samples
+    paper/task3_village/eval_log.eval        — all Task 3 samples (orig + post-Amend-A1)
 
 Originals are NOT deleted; they remain in their split folders for reproducibility.
 
@@ -33,10 +33,8 @@ from pathlib import Path
 
 from inspect_ai.log import EvalLog, read_eval_log, write_eval_log
 
-LOGS_DIR = Path("logs")
-
 TASK_SPLITS = {
-    "task1_bargaining_combined.eval": [
+    "paper/task1_bargaining/eval_log.eval": [
         "logs/task1_fullsweep_20260422/*.eval",
         "logs/task1_fullsweep_20260422_batch1/*.eval",
         "logs/task1_fullsweep_20260422_llama_retry/*.eval",
@@ -48,7 +46,7 @@ TASK_SPLITS = {
         # DeepSeek V3.2 -> V4 Pro swap (PREREG Amendment A3, official API).
         "logs/task1_dsv4/*.eval",
     ],
-    "task2_debate_combined.eval": [
+    "paper/task2_debate/eval_log.eval": [
         "logs/task2_debate_v61_full/*.eval",
         "logs/task2_debate_v61_full_gemini/*.eval",
         "logs/task2_debate_v61_full_gpt5/*.eval",
@@ -58,19 +56,19 @@ TASK_SPLITS = {
         "logs/task2_gpt55/*.eval",
         "logs/task2_dsv4/*.eval",
     ],
-    "task3_village_combined.eval": [
+    "paper/task3_village/eval_log.eval": [
         "logs/task3_village_v61_full/*.eval",
         "logs/task3_village_v61_full_remaining/*.eval",
         "logs/task3_village_v61_full_remaining_v2/*.eval",
         "logs/task3_gpt55/*.eval",
         "logs/task3_dsv4/*.eval",
     ],
-    "task4_sales_combined.eval": [
+    "paper/task4_sales/eval_log.eval": [
         "logs/task4_sales_v61_full/*.eval",
         "logs/task4_gpt55/*.eval",
         "logs/task4_dsv4/*.eval",
     ],
-    "task5_committee_combined.eval": [
+    "paper/task5_committee/eval_log.eval": [
         "logs/committee_fullsweep_20260422/*.eval",
         "logs/task5_gpt55/*.eval",
         "logs/task5_dsv4/*.eval",
@@ -78,15 +76,16 @@ TASK_SPLITS = {
 }
 
 
-def combine(out_filename: str, patterns: list[str]) -> None:
+def combine(out_path_str: str, patterns: list[str]) -> None:
     """Merge .eval files matched by ``patterns`` into a single canonical .eval.
 
     ``patterns`` is given in chronological order — the LATEST source's header
     (eval/plan/stats fields) wins, but its samples are merged with all earlier
     sources' samples (deduplicating by sample id with later wins).
     """
-    out_path = LOGS_DIR / out_filename
-    print(f"\n=== {out_filename} ===")
+    out_path = Path(out_path_str)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    print(f"\n=== {out_path_str} ===")
 
     # Collect all log paths (in pattern order)
     log_paths: list[str] = []
@@ -136,9 +135,8 @@ def combine(out_filename: str, patterns: list[str]) -> None:
 
 
 def main() -> None:
-    LOGS_DIR.mkdir(parents=True, exist_ok=True)
-    for fname, patterns in TASK_SPLITS.items():
-        combine(fname, patterns)
+    for out_path, patterns in TASK_SPLITS.items():
+        combine(out_path, patterns)
 
 
 if __name__ == "__main__":

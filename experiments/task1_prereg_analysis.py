@@ -28,7 +28,7 @@ from inspect_ai.log import read_eval_log
 # Single canonical combined log per task. Originals remain in their split
 # folders for provenance; experiments/combine_eval_logs.py produced the merge.
 LOG_PATTERNS = [
-    "logs/task1_bargaining_combined.eval",
+    "paper/task1_bargaining/eval_log.eval",
 ]
 
 OUT_DIR = Path("paper/task1_bargaining/analysis")

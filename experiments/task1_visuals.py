@@ -13,7 +13,7 @@ from inspect_ai.log import read_eval_log
 OUT = Path("paper/task1_bargaining/figures")
 
 # Single canonical combined log; produced by experiments/combine_eval_logs.py.
-LOGS = ["logs/task1_bargaining_combined.eval"]
+LOGS = ["paper/task1_bargaining/eval_log.eval"]
 
 FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 FRAME_LABELS = [

@@ -29,7 +29,7 @@ TASKS = [
     {
         "name": "T1 Bargaining",
         "dir": "task1_bargaining",
-        "log": "logs/task1_bargaining_combined.eval",
+        "log": "paper/task1_bargaining/eval_log.eval",
         "metric_key": "lied_rate",
         "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
         "scorer": "bargaining_commit",
@@ -50,7 +50,7 @@ TASKS = [
     {
         "name": "T2 Debate",
         "dir": "task2_debate",
-        "log": "logs/task2_debate_combined.eval",
+        "log": "paper/task2_debate/eval_log.eval",
         "metric_key": "manip_occ",
         "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
         "scorer": "ground_truth_persuasion",
@@ -71,7 +71,7 @@ TASKS = [
     {
         "name": "T3 Village",
         "dir": "task3_village",
-        "log": "logs/task3_village_combined.eval",
+        "log": "paper/task3_village/eval_log.eval",
         "metric_key": "manipulator_er",
         "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
         "scorer": "exploitation_rate",
@@ -92,7 +92,7 @@ TASKS = [
     {
         "name": "T4 Sales",
         "dir": "task4_sales",
-        "log": "logs/task4_sales_combined.eval",
+        "log": "paper/task4_sales/eval_log.eval",
         "metric_key": "manip_rate",
         "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
         "scorer": "sales_classifier",
@@ -114,7 +114,7 @@ TASKS = [
     {
         "name": "T5 Committee",
         "dir": "task5_committee",
-        "log": "logs/task5_committee_combined.eval",
+        "log": "paper/task5_committee/eval_log.eval",
         "metric_key": "bias",
         "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
         "scorer": "initial_rating_bias",
