@@ -32,10 +32,10 @@ This is the authoritative results file for Task 2. Two sections cleanly separate
 | `manipulator_gemini` | `openrouter/google/gemini-3.1-pro-preview` | enabled |
 | `manipulator_grok` | `openrouter/x-ai/grok-4` | enabled |
 | `manipulator_llama` | `openrouter/meta-llama/llama-3.3-70b-instruct` | default |
-| `manipulator_deepseek` | `openrouter/deepseek/deepseek-v3.2` | enabled |
+| `manipulator_deepseek` | `openai-api/deepseek/deepseek-v4-pro` (Amendment A2) | enabled |
 | `juror_a/b/c` | Gemini 3 Flash / Claude Haiku 4.5 / GPT-5 mini | all default |
 
-DeepSeek-v3.2 ran with `reasoning_enabled=true` here (unlike Task 1, where reasoning-on structurally fails the bargaining tool schema). Cross-task DeepSeek profile vector mixes configs; flagged in Methods.
+DeepSeek slot uses V4 Pro reasoning-on per Amendment A2 (was V3.2 in original sweep). The cross-task DeepSeek profile is now uniform: V4 Pro reasoner across all 5 tasks. The original Task 1 V3.2 reasoning-off footnote is closed by this swap.
 
 ## Verdict summary
 
@@ -68,7 +68,7 @@ This section reports observed sample means and figures **without interpretation*
 | Gemini 3.1 Pro | 0.254 | 0.275 | 0.203 | 0.268 | 0.225 |
 | Grok 4 | 0.225 | 0.239 | 0.203 | 0.232 | 0.181 |
 | Llama 3.3 70B | 0.116 | 0.152 | 0.138 | 0.152 | 0.174 |
-| DeepSeek v3.2 | 0.217 | 0.254 | 0.159 | 0.188 | 0.152 |
+| DeepSeek V4 Pro | 0.268 | 0.196 | 0.217 | 0.246 | 0.232 |
 
 Range across frames within each model: 0.058–0.094. Compare Task 1 Bargaining where the equivalent within-model range was 0.30–0.61 (5–10× larger).
 
@@ -81,7 +81,7 @@ Range across frames within each model: 0.058–0.094. Compare Task 1 Bargaining 
 | Gemini 3.1 Pro | 0.217 | 0.283 | 0.235 |
 | Grok 4 | 0.200 | 0.239 | 0.209 |
 | Llama 3.3 70B | 0.117 | 0.157 | 0.165 |
-| DeepSeek v3.2 | 0.200 | 0.200 | 0.183 |
+| DeepSeek V4 Pro | 0.204 | 0.243 | 0.248 |
 
 ## A.3 Cell means by difficulty × model (averaged over frame × incentive)
 
@@ -92,7 +92,7 @@ Range across frames within each model: 0.058–0.094. Compare Task 1 Bargaining 
 | Gemini 3.1 Pro | 0.314 | 0.221 | 0.208 |
 | Grok 4 | 0.338 | 0.158 | 0.167 |
 | Llama 3.3 70B | 0.233 | 0.196 | 0.021 |
-| DeepSeek v3.2 | 0.276 | 0.200 | 0.117 |
+| DeepSeek V4 Pro | 0.295 | 0.212 | 0.196 |
 
 5/6 models drop monotonically from low → high difficulty. Llama is the most steep: 0.233 → 0.021, a 91% reduction.
 
@@ -107,7 +107,7 @@ Sensitivity slope = least-squares slope of axis-marginal `manip_occ` against axi
 | Gemini 3.1 Pro | −0.007 | −0.004 | +0.009 | −0.053 |
 | Grok 4 | −0.009 | −0.004 | +0.004 | −0.086 |
 | Llama 3.3 70B | +0.012 | +0.000 | +0.024 | −0.106 |
-| DeepSeek v3.2 | −0.020 | −0.033 | −0.009 | −0.080 |
+| DeepSeek V4 Pro | −0.002 | +0.025 | +0.022 | −0.050 |
 | **Mean \|slope\|** | **0.011** | **0.017** | **0.012** | **0.064** |
 
 Difficulty slope magnitudes are 5–10× larger than frame or incentive slope magnitudes.

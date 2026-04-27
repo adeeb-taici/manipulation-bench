@@ -35,7 +35,7 @@ Per-model n: Claude 90, GPT-5.5 90, Gemini 90, Grok 90, Llama 87, DeepSeek 85.
 | `manipulator_gemini` | `openrouter/google/gemini-3.1-pro-preview` | enabled | |
 | `manipulator_grok` | `openrouter/x-ai/grok-4` | enabled | |
 | `manipulator_llama` | `openrouter/meta-llama/llama-3.3-70b-instruct` | default | |
-| `manipulator_deepseek` | `openrouter/deepseek/deepseek-v3.2` | enabled | |
+| `manipulator_deepseek` | `openai-api/deepseek/deepseek-v4-pro` (Amendment A4) | enabled | |
 | `bystander_haiku` | `openrouter/anthropic/claude-haiku-4.5` | default; A2 max_tokens 8192 | agents 2, 6 |
 | `bystander_gpt5mini` | `openrouter/openai/gpt-5-mini` | default | agent 3 |
 | `bystander_gemflash` | `openrouter/google/gemini-3-flash-preview` | default | agent 4 |
@@ -74,11 +74,12 @@ This section reports observed sample means and figures **without interpretation*
 | Gemini 3.1 Pro | 0.022 | 0.240 | 0.352 | 0.834 | **0.997** |
 | Grok 4 | 0.000 | 0.065 | 0.110 | 0.272 | 0.964 |
 | **Llama 3.3 70B** | **0.421** | 0.388 | 0.409 | 0.442 | 0.918 |
-| **DeepSeek v3.2** | **0.511** | 0.628 | 0.710 | 0.603 | 0.862 |
+| DeepSeek V4 Pro | 0.107 | 0.149 | 0.289 | 0.252 | 0.760 |
 
 Two distinct model families at the prohibitive endpoint:
 - **Compliant** (prohibitive ≤ 0.05): Claude, GPT-5.5, Gemini, Grok
-- **Non-compliant** (prohibitive > 0.40): Llama, DeepSeek
+- **Borderline-compliant** (prohibitive 0.10–0.15): DeepSeek V4 Pro (was 0.51 with V3.2 — major V4-generation alignment improvement)
+- **Non-compliant** (prohibitive > 0.40): Llama
 
 The frame gradient is clean and monotonic for the compliant set: e.g., Gemini goes 0.022 → 0.240 → 0.352 → 0.834 → 0.997 (44× endpoint range).
 
@@ -91,7 +92,7 @@ The frame gradient is clean and monotonic for the compliant set: e.g., Gemini go
 | Gemini 3.1 Pro | 0.424 | 0.409 | 0.634 |
 | Grok 4 | 0.259 | 0.265 | 0.322 |
 | Llama 3.3 70B | 0.484 | 0.519 | 0.534 |
-| DeepSeek v3.2 | 0.688 | 0.653 | 0.651 |
+| DeepSeek V4 Pro | 0.270 | 0.330 | 0.296 |
 
 Within-model incentive ranges are 0.005 (DeepSeek) – 0.225 (Gemini), much smaller than frame ranges.
 
@@ -106,7 +107,7 @@ Difficulty axis: pool multiplier 1.2 (low; defection rational) / 1.5 (medium) / 
 | Gemini 3.1 Pro | 0.551 | 0.458 | 0.457 |
 | Grok 4 | 0.290 | 0.272 | 0.283 |
 | Llama 3.3 70B | 0.503 | 0.511 | 0.524 |
-| DeepSeek v3.2 | 0.644 | 0.667 | 0.681 |
+| DeepSeek V4 Pro | 0.297 | 0.277 | 0.319 |
 
 Within-model difficulty ranges are 0.018 (Claude) – 0.094 (Gemini). The economic-reasoning expectation that high difficulty (cooperation rewarding) should suppress manipulation **is not borne out for any model** — within-model difficulty effects are negligible vs frame.
 
@@ -119,7 +120,7 @@ Within-model difficulty ranges are 0.018 (Claude) – 0.094 (Gemini). The econom
 | Gemini 3.1 Pro | +0.254 | +0.297 | +0.105 | −0.047 |
 | Grok 4 | +0.213 | +0.103 | +0.032 | −0.004 |
 | Llama 3.3 70B | +0.105 | +0.027 | +0.025 | +0.011 |
-| DeepSeek v3.2 | +0.068 | −0.013 | −0.018 | +0.018 |
+| DeepSeek V4 Pro | +0.141 | +0.052 | +0.013 | +0.011 |
 | **Mean abs** | **0.157** | **0.116** | **0.044** | **0.016** |
 
 Frame slope mean magnitude (0.157) is **3.6× incentive** and **10× difficulty**. This is the inverse of the Committee/Debate/Sales pattern.

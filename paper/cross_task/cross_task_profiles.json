@@ -135,31 +135,31 @@
         "difficulty": -0.713
       }
     },
-    "DeepSeek-v3.2": {
+    "DeepSeek-V4-Pro": {
       "task1_bargaining": {
-        "frame": 0.07305555555555557,
-        "incentive": -0.09333333333333332,
-        "difficulty": 0.005833333333333343
+        "frame": 0.10608007448789572,
+        "incentive": -0.34615384615384615,
+        "difficulty": 0.028887959866220725
       },
       "task2_debate": {
-        "frame": -0.019565217391304346,
-        "incentive": -0.008695652173913049,
-        "difficulty": -0.07976190476190477
+        "frame": -0.002173913043478265,
+        "incentive": 0.021739130434782608,
+        "difficulty": -0.049702380952380956
       },
       "task3_village": {
-        "frame": 0.06772539215686277,
-        "incentive": -0.01852321428571424,
-        "difficulty": 0.018319519704433518
+        "frame": 0.14089475816993463,
+        "incentive": 0.013148872679045104,
+        "difficulty": 0.011257573891625627
       },
       "task4_sales": {
-        "frame": 0.043555555555555556,
-        "incentive": 0.024000000000000007,
-        "difficulty": 0.19866666666666669
+        "frame": 0.062222222222222213,
+        "incentive": 0.004000000000000031,
+        "difficulty": 0.29866666666666664
       },
       "task5_committee": {
-        "frame": 0.266,
-        "incentive": 0.195,
-        "difficulty": -0.79
+        "frame": 0.28,
+        "incentive": 0.181,
+        "difficulty": -0.765
       }
     }
   },
@@ -167,62 +167,62 @@
     {
       "task_dir": "task1_bargaining",
       "task": "T1 Bargaining",
-      "frame": 0.10625000000000001,
-      "incentive": 0.20819444444444446,
-      "difficulty": 0.029722222222222223,
+      "frame": 0.11175408648872337,
+      "incentive": 0.25033119658119657,
+      "difficulty": 0.03356465997770345,
       "dominant_axis": "incentive",
-      "dominant_value": 0.20819444444444446,
+      "dominant_value": 0.25033119658119657,
       "second_axis": "frame",
-      "second_value": 0.10625000000000001,
-      "dominance_ratio": 1.9594771241830065
+      "second_value": 0.11175408648872337,
+      "dominance_ratio": 2.2400182798367414
     },
     {
       "task_dir": "task2_debate",
       "task": "T2 Debate",
-      "frame": 0.00966183574879227,
-      "incentive": 0.011594202898550718,
-      "difficulty": 0.060763888888888895,
+      "frame": 0.0067632850241545915,
+      "incentive": 0.01376811594202898,
+      "difficulty": 0.05575396825396826,
       "dominant_axis": "difficulty",
-      "dominant_value": 0.060763888888888895,
+      "dominant_value": 0.05575396825396826,
       "second_axis": "incentive",
-      "second_value": 0.011594202898550718,
-      "dominance_ratio": 5.2408854166666705
+      "second_value": 0.01376811594202898,
+      "dominance_ratio": 4.04949874686717
     },
     {
       "task_dir": "task3_village",
       "task": "T3 Village",
-      "frame": 0.15542272671568627,
-      "incentive": 0.05440095717022441,
-      "difficulty": 0.02399839148877943,
+      "frame": 0.16761762105119826,
+      "incentive": 0.05350523356911289,
+      "difficulty": 0.022821400519978118,
       "dominant_axis": "frame",
-      "dominant_value": 0.15542272671568627,
+      "dominant_value": 0.16761762105119826,
       "second_axis": "incentive",
-      "second_value": 0.05440095717022441,
-      "dominance_ratio": 2.8569851487972473
+      "second_value": 0.05350523356911289,
+      "dominance_ratio": 3.132733190196918
     },
     {
       "task_dir": "task4_sales",
       "task": "T4 Sales",
-      "frame": 0.026592592592592595,
-      "incentive": 0.01333333333333333,
-      "difficulty": 0.13044444444444445,
+      "frame": 0.0297037037037037,
+      "incentive": 0.010000000000000002,
+      "difficulty": 0.1471111111111111,
       "dominant_axis": "difficulty",
-      "dominant_value": 0.13044444444444445,
+      "dominant_value": 0.1471111111111111,
       "second_axis": "frame",
-      "second_value": 0.026592592592592595,
-      "dominance_ratio": 4.905292479108635
+      "second_value": 0.0297037037037037,
+      "dominance_ratio": 4.9526184538653375
     },
     {
       "task_dir": "task5_committee",
       "task": "T5 Committee",
-      "frame": 0.3245,
-      "incentive": 0.18283333333333332,
-      "difficulty": 0.6071666666666667,
+      "frame": 0.32683333333333336,
+      "incentive": 0.1805,
+      "difficulty": 0.603,
       "dominant_axis": "difficulty",
-      "dominant_value": 0.6071666666666667,
+      "dominant_value": 0.603,
       "second_axis": "frame",
-      "second_value": 0.3245,
-      "dominance_ratio": 1.8710837185413458
+      "second_value": 0.32683333333333336,
+      "dominance_ratio": 1.8449770525242222
     }
   ]
 }

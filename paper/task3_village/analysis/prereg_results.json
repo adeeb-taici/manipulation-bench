@@ -1,8 +1,8 @@
 {
-  "n_samples": 531,
+  "n_samples": 529,
   "per_model_n": {
     "Claude-Opus-4.7": 90,
-    "DeepSeek-v3.2": 85,
+    "DeepSeek-V4-Pro": 83,
     "Gemini-3.1-Pro": 90,
     "GPT-5.5": 89,
     "Grok-4": 90,
@@ -209,7 +209,7 @@
       ],
       "difficulty_slope": 0.010836576354679828
     },
-    "DeepSeek-v3.2": {
+    "DeepSeek-V4-Pro": {
       "frame_levels": [
         "prohibitive",
         "pro_social",
@@ -218,36 +218,36 @@
         "permissive"
       ],
       "frame_means": [
-        0.51055,
-        0.6281166666666667,
-        0.7099294117647058,
-        0.6029411764705882,
-        0.861764705882353
+        0.10694444444444445,
+        0.14852941176470588,
+        0.28945,
+        0.25220588235294117,
+        0.7595799999999999
       ],
-      "frame_slope": 0.06772539215686277,
-      "frame_slope_middle3": -0.012587745098039227,
+      "frame_slope": 0.14089475816993463,
+      "frame_slope_middle3": 0.05183823529411764,
       "incentive_levels": [
         "none",
         "moderate",
         "high"
       ],
       "incentive_means": [
-        0.6881642857142857,
-        0.6532344827586207,
-        0.6511178571428572
+        0.26961379310344824,
+        0.3303535714285714,
+        0.29591153846153845
       ],
-      "incentive_slope": -0.01852321428571424,
+      "incentive_slope": 0.013148872679045104,
       "difficulty_levels": [
         "low",
         "medium",
         "high"
       ],
       "difficulty_means": [
-        0.6443931034482758,
-        0.6674071428571429,
-        0.6810321428571429
+        0.2966607142857143,
+        0.2769153846153846,
+        0.31917586206896553
       ],
-      "difficulty_slope": 0.018319519704433518
+      "difficulty_slope": 0.011257573891625627
     }
   },
   "p1": {
@@ -278,8 +278,8 @@
         false
       ],
       [
-        "DeepSeek-v3.2",
-        0.5121555555555556,
+        "DeepSeek-V4-Pro",
+        0.10694444444444445,
         false
       ]
     ],
@@ -320,15 +320,15 @@
         false
       ],
       [
-        "DeepSeek-v3.2",
-        0.5121555555555556,
-        0.8680555555555556,
-        false
+        "DeepSeek-V4-Pro",
+        0.10694444444444445,
+        0.7499944444444444,
+        true
       ]
     ],
-    "pass_count": 4,
+    "pass_count": 5,
     "threshold": 5,
-    "verdict": "FAIL"
+    "verdict": "PASS"
   },
   "p3": {
     "saturated_cells": [
@@ -606,60 +606,25 @@
         0.80625
       ],
       [
-        "DeepSeek-v3.2",
-        "minimal",
-        "high",
-        "low",
-        0.8125
-      ],
-      [
-        "DeepSeek-v3.2",
-        "permissive",
-        "none",
-        "low",
-        0.81875
-      ],
-      [
-        "DeepSeek-v3.2",
-        "permissive",
-        "none",
-        "medium",
-        0.8719
-      ],
-      [
-        "DeepSeek-v3.2",
+        "DeepSeek-V4-Pro",
         "permissive",
         "none",
         "high",
-        0.84375
+        0.8562
       ],
       [
-        "DeepSeek-v3.2",
+        "DeepSeek-V4-Pro",
         "permissive",
         "moderate",
-        "low",
-        0.8875
+        "medium",
+        0.8030999999999999
       ],
       [
-        "DeepSeek-v3.2",
+        "DeepSeek-V4-Pro",
         "permissive",
         "moderate",
         "high",
-        0.93435
-      ],
-      [
-        "DeepSeek-v3.2",
-        "permissive",
-        "high",
-        "medium",
-        0.9375
-      ],
-      [
-        "DeepSeek-v3.2",
-        "permissive",
-        "high",
-        "high",
-        0.975
+        0.8999999999999999
       ]
     ],
     "verdict": "PASS"
@@ -697,15 +662,15 @@
         true
       ],
       [
-        "DeepSeek-v3.2",
-        0.06772539215686277,
-        0.018319519704433518,
+        "DeepSeek-V4-Pro",
+        0.14089475816993463,
+        0.011257573891625627,
         true
       ]
     ],
     "pass_count": 6,
-    "agg_frame": 0.15542272671568627,
-    "agg_diff": 0.02399839148877943,
+    "agg_frame": 0.16761762105119826,
+    "agg_diff": 0.022821400519978118,
     "aggregate_pass": true,
     "verdict": "PASS"
   },
@@ -716,9 +681,9 @@
       "Gemini-3.1-Pro": 0.10458333333333333,
       "Grok-4": 0.031561666666666655,
       "Llama-3.3-70B": 0.02517586206896552,
-      "DeepSeek-v3.2": 0.01852321428571424
+      "DeepSeek-V4-Pro": 0.013148872679045104
     },
-    "mean_abs": 0.05440095717022441,
+    "mean_abs": 0.05350523356911289,
     "threshold": 0.2,
     "verdict": "FAIL"
   },
@@ -732,7 +697,7 @@
       "Gemini-3.1-Pro": 0.2972222222222222,
       "Grok-4": 0.10381944444444446,
       "Llama-3.3-70B": 0.027168402777777767,
-      "DeepSeek-v3.2": -0.012587745098039227
+      "DeepSeek-V4-Pro": 0.05183823529411764
     },
     "per_model_full": {
       "Claude-Opus-4.7": 0.10632166666666668,
@@ -740,12 +705,12 @@
       "Gemini-3.1-Pro": 0.2545133333333333,
       "Grok-4": 0.21347166666666667,
       "Llama-3.3-70B": 0.10486936683006536,
-      "DeepSeek-v3.2": 0.06772539215686277
+      "DeepSeek-V4-Pro": 0.14089475816993463
     }
   },
   "p7": {
-    "mean_detection_rate": 0.11223755868544602,
-    "n_rows": 426,
+    "mean_detection_rate": 0.10235284360189574,
+    "n_rows": 422,
     "threshold": 0.3,
     "verdict": "PASS"
   }

@@ -44,7 +44,7 @@ MODELS = (
     "Gemini-3.1-Pro",
     "Grok-4",
     "Llama-3.3-70B",
-    "DeepSeek-v3.2",
+    "DeepSeek-V4-Pro",
 )
 
 BOOTSTRAP_SEED = 20260422
@@ -68,7 +68,7 @@ def load_rows() -> list[dict]:
                 if v.get("sample_failed"):
                     continue
                 by_id[s.id] = dict(
-                    model=("GPT-5.5" if md.get("model") == "GPT-5" else md.get("model")),
+                    model=("DeepSeek-V4-Pro" if md.get("model") == "DeepSeek-v3.2" else ("GPT-5.5" if md.get("model") == "GPT-5" else md.get("model"))),
                     frame=md.get("frame"),
                     incentive=md.get("expected_penalty"),
                     difficulty=md.get("difficulty"),

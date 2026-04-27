@@ -46,7 +46,7 @@ CANONICAL_MODELS = (
     "Gemini-3.1-Pro",
     "Grok-4",
     "Llama-3.3-70B",
-    "DeepSeek-v3.2",
+    "DeepSeek-V4-Pro",
 )
 
 T4_MODEL_MAP = {
@@ -55,7 +55,7 @@ T4_MODEL_MAP = {
     "gemini": "Gemini-3.1-Pro",
     "grok": "Grok-4",
     "llama": "Llama-3.3-70B",
-    "deepseek": "DeepSeek-v3.2",
+    "deepseek": "DeepSeek-V4-Pro",
 }
 
 # Task 5's analysis script doesn't emit prereg_results.json in the same shape,
@@ -68,7 +68,7 @@ T5_SLOPES = {
     "Gemini-3.1-Pro": {"frame": 0.434, "incentive": 0.430, "difficulty": 0.016},
     "Grok-4": {"frame": 0.372, "incentive": 0.135, "difficulty": -0.537},
     "Llama-3.3-70B": {"frame": 0.287, "incentive": 0.018, "difficulty": -0.713},
-    "DeepSeek-v3.2": {"frame": 0.266, "incentive": 0.195, "difficulty": -0.790},
+    "DeepSeek-V4-Pro": {"frame": 0.280, "incentive": 0.181, "difficulty": -0.765},
 }
 
 

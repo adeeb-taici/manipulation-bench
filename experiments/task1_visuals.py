@@ -33,7 +33,7 @@ MODEL_DISPLAY = {
     "Gemini-3.1-Pro": "Gemini 3.1 Pro",
     "Grok-4": "Grok 4",
     "Llama-3.3-70B": "Llama 3.3 70B",
-    "DeepSeek-v3.2": "DeepSeek v3.2",
+    "DeepSeek-V4-Pro": "DeepSeek V4 Pro",
 }
 
 
@@ -52,7 +52,7 @@ def load_rows():
             if v.get("sample_failed"):
                 continue
             by_id[s.id] = dict(
-                model=("GPT-5.5" if md["model"] == "GPT-5" else md["model"]),
+                model=("DeepSeek-V4-Pro" if md["model"] == "DeepSeek-v3.2" else ("GPT-5.5" if md["model"] == "GPT-5" else md["model"])),
                 frame=md["frame"],
                 incentive=md["expected_penalty"],
                 difficulty=md["difficulty"],

@@ -6,11 +6,11 @@ Auto-generated from each task's `paper/<task>/analysis/prereg_results.json` (T1-
 
 | Task | Headline metric | Frame | Incentive | Difficulty | Dominant axis | Dominance ratio (top/2nd) |
 |---|---|---:|---:|---:|---|---:|
-| T1 Bargaining | `lied_rate` | 0.106 | 0.208 | 0.030 | **incentive** | 2.0× |
-| T2 Debate | `manipulation_occurred` | 0.010 | 0.012 | 0.061 | **difficulty** | 5.2× |
-| T3 Village | `exploitation_rate` | 0.155 | 0.054 | 0.024 | **frame** | 2.9× |
-| T4 Sales | `manipulation_rate` | 0.027 | 0.013 | 0.130 | **difficulty** | 4.9× |
-| T5 Committee | `initial_rating_bias` | 0.325 | 0.183 | 0.607 | **difficulty** | 1.9× |
+| T1 Bargaining | `lied_rate` | 0.112 | 0.250 | 0.034 | **incentive** | 2.2× |
+| T2 Debate | `manipulation_occurred` | 0.007 | 0.014 | 0.056 | **difficulty** | 4.0× |
+| T3 Village | `exploitation_rate` | 0.168 | 0.054 | 0.023 | **frame** | 3.1× |
+| T4 Sales | `manipulation_rate` | 0.030 | 0.010 | 0.147 | **difficulty** | 5.0× |
+| T5 Committee | `initial_rating_bias` | 0.327 | 0.180 | 0.603 | **difficulty** | 1.8× |
 
 Notes on metric scales:
 - T1 / T2 / T3 / T4 use rates in [0, 1]; slopes are also in rate-per-axis-step units.
@@ -71,12 +71,12 @@ Each model's profile = 5 tasks × 3 axes = 15 entries (signed slopes).
 | T4 Sales | +0.035 | +0.011 | +0.113 |
 | T5 Committee | +0.287 | +0.018 | -0.713 |
 
-### DeepSeek-v3.2
+### DeepSeek-V4-Pro
 
 | Task | Frame slope | Incentive slope | Difficulty slope |
 |---|---:|---:|---:|
-| T1 Bargaining | +0.073 | -0.093 | +0.006 |
-| T2 Debate | -0.020 | -0.009 | -0.080 |
-| T3 Village | +0.068 | -0.019 | +0.018 |
-| T4 Sales | +0.044 | +0.024 | +0.199 |
-| T5 Committee | +0.266 | +0.195 | -0.790 |
+| T1 Bargaining | +0.106 | -0.346 | +0.029 |
+| T2 Debate | -0.002 | +0.022 | -0.050 |
+| T3 Village | +0.141 | +0.013 | +0.011 |
+| T4 Sales | +0.062 | +0.004 | +0.299 |
+| T5 Committee | +0.280 | +0.181 | -0.765 |
