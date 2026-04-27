@@ -43,7 +43,7 @@ Six interested-party models, each paired with a fixed neutral panel of 4.
 | `model_gemini` | `openrouter/google/gemini-3.1-pro-preview` (reasoning_enabled=true) |
 | `model_grok` | `openrouter/x-ai/grok-4` (reasoning_enabled=true) |
 | `model_llama` | `openrouter/meta-llama/llama-3.3-70b-instruct` |
-| `model_deepseek` | `openrouter/deepseek/deepseek-v3.2` (reasoning_enabled=true) |
+| `model_deepseek` | `openai-api/deepseek/deepseek-v4-pro` (Amendment A4; `tool_choice_strategy=auto`) |
 | `model_neutral_anthropic` | `openrouter/anthropic/claude-haiku-4.5` |
 | `model_neutral_openai` | `openrouter/openai/gpt-5-mini` |
 | `model_neutral_google` | `openrouter/google/gemini-3-flash-preview` |
@@ -77,7 +77,7 @@ This section reports observed sample means and figures **without interpretation*
 | **Gemini 3.1 Pro** | +0.130 | **12.033** | **12.257** | **9.448** | **18.858** |
 | Grok 4 | −1.005 | 3.981 | 4.675 | 3.954 | 7.013 |
 | Llama 3.3 70B | −0.410 | 1.904 | 1.742 | 2.574 | 3.438 |
-| DeepSeek v3.2 | −0.279 | 2.459 | 2.506 | 2.668 | 4.400 |
+| DeepSeek V4 Pro | −1.366 | 2.431 | 2.833 | 3.111 | 4.400 |
 
 5/6 models show the unexpected `minimal > selfish` ordering (Claude, GPT-5.5, Gemini, Grok, DeepSeek). Llama is the only model with monotonic pro_social → minimal → selfish → permissive.
 
@@ -90,7 +90,7 @@ This section reports observed sample means and figures **without interpretation*
 | **Gemini 3.1 Pro** | 7.858 | 10.906 | 15.156 |
 | Grok 4 | 2.965 | 3.190 | 4.102 |
 | Llama 3.3 70B | 1.501 | 1.731 | 1.600 |
-| DeepSeek v3.2 | 1.567 | 2.122 | 3.116 |
+| DeepSeek V4 Pro | 1.564 | 2.135 | 3.147 |
 
 ## A.3 Cell means by difficulty × model (averaged over frame × incentive)
 
@@ -101,7 +101,7 @@ This section reports observed sample means and figures **without interpretation*
 | Gemini 3.1 Pro | 11.085 | 11.528 | 11.351 |
 | Grok 4 | 5.919 | 3.378 | 1.398 |
 | Llama 3.3 70B | 3.804 | 1.517 | −0.088 |
-| DeepSeek v3.2 | 5.516 | 2.417 | −0.754 |
+| DeepSeek V4 Pro | 5.638 | 3.339 | −1.037 |
 
 5/6 models show monotonically decreasing bias as slate difficulty increases — i.e., harder-to-justify candidates can't be inflated past the cold-panel honest baseline. Gemini is flat across difficulty (saturation effect — its favored ratings stay near 20 regardless of slate quality).
 
@@ -116,7 +116,7 @@ Standardized per-axis slopes — OLS slope of (bias / per-model pooled SD) on ax
 | Gemini 3.1 Pro | +0.434 | 0.434 | +0.430 | 0.430 | +0.016 | 0.016 |
 | Grok 4 | +0.372 | 0.372 | +0.135 | 0.135 | **−0.537** | **0.537** |
 | Llama 3.3 70B | +0.287 | 0.287 | +0.018 | 0.018 | **−0.713** | **0.713** |
-| DeepSeek v3.2 | +0.266 | 0.266 | +0.195 | 0.195 | **−0.790** | **0.790** |
+| DeepSeek V4 Pro | +0.280 | 0.280 | +0.181 | 0.181 | **−0.765** | **0.765** |
 | **Mean abs** | — | **0.312** | — | **0.173** | — | **0.643** |
 
 Difficulty slope mean magnitude (0.643) is **2× the frame slope** and **3.7× the incentive slope**. Five of six models show negative difficulty slope (bias decreases as truth gets harder to manipulate); Gemini is the saturation outlier (~0).

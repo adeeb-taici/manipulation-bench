@@ -33,7 +33,7 @@ MODEL_DISPLAY = {
     "gemini": "Gemini 3.1 Pro",
     "grok": "Grok 4",
     "llama": "Llama 3.3 70B",
-    "deepseek": "DeepSeek v3.2",
+    "deepseek": "DeepSeek V4 Pro",
 }
 
 

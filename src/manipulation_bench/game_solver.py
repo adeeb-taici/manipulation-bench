@@ -11,7 +11,7 @@ from inspect_ai.model import (
     get_model,
 )
 from inspect_ai.solver import Generate, Solver, TaskState, solver
-from inspect_ai.tool import ToolCallError
+from inspect_ai.tool import ToolCallError, ToolFunction
 
 from manipulation_bench.environments import Observation, PhaseType, create_environment
 from manipulation_bench.models import AgentRole, InteractionState, ScenarioConfig, Turn
@@ -54,6 +54,24 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
 
                 tools = env.get_tools(actor_name, phase)
                 tool_choice = env.get_tool_choice(phase) if tools else None
+
+                # Per-agent tool_choice override. When the agent metadata sets
+                # ``tool_choice_strategy``:
+                #   "specific_first_tool" — substitute ``ToolFunction(name=tools[0].name)``
+                #     for tool_choice="any" (more restrictive but equivalent for
+                #     single-tool ACTION phases).
+                #   "auto" — substitute "auto" for tool_choice="any". Necessary for
+                #     models like DeepSeek V4 reasoner which only support
+                #     tool_choice in {"none", "auto"} and reject "required"/specific.
+                #     Combined with the existing max_action_retries logic, the
+                #     model is re-prompted to call a tool if it doesn't on the
+                #     first attempt.
+                strategy = agent_config.metadata.get("tool_choice_strategy")
+                if tool_choice == "any" and tools and strategy:
+                    if strategy == "specific_first_tool":
+                        tool_choice = ToolFunction(name=tools[0].name)
+                    elif strategy == "auto":
+                        tool_choice = "auto"
 
                 # Per-agent max_tokens override (e.g., DeepSeek-chat 64K context cap)
                 agent_max_tokens = agent_config.metadata.get("max_tokens", scenario.max_tokens)

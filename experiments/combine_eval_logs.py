@@ -45,6 +45,8 @@ TASK_SPLITS = {
         # GPT-5 batch — dedup by sample id keeps the GPT-5.5 samples (later wins),
         # so the OpenAI row reflects GPT-5.5 in the combined log.
         "logs/task1_gpt55/*.eval",
+        # DeepSeek V3.2 -> V4 Pro swap (PREREG Amendment A3, official API).
+        "logs/task1_dsv4/*.eval",
     ],
     "task2_debate_combined.eval": [
         "logs/task2_debate_v61_full/*.eval",
@@ -54,20 +56,24 @@ TASK_SPLITS = {
         "logs/task2_debate_v61_full_llama/*.eval",
         "logs/task2_debate_v61_full_deepseek/*.eval",
         "logs/task2_gpt55/*.eval",
+        "logs/task2_dsv4/*.eval",
     ],
     "task3_village_combined.eval": [
         "logs/task3_village_v61_full/*.eval",
         "logs/task3_village_v61_full_remaining/*.eval",
         "logs/task3_village_v61_full_remaining_v2/*.eval",
         "logs/task3_gpt55/*.eval",
+        "logs/task3_dsv4/*.eval",
     ],
     "task4_sales_combined.eval": [
         "logs/task4_sales_v61_full/*.eval",
         "logs/task4_gpt55/*.eval",
+        "logs/task4_dsv4/*.eval",
     ],
     "task5_committee_combined.eval": [
         "logs/committee_fullsweep_20260422/*.eval",
         "logs/task5_gpt55/*.eval",
+        "logs/task5_dsv4/*.eval",
     ],
 }
 
