@@ -155,7 +155,12 @@ Village Commons uses tool calls for structured actions: `contribute(amount)`, `i
 
 ## API keys and providers
 
-All models are accessed through OpenRouter (`OPENROUTER_API_KEY` in `.env`). Model IDs use the format `openrouter/provider/model-name`. The judge defaults to the eval's primary model but can be overridden with `--model-role judge=...`.
+Most models are accessed through OpenRouter (`OPENROUTER_API_KEY` in `.env`). Model IDs use the format `openrouter/provider/model-name`. The judge defaults to the eval's primary model but can be overridden with `--model-role judge=...`.
+
+DeepSeek V4 Pro reasoning rejects OpenRouter's privacy guardrails AND rejects `tool_choice="any"` (reasoner-only constraint), so the paper roster uses the **official DeepSeek API**:
+- `DEEPSEEK_API_KEY` and `DEEPSEEK_BASE_URL=https://api.deepseek.com/v1` in `.env`
+- Provider prefix: `openai-api/deepseek/<model>` (Inspect's openai-api adapter)
+- Per-agent `metadata.tool_choice_strategy="auto"` triggers a `game_solver.py` override that downgrades `tool_choice="any"` → `"auto"` for that agent only, with the existing retry budget covering tool-call refusals.
 
 ## Running things
 
@@ -210,15 +215,38 @@ Adding a new game: implement the ABC, register in `environments/__init__.py:ENVI
 
 ## Prior experimental results
 
-See `FINDINGS.md` for all raw experimental results with sample sizes and reproduction commands. Reference this file when the user asks about prior results or wants to build on existing experiments. When new eval runs complete, add results to FINDINGS.md following the established format.
+See `FINDINGS.md` for legacy experimental results (pre-paper) with sample sizes and reproduction commands. Reference this file when the user asks about earlier prototype experiments. When new eval runs complete that don't belong in the paper, add results to FINDINGS.md following the established format.
+
+## Paper artifacts (NeurIPS 2026 E&D)
+
+`paper/` is the authoritative record for the 5-task Manipulation Response Surface paper. Each task has `prereg.md` (pre-registered with formal Amendments), `results.md` (verdicts against P1-P7), `analysis/` (per-task JSONs), `figures/` (per-task PNGs), and `eval_log.eval` (canonical combined eval log, committed via Git LFS). Cross-task material is in `paper/cross_task/` — `SUMMARY.md` (paper-level), `EXPLORATORY_FINDINGS.md` (post-PREREG analyses), `cross_task_aggregate.md` (machine-generated per-task tables).
+
+The paper's frozen model cohort is **Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro** (post Amendments A2/A3). Older split logs in `logs/task*_*` are kept for provenance; the combined logs at `paper/task<N>/eval_log.eval` are produced by `experiments/combine_eval_logs.py` (dedup-by-sample-id with later-running splits winning, so amendments overlay originals).
+
+### Paper analysis scripts (under `experiments/`)
+
+- **PREREG verdicts**: `task<N>_prereg_analysis.py` — runs P1-P7 against the combined log per task.
+- **Statistics**: `run_bootstrap_cis.py` (per-axis 95% CIs at N=1000), `run_cohens_d.py` (per-cell effect sizes for T1-T4), `task5_cohens_d.py`, `bootstrap_slopes.py` (helpers).
+- **Figures**: `task<N>_visuals.py` (per-task), `run_response_surface.py` (cross-task fig7 — 3 difficulty rows × 6 model cols × 5×3 frame×incentive heatmap each), `cross_task_explore.py` (7 cross-task views).
+- **Exploratory** (post-PREREG, in `paper/cross_task/EXPLORATORY_FINDINGS.md`):
+  - `cross_task_ranking_stability.py` — Spearman ρ across per-task model orderings
+  - `cross_task_clustering.py` — hierarchical clustering on 15-dim profile vectors
+  - `surprise_residuals.py` — additive-model residuals per (task, model)
+  - `frontier_lift.py` — GPT-5→5.5 / V3.2→V4-Pro within-scenario contrast
+  - `sample_distributions.py` — per-frame violin/scatter per model per task
+  - `t1_lie_magnitude.py`, `t2_per_claim.py`, `t3_promise_gap.py`, `t4_per_question_type.py` — task-specific exploratory pivots
+
+When updating analysis, add new scripts here and to `paper/cross_task/SUMMARY.md`'s reproduction block.
 
 ## Gotchas
 
-- **Windows encoding**: Always use `encoding="utf-8"` when opening files for read/write. YAML with unicode characters (em-dashes, etc.) will produce corrupt JSONL otherwise.
+- **Windows encoding**: Always use `encoding="utf-8"` when opening files for read/write. YAML with unicode characters (em-dashes, etc.) will produce corrupt JSONL otherwise. Print statements that emit non-ASCII (ρ, →, etc.) crash on Windows cp1252 stdout — use ASCII (`rho`, `->`).
 - **StoreModel mutation**: `state.turns.append(x)` does NOT work. Use `state.turns = [*state.turns, x]`.
 - **Scorer metrics with `"*"` glob**: Dict-valued scores with `@scorer(metrics={"*": [mean(), stderr()]})` auto-create per-key metrics. Different scenarios can have different agent names — metrics aggregate per-key across samples that share that key.
 - **Ground-truth scorers**: Return `Score(value={"persuasion_rate": None, ...})` when `ground_truth` is not set. They don't error — they just produce None values.
 - **JSONL paths**: `load_scenarios()` resolves relative paths against `src/manipulation_bench/scenarios/`. The `-T scenarios=filename.jsonl` flag passes just the filename, not a full path.
+- **Combined eval logs preserve OLD model labels**: When an amendment swaps a model (e.g., GPT-5 → GPT-5.5 via `--model-role`), the new run's scenario metadata still carries the original model label (`model: GPT-5`) because scenarios are regenerated against the original JSONL. To do a within-task pre/post comparison, filter by the OLD label in BOTH halves — only the runtime model binding changed, not the recorded scenario label. See `experiments/frontier_lift.py`.
+- **Git LFS for combined logs**: `paper/task*/eval_log.eval` are LFS-tracked (~1 GB total). Clone with `git lfs install && git lfs pull`. The repo is right at GitHub's free 1 GB LFS quota; new combined logs need `git lfs track` before adding.
 
 ### Typed scenario metadata (`ScenarioMetadata`)
 

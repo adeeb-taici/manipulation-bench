@@ -2,7 +2,9 @@
 
 Framework for measuring how AI models manipulate and respond to manipulation across multiple environments — debates, social deduction (Werewolf), negotiation (Diplomacy), a public-goods game (Village Commons), vocabulary-convergence (Naming Game), a single-agent sales task (Task 4), and a committee evaluation with conflict of interest (Task 5). Built on [Inspect AI](https://inspect.aisi.org.uk/).
 
-See [`FINDINGS.md`](FINDINGS.md) for the current experimental results.
+> **Paper artifacts** for the NeurIPS 2026 E&D submission "Manipulation Response Surface" live in [`paper/`](paper/README.md). See [`paper/cross_task/SUMMARY.md`](paper/cross_task/SUMMARY.md) for the cross-task headline findings and [`paper/cross_task/EXPLORATORY_FINDINGS.md`](paper/cross_task/EXPLORATORY_FINDINGS.md) for post-PREREG analyses (model-archetype clustering, frontier-generation lift, ranking stability across tasks). The combined eval logs (~1 GB) are committed via Git LFS — `git lfs install && git lfs pull` to fetch.
+
+For pre-paper exploratory results see [`FINDINGS.md`](FINDINGS.md).
 
 ## Start here (30 seconds, no API key)
 
@@ -409,7 +411,24 @@ Per-response classification rolled up to per-sample rates. `manipulation_rate = 
 
 ## Models used in this repo
 
-The default model across examples and FINDINGS is Claude Opus 4.6. Cross-model experiments typically use this cast:
+Two distinct rosters depending on whether you're running paper experiments or pre-paper exploration.
+
+### Paper roster (NeurIPS 2026 — `paper/`)
+
+Six models, locked at PREREG time and updated via Amendments A2 (GPT-5 → GPT-5.5) and A3 (DeepSeek-v3.2 → DeepSeek-V4-Pro):
+
+| Slot | Label | Model ID | Notes |
+|---|---|---|---|
+| `model_a` | Claude Opus 4.7 | `openrouter/anthropic/claude-opus-4.7` | default |
+| `model_b` | GPT-5.5 | `openrouter/openai/gpt-5.5-20260423` | `reasoning_enabled=true` |
+| `model_c` | Gemini 3.1 Pro | `openrouter/google/gemini-3.1-pro-preview` | `reasoning_enabled=true` |
+| `model_d` | Grok 4 | `openrouter/x-ai/grok-4` | `reasoning_enabled=true` |
+| `model_e` | Llama 3.3 70B | `openrouter/meta-llama/llama-3.3-70b-instruct` | default |
+| `model_f` | DeepSeek V4 Pro | `openai-api/deepseek/deepseek-v4-pro` | DeepSeek official API (`DEEPSEEK_API_KEY` + `DEEPSEEK_BASE_URL`); per-agent `metadata.tool_choice_strategy=auto` to bypass reasoner's `tool_choice="any"` rejection |
+
+### Legacy roster (FINDINGS.md examples)
+
+Pre-paper experiments and the `Quick start` block above default to Claude Opus 4.6 + earlier-generation cast:
 
 | Label in FINDINGS | Model ID |
 |-------------------|----------|
@@ -418,7 +437,7 @@ The default model across examples and FINDINGS is Claude Opus 4.6. Cross-model e
 | Gemini 2.5 Pro | `openrouter/google/gemini-2.5-pro` |
 | Grok 3 | `openrouter/x-ai/grok-3` |
 
-Budget-friendly alternatives used for juror panels in Section 8:
+Budget-friendly alternatives used for juror panels in `FINDINGS.md` Section 8:
 
 | Role | Model ID |
 |------|----------|
@@ -426,7 +445,7 @@ Budget-friendly alternatives used for juror panels in Section 8:
 | Juror | `openrouter/anthropic/claude-haiku-4.5` |
 | Juror | `openrouter/openai/gpt-5-mini` |
 
-Some older `FINDINGS.md` sections reference `claude-sonnet-4`; those are preserved as-is because the results were published at those versions. Use Opus 4.6 for new work unless a section explicitly says otherwise.
+Some older `FINDINGS.md` sections reference `claude-sonnet-4`; those are preserved as-is because the results were published at those versions. Use Opus 4.6 for new exploratory work, or the paper roster for paper-related experiments.
 
 ## Communication topologies
 
