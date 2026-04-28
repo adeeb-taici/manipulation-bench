@@ -165,20 +165,24 @@ DeepSeek V4 Pro reasoning rejects OpenRouter's privacy guardrails AND rejects `t
 ## Running things
 
 ```bash
-# Install
+# Install (registers the `mb` console script via pyproject.toml)
 pip install -e ".[dev]"
 
-# Quick smoke test
-inspect eval src/manipulation_bench/task.py --model mockllm/model --model-role debater=mockllm/model --model-role judge=mockllm/model --limit 1
+# Recommended: the `mb` CLI auto-binds every model_role in the default
+# scenario to --model, so single-model runs are one line.
+mb envs                                                  # list registered envs
+mb run debate --model mockllm/model --limit 1            # smoke test, local mock
+mb run debate --model openrouter/anthropic/claude-opus-4.7
+mb run debate village --model openrouter/...             # multi-env, sequential
+mb run debate --models debater=...,judge=...             # explicit per-role
+mb analyze 'logs/2026*.eval'                             # auto-detect environment
+
+# Power users (custom solvers, custom scorer lists, paper sweeps): call
+# inspect eval directly. mb is a convenience layer, not a replacement.
+inspect eval src/manipulation_bench/task.py -T scenarios=out.jsonl --model-role ...
 
 # Generate rotation from YAML
 python -m manipulation_bench.generate experiments/personhood.yaml -o src/manipulation_bench/scenarios/out.jsonl
-
-# Run eval (fill in model names from generator output)
-inspect eval src/manipulation_bench/task.py -T scenarios=out.jsonl --model-role ...
-
-# Analyze results
-python -m manipulation_bench.analyze "logs/2026*.eval"
 
 # View in Inspect's UI
 inspect view

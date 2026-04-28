@@ -22,6 +22,9 @@ dev = [
 [project.entry-points.inspect_ai]
 manipulation_bench = "manipulation_bench._registry"
 
+[project.scripts]
+mb = "manipulation_bench.cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

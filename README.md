@@ -6,20 +6,34 @@ Framework for measuring how AI models manipulate and respond to manipulation acr
 
 For pre-paper exploratory results see [`FINDINGS.md`](FINDINGS.md).
 
-## Start here (30 seconds, no API key)
+## Quick start (new researchers)
 
 ```bash
 pip install -e ".[dev]"
+cp .env.example .env   # add OPENROUTER_API_KEY (optional for the smoke test)
 
-# Smoke test — runs locally with a mock model, no API calls.
-inspect eval src/manipulation_bench/task.py \
-  --model mockllm/model \
-  --model-role debater=mockllm/model \
-  --model-role judge=mockllm/model \
-  --limit 1
+# Smoke test — local, no API key.
+mb run debate --model mockllm/model --limit 1
+
+# List available environments.
+mb envs
+
+# Run one model across one environment.
+mb run debate --model openrouter/anthropic/claude-opus-4.7
+
+# Two models head-to-head on debate.
+mb run debate --models debater=openrouter/anthropic/claude-opus-4.7,judge=openrouter/openai/gpt-5
+
+# Same model across multiple environments.
+mb run debate village sales --model openrouter/anthropic/claude-opus-4.7
+
+# Analyze the most recent matching log.
+mb analyze 'logs/2026*.eval'
 ```
 
-If that prints a log path and `inspect view` shows a sample, your install is working. Now set up a real API key and run the quick-start below.
+`mb run` discovers the model_roles in each environment's default scenario JSONL and binds them all to `--model`, so you don't have to enumerate them manually. Pass `--models name=id,name=id` to override individual roles. `--scenarios <file.jsonl>` swaps in a custom scenario. Any other flag (e.g., `--max-connections`, `--no-fail-on-error`) is forwarded verbatim to `inspect eval`.
+
+Power users can keep using `inspect eval src/manipulation_bench/<task>.py …` directly — the CLI is just a convenience layer.
 
 ## Install & configure
 
@@ -28,34 +42,22 @@ pip install -e ".[dev]"
 cp .env.example .env   # add your OPENROUTER_API_KEY
 ```
 
-All models are accessed through [OpenRouter](https://openrouter.ai). Model IDs use the format `openrouter/provider/model-name`.
+Most models are accessed through [OpenRouter](https://openrouter.ai). Model IDs use the format `openrouter/provider/model-name`. DeepSeek's reasoning models can also be hit through DeepSeek's official API — see [`paper/README.md`](paper/README.md#model-cohort) for the configuration the paper uses.
 
-## Quick start (each environment, 1 sample)
+## Quick start (advanced — direct `inspect eval`)
+
+`mb run` is the recommended path. If you want fine-grained control (e.g., custom solver, custom scorer list) you can call `inspect eval` directly:
 
 ```bash
-# Debate (2 agents)
 inspect eval src/manipulation_bench/task.py \
-  --model openrouter/anthropic/claude-opus-4-6 \
-  --model-role debater=openrouter/anthropic/claude-opus-4-6 \
-  --model-role judge=openrouter/anthropic/claude-opus-4-6 \
-  --limit 1
-
-# Werewolf (5 players)
-inspect eval src/manipulation_bench/game_task.py \
-  --model openrouter/anthropic/claude-opus-4-6 \
-  --model-role player=openrouter/anthropic/claude-opus-4-6 \
-  --model-role judge=openrouter/anthropic/claude-opus-4-6 \
-  --limit 1
-
-# Diplomacy (7 powers)
-inspect eval src/manipulation_bench/diplomacy_task.py \
-  --model openrouter/anthropic/claude-opus-4-6 \
-  --model-role player=openrouter/anthropic/claude-opus-4-6 \
-  --model-role judge=openrouter/anthropic/claude-opus-4-6 \
+  -T scenarios=debate_2agent.jsonl \
+  --model openrouter/anthropic/claude-opus-4.7 \
+  --model-role debater=openrouter/anthropic/claude-opus-4.7 \
+  --model-role judge=openrouter/anthropic/claude-opus-4.7 \
   --limit 1
 ```
 
-View the log: `inspect view`. Analyze it: `python -m manipulation_bench.analyze "logs/*.eval"`.
+Each environment has its own task file: `task.py` (debate), `game_task.py` (werewolf), `diplomacy_task.py`, `village_task.py`, `sales_task.py`, `committee_task.py`, `bargaining_task.py`. View the log: `inspect view`. Analyze it: `mb analyze "logs/*.eval"` or `python -m manipulation_bench.analyze "logs/*.eval"`.
 
 ## Architecture
 
