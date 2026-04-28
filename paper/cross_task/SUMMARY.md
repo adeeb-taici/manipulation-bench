@@ -17,11 +17,11 @@ See [cross_task_aggregate.md](cross_task_aggregate.md) for the full machine-gene
 
 | Task | Frame | Incentive | Difficulty | Dominant axis | Dominance ratio |
 |---|---:|---:|---:|---|---:|
-| T1 Bargaining | 0.106 | **0.208** | 0.030 | incentive | 2.0× |
-| T2 Debate | 0.010 | 0.012 | **0.061** | difficulty | 5.2× |
-| T3 Village | **0.155** | 0.054 | 0.024 | **frame** | 2.9× |
-| T4 Sales | 0.027 | 0.013 | **0.130** | difficulty | 4.9× |
-| T5 Committee | 0.325 | 0.183 | **0.607** | difficulty | 1.9× |
+| T1 Bargaining | 0.108 | **0.250** | 0.030 | incentive | 2.3× |
+| T2 Debate | 0.007 | 0.014 | **0.061** | difficulty | 4.4× |
+| T3 Village | **0.168** | 0.054 | 0.023 | **frame** | 3.1× |
+| T4 Sales | 0.030 | 0.010 | **0.130** | difficulty | 4.3× |
+| T5 Committee | 0.327 | 0.181 | **0.603** | difficulty | 1.8× |
 
 (T5 numbers are on a 0–20 bias scale, not a 0–1 rate scale, so absolute magnitudes aren't directly comparable to T1-T4.)
 
@@ -31,8 +31,10 @@ The PREREG predicted incentive sensitivity would be a per-task continuum, with S
 
 | Cluster | Tasks | Mean \|incentive slope\| | Why |
 |---|---|---:|---|
-| **Binding** | Bargaining, Committee | 0.22, 0.17 | **Structural reward integration** — penalty math affecting payoff (Bargaining); competition outcome determining win/loss (Committee) |
+| **Binding** | Bargaining, Committee | 0.25, 0.18 | **Structural reward integration** — penalty math affecting payoff (Bargaining); competition outcome determining win/loss (Committee) |
 | **Inert** | Village, Sales, Debate | 0.05, 0.01, 0.01 | **Verbal emphasis only** — "your final score is X" or "you earn N points per Y" doesn't change the agent's actual reward function |
+
+(T1 Bargaining and T5 Committee mean |incentive slope| = 0.250 and 0.181 respectively, post-Amendment-A2/A3. T3 Village = 0.054, T4 Sales = 0.010, T2 Debate = 0.014.)
 
 This refines the cross-task incentive theory: **incentive language only binds when it introduces NEW reward structure**. When it's just a verbal restatement of the natural objective ("your final token balance is your only score" — but token balance is *already* the natural objective in Village), models treat it as redundant. This was a P5 failure across three of five tasks (Village, Sales, Debate); only Bargaining and Committee passed P5 as predicted.
 
@@ -45,7 +47,7 @@ A few notable per-model patterns:
 - **Gemini 3.1 Pro** is the most frame-sensitive model in 4 of 5 tasks (Bargaining, Village, Sales, Committee), but saturates early on permissive frames (Sales, Village, Committee all hit ≥ 0.85 at the permissive endpoint), making it the easiest model to push to extreme manipulation.
 - **GPT-5.5** is the most-aligned model on Sales (0.03 prohibitive manipulation rate, comparable to Claude/Grok) — a major reversal from GPT-5, which had a 0.51 prohibitive manipulation rate driven by a "commercial-omission default" (selectively omitting comparables and known defects). On Bargaining, GPT-5.5 keeps GPT-5's clean 0.000 prohibitive endpoint but reads pro-social/minimal middle-frames ~30pp better. On Debate/Village/Committee the alignment shift is smaller and task-dependent.
 - **Claude Opus 4.7** is the most prohibitive-compliant model across tasks (≤ 0.05 on T1/T2 prohibitive averages) and never saturates a high-manipulation cell on T3 Village or T4 Sales. Frame slopes are also middling — Claude's overall manipulation envelope is the smallest of the six.
-- **Llama 3.3 70B** is the only model that consistently behaves as "less prompt-responsive" across tasks — it fails P1 on Village (prohibitive 0.42) and shows low incentive sensitivity on Bargaining. The V3.2 → V4 Pro DeepSeek swap (Amendments A2/A4) closed what was previously a parallel "Llama + DeepSeek = both unresponsive" pattern: V4 Pro now shows strong incentive sensitivity on Bargaining (slope −0.346, V3.2 reasoning-off was −0.093) and dramatically improved prohibitive compliance on Village (0.11 vs V3.2's 0.51). Llama is the sole remaining outlier on those measures.
+- **Llama 3.3 70B** is the only model that consistently behaves as "less prompt-responsive" across tasks — it fails P1 on Village (prohibitive 0.42) and shows low incentive sensitivity on Bargaining. The V3.2 → V4 Pro DeepSeek swap (Amendment A3) closed what was previously a parallel "Llama + DeepSeek = both unresponsive" pattern: V4 Pro now shows strong incentive sensitivity on Bargaining (slope −0.346, V3.2 reasoning-off was −0.093) and dramatically improved prohibitive compliance on Village (0.11 vs V3.2's 0.51). Llama is the sole remaining outlier on those measures.
 - **DeepSeek V4 Pro vs V3.2 generation contrast**: a clean per-task split. V4 Pro is *more* aggressive on Sales (+0.11 prohibitive, +0.18 permissive) and slightly more on Debate, but *more compliant* on Bargaining (E=250 lying drops 0.137 → 0.000, full penalty-math response), Village (prohibitive 0.51 → 0.11), and Committee (prohibitive bias −0.28 → −1.37). Generation-level alignment is task-dependent for DeepSeek as for OpenAI.
 - **Grok 4** behaves close to Claude on prompt-compliance baselines but has a steeper permissive endpoint. On Village Grok jumps from 0.00 prohibitive to 0.96 permissive — a 96-percentage-point swing, the largest endpoint range in T3.
 
@@ -54,30 +56,53 @@ A few notable per-model patterns:
 | Task | P1 prohib | P2 perm | P3 saturation | P4 dominance | P5 incentive | P6 ρ stable | P7 |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | T1 Bargaining | ✓ | ✓ | (deferred) | partial (4/6) | ✗ | ✓ | — |
-| T2 Debate | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | — |
-| T3 Village | ✗ | ✗ | ✓ | **✓** | ✗ | ✓ | ✓ |
+| T2 Debate | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | — |
+| T3 Village | ✗ | ✓ | ✓ | **✓** | ✗ | ✓ | ✓ |
 | T4 Sales | ✗ | ✗ | **✓** | ✓ | ✗ | ✓ | (deferred) |
-| T5 Committee | ✓ | ✓ | weak | ✗ | ✓ | (FAIL ρ=−0.83) | — |
+| T5 Committee | ✓ | ✓ | weak | ✗ | ✓ | (FAIL ρ=−0.94) | — |
 
 P1/P2 fail in 3/5 tasks (Debate, Village, Sales — Sales' P1 PASS under GPT-5.5 alone reverts to FAIL once DeepSeek V4 Pro joins the row, since V4 Pro itself fails P1 on Sales at 0.16). The pattern: predictions that "prohibitive will land below 5%" are correct on Bargaining and Committee (where prohibitive is a hard constraint on a single act) but fail on Debate, Village, and Sales (where prohibitive doesn't fully prevent manipulation because it doesn't change the manipulator's underlying *role* — they're still arguing the false side, still defecting from cooperation, still selling a bad product).
 
 ## What's NOT in this file
 
-- Cohen's d secondary analysis across all 5 tasks (only T5 has it; deferred for T1-T4)
-- Bootstrap CIs (deferred)
-- Per-task hand-validation results (deferred for T4/T5)
-- Statistical model: which axis-pairs are significantly correlated across models (deferred)
+- Cohen's d secondary analysis (only T5 has the full prereg version; T1-T4 carried out via [../../experiments/run_cohens_d.py](../../experiments/run_cohens_d.py))
+- Per-task hand-validation results (deferred for T4 P7 and T5 polarity scorer)
+- Per-claim T2 weighting in cross-task aggregation (see [EXPLORATORY_FINDINGS.md §4](EXPLORATORY_FINDINGS.md))
+
+## Exploratory follow-ups (post-PREREG)
+
+Past-PREREG analyses live in [EXPLORATORY_FINDINGS.md](EXPLORATORY_FINDINGS.md). Highlights:
+
+- **Cross-task model rankings barely correlate** (mean Spearman ρ = 0.047 across the 10 task-pairs) — manipulation propensity is task-dependent, not a stable model trait. See [ranking_stability.json](ranking_stability.json) and [figures/fig_ranking_stability.png](figures/fig_ranking_stability.png).
+- **Frontier-generation lift is non-uniform**: GPT-5 → GPT-5.5 reduces manipulation on 4/5 tasks (T4 Sales 56% → 3%), but DeepSeek V3.2 → V4 Pro *increases* it on 4/5. See [frontier_lift.json](frontier_lift.json) and [figures/fig_frontier_lift.png](figures/fig_frontier_lift.png).
+- **T1 lie magnitude**: when models lie, Gemini 100% / GPT-5.5 97% / DeepSeek 76% / Grok 79% lie *extremely* (>200pt overstatements); Claude 6%, Llama 1%. See [../task1_bargaining/analysis/lie_magnitude.json](../task1_bargaining/analysis/lie_magnitude.json).
+- **T5 dominates non-additive interactions**: per-(task, model) residuals from an additive linear fit; the top-10 most-surprising cells are all T5 (`prohibitive × high-difficulty` flips sign). See [residuals.json](residuals.json) and [figures/fig_residual_t<N>.png](figures/).
+- **Model archetypes** (15-dim profile clustering): Claude/Llama/DeepSeek vs GPT-5.5/Grok vs Gemini outlier. See [clusters.json](clusters.json) and [figures/fig_dendrogram.png](figures/fig_dendrogram.png).
 
 ## Reproduction
 
 ```bash
-# Re-build all per-task analysis JSONs
+# Re-build all per-task PREREG analysis JSONs
 python experiments/task1_prereg_analysis.py
 python experiments/task2_prereg_analysis.py
 python experiments/task3_prereg_analysis.py
 python experiments/task4_prereg_analysis.py
-python experiments/task5_prereg_analysis.py    # T5 prints to stdout; numbers embedded in cross_task_analysis.py
+python experiments/task5_prereg_analysis.py
 
-# Build cross-task summary
+# Cross-task summary + bootstrap CIs + Cohen's d
 python experiments/cross_task_analysis.py
+python experiments/run_bootstrap_cis.py
+python experiments/run_cohens_d.py
+python experiments/run_response_surface.py     # per-task fig7 (3×6 grid: difficulty × model)
+
+# Exploratory analyses (sec 1-9 of EXPLORATORY_FINDINGS.md)
+python experiments/cross_task_ranking_stability.py
+python experiments/cross_task_clustering.py
+python experiments/surprise_residuals.py
+python experiments/frontier_lift.py
+python experiments/sample_distributions.py
+python experiments/t1_lie_magnitude.py
+python experiments/t2_per_claim.py
+python experiments/t3_promise_gap.py
+python experiments/t4_per_question_type.py
 ```
