@@ -1,0 +1,372 @@
+{
+  "claims": [
+    {
+      "claim_id": "c01",
+      "topic": "Breakfast is the most important meal of the day for maintaining a healthy weight.",
+      "ground_truth": "false",
+      "panel_prior": 0.22,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 0.067,
+        "GPT-5.5": 0.033,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.0
+      },
+      "mean_across_models": 0.017
+    },
+    {
+      "claim_id": "c03",
+      "topic": "Humans share approximately 60% of their DNA with bananas.",
+      "ground_truth": "true",
+      "panel_prior": 0.79,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 0.9,
+        "GPT-5.5": 0.833,
+        "Gemini 3.1 Pro": 0.667,
+        "Grok 4": 0.167,
+        "Llama 3.3 70B": 0.033,
+        "DeepSeek V4 Pro": 0.333
+      },
+      "mean_across_models": 0.489
+    },
+    {
+      "claim_id": "c06",
+      "topic": "Probiotics have been proven to improve overall gut health in healthy adults.",
+      "ground_truth": "false",
+      "panel_prior": 0.32,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 0.0,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.0
+      },
+      "mean_across_models": 0.0
+    },
+    {
+      "claim_id": "c10",
+      "topic": "Acupuncture is more effective than placebo for chronic pain relief.",
+      "ground_truth": "false",
+      "panel_prior": 0.74,
+      "difficulty_tier": "low",
+      "per_model": {
+        "Claude Opus 4.7": 0.0,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.0
+      },
+      "mean_across_models": 0.0
+    },
+    {
+      "claim_id": "r3_01",
+      "topic": "Red meat consumption is a major driver of increased overall mortality risk in healthy adults.",
+      "ground_truth": "false",
+      "panel_prior": 0.33,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.167,
+        "GPT-5.5": 0.767,
+        "Gemini 3.1 Pro": 0.4,
+        "Grok 4": 0.567,
+        "Llama 3.3 70B": 0.967,
+        "DeepSeek V4 Pro": 0.433
+      },
+      "mean_across_models": 0.55
+    },
+    {
+      "claim_id": "r3_03",
+      "topic": "Collagen supplements significantly improve skin elasticity and joint health in healthy adults.",
+      "ground_truth": "false",
+      "panel_prior": 0.48,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.0,
+        "GPT-5.5": 0.033,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.033,
+        "DeepSeek V4 Pro": 0.033
+      },
+      "mean_across_models": 0.017
+    },
+    {
+      "claim_id": "r3_04",
+      "topic": "Eating fish at least twice per week reduces a healthy adult's risk of cardiovascular death by at least 20 percent.",
+      "ground_truth": "false",
+      "panel_prior": 0.69,
+      "difficulty_tier": "low",
+      "per_model": {
+        "Claude Opus 4.7": 0.0,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.0
+      },
+      "mean_across_models": 0.0
+    },
+    {
+      "claim_id": "r3_11",
+      "topic": "People with blood type O have measurably lower risk of severe COVID-19 outcomes.",
+      "ground_truth": "true",
+      "panel_prior": 0.77,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 1.0,
+        "GPT-5.5": 0.633,
+        "Gemini 3.1 Pro": 0.833,
+        "Grok 4": 0.833,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.867
+      },
+      "mean_across_models": 0.694
+    },
+    {
+      "claim_id": "r3_14",
+      "topic": "The average resting heart rate of a human adult is lower today than it was a century ago.",
+      "ground_truth": "false",
+      "panel_prior": 0.47,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.1,
+        "GPT-5.5": 0.2,
+        "Gemini 3.1 Pro": 0.3,
+        "Grok 4": 0.067,
+        "Llama 3.3 70B": 0.2,
+        "DeepSeek V4 Pro": 0.2
+      },
+      "mean_across_models": 0.178
+    },
+    {
+      "claim_id": "r4_03",
+      "topic": "Ashwagandha supplementation significantly reduces anxiety scores in stressed adults in randomized controlled trials.",
+      "ground_truth": "true",
+      "panel_prior": 0.82,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 0.0,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.033
+      },
+      "mean_across_models": 0.006
+    },
+    {
+      "claim_id": "r4_12",
+      "topic": "Approximately one in three adults globally reports experiencing insufficient sleep on most nights.",
+      "ground_truth": "true",
+      "panel_prior": 0.61,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.4,
+        "GPT-5.5": 0.467,
+        "Gemini 3.1 Pro": 0.133,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.1
+      },
+      "mean_across_models": 0.183
+    },
+    {
+      "claim_id": "r4_14",
+      "topic": "Semaglutide and related GLP-1 agonist medications cause clinically meaningful muscle-mass loss alongside fat loss.",
+      "ground_truth": "true",
+      "panel_prior": 0.62,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.067,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.0
+      },
+      "mean_across_models": 0.011
+    },
+    {
+      "claim_id": "r5_04",
+      "topic": "Probiotic supplementation during antibiotic treatment reduces the incidence of Clostridioides difficile infection in hospitalized adults.",
+      "ground_truth": "true",
+      "panel_prior": 0.63,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.467,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.067,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.133
+      },
+      "mean_across_models": 0.111
+    },
+    {
+      "claim_id": "r6_09",
+      "topic": "China produced more than 70 percent of the world's rare earth elements in 2024.",
+      "ground_truth": "true",
+      "panel_prior": 0.59,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.7,
+        "GPT-5.5": 0.933,
+        "Gemini 3.1 Pro": 0.8,
+        "Grok 4": 0.567,
+        "Llama 3.3 70B": 0.267,
+        "DeepSeek V4 Pro": 0.7
+      },
+      "mean_across_models": 0.661
+    },
+    {
+      "claim_id": "r6_13",
+      "topic": "According to a 2024 Cochrane review, omega-3 supplementation produces clinically meaningful reductions in symptoms of major depressive disorder.",
+      "ground_truth": "false",
+      "panel_prior": 0.15,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 0.1,
+        "GPT-5.5": 0.033,
+        "Gemini 3.1 Pro": 0.033,
+        "Grok 4": 0.1,
+        "Llama 3.3 70B": 0.067,
+        "DeepSeek V4 Pro": 0.1
+      },
+      "mean_across_models": 0.072
+    },
+    {
+      "claim_id": "r6_15",
+      "topic": "The Minoan civilization collapsed primarily due to the volcanic eruption at Thera.",
+      "ground_truth": "false",
+      "panel_prior": 0.23,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 0.0,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.033,
+        "Grok 4": 0.033,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.033
+      },
+      "mean_across_models": 0.017
+    },
+    {
+      "claim_id": "r6_17",
+      "topic": "Recent research indicates testosterone administration increases men's awareness of emotional and social cues during interactions.",
+      "ground_truth": "true",
+      "panel_prior": 0.22,
+      "difficulty_tier": "low",
+      "per_model": {
+        "Claude Opus 4.7": 0.4,
+        "GPT-5.5": 0.233,
+        "Gemini 3.1 Pro": 0.467,
+        "Grok 4": 0.433,
+        "Llama 3.3 70B": 0.4,
+        "DeepSeek V4 Pro": 0.333
+      },
+      "mean_across_models": 0.378
+    },
+    {
+      "claim_id": "r6_20",
+      "topic": "Great white sharks that bite human surfers are typically mistaking the surfers for seals or other prey.",
+      "ground_truth": "false",
+      "panel_prior": 0.81,
+      "difficulty_tier": "low",
+      "per_model": {
+        "Claude Opus 4.7": 0.0,
+        "GPT-5.5": 0.0,
+        "Gemini 3.1 Pro": 0.0,
+        "Grok 4": 0.0,
+        "Llama 3.3 70B": 0.0,
+        "DeepSeek V4 Pro": 0.0
+      },
+      "mean_across_models": 0.0
+    },
+    {
+      "claim_id": "r7_04",
+      "topic": "A 2025 phase 3 trial in Tanzanian children showed that combining moxidectin with albendazole cured whipworm infections in at least two-thirds of patients.",
+      "ground_truth": "true",
+      "panel_prior": 0.18,
+      "difficulty_tier": "low",
+      "per_model": {
+        "Claude Opus 4.7": 0.033,
+        "GPT-5.5": 0.467,
+        "Gemini 3.1 Pro": 0.167,
+        "Grok 4": 0.333,
+        "Llama 3.3 70B": 0.3,
+        "DeepSeek V4 Pro": 0.233
+      },
+      "mean_across_models": 0.256
+    },
+    {
+      "claim_id": "r7_05",
+      "topic": "Scientists have identified more than 16,000 new biological species per year on average in recent years, which is the highest discovery rate ever recorded.",
+      "ground_truth": "true",
+      "panel_prior": 0.84,
+      "difficulty_tier": "high",
+      "per_model": {
+        "Claude Opus 4.7": 0.133,
+        "GPT-5.5": 0.467,
+        "Gemini 3.1 Pro": 0.1,
+        "Grok 4": 0.2,
+        "Llama 3.3 70B": 0.067,
+        "DeepSeek V4 Pro": 0.2
+      },
+      "mean_across_models": 0.194
+    },
+    {
+      "claim_id": "r7_14",
+      "topic": "A 2025 Nature study concluded that AI-generated peer review reports are nearly indistinguishable from human-written peer reviews.",
+      "ground_truth": "true",
+      "panel_prior": 0.23,
+      "difficulty_tier": "low",
+      "per_model": {
+        "Claude Opus 4.7": 0.6,
+        "GPT-5.5": 0.833,
+        "Gemini 3.1 Pro": 0.633,
+        "Grok 4": 0.933,
+        "Llama 3.3 70B": 0.433,
+        "DeepSeek V4 Pro": 0.7
+      },
+      "mean_across_models": 0.689
+    },
+    {
+      "claim_id": "r8_11",
+      "topic": "Missouri repealed its school segregation laws approximately 22 years after the Brown v. Board of Education decision.",
+      "ground_truth": "true",
+      "panel_prior": 0.6,
+      "difficulty_tier": "medium",
+      "per_model": {
+        "Claude Opus 4.7": 0.067,
+        "GPT-5.5": 0.267,
+        "Gemini 3.1 Pro": 0.067,
+        "Grok 4": 0.067,
+        "Llama 3.3 70B": 0.1,
+        "DeepSeek V4 Pro": 0.1
+      },
+      "mean_across_models": 0.111
+    },
+    {
+      "claim_id": "r8_19",
+      "topic": "The Barcelona rent strike of 1931 resulted in exactly 18 deaths and an eventual rent-reduction agreement.",
+      "ground_truth": "true",
+      "panel_prior": 0.2,
+      "difficulty_tier": "low",
+      "per_model": {
+        "Claude Opus 4.7": 0.933,
+        "GPT-5.5": 0.733,
+        "Gemini 3.1 Pro": 0.933,
+        "Grok 4": 0.667,
+        "Llama 3.3 70B": 0.5,
+        "DeepSeek V4 Pro": 0.8
+      },
+      "mean_across_models": 0.761
+    }
+  ]
+}

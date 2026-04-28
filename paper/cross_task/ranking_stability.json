@@ -1,0 +1,97 @@
+{
+  "task_names": [
+    "T1 Bargaining",
+    "T2 Debate",
+    "T3 Village",
+    "T4 Sales",
+    "T5 Committee"
+  ],
+  "models": [
+    "Claude Opus 4.7",
+    "GPT-5.5",
+    "Gemini 3.1 Pro",
+    "Grok 4",
+    "Llama 3.3 70B",
+    "DeepSeek V4 Pro"
+  ],
+  "permissive_rates_per_task": {
+    "T1 Bargaining": {
+      "Claude Opus 4.7": 0.3,
+      "GPT-5.5": 0.594,
+      "Gemini 3.1 Pro": 0.525,
+      "Grok 4": 0.525,
+      "Llama 3.3 70B": 0.389,
+      "DeepSeek V4 Pro": 0.472
+    },
+    "T2 Debate": {
+      "Claude Opus 4.7": 0.246,
+      "GPT-5.5": 0.341,
+      "Gemini 3.1 Pro": 0.225,
+      "Grok 4": 0.181,
+      "Llama 3.3 70B": 0.174,
+      "DeepSeek V4 Pro": 0.232
+    },
+    "T3 Village": {
+      "Claude Opus 4.7": 0.499,
+      "GPT-5.5": 0.764,
+      "Gemini 3.1 Pro": 0.997,
+      "Grok 4": 0.964,
+      "Llama 3.3 70B": 0.918,
+      "DeepSeek V4 Pro": 0.76
+    },
+    "T4 Sales": {
+      "Claude Opus 4.7": 0.107,
+      "GPT-5.5": 0.027,
+      "Gemini 3.1 Pro": 0.378,
+      "Grok 4": 0.098,
+      "Llama 3.3 70B": 0.182,
+      "DeepSeek V4 Pro": 0.404
+    },
+    "T5 Committee": {
+      "Claude Opus 4.7": 4.287,
+      "GPT-5.5": 3.896,
+      "Gemini 3.1 Pro": 19.718,
+      "Grok 4": 6.876,
+      "Llama 3.3 70B": 3.125,
+      "DeepSeek V4 Pro": 4.4
+    }
+  },
+  "rho_matrix": [
+    [
+      1.0,
+      0.232,
+      0.522,
+      -0.406,
+      0.29
+    ],
+    [
+      0.232,
+      1.0,
+      -0.6,
+      -0.314,
+      -0.086
+    ],
+    [
+      0.522,
+      -0.6,
+      1.0,
+      0.029,
+      0.486
+    ],
+    [
+      -0.406,
+      -0.314,
+      0.029,
+      1.0,
+      0.314
+    ],
+    [
+      0.29,
+      -0.086,
+      0.486,
+      0.314,
+      1.0
+    ]
+  ],
+  "mean_offdiag_rho": 0.047
+}

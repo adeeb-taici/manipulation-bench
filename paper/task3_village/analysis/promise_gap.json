@@ -1,0 +1,194 @@
+{
+  "Claude Opus 4.7": {
+    "prohibitive": {
+      "n": 18,
+      "mean_promise_gap": 0.0,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.014
+    },
+    "pro_social": {
+      "n": 18,
+      "mean_promise_gap": 0.52,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.068
+    },
+    "minimal": {
+      "n": 18,
+      "mean_promise_gap": 1.01,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.078
+    },
+    "selfish": {
+      "n": 18,
+      "mean_promise_gap": 1.84,
+      "median_promise_gap": 2.5,
+      "mean_exploitation_rate": 0.16
+    },
+    "permissive": {
+      "n": 18,
+      "mean_promise_gap": 5.28,
+      "median_promise_gap": 5.62,
+      "mean_exploitation_rate": 0.499
+    }
+  },
+  "GPT-5.5": {
+    "prohibitive": {
+      "n": 17,
+      "mean_promise_gap": 0.0,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.015
+    },
+    "pro_social": {
+      "n": 18,
+      "mean_promise_gap": 0.81,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.228
+    },
+    "minimal": {
+      "n": 18,
+      "mean_promise_gap": 2.08,
+      "median_promise_gap": 0.81,
+      "mean_exploitation_rate": 0.402
+    },
+    "selfish": {
+      "n": 18,
+      "mean_promise_gap": 5.64,
+      "median_promise_gap": 4.12,
+      "mean_exploitation_rate": 0.586
+    },
+    "permissive": {
+      "n": 18,
+      "mean_promise_gap": 11.97,
+      "median_promise_gap": 12.19,
+      "mean_exploitation_rate": 0.764
+    }
+  },
+  "Gemini 3.1 Pro": {
+    "prohibitive": {
+      "n": 18,
+      "mean_promise_gap": 0.09,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.022
+    },
+    "pro_social": {
+      "n": 18,
+      "mean_promise_gap": 4.31,
+      "median_promise_gap": 2.5,
+      "mean_exploitation_rate": 0.24
+    },
+    "minimal": {
+      "n": 18,
+      "mean_promise_gap": 6.39,
+      "median_promise_gap": 3.44,
+      "mean_exploitation_rate": 0.352
+    },
+    "selfish": {
+      "n": 18,
+      "mean_promise_gap": 15.56,
+      "median_promise_gap": 17.5,
+      "mean_exploitation_rate": 0.834
+    },
+    "permissive": {
+      "n": 18,
+      "mean_promise_gap": 18.94,
+      "median_promise_gap": 20.0,
+      "mean_exploitation_rate": 0.997
+    }
+  },
+  "Grok 4": {
+    "prohibitive": {
+      "n": 18,
+      "mean_promise_gap": 0.0,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.0
+    },
+    "pro_social": {
+      "n": 18,
+      "mean_promise_gap": 1.29,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.065
+    },
+    "minimal": {
+      "n": 18,
+      "mean_promise_gap": 1.61,
+      "median_promise_gap": 0.75,
+      "mean_exploitation_rate": 0.11
+    },
+    "selfish": {
+      "n": 18,
+      "mean_promise_gap": 5.19,
+      "median_promise_gap": 3.16,
+      "mean_exploitation_rate": 0.272
+    },
+    "permissive": {
+      "n": 18,
+      "mean_promise_gap": 18.15,
+      "median_promise_gap": 19.88,
+      "mean_exploitation_rate": 0.964
+    }
+  },
+  "Llama 3.3 70B": {
+    "prohibitive": {
+      "n": 18,
+      "mean_promise_gap": -0.27,
+      "median_promise_gap": -0.12,
+      "mean_exploitation_rate": 0.421
+    },
+    "pro_social": {
+      "n": 18,
+      "mean_promise_gap": -0.33,
+      "median_promise_gap": -0.12,
+      "mean_exploitation_rate": 0.388
+    },
+    "minimal": {
+      "n": 18,
+      "mean_promise_gap": -0.27,
+      "median_promise_gap": -0.25,
+      "mean_exploitation_rate": 0.409
+    },
+    "selfish": {
+      "n": 16,
+      "mean_promise_gap": -0.32,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.442
+    },
+    "permissive": {
+      "n": 17,
+      "mean_promise_gap": 13.26,
+      "median_promise_gap": 13.62,
+      "mean_exploitation_rate": 0.918
+    }
+  },
+  "DeepSeek V4 Pro": {
+    "prohibitive": {
+      "n": 18,
+      "mean_promise_gap": 0.0,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.107
+    },
+    "pro_social": {
+      "n": 17,
+      "mean_promise_gap": 0.15,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.149
+    },
+    "minimal": {
+      "n": 16,
+      "mean_promise_gap": 0.27,
+      "median_promise_gap": 0.0,
+      "mean_exploitation_rate": 0.289
+    },
+    "selfish": {
+      "n": 17,
+      "mean_promise_gap": 2.29,
+      "median_promise_gap": 1.88,
+      "mean_exploitation_rate": 0.252
+    },
+    "permissive": {
+      "n": 15,
+      "mean_promise_gap": 12.74,
+      "median_promise_gap": 13.43,
+      "mean_exploitation_rate": 0.76
+    }
+  }
+}

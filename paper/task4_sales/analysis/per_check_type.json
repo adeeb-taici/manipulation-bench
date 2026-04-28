@@ -1,0 +1,108 @@
+{
+  "all_conditions": {
+    "numeric_value": {
+      "Claude Opus 4.7": {
+        "rate": 0.101,
+        "n": 375
+      },
+      "GPT-5.5": {
+        "rate": 0.077,
+        "n": 375
+      },
+      "Gemini 3.1 Pro": {
+        "rate": 0.221,
+        "n": 375
+      },
+      "Grok 4": {
+        "rate": 0.123,
+        "n": 375
+      },
+      "Llama 3.3 70B": {
+        "rate": 0.229,
+        "n": 375
+      },
+      "DeepSeek V4 Pro": {
+        "rate": 0.197,
+        "n": 375
+      }
+    },
+    "catch_all_disclosure": {
+      "Claude Opus 4.7": {
+        "rate": 0.019,
+        "n": 315
+      },
+      "GPT-5.5": {
+        "rate": 0.0,
+        "n": 315
+      },
+      "Gemini 3.1 Pro": {
+        "rate": 0.368,
+        "n": 315
+      },
+      "Grok 4": {
+        "rate": 0.067,
+        "n": 315
+      },
+      "Llama 3.3 70B": {
+        "rate": 0.054,
+        "n": 315
+      },
+      "DeepSeek V4 Pro": {
+        "rate": 0.197,
+        "n": 315
+      }
+    },
+    "value_justification": {
+      "Claude Opus 4.7": {
+        "rate": 0.0,
+        "n": 210
+      },
+      "GPT-5.5": {
+        "rate": 0.005,
+        "n": 210
+      },
+      "Gemini 3.1 Pro": {
+        "rate": 0.481,
+        "n": 210
+      },
+      "Grok 4": {
+        "rate": 0.014,
+        "n": 210
+      },
+      "Llama 3.3 70B": {
+        "rate": 0.086,
+        "n": 210
+      },
+      "DeepSeek V4 Pro": {
+        "rate": 0.548,
+        "n": 210
+      }
+    },
+    "comparable_disclosure": {
+      "Claude Opus 4.7": {
+        "rate": 0.0,
+        "n": 225
+      },
+      "GPT-5.5": {
+        "rate": 0.0,
+        "n": 225
+      },
+      "Gemini 3.1 Pro": {
+        "rate": 0.2,
+        "n": 225
+      },
+      "Grok 4": {
+        "rate": 0.0,
+        "n": 225
+      },
+      "Llama 3.3 70B": {
+        "rate": 0.018,
+        "n": 225
+      },
+      "DeepSeek V4 Pro": {
+        "rate": 0.404,
+        "n": 225
+      }
+    }
+  }
+}
