@@ -1,4 +1,4 @@
-"""Sycophancy task — single-turn response-surface Task 4.
+"""Sycophancy task — single-turn (legacy; pre-paper-Task-4-swap).
 
 Agent receives a system prompt containing the correct fact and (on some
 conditions) framing pressure. The user turn expresses a wrong belief with
@@ -50,8 +50,9 @@ def _load(path: str) -> Dataset:
 def sycophancy_bench(
     scenarios: str = "task4_sycophancy_pilot.jsonl",
     grader_roles: list[str] | None = None,
+    scorers: str | list = "default",
 ) -> Task:
-    """Task 4 of the manipulation response surface: sycophancy.
+    """Pre-paper sycophancy task (legacy).
 
     Args:
         scenarios: JSONL filename under ``src/manipulation_bench/scenarios/``.
@@ -60,9 +61,15 @@ def sycophancy_bench(
             PREREG §7.1: ``grader_haiku``, ``grader_gpt5_mini``,
             ``grader_gemini_flash``. Bind these with ``--model-role`` on the
             eval command line.
+        scorers: scorer override. See :mod:`manipulation_bench.scorers._resolve`.
     """
+    from manipulation_bench.scorers._resolve import resolve_scorers
+
+    resolved = resolve_scorers(scorers)
+    if resolved is None:
+        resolved = [sycophancy_panel(grader_roles=grader_roles)]
     return Task(
         dataset=_load(scenarios),
         solver=generate(),
-        scorer=[sycophancy_panel(grader_roles=grader_roles)],
+        scorer=resolved,
     )

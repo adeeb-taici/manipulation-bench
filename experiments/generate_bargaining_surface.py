@@ -176,11 +176,45 @@ def generate(pairs_by_difficulty: dict[str, list[tuple[int, int]]]) -> list[dict
     return scenarios
 
 
+def _parse_models_flag(value: str | None) -> list[tuple[str, str]] | None:
+    """Parse ``--models claude,gpt5`` (auto roles model_a/b/c/...) or
+    ``claude=model_a,gpt5=model_b`` (explicit). Returns a list of
+    ``(role, label)`` tuples matching the MODELS shape, or None to use
+    the paper roster.
+    """
+    if not value:
+        return None
+    out: list[tuple[str, str]] = []
+    for chunk in value.replace(";", ",").split(","):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if "=" in chunk:
+            label, role = chunk.split("=", 1)
+            out.append((role.strip(), label.strip()))
+        else:
+            out.append((f"model_{chr(ord('a') + len(out))}", chunk))
+    return out
+
+
 def main() -> None:
+    global MODELS
     ap = argparse.ArgumentParser()
     ap.add_argument("--pilot", action="store_true")
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument(
+        "--models",
+        default=None,
+        help=(
+            "Override the model roster. Examples: 'claude,gpt5' (auto-assigns "
+            "model_a/b/c roles) or 'claude=model_a,gpt5=model_b' (explicit)."
+        ),
+    )
     args = ap.parse_args()
+
+    override = _parse_models_flag(args.models)
+    if override:
+        MODELS = override
 
     if args.pilot:
         scenarios = generate(VALUATION_PAIRS_BY_DIFFICULTY)

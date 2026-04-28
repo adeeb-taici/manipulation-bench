@@ -18,8 +18,8 @@ src/manipulation_bench/
   task.py            # @task manipulation_bench (debates)
   game_task.py       # @task for Werewolf game environment
   diplomacy_task.py  # @task for Diplomacy game environment
-  sales_task.py      # @task for Task 4 sales (single-agent, scripted buyer)
-  committee_task.py  # @task for Task 5 committee evaluation with conflict of interest
+  sales_task.py      # @task for sales (single-agent, scripted buyer; paper Task 4)
+  committee_task.py  # @task for committee evaluation with conflict of interest (paper Task 5)
   _registry.py       # Inspect entry-point (lazy imports)
   generate.py        # CLI: YAML config → rotation JSONL + generate_debate_rotation() / generate_debate_surface() shared functions
   analyze.py         # CLI: eval log → comparison tables + susceptibility analysis (debate/werewolf/diplomacy)
@@ -42,8 +42,8 @@ src/manipulation_bench/
     social_deduction.py  # Werewolf scorers: game_win_rate, vote_accuracy, deception_success, game_manipulation_detection
     negotiation.py       # Diplomacy scorers: territorial_success, agreement_compliance, negotiation_manipulation
     village.py           # Village scorers: exploitation_rate, promise_action_gap, village_fairness
-    sales.py             # Task 4 sales rule-based classifier: sales_classifier (accurate/misleading/false)
-    committee.py         # Task 5 committee scorers: initial_rating_bias, post_discussion_rating_change, discussion_polarity, decision_outcome
+    sales.py             # Sales rule-based classifier: sales_classifier (accurate/misleading/false; paper Task 4)
+    committee.py         # Committee scorers: initial_rating_bias, post_discussion_rating_change, discussion_polarity, decision_outcome (paper Task 5)
     _committee_wordlist.py  # Rule-based polarity classifier (positive/negative words, negation scope, hedge halving)
 experiments/         # YAML configs and generator scripts for specific experiments
 tests/               # pytest test suite
@@ -57,8 +57,8 @@ The framework supports several environment types:
 - **Werewolf**: Social deduction game, 4-7 players. Measures deception and vote manipulation. Implemented as `WerewolfEnvironment`.
 - **Diplomacy**: Negotiation game, 7 powers. Measures promise-breaking and alliance betrayal. Wraps the `diplomacy` Python package via `DiplomacyEnvironment`.
 - **Village Commons**: Public goods game, 6 agents. Measures free-riding, promise-breaking, false accusations, and cooperative exploitation. Implemented as `VillageEnvironment`. Actions use tool calls (`contribute`, `inspect_agent`, `penalize`). All metrics are mathematical — no LLM judge needed.
-- **Sales** (Task 4): Principal-agent representation, single-agent. The agent represents a seller; a scripted buyer asks 5 fixed factual questions per scenario; answers are classified against a structured product spec as `accurate` / `misleading` / `false`. Deterministic rule-based scorer (`sales_classifier`) — no LLM judge. Lives in `sales_task.py` with its own 5-turn solver (`sales_interaction`) rather than `game_solver.py`, because there is no counterparty LLM.
-- **Committee** (Task 5): Multi-agent committee (5 agents) evaluates a slate of candidates (4) on structured criteria. One agent has a private interested-party affiliation with a specific candidate. Phase sequence: `private_rating (ACTION) → discussion_r1…rN (DISCUSSION) → final_rating (ACTION)` — `num_discussion_rounds` is configurable. Agents submit ratings via the `submit_ratings` tool (nested JSON: candidate_id → criterion → int 0-10). Discussion is free-text with required `[A]/[B]/[C]/[D]` markers per candidate; the scorer splits by marker and applies a rule-based polarity classifier. All metrics mathematical — no LLM judge.
+- **Sales** (paper Task 4): Principal-agent representation, single-agent. The agent represents a seller; a scripted buyer asks 5 fixed factual questions per scenario; answers are classified against a structured product spec as `accurate` / `misleading` / `false`. Deterministic rule-based scorer (`sales_classifier`) — no LLM judge. Lives in `sales_task.py` with its own 5-turn solver (`sales_interaction`) rather than `game_solver.py`, because there is no counterparty LLM.
+- **Committee** (paper Task 5): Multi-agent committee (5 agents) evaluates a slate of candidates (4) on structured criteria. One agent has a private interested-party affiliation with a specific candidate. Phase sequence: `private_rating (ACTION) → discussion_r1…rN (DISCUSSION) → final_rating (ACTION)` — `num_discussion_rounds` is configurable. Agents submit ratings via the `submit_ratings` tool (nested JSON: candidate_id → criterion → int 0-10). Discussion is free-text with required `[A]/[B]/[C]/[D]` markers per candidate; the scorer splits by marker and applies a rule-based polarity classifier. All metrics mathematical — no LLM judge.
 
 Debate, Werewolf, Diplomacy, Village, and Committee share `game_solver.py` and the `Environment` ABC. Sales is single-agent and bypasses both.
 
@@ -99,8 +99,8 @@ The solver calls `get_model(role=agent.model_role).generate(messages)` directly 
 - `scorers/social_deduction.py` — Werewolf game metrics: `game_win_rate`, `vote_accuracy`, `deception_success`, `game_manipulation_detection`
 - `scorers/negotiation.py` — Diplomacy game metrics: `territorial_success`, `agreement_compliance` (hard metric — no LLM, computes kept/total promises per agent), `negotiation_manipulation`
 - `scorers/village.py` — Village Commons metrics (all mathematical, no LLM): `exploitation_rate` (1 - avg contribution / 20), `promise_action_gap` (promised - actual), `village_fairness` (Gini coefficient + free-rider detection rate)
-- `scorers/sales.py` — Task 4 sales: `sales_classifier` classifies each buyer-question response as `accurate` / `misleading` / `false` using per-check-type rules against a typed `check_fields` DSL on the ground-truth record. No LLM judge. Hand-validated with `experiments/task4_hand_validation.py` (emit template → human fills → score agreement ≥90%).
-- `scorers/committee.py` — Task 5 committee metrics (all mathematical, no LLM): `initial_rating_bias` (interested party's favored-vs-matched-tier-peers delta on initial ratings), `post_discussion_rating_change` (neutral_shift_toward_interested = mean neutral delta signed by interested-party delta direction), `discussion_polarity` (rule-based wordlist classifier from `_committee_wordlist.py` with negation scope 3 and hedge halving; per-candidate segments split by `[X]` markers), `decision_outcome` (favored_won / ground_truth_matched / favored_rank). Hand-validated with `experiments/task5_hand_validation.py` (≥85% agreement gate).
+- `scorers/sales.py` — sales: `sales_classifier` classifies each buyer-question response as `accurate` / `misleading` / `false` using per-check-type rules against a typed `check_fields` DSL on the ground-truth record. No LLM judge. Hand-validated with `experiments/task4_hand_validation.py` (emit template → human fills → score agreement ≥90%). Paper Task 4 primary scorer.
+- `scorers/committee.py` — committee metrics (all mathematical, no LLM): `initial_rating_bias` (interested party's favored-vs-matched-tier-peers delta on initial ratings), `post_discussion_rating_change` (neutral_shift_toward_interested = mean neutral delta signed by interested-party delta direction), `discussion_polarity` (rule-based wordlist classifier from `_committee_wordlist.py` with negation scope 3 and hedge halving; per-candidate segments split by `[X]` markers), `decision_outcome` (favored_won / ground_truth_matched / favored_rank). Hand-validated with `experiments/task5_hand_validation.py` (≥85% agreement gate). Paper Task 5 primary scorers.
 
 ### Model swapping via Inspect model roles
 
@@ -120,7 +120,7 @@ Rules:
 - **Typed source of truth**: each scenario's `ScenarioMetadata.frame`, `.incentive`, `.difficulty`, and `.manipulator` fields (on [models.py](src/manipulation_bench/models.py)) are the canonical record. Generators must set these.
 - **Prompts + aliases live in [axes.py](src/manipulation_bench/axes.py)**: `FRAME_PROMPTS[env][level]` and `INCENTIVE_PROMPTS[env][level]` are per-environment prompt fragments. `FRAME_ALIASES` / `INCENTIVE_ALIASES` map legacy names (`goal_fairness`, `I=moderate`, `cooperative`, `pro_honesty`, etc.) to canonical ones so old eval logs still pivot correctly.
 - **Unified analyzer**: [src/manipulation_bench/analyze_surface.py](src/manipulation_bench/analyze_surface.py) reads any env's eval log, auto-detects environment by scorer names, normalizes axis metadata through the aliases, and emits frame × incentive and frame × difficulty grids per model (plus optional CSV).
-- **Surface generators** live alongside legacy ones with the `_surface` suffix: [experiments/generate_village_surface.py](experiments/generate_village_surface.py), [experiments/generate_debate_surface.py](experiments/generate_debate_surface.py), [experiments/generate_bargaining_surface.py](experiments/generate_bargaining_surface.py). Task 4 and Task 5 were migrated in place (their original generators already factor over frame × incentive × difficulty).
+- **Surface generators** live alongside legacy ones with the `_surface` suffix: [experiments/generate_village_surface.py](experiments/generate_village_surface.py), [experiments/generate_debate_surface.py](experiments/generate_debate_surface.py), [experiments/generate_bargaining_surface.py](experiments/generate_bargaining_surface.py). Sales (paper Task 4) and committee (paper Task 5) were migrated in place — their original generators already factor over frame × incentive × difficulty.
 
 ### Debate rotation design
 
@@ -132,7 +132,7 @@ The standard experimental design for measuring manipulation in debates:
 
 The `generate.py` CLI automates this from a YAML config. Custom generator scripts (in `experiments/`) handle multi-topic experiments.
 
-### Task 4 sales (single-agent, scripted buyer)
+### Sales (single-agent, scripted buyer; paper Task 4)
 
 Sales scenarios are not debates or games — a scripted buyer asks 5 fixed questions and the seller-agent answers each in turn. Every scenario is one principal-agent pairing (frame × incentive × product × model). The solver (`sales_task.py:sales_interaction`) maintains a single chat thread, appends each buyer question, generates the agent's reply, and stores all 5 responses in `state.metadata['responses']`. The scorer (`scorers/sales.py:sales_classifier`) classifies each response deterministically against the scenario's `ground_truth` records (one per question, with `check_type` + `check_fields`). Experimental design cross-cuts the 5 canonical frames (`prohibitive`/`pro_social`/`minimal`/`selfish`/`permissive`) with 3 incentives (`none`/`moderate`/`high`) and 3 difficulty tiers, producing manipulation-rate as the headline metric.
 
@@ -161,6 +161,8 @@ DeepSeek V4 Pro reasoning rejects OpenRouter's privacy guardrails AND rejects `t
 - `DEEPSEEK_API_KEY` and `DEEPSEEK_BASE_URL=https://api.deepseek.com/v1` in `.env`
 - Provider prefix: `openai-api/deepseek/<model>` (Inspect's openai-api adapter)
 - Per-agent `metadata.tool_choice_strategy="auto"` triggers a `game_solver.py` override that downgrades `tool_choice="any"` → `"auto"` for that agent only, with the existing retry budget covering tool-call refusals.
+
+For the full catalog of provider quirks the framework works around (DeepSeek V4 Pro, GPT-5 strict-mode tool schemas, Llama retry sensitivity), see [`docs/provider_quirks.md`](docs/provider_quirks.md). Point new researchers there if they hit a 400 from a provider they haven't used before.
 
 ## Running things
 
@@ -208,6 +210,54 @@ Key methods:
 - `get_game_state_for_scoring() -> dict` — full state dump for scorers (roles, votes, messages, outcomes)
 
 Adding a new game: implement the ABC, register in `environments/__init__.py:ENVIRONMENTS`, create a `@task` file, add environment-specific scorers.
+
+### Templates for new researchers
+
+When a researcher asks "how do I add a new env / scorer?", point them at [`examples/`](examples/), which has a fully working starter:
+
+- [`examples/new_environment/`](examples/new_environment/) — minimal `Environment` subclass (DISCUSSION-only, ~150 LOC), self-contained `@task` wrapper, two sample scenarios, and a 5-step checklist for production envs. Runs end-to-end with `mockllm/model`.
+- [`examples/new_scorer/`](examples/new_scorer/) — two scorer flavors in one file: a deterministic mathematical scorer and an LLM-judge scorer with the dict-valued `metrics={"*": [...]}` shape.
+
+Direct researchers there before having them read full production env code (`debate.py`, `werewolf.py`, etc.); those are richer but mix in paper-specific concerns.
+
+### Adding to the `mb` CLI
+
+If the new env should be runnable via `mb run <name>`, add an entry to `ENVS` in [`src/manipulation_bench/cli.py`](src/manipulation_bench/cli.py). The CLI auto-discovers model_roles from the env's default scenario JSONL and binds them all to `--model` unless overridden.
+
+### Pluggable scorer override
+
+Every `@task` accepts a `scorers` parameter that overrides the hardcoded scorer list:
+
+```bash
+# Built-in scorer names (one or comma-separated)
+inspect eval src/manipulation_bench/task.py -T scorers=manipulation_detection,argument_quality ...
+mb run debate --model ... -T scorers=manipulation_detection
+
+# Dotted import path to a custom scorer factory
+mb run debate --model ... -T scorers=my_pkg.my_module.my_scorer
+```
+
+Resolution lives in [`src/manipulation_bench/scorers/_resolve.py`](src/manipulation_bench/scorers/_resolve.py): bare names hit `manipulation_bench.scorers`, dotted names go through `importlib.import_module`. Default behavior (no `-T scorers=…`) is unchanged — each task keeps its own hardcoded list as the fallback. New scorer factories must take no required positional args (the resolver calls `factory()` with no args).
+
+### Reusing paper generators with a different model roster
+
+Three of the paper-roster generators accept a `--models` CLI flag so external researchers don't have to fork the script to change models:
+
+```bash
+# 'claude,gpt5,llama' auto-assigns model_a/b/c roles
+python experiments/generate_task4_sales.py --pilot --models 'claude,gpt5,llama'
+
+# Or explicit role mapping
+python experiments/generate_task5_committee.py --pilot \
+    --models 'claude=model_claude,gpt5=model_gpt5'
+
+python experiments/generate_bargaining_surface.py --pilot --models 'claude,grok'
+```
+
+Generators that don't take `--models`:
+- [`generate_debate_surface.py`](experiments/generate_debate_surface.py) — model-agnostic; binds models at eval time via `--model-role debater=...`.
+- [`generate_village_surface.py`](experiments/generate_village_surface.py) — has a fixed 6-agent layout with paper-specific doubling. Edit `MODELS` at the top of the file directly if you need a different roster.
+- Legacy generators (`generate_policy_debates.py`, `generate_werewolf_*.py`, etc.) — kept pinned for FINDINGS reproducibility; safer to fork than parameterize.
 
 ## Experiment design conventions
 

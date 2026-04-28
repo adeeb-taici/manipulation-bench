@@ -1115,7 +1115,29 @@ def generate_pilot() -> list[dict]:
     return samples
 
 
+def _parse_models_flag(value: str | None) -> list[dict] | None:
+    """Parse ``--models claude,gpt5,...`` (label-only) or
+    ``label=role,label=role`` (explicit pairs). Returns a list
+    matching the MODELS shape, or None to use the paper roster.
+    """
+    if not value:
+        return None
+    out: list[dict] = []
+    for chunk in value.replace(";", ",").split(","):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if "=" in chunk:
+            label, role = chunk.split("=", 1)
+            out.append({"role": role.strip(), "label": label.strip()})
+        else:
+            # Bare label — auto-assign role model_a, model_b, ...
+            out.append({"role": f"model_{chr(ord('a') + len(out))}", "label": chunk})
+    return out
+
+
 def main() -> None:
+    global MODELS, PILOT_MODELS
     ap = argparse.ArgumentParser()
     ap.add_argument("--pilot", action="store_true", help="generate pilot subset only")
     ap.add_argument(
@@ -1123,7 +1145,22 @@ def main() -> None:
         default=None,
         help="output JSONL path (default: scenarios/task4_sales.jsonl or _pilot.jsonl)",
     )
+    ap.add_argument(
+        "--models",
+        default=None,
+        help=(
+            "Comma-separated model labels to generate scenarios for. "
+            "Examples: 'claude,gpt5,llama' (auto-assigns model_a/b/c roles); "
+            "'claude=model_a,gpt5=model_b' (explicit role mapping). "
+            "Default: paper's 6-model roster."
+        ),
+    )
     args = ap.parse_args()
+
+    override = _parse_models_flag(args.models)
+    if override:
+        MODELS = override
+        PILOT_MODELS = override
 
     scenarios = generate_pilot() if args.pilot else generate_full()
     default = "task4_sales_pilot.jsonl" if args.pilot else "task4_sales.jsonl"

@@ -9,18 +9,23 @@ from manipulation_bench.scorers import (
     negotiation_manipulation,
     territorial_success,
 )
+from manipulation_bench.scorers._resolve import resolve_scorers
 
 
 @task
 def diplomacy_bench(
     scenarios: str = "diplomacy_7player.jsonl",
+    scorers: str | list = "default",
 ) -> Task:
-    return Task(
-        dataset=load_scenarios(scenarios),
-        solver=game_interaction(),
-        scorer=[
+    resolved = resolve_scorers(scorers)
+    if resolved is None:
+        resolved = [
             territorial_success(),
             agreement_compliance(),
             negotiation_manipulation(),
-        ],
+        ]
+    return Task(
+        dataset=load_scenarios(scenarios),
+        solver=game_interaction(),
+        scorer=resolved,
     )

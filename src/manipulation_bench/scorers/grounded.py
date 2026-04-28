@@ -89,7 +89,7 @@ def ground_truth_persuasion(
     the debate transcript. Produces per-juror belief shift and overall
     persuasion rate.
 
-    Defaults match the Task 2 Debate pre-sweep claim-pool re-validation
+    Defaults match the paper-Task-2 debate pre-sweep claim-pool re-validation
     configuration (T=0, n=1, with neutral-juror system prompt) so pre-debate
     juror priors measured here are directly comparable to the priors that
     determined claim-pool tier assignment — see

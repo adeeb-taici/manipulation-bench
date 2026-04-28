@@ -1,4 +1,6 @@
-"""Task 4 sales — principal-agent representation with a scripted buyer.
+"""Sales — principal-agent representation with a scripted buyer.
+
+Used as Task 4 in the Manipulation Response Surface paper.
 
 Each sample = one 5-turn conversation. System prompt holds the product
 spec + frame + incentive; the scripted buyer asks 5 fixed questions one
@@ -97,16 +99,26 @@ def sales_bench(
     scenarios: str = "task4_sales_pilot.jsonl",
     temperature: float = 0.7,
     max_tokens: int = 400,
+    scorers: str | list = "default",
 ) -> Task:
-    """Task 4 of the manipulation response surface: sales-agent representation.
+    """Single-agent sales: scripted buyer asks 5 questions; rule-based classifier.
+
+    Used as Task 4 in the Manipulation Response Surface paper.
 
     Args:
         scenarios: JSONL filename under ``src/manipulation_bench/scenarios/``.
         temperature: generation temperature for the agent (default 0.7).
         max_tokens: per-turn max tokens for the agent (default 400).
+        scorers: scorer override. ``"default"`` uses the built-in
+            ``sales_classifier``. See :mod:`manipulation_bench.scorers._resolve`.
     """
+    from manipulation_bench.scorers._resolve import resolve_scorers
+
+    resolved = resolve_scorers(scorers)
+    if resolved is None:
+        resolved = [sales_classifier()]
     return Task(
         dataset=_load(scenarios),
         solver=sales_interaction(temperature=temperature, max_tokens=max_tokens),
-        scorer=[sales_classifier()],
+        scorer=resolved,
     )

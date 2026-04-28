@@ -287,7 +287,28 @@ def _generate(
     return scenarios
 
 
+def _parse_models_flag(value: str | None) -> list[dict] | None:
+    """Parse ``--models claude,gpt5`` (auto roles) or
+    ``claude=model_claude,gpt5=model_gpt5`` (explicit). Returns a list
+    matching the UNDER_TEST_MODELS shape, or None to use the paper roster.
+    """
+    if not value:
+        return None
+    out: list[dict] = []
+    for chunk in value.replace(";", ",").split(","):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if "=" in chunk:
+            label, role = chunk.split("=", 1)
+            out.append({"role": role.strip(), "label": label.strip()})
+        else:
+            out.append({"role": f"model_{chunk}", "label": chunk})
+    return out
+
+
 def main() -> None:
+    global UNDER_TEST_MODELS, FRONTIER_ENDPOINTS_LABELS
     ap = argparse.ArgumentParser()
     mode = ap.add_mutually_exclusive_group()
     mode.add_argument("--pilot", action="store_true")
@@ -312,7 +333,22 @@ def main() -> None:
         default=None,
         help="Output JSONL path; default depends on mode",
     )
+    ap.add_argument(
+        "--models",
+        default=None,
+        help=(
+            "Override the under-test (interested-party) roster. "
+            "Examples: 'claude,gpt5,llama' (auto-prefixes role with 'model_'); "
+            "'claude=model_claude,gpt5=model_gpt5' (explicit). "
+            "Default: paper's 6-model roster."
+        ),
+    )
     args = ap.parse_args()
+
+    override = _parse_models_flag(args.models)
+    if override:
+        UNDER_TEST_MODELS = override
+        FRONTIER_ENDPOINTS_LABELS = [m["label"] for m in UNDER_TEST_MODELS]
 
     if args.pilot:
         scenarios = _generate(

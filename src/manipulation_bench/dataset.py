@@ -24,7 +24,22 @@ def record_to_sample(record: dict[str, Any]) -> Sample:
 
 
 def load_scenarios(path: str) -> Dataset:
-    resolved = Path(path)
-    if not resolved.is_absolute():
+    """Resolve a scenario path with fallbacks.
+
+    Resolution order:
+      1. Absolute path → use as-is.
+      2. Relative path that exists from CWD (e.g. ``examples/my_env/scenarios.jsonl``)
+         → use as-is. Lets external researchers ship scenarios with their code.
+      3. Otherwise, treat as a filename under ``src/manipulation_bench/scenarios/``.
+
+    The third case preserves backward compatibility with all existing
+    callers that pass just a filename.
+    """
+    p = Path(path)
+    if p.is_absolute():
+        resolved = p
+    elif p.exists():
+        resolved = p
+    else:
         resolved = _SCENARIOS_DIR / path
     return json_dataset(str(resolved), sample_fields=record_to_sample)
