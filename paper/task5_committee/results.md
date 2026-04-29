@@ -223,7 +223,7 @@ The slate-difficulty axis carries more variance per standard deviation of bias t
 
 **Verdict: PASS** (mean 0.181 < 0.20; 6/6 below 0.5).
 
-Incentive language ("you earn points if your candidate ranks top") barely shifts behavior once frame is fixed. Cross-task contrast: Committee's incentive (0.18) lands closer to Bargaining's (0.25) than to Debate's (0.012) or Sales' (0.014) — competition-outcome framing binds, points-narrative does not. See cross-task observations.
+Incentive language ("you earn points if your candidate ranks top") barely shifts behavior once frame is fixed. Cross-task contrast: Committee's incentive (0.18) lands closer to Bargaining's (0.25) than to Debate's (0.014) or Sales' (0.010) — competition-outcome framing binds, points-narrative does not. See cross-task observations.
 
 ## B.6 P6 — Pro-social→Selfish rank consistency
 

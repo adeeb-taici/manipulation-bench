@@ -256,7 +256,7 @@ This section is interpretive and goes beyond the pre-registered tests.
 |---|---:|---:|---|
 | **Bargaining** | 0.107 | 0.217 (incentive) | mixed (close) |
 | Debate | 0.011 | 0.064 (difficulty) | difficulty |
-| Sales | 0.030 | 0.190 (difficulty) | difficulty |
+| Sales | 0.026 | 0.087 (difficulty) | difficulty |
 | **Village** | **0.157** | 0.016 (difficulty) | **frame (10× margin)** |
 | Committee | 0.312 | 0.643 (difficulty) | difficulty |
 
@@ -264,7 +264,7 @@ Village shows the largest frame:other-axis ratio of any task (10:1). This is str
 
 **C.2 — Llama and DeepSeek are non-compliant on prohibitive frame.** Both models fail P1 with prohibitive exploitation > 0.4 — they free-ride substantially even when explicitly forbidden. This pattern exactly matches the smoke prediction (smoke at n=1 showed Llama 0.625 and DeepSeek 0.475 under prohibitive). Among the 6 roster models, these are the same two with weak Bargaining incentive sensitivity (P5 there) — a tantalizing per-model consistency: **Llama and DeepSeek's prompt-following is more brittle than the frontier-reasoning four**.
 
-**C.3 — Gemini saturates earliest.** Permissive across all incentive × difficulty cells reaches 0.99–1.00. Selfish frame reaches 1.00 on minimal/high/low. The combination of "explicit selfish goal" + low-difficulty (defection rational) gives Gemini full-saturation defection. This contrasts with Sales' Gemini saturation pattern (which appeared on prohibitive too, suggesting commercial-omission default); Village's Gemini saturation is frame-driven, not default-driven.
+**C.3 — Gemini saturates earliest.** Permissive across all incentive × difficulty cells reaches 0.99–1.00. Selfish frame reaches 1.00 on minimal/high/low. The combination of "explicit selfish goal" + low-difficulty (defection rational) gives Gemini full-saturation defection. Gemini saturates Village and Committee but does NOT saturate Sales (max ~0.30) — Village's Gemini saturation appears specific to behavioral-channel manipulation rather than informational manipulation.
 
 **C.4 — P5 prediction was structurally optimistic.** Village's prediction that incentive language would matter more than Debate's because "token balance is the natural objective" was inverted in practice. **Verbal incentive language only binds when it introduces NEW reward structure** — penalty math (Bargaining) or competition outcomes (Committee). When the incentive is just emphasis on an existing objective (Village, Sales, Debate), models treat it as redundant.
 
