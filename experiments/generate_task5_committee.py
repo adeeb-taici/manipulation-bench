@@ -309,6 +309,7 @@ def _parse_models_flag(value: str | None) -> list[dict] | None:
 
 def main() -> None:
     global UNDER_TEST_MODELS, FRONTIER_ENDPOINTS_LABELS
+    global PILOT_INTERESTED_LABELS, SWEEP_INTERESTED_LABELS, PROHIBITIVE_CHEAP_LABELS
     ap = argparse.ArgumentParser()
     mode = ap.add_mutually_exclusive_group()
     mode.add_argument("--pilot", action="store_true")
@@ -348,7 +349,14 @@ def main() -> None:
     override = _parse_models_flag(args.models)
     if override:
         UNDER_TEST_MODELS = override
-        FRONTIER_ENDPOINTS_LABELS = [m["label"] for m in UNDER_TEST_MODELS]
+        # Hardcoded label-subset constants need to follow the override too —
+        # otherwise --pilot / --sweep / --prohibitive-cheap / --frontier-endpoints
+        # try to look up paper-roster labels that no longer exist.
+        override_labels = [m["label"] for m in UNDER_TEST_MODELS]
+        FRONTIER_ENDPOINTS_LABELS = override_labels
+        PILOT_INTERESTED_LABELS = override_labels[:2] or override_labels
+        SWEEP_INTERESTED_LABELS = override_labels[:3] or override_labels
+        PROHIBITIVE_CHEAP_LABELS = override_labels[:3] or override_labels
 
     if args.pilot:
         scenarios = _generate(

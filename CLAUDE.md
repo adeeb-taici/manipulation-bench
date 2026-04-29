@@ -241,18 +241,27 @@ Resolution lives in [`src/manipulation_bench/scorers/_resolve.py`](src/manipulat
 
 ### Reusing paper generators with a different model roster
 
-Three of the paper-roster generators accept a `--models` CLI flag so external researchers don't have to fork the script to change models:
+All five paper-task generators accept a `--models` CLI flag so external researchers don't have to fork the script to change models. Bare labels auto-prefix the role; `label=role` pairs let you pick roles explicitly.
 
 ```bash
-# 'claude,gpt5,llama' auto-assigns model_a/b/c roles
+# T1 Bargaining — bare labels auto-assign model_a/b/c roles
+python experiments/generate_task1_bargaining.py --pilot --models 'claude,grok'
+
+# T2 Debate — bare labels auto-prefix with manipulator_
+python experiments/generate_task2_debate_full.py --models 'claude,grok'
+
+# T3 Village — same auto-prefix as T2
+python experiments/generate_task3_village_full.py --models 'claude,grok'
+
+# T4 Sales — same auto-prefix as T1 (model_a/b/c)
 python experiments/generate_task4_sales.py --pilot --models 'claude,gpt5,llama'
 
-# Or explicit role mapping
+# T5 Committee — supports --pilot / --sweep / --frontier-endpoints
 python experiments/generate_task5_committee.py --pilot \
     --models 'claude=model_claude,gpt5=model_gpt5'
-
-python experiments/generate_bargaining_surface.py --pilot --models 'claude,grok'
 ```
+
+Each generator prints the exact `inspect eval` command at the end, with `--model-role <role>=openrouter/<provider>/<model>` placeholders for the under-test roster (so the user fills in their provider strings) and verbatim canonical bindings for the pinned framework roles (Debate truthful debater + jurors + judge; Village bystanders; Committee neutral panel). Without `--models`, T1/T2/T3 print the actual paper-roster bindings; T4/T5 always print placeholders for under-test roles regardless.
 
 Generators that don't take `--models`:
 - [`generate_debate_surface.py`](experiments/generate_debate_surface.py) — model-agnostic; binds models at eval time via `--model-role debater=...`.

@@ -38,8 +38,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 # ── Models (v6.1 roster; matches paper/task5_committee/prereg.md §3) ──
-# Role names used in --model-role flags at eval time.
-MODELS_FULL = [
+# Role names used in --model-role flags at eval time. The paper roster below
+# is the default; --models on the CLI overrides it (see _parse_models_flag).
+MODELS_FULL: list[tuple[str, str]] = [
     ("model_a", "Claude-Opus-4.7"),
     ("model_b", "GPT-5"),
     ("model_c", "Gemini-3.1-Pro"),
@@ -47,10 +48,52 @@ MODELS_FULL = [
     ("model_e", "Llama-3.3-70B"),
     ("model_f", "DeepSeek-v3.2"),
 ]
-MODELS_PILOT = [
+MODELS_PILOT: list[tuple[str, str]] = [
     ("model_a", "Claude-Opus-4.7"),
     ("model_b", "GPT-5"),
 ]
+
+# Canonical run-command bindings for the paper roster, keyed by role name.
+# Used to print a copy-pasteable inspect eval command when --models is NOT
+# overridden. When the user overrides the roster, we print placeholder
+# bindings instead because we don't know what model they want to bind.
+PAPER_ROSTER_BINDINGS: dict[str, str] = {
+    "model_a": '\'{"model":"openrouter/anthropic/claude-opus-4.7"}\'',
+    "model_b": '\'{"model":"openrouter/openai/gpt-5","model_args":{"reasoning_enabled":true}}\'',
+    "model_c": '\'{"model":"openrouter/google/gemini-3.1-pro-preview","model_args":{"reasoning_enabled":true}}\'',
+    "model_d": '\'{"model":"openrouter/x-ai/grok-4","model_args":{"reasoning_enabled":true}}\'',
+    "model_e": '\'{"model":"openrouter/meta-llama/llama-3.3-70b-instruct"}\'',
+    "model_f": '\'{"model":"openrouter/deepseek/deepseek-v3.2","model_args":{"reasoning_enabled":false}}\'',
+}
+
+
+def _parse_models_flag(value: str | None) -> list[tuple[str, str]] | None:
+    """Parse ``--models claude,gpt5,...`` (auto-prefixes role with model_a/b/c)
+    or ``label=role,label=role`` (explicit pairs). Returns the same
+    ``[(role, label)]`` shape as ``MODELS_FULL``, or None to use the paper
+    roster.
+
+    Examples:
+        --models 'claude,gpt5,llama'
+            → [("model_a","claude"), ("model_b","gpt5"), ("model_c","llama")]
+        --models 'claude=model_a,gpt5=model_b'
+            → [("model_a","claude"), ("model_b","gpt5")]
+    """
+    if not value:
+        return None
+    out: list[tuple[str, str]] = []
+    for chunk in value.replace(";", ",").split(","):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if "=" in chunk:
+            label, role = chunk.split("=", 1)
+            out.append((role.strip(), label.strip()))
+        else:
+            # Bare label — auto-assign role model_a, model_b, ...
+            out.append((f"model_{chr(ord('a') + len(out))}", chunk))
+    return out
+
 
 # ── Axis 1: Frame ─────────────────────────────────────────────────────
 # Canonical 5-level set; legacy names `goal_prosocial`/`goal_selfish` still
@@ -336,7 +379,23 @@ def main() -> None:
             "task1_bargaining[_pilot|_cross_model].jsonl)"
         ),
     )
+    parser.add_argument(
+        "--models",
+        default=None,
+        help=(
+            "Override the under-test roster. Examples: "
+            "'claude,gpt5,llama' (auto-prefixes role with model_a/b/c); "
+            "'claude=model_a,gpt5=model_b' (explicit label=role). "
+            "Default: paper's 6-model roster."
+        ),
+    )
     args = parser.parse_args()
+
+    global MODELS_FULL, MODELS_PILOT
+    override = _parse_models_flag(args.models)
+    if override:
+        MODELS_FULL = override
+        MODELS_PILOT = override
 
     scenarios = generate_scenarios(pilot=args.pilot, cross_model=args.cross_model)
 
@@ -413,25 +472,24 @@ def main() -> None:
         else:
             print("  All 30 focal->counterparty pairings present.")
     print()
-    print("Run with (v6.1 bindings per paper/task1_bargaining/prereg.md §3 + A1):")
-    model_roles_full = [
-        '--model-role model_a=\'{"model":"openrouter/anthropic/claude-opus-4.7"}\'',
-        '--model-role model_b=\'{"model":"openrouter/openai/gpt-5","model_args":{"reasoning_enabled":true}}\'',
-        '--model-role model_c=\'{"model":"openrouter/google/gemini-3.1-pro-preview","model_args":{"reasoning_enabled":true}}\'',
-        '--model-role model_d=\'{"model":"openrouter/x-ai/grok-4","model_args":{"reasoning_enabled":true}}\'',
-        '--model-role model_e=\'{"model":"openrouter/meta-llama/llama-3.3-70b-instruct"}\'',
-        '--model-role model_f=\'{"model":"openrouter/deepseek/deepseek-v3.2","model_args":{"reasoning_enabled":false}}\'',
-    ]
-    role_ids = {r for r, _ in models}
-    role_map = dict(zip([r for r, _ in MODELS_FULL], model_roles_full))
-    used_roles = [role_map[r] for r in role_ids]
-
+    if override:
+        print("Roster (role -> label):")
+        for role, label in sorted(models, key=lambda rl: rl[0]):
+            print(f"  {role} -> {label}")
+        print()
+        print("Run with (substitute provider/model strings into each --model-role):")
+    else:
+        print("Run with (v6.1 bindings per paper/task1_bargaining/prereg.md §3 + A1):")
     print(f"  inspect eval src/manipulation_bench/bargaining_task.py@bargaining_commit_bench \\")
     print(f"    -T scenarios={out.name} \\")
     print(f"    -T max_action_retries=4 \\")
     print(f"    --model openrouter/anthropic/claude-opus-4.7 \\")
-    for r in sorted(used_roles):
-        print(f"    {r} \\")
+    for role, _label in sorted(models, key=lambda rl: rl[0]):
+        if override:
+            binding = "openrouter/<provider>/<model>"
+        else:
+            binding = PAPER_ROSTER_BINDINGS.get(role, "openrouter/<provider>/<model>")
+        print(f"    --model-role {role}={binding} \\")
     print(f"    --temperature 0.7 --max-tokens 16384 --max-connections 20 --no-fail-on-error")
     print()
 

@@ -89,7 +89,33 @@ python experiments/t3_promise_gap.py
 python experiments/t4_per_question_type.py
 ```
 
-Re-running an eval from scratch is documented per-task in `paper/task<N>/prereg.md` §11 and in [../FINDINGS.md](../FINDINGS.md).
+## Reproducing the experiments on a new model roster
+
+Each task's generator now accepts a `--models` flag that overrides the paper roster while keeping the rest of the design (axes, reps per cell, scorer, analysis) fixed. The recipe is uniform across all five tasks:
+
+```bash
+# 1. Generate scenarios with your roster.
+#    Bare labels auto-prefix the role; `label=role` pairs let you pick roles explicitly.
+python experiments/generate_task1_bargaining.py --models 'opus47,haiku45,gpt55,grok4'
+python experiments/generate_task2_debate_full.py  --models 'opus47,haiku45,gpt55,grok4'
+python experiments/generate_task3_village_full.py --models 'opus47,haiku45,gpt55,grok4'
+python experiments/generate_task4_sales.py        --models 'opus47,haiku45,gpt55,grok4'
+python experiments/generate_task5_committee.py    --models 'opus47,haiku45,gpt55,grok4' --sweep
+
+# 2. Each generator prints the exact `inspect eval ...` command, with each
+#    `--model-role <role>=openrouter/<provider>/<model>` left as a placeholder.
+#    Copy-paste it and substitute your provider strings into each role.
+
+# 3. Score against the same pre-registered analysis used in the paper.
+for n in 1 2 3 4 5; do python experiments/task${n}_prereg_analysis.py; done
+python experiments/run_bootstrap_cis.py
+python experiments/run_cohens_d.py
+```
+
+Notes:
+- Pinned framework roles (Debate's `truthful_debater`/jurors/judge, Village's `bystander_*`, Committee's `model_neutral_*`) keep their canonical bindings in the printed command — only the under-test roster changes.
+- Without `--models`, the generators print the canonical paper-roster command (Claude Opus 4.7 / GPT-5.5 / Gemini 3.1 Pro / Grok 4 / Llama 3.3 70B / DeepSeek V4 Pro), which is what produced the eval logs under this directory.
+- Pilot variants are available via `--pilot` (T1, T4, T5) — useful for sanity-checking your new roster before paying for the full sweep.
 
 ## Where things live that are *not* under paper/
 

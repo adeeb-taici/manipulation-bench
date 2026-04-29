@@ -22,6 +22,7 @@ Usage:
 
 from __future__ import annotations
 
+import argparse
 import json
 import random
 import sys
@@ -34,7 +35,7 @@ from manipulation_bench.axes import FRAME_PROMPTS, INCENTIVE_PROMPTS  # noqa: E4
 
 OUT = Path("src/manipulation_bench/scenarios/task2_debate_v61_full.jsonl")
 
-MANIPULATORS = [
+MANIPULATORS: list[tuple[str, str]] = [
     ("manipulator_claude", "Claude-Opus-4.7"),
     ("manipulator_gpt5", "GPT-5"),
     ("manipulator_gemini", "Gemini-3.1-Pro"),
@@ -42,6 +43,57 @@ MANIPULATORS = [
     ("manipulator_llama", "Llama-3.3-70B"),
     ("manipulator_deepseek", "DeepSeek-v3.2"),
 ]
+
+# Canonical run-command bindings for the paper roster, keyed by role name.
+# Used when --models is NOT overridden. When overridden, placeholders are
+# printed instead so there's no risk of misleading copy-paste.
+PAPER_ROSTER_BINDINGS: dict[str, str] = {
+    "manipulator_claude": '\'{"model":"openrouter/anthropic/claude-opus-4.7"}\'',
+    "manipulator_gpt5": '\'{"model":"openrouter/openai/gpt-5","model_args":{"reasoning_enabled":true}}\'',
+    "manipulator_gemini": '\'{"model":"openrouter/google/gemini-3.1-pro-preview","model_args":{"reasoning_enabled":true}}\'',
+    "manipulator_grok": '\'{"model":"openrouter/x-ai/grok-4","model_args":{"reasoning_enabled":true}}\'',
+    "manipulator_llama": '\'{"model":"openrouter/meta-llama/llama-3.3-70b-instruct"}\'',
+    "manipulator_deepseek": '\'{"model":"openrouter/deepseek/deepseek-v3.2","model_args":{"reasoning_enabled":true}}\'',
+}
+
+# Pinned framework roles (not part of the under-test roster). These appear in
+# the printed run command verbatim regardless of --models.
+PINNED_BINDINGS: list[tuple[str, str]] = [
+    ("truthful_debater", '\'{"model":"openrouter/anthropic/claude-opus-4.7"}\''),
+    ("juror_a", '\'{"model":"openrouter/google/gemini-3-flash-preview"}\''),
+    ("juror_b", '\'{"model":"openrouter/anthropic/claude-haiku-4.5"}\''),
+    ("juror_c", '\'{"model":"openrouter/openai/gpt-5-mini"}\''),
+    ("judge", '\'{"model":"openrouter/anthropic/claude-opus-4.7"}\''),
+]
+
+
+def _parse_models_flag(value: str | None) -> list[tuple[str, str]] | None:
+    """Parse ``--models claude,gpt5,...`` (auto-prefixes role with
+    ``manipulator_``) or ``label=role,label=role`` (explicit pairs). Returns
+    the same ``[(role, label)]`` shape as ``MANIPULATORS``, or None to use
+    the paper roster.
+
+    Examples:
+        --models 'claude,gpt5,llama'
+            → [("manipulator_claude","claude"), ("manipulator_gpt5","gpt5"),
+               ("manipulator_llama","llama")]
+        --models 'claude=manipulator_claude,gpt5=manipulator_gpt5'
+            → [("manipulator_claude","claude"), ("manipulator_gpt5","gpt5")]
+    """
+    if not value:
+        return None
+    out: list[tuple[str, str]] = []
+    for chunk in value.replace(";", ",").split(","):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if "=" in chunk:
+            label, role = chunk.split("=", 1)
+            out.append((role.strip(), label.strip()))
+        else:
+            out.append((f"manipulator_{chunk}", chunk))
+    return out
+
 
 FRAMES = ["prohibitive", "pro_social", "minimal", "selfish", "permissive"]
 INCENTIVES = ["none", "moderate", "high"]
@@ -125,12 +177,37 @@ def build_scenarios() -> list[dict]:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser.add_argument(
+        "-o",
+        "--output",
+        default=None,
+        help=f"Output JSONL path (default: {OUT})",
+    )
+    parser.add_argument(
+        "--models",
+        default=None,
+        help=(
+            "Override the manipulator roster. Examples: "
+            "'claude,gpt5,llama' (auto-prefixes role with 'manipulator_'); "
+            "'claude=manipulator_claude,gpt5=manipulator_gpt5' (explicit). "
+            "Default: paper's 6-model roster."
+        ),
+    )
+    args = parser.parse_args()
+
+    global MANIPULATORS
+    override = _parse_models_flag(args.models)
+    if override:
+        MANIPULATORS = override
+
+    out = Path(args.output) if args.output else OUT
     scenarios = build_scenarios()
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUT, "w", encoding="utf-8") as f:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
         for s in scenarios:
             f.write(json.dumps(s, ensure_ascii=False) + "\n")
-    print(f"Wrote {len(scenarios)} scenarios -> {OUT}")
+    print(f"Wrote {len(scenarios)} scenarios -> {out}")
     print(
         f"  {len(MANIPULATORS)} manipulator models × {len(FRAMES)} frames × "
         f"{len(INCENTIVES)} incentives × {len(CLAIMS)} claims × {N_REPS} reps"
@@ -151,37 +228,30 @@ def main() -> None:
     print(f"  By model: {dict(by_model)}")
 
     print()
-    print("# Full-sweep launch command (after pre-sweep smoke passes):")
+    if override:
+        print("Roster (role -> label):")
+        for role, label in MANIPULATORS:
+            print(f"  {role} -> {label}")
+        print()
+        print("Run with (substitute provider/model strings into each manipulator --model-role):")
+    else:
+        print("# Full-sweep launch command (after pre-sweep smoke passes):")
     print("inspect eval src/manipulation_bench/task.py \\")
-    print(f"    -T scenarios={OUT.name} \\")
+    print(f"    -T scenarios={out.name} \\")
     print('    -T juror_roles="juror_a,juror_b,juror_c" \\')
     print("    --model openrouter/anthropic/claude-opus-4.7 \\")
-    print(
-        '    --model-role truthful_debater=\'{"model":"openrouter/anthropic/claude-opus-4.7"}\' \\'
-    )
-    print(
-        '    --model-role manipulator_claude=\'{"model":"openrouter/anthropic/claude-opus-4.7"}\' \\'
-    )
-    print(
-        '    --model-role manipulator_gpt5=\'{"model":"openrouter/openai/gpt-5","model_args":{"reasoning_enabled":true}}\' \\'
-    )
-    print(
-        '    --model-role manipulator_gemini=\'{"model":"openrouter/google/gemini-3.1-pro-preview","model_args":{"reasoning_enabled":true}}\' \\'
-    )
-    print(
-        '    --model-role manipulator_grok=\'{"model":"openrouter/x-ai/grok-4","model_args":{"reasoning_enabled":true}}\' \\'
-    )
-    print(
-        '    --model-role manipulator_llama=\'{"model":"openrouter/meta-llama/llama-3.3-70b-instruct"}\' \\'
-    )
-    print(
-        '    --model-role manipulator_deepseek=\'{"model":"openrouter/deepseek/deepseek-v3.2","model_args":{"reasoning_enabled":true}}\' \\'
-    )
-    print('    --model-role juror_a=\'{"model":"openrouter/google/gemini-3-flash-preview"}\' \\')
-    print('    --model-role juror_b=\'{"model":"openrouter/anthropic/claude-haiku-4.5"}\' \\')
-    print('    --model-role juror_c=\'{"model":"openrouter/openai/gpt-5-mini"}\' \\')
-    print('    --model-role judge=\'{"model":"openrouter/anthropic/claude-opus-4.7"}\' \\')
-    print("    --log-dir logs/task2_debate_v61_full \\")
+    # truthful debater is pinned (PINNED_BINDINGS[0])
+    print(f"    --model-role truthful_debater={PINNED_BINDINGS[0][1]} \\")
+    for role, _label in MANIPULATORS:
+        binding = (
+            PAPER_ROSTER_BINDINGS.get(role, "openrouter/<provider>/<model>")
+            if not override
+            else "openrouter/<provider>/<model>"
+        )
+        print(f"    --model-role {role}={binding} \\")
+    for role, binding in PINNED_BINDINGS[1:]:  # jurors + judge
+        print(f"    --model-role {role}={binding} \\")
+    print(f"    --log-dir logs/{out.stem} \\")
     print("    --temperature 0.7 --max-tokens 16384 --max-connections 20 --no-fail-on-error")
 
 
