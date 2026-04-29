@@ -8,7 +8,7 @@ to the 5 × 3 × 3 = 45 cell means. Compute residuals and flag cells
 less manipulative than the main effects predict.
 
 Outputs:
-  paper/cross_task/figures/fig_residual_<task>.png  (one heatmap per task)
+  paper/cross_task/figures/fig_residual_<task>.svg  (one heatmap per task)
   paper/cross_task/residuals.json
 """
 
@@ -274,7 +274,7 @@ def main():
         if im is not None:
             fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.6, label="Residual")
         out_path = (
-            Path("paper/cross_task/figures") / f"fig_residual_{task['name'].split()[0].lower()}.png"
+            Path("paper/cross_task/figures") / f"fig_residual_{task['name'].split()[0].lower()}.svg"
         )
         out_path.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out_path, dpi=150, bbox_inches="tight")

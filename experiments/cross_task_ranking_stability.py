@@ -6,7 +6,7 @@ across all 10 task pairs. Strong ρ = same model ordering across tasks
 (stable trait); weak ρ = task-specific behaviour.
 
 Outputs:
-  paper/cross_task/figures/fig_ranking_stability.png  (5×5 ρ matrix)
+  paper/cross_task/figures/fig_ranking_stability.svg  (5×5 ρ matrix)
   paper/cross_task/ranking_stability.json
 """
 
@@ -180,7 +180,7 @@ def main():
         fontsize=11,
     )
     fig.tight_layout()
-    out = Path("paper/cross_task/figures") / "fig_ranking_stability.png"
+    out = Path("paper/cross_task/figures") / "fig_ranking_stability.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"\nsaved {out}")

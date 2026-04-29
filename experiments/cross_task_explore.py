@@ -5,13 +5,13 @@ paper/cross_task/figures/. Some may not yield interesting findings;
 keep what's useful and prune the rest.
 
 Figures produced:
-  fig_per_model_frame_curves.png   — 6×5 grid of per-model frame curves per task
-  fig_model_similarity_matrix.png  — 6×6 pairwise Spearman ρ on 15-dim profiles
-  fig_variance_decomposition.png   — per-task share of variance by axis
-  fig_saturation_map.png           — per-model fraction of saturated cells per task
-  fig_endpoint_range.png           — permissive−prohibitive range per model per task
-  fig_model_ranking_stability.png  — per-model rank per task per axis
-  fig_generation_contrast.png      — GPT-5 vs GPT-5.5, V3.2 vs V4 Pro side-by-side
+  fig_per_model_frame_curves.svg   — 6×5 grid of per-model frame curves per task
+  fig_model_similarity_matrix.svg  — 6×6 pairwise Spearman ρ on 15-dim profiles
+  fig_variance_decomposition.svg   — per-task share of variance by axis
+  fig_saturation_map.svg           — per-model fraction of saturated cells per task
+  fig_endpoint_range.svg           — permissive−prohibitive range per model per task
+  fig_model_ranking_stability.svg  — per-model rank per task per axis
+  fig_generation_contrast.svg      — GPT-5 vs GPT-5.5, V3.2 vs V4 Pro side-by-side
 """
 
 from __future__ import annotations
@@ -227,7 +227,7 @@ def fig_per_model_frame_curves(all_task_rows: dict[str, list[dict]]) -> None:
         y=1.00,
     )
     fig.tight_layout()
-    out = OUT / "fig_per_model_frame_curves.png"
+    out = OUT / "fig_per_model_frame_curves.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")
@@ -308,7 +308,7 @@ def fig_model_similarity_matrix(all_task_rows: dict[str, list[dict]]) -> None:
         "Cross-task per-model profile similarity\n(15-dim signed slope vector: 5 tasks × 3 axes)"
     )
     fig.tight_layout()
-    out = OUT / "fig_model_similarity_matrix.png"
+    out = OUT / "fig_model_similarity_matrix.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")
@@ -363,7 +363,7 @@ def fig_variance_decomposition(all_task_rows: dict[str, list[dict]]) -> None:
     ax.legend(loc="upper right")
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    out = OUT / "fig_variance_decomposition.png"
+    out = OUT / "fig_variance_decomposition.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")
@@ -416,7 +416,7 @@ def fig_saturation_map(all_task_rows: dict[str, list[dict]]) -> None:
         "Saturation map: per-model fraction of cells with manipulation ≥ 0.80\n(T5 bias normalized to [-1, 1])"
     )
     fig.tight_layout()
-    out = OUT / "fig_saturation_map.png"
+    out = OUT / "fig_saturation_map.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")
@@ -458,7 +458,7 @@ def fig_endpoint_range(all_task_rows: dict[str, list[dict]]) -> None:
         "Endpoint frame range per model per task\n(Larger = more frame-responsive at the endpoints)"
     )
     fig.tight_layout()
-    out = OUT / "fig_endpoint_range.png"
+    out = OUT / "fig_endpoint_range.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")
@@ -527,7 +527,7 @@ def fig_model_ranking_stability(all_task_rows: dict[str, list[dict]]) -> None:
         "Model rank stability across tasks × axes (15 combinations)\n(Same model in same column should yield same rank if sensitivity is intrinsic to model)"
     )
     fig.tight_layout()
-    out = OUT / "fig_model_ranking_stability.png"
+    out = OUT / "fig_model_ranking_stability.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")
@@ -610,7 +610,7 @@ def fig_generation_contrast() -> None:
         y=1.02,
     )
     fig.tight_layout()
-    out = OUT / "fig_generation_contrast.png"
+    out = OUT / "fig_generation_contrast.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")

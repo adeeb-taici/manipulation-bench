@@ -108,7 +108,7 @@ def fig1_bias_across_frames(rows):
     ax.set_ylim(-10, 22)
 
     fig.tight_layout()
-    out = OUT / "fig1_bias_by_frame.png"
+    out = OUT / "fig1_bias_by_frame.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -153,7 +153,7 @@ def fig2_minimal_vs_selfish(rows):
     ax.grid(axis="y", alpha=0.3)
 
     fig.tight_layout()
-    out = OUT / "fig2_minimal_vs_selfish.png"
+    out = OUT / "fig2_minimal_vs_selfish.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -205,7 +205,7 @@ def fig3_frame_vs_difficulty_heatmap(rows):
         fontsize=13,
     )
     fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.7, label="Bias (0–20 scale)")
-    out = OUT / "fig3_frame_x_difficulty_heatmap.png"
+    out = OUT / "fig3_frame_x_difficulty_heatmap.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -247,7 +247,7 @@ def fig4_endpoints(rows):
     ax.grid(axis="y", alpha=0.3)
 
     fig.tight_layout()
-    out = OUT / "fig4_endpoints.png"
+    out = OUT / "fig4_endpoints.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")

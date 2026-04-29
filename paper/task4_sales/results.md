@@ -116,10 +116,10 @@ Difficulty slope mean magnitude (0.130) is **5× the frame slope** and **10× th
 
 | Figure | File |
 |---|---|
-| Manipulation rate by frame × model (bar chart) | [figures/fig1_manip_by_frame.png](figures/fig1_manip_by_frame.png) |
-| Per-model frame × incentive heatmap | [figures/fig2_frame_inc_heatmap.png](figures/fig2_frame_inc_heatmap.png) |
-| Endpoints comparison: prohibitive vs permissive per model | [figures/fig3_endpoints.png](figures/fig3_endpoints.png) |
-| Manipulation rate by difficulty per model | [figures/fig4_difficulty.png](figures/fig4_difficulty.png) |
+| Manipulation rate by frame × model (bar chart) | [figures/fig1_manip_by_frame.svg](figures/fig1_manip_by_frame.svg) |
+| Per-model frame × incentive heatmap | [figures/fig2_frame_inc_heatmap.svg](figures/fig2_frame_inc_heatmap.svg) |
+| Endpoints comparison: prohibitive vs permissive per model | [figures/fig3_endpoints.svg](figures/fig3_endpoints.svg) |
+| Manipulation rate by difficulty per model | [figures/fig4_difficulty.svg](figures/fig4_difficulty.svg) |
 
 ---
 

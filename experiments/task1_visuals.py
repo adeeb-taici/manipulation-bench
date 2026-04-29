@@ -92,7 +92,7 @@ def fig1_lied_by_frame(rows):
     ax.legend(loc="upper left", ncol=2, fontsize=9)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    out = OUT / "fig1_lied_by_frame.png"
+    out = OUT / "fig1_lied_by_frame.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -130,7 +130,7 @@ def fig2_penalty_collapse(rows):
     ax.axvline(1, color="gray", linestyle="--", alpha=0.4)
     ax.text(1.02, 0.98, "break-even", fontsize=8, color="gray", ha="left", va="top")
     fig.tight_layout()
-    out = OUT / "fig2_penalty_collapse.png"
+    out = OUT / "fig2_penalty_collapse.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -179,7 +179,7 @@ def fig3_frame_penalty_heatmap(rows):
         ax.set_visible(False)
     fig.suptitle("Lying rate: frame × penalty per model (red = more lying)", fontsize=13, y=1.00)
     fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.7, label="Lying rate")
-    out = OUT / "fig3_frame_penalty_heatmap.png"
+    out = OUT / "fig3_frame_penalty_heatmap.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -218,7 +218,7 @@ def fig4_endpoints(rows):
     ax.legend(loc="upper left")
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    out = OUT / "fig4_endpoints.png"
+    out = OUT / "fig4_endpoints.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")

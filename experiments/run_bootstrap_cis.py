@@ -6,7 +6,7 @@ per-task slope+CI bar figures.
 
 Outputs:
   paper/task<N>/<dir>/analysis/bootstrap_cis.json
-  paper/task<N>/<dir>/figures/fig5_slopes_with_ci.png
+  paper/task<N>/<dir>/figures/fig5_slopes_with_ci.svg
 """
 
 from __future__ import annotations
@@ -267,7 +267,7 @@ def main():
             )
         print(f"  wrote {out_json}")
 
-        fig_path = Path("paper") / task["dir"] / "figures" / "fig5_slopes_with_ci.png"
+        fig_path = Path("paper") / task["dir"] / "figures" / "fig5_slopes_with_ci.svg"
         fig_path.parent.mkdir(parents=True, exist_ok=True)
         fig_slopes_with_ci(task, ci_data, fig_path)
 

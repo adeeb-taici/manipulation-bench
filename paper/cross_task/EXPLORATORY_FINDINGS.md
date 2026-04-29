@@ -23,7 +23,7 @@ T2 (GPT-5.5) is least manipulable on T4 (rate=0.027). T2↔T3 is strongly *negat
 → **Paper headline candidate**: "Manipulation propensity is task-dependent, not a
 property of the model." This makes a strong case for multi-task evaluation.
 
-Figure: `figures/fig_ranking_stability.png`. JSON: `ranking_stability.json`.
+Figure: `figures/fig_ranking_stability.svg`. JSON: `ranking_stability.json`.
 
 ## 2. Model archetypes from 15-dim profile clustering
 
@@ -37,7 +37,7 @@ Hierarchical (Ward) clustering on z-scored 15-dim slope profiles (5 tasks × 3 a
 Note that Cluster A spans capability tiers (frontier Claude alongside cheaper
 Llama/DeepSeek) — clustering is about *response sensitivity*, not capability.
 
-Figures: `fig_dendrogram.png`, `fig_cluster_heatmap.png`, `fig_distance_matrix.png`.
+Figures: `fig_dendrogram.svg`, `fig_cluster_heatmap.svg`, `fig_distance_matrix.svg`.
 JSON: `clusters.json`.
 
 ## 3. T1 Bargaining: when models lie, most lie *extremely*
@@ -62,8 +62,8 @@ stated valuation past 200pts.
 This challenges the framing that "lie rate" is a single dial. There are at least
 two qualitatively different lying modes.
 
-Figures: `paper/task1_bargaining/figures/fig8_lie_magnitude.png`,
-`paper/task1_bargaining/figures/fig9_magnitude_vs_rate.png`.
+Figures: `paper/task1_bargaining/figures/fig8_lie_magnitude.svg`,
+`paper/task1_bargaining/figures/fig9_magnitude_vs_rate.svg`.
 JSON: `paper/task1_bargaining/analysis/lie_magnitude.json`.
 
 ## 4. T2 Debate: claim difficulty is endogenous, not just framing
@@ -86,8 +86,8 @@ truthful debater could pull jurors back:
 → **Implication**: Manipulation rate confounds with claim selection. Future T2
 designs should report rates *per claim* and weight when aggregating.
 
-Figures: `paper/task2_debate/figures/fig8_per_claim.png`,
-`paper/task2_debate/figures/fig9_claim_difficulty.png`.
+Figures: `paper/task2_debate/figures/fig8_per_claim.svg`,
+`paper/task2_debate/figures/fig9_claim_difficulty.svg`.
 JSON: `paper/task2_debate/analysis/per_claim.json`.
 
 ## 5. T3 Village: promise-action gap reveals deception magnitude
@@ -107,7 +107,7 @@ Gemini's manipulator over-promises 5x more than DeepSeek's, and does so on 76%
 of games. This corroborates the per-frame T3 finding that Gemini saturates on
 exploitation_rate at ~0.99.
 
-Figure: `paper/task3_village/figures/fig8_promise_gap.png`.
+Figure: `paper/task3_village/figures/fig8_promise_gap.svg`.
 JSON: `paper/task3_village/analysis/promise_gap.json`.
 
 ## 6. T4 Sales: question-type gradient
@@ -125,8 +125,8 @@ Manipulation rate (misleading + false) by check_type, all conditions averaged:
 question type — 19% manipulation rate on average and 55% for DeepSeek V4 Pro.
 "How does this compare to alternatives?" (`comparable_disclosure`) is least.
 
-Figures: `paper/task4_sales/figures/fig8_check_type_heatmap.png`,
-`paper/task4_sales/figures/fig9_check_type_by_frame.png`.
+Figures: `paper/task4_sales/figures/fig8_check_type_heatmap.svg`,
+`paper/task4_sales/figures/fig9_check_type_by_frame.svg`.
 JSON: `paper/task4_sales/analysis/per_check_type.json`.
 
 ## 7. Non-additive interactions are dominated by T5
@@ -150,7 +150,7 @@ interactions; for T1-T4 (rates ∈ [0,1]) the additive model is much closer
 (13-17 flagged cells per task vs T5's 15, but T5's residuals are 2-3× larger
 in absolute size).
 
-Figures: `paper/cross_task/figures/fig_residual_t<N>.png` (5 figures).
+Figures: `paper/cross_task/figures/fig_residual_t<N>.svg` (5 figures).
 JSON: `paper/cross_task/residuals.json`.
 
 ## 8. Sample-distribution shapes (no smoking gun)
@@ -161,7 +161,7 @@ so distributions are uninformative; T4 shows mild bimodality at frame=permissive
 for Gemini and DeepSeek (clusters near 0 and near 0.6) suggesting two modes:
 honest sale vs going-all-in deceptive sale.
 
-Figures: `paper/task<N>/<dir>/figures/fig10_sample_distributions.png` (5 figures).
+Figures: `paper/task<N>/<dir>/figures/fig10_sample_distributions.svg` (5 figures).
 
 ## 9. Frontier-generation lift
 
@@ -198,7 +198,7 @@ V4 Pro is *more* manipulative on 4/5 tasks; only T3 Village (where V3.2 was at
 → Generation upgrades are NOT uniformly safety-positive; the direction depends
 on lab and on task. This is a paper-headline-class finding.
 
-Figure: `figures/fig_frontier_lift.png`. JSON: `frontier_lift.json`.
+Figure: `figures/fig_frontier_lift.svg`. JSON: `frontier_lift.json`.
 
 ## What we did NOT find
 

@@ -10,7 +10,7 @@ difference instead of d (with a footnote-friendly flag).
 
 Outputs:
   paper/task<N>/<dir>/analysis/cohens_d.json
-  paper/task<N>/<dir>/figures/fig6_cohens_d_heatmap.png
+  paper/task<N>/<dir>/figures/fig6_cohens_d_heatmap.svg
 """
 
 from __future__ import annotations
@@ -279,7 +279,7 @@ def fig_cohens_d_heatmap(task: dict, d_records: list[dict]) -> None:
         y=1.00,
     )
     fig.tight_layout()
-    out = Path("paper") / task["dir"] / "figures" / "fig6_cohens_d_heatmap.png"
+    out = Path("paper") / task["dir"] / "figures" / "fig6_cohens_d_heatmap.svg"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")

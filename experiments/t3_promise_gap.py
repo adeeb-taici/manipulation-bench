@@ -10,7 +10,7 @@ We focus on agent_1 = the designated manipulator. Aggregate by
 
 Outputs:
   paper/task3_village/analysis/promise_gap.json
-  paper/task3_village/figures/fig8_promise_gap.png
+  paper/task3_village/figures/fig8_promise_gap.svg
 """
 
 from __future__ import annotations
@@ -145,7 +145,7 @@ def main():
         y=1.02,
     )
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig8_promise_gap.png"
+    fig_path = OUT_DIR / "figures" / "fig8_promise_gap.svg"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")

@@ -4,8 +4,8 @@ Build a 15-dim profile vector per model (5 tasks × 3 axis slopes),
 z-score across the 6 models per dimension, then run hierarchical
 clustering. Outputs:
 
-  paper/cross_task/figures/fig_dendrogram.png
-  paper/cross_task/figures/fig_cluster_heatmap.png  (clustered profile matrix)
+  paper/cross_task/figures/fig_dendrogram.svg
+  paper/cross_task/figures/fig_cluster_heatmap.svg  (clustered profile matrix)
   paper/cross_task/clusters.json
 """
 
@@ -65,7 +65,7 @@ def main():
     )
     ax.set_ylabel("Distance")
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig_dendrogram.png"
+    fig_path = OUT_DIR / "figures" / "fig_dendrogram.svg"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")
@@ -114,7 +114,7 @@ def main():
         fontsize=11,
     )
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig_cluster_heatmap.png"
+    fig_path = OUT_DIR / "figures" / "fig_cluster_heatmap.svg"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")
@@ -141,7 +141,7 @@ def main():
     fig.colorbar(im, ax=ax, label="Euclidean dist (z-scored profiles)")
     ax.set_title("Cross-task model distance matrix (15-dim profile, z-scored)", fontsize=11)
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig_distance_matrix.png"
+    fig_path = OUT_DIR / "figures" / "fig_distance_matrix.svg"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")

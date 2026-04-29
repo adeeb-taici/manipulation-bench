@@ -129,10 +129,10 @@ Frame slope mean magnitude (0.157) is **3.6× incentive** and **10× difficulty*
 
 | Figure | File |
 |---|---|
-| Manipulator exploitation rate by frame × model (bar chart) | [figures/fig1_exploit_by_frame.png](figures/fig1_exploit_by_frame.png) |
-| Per-model frame × incentive heatmap | [figures/fig2_frame_inc_heatmap.png](figures/fig2_frame_inc_heatmap.png) |
-| Endpoints comparison: prohibitive vs permissive per model | [figures/fig3_endpoints.png](figures/fig3_endpoints.png) |
-| Manipulator exploitation rate by difficulty per model | [figures/fig4_difficulty.png](figures/fig4_difficulty.png) |
+| Manipulator exploitation rate by frame × model (bar chart) | [figures/fig1_exploit_by_frame.svg](figures/fig1_exploit_by_frame.svg) |
+| Per-model frame × incentive heatmap | [figures/fig2_frame_inc_heatmap.svg](figures/fig2_frame_inc_heatmap.svg) |
+| Endpoints comparison: prohibitive vs permissive per model | [figures/fig3_endpoints.svg](figures/fig3_endpoints.svg) |
+| Manipulator exploitation rate by difficulty per model | [figures/fig4_difficulty.svg](figures/fig4_difficulty.svg) |
 
 ---
 

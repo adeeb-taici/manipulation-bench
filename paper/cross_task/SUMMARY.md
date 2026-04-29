@@ -13,7 +13,7 @@ The cluster split is **not** an artifact of which models manipulate easily — i
 
 ## Per-task aggregate sensitivity (mean |slope| across 6 models)
 
-See [cross_task_aggregate.md](cross_task_aggregate.md) for the full machine-generated table; [figures/per_task_slopes.png](figures/per_task_slopes.png) for the chart.
+See [cross_task_aggregate.md](cross_task_aggregate.md) for the full machine-generated table; [figures/per_task_slopes.svg](figures/per_task_slopes.svg) for the chart.
 
 | Task | Frame | Incentive | Difficulty | Dominant axis | Dominance ratio |
 |---|---:|---:|---:|---|---:|
@@ -40,7 +40,7 @@ This refines the cross-task incentive theory: **incentive language only binds wh
 
 ## Per-model profile signatures (15-dim cross-task vector)
 
-See [figures/per_model_profiles.png](figures/per_model_profiles.png) for the small-multiples view; [figures/cross_task_heatmap.png](figures/cross_task_heatmap.png) for the dense matrix; [cross_task_aggregate.md](cross_task_aggregate.md) for the machine-readable signed slopes.
+See [figures/per_model_profiles.svg](figures/per_model_profiles.svg) for the small-multiples view; [figures/cross_task_heatmap.svg](figures/cross_task_heatmap.svg) for the dense matrix; [cross_task_aggregate.md](cross_task_aggregate.md) for the machine-readable signed slopes.
 
 A few notable per-model patterns:
 
@@ -73,11 +73,11 @@ P1/P2 fail in 3/5 tasks (Debate, Village, Sales — Sales' P1 PASS under GPT-5.5
 
 Past-PREREG analyses live in [EXPLORATORY_FINDINGS.md](EXPLORATORY_FINDINGS.md). Highlights:
 
-- **Cross-task model rankings barely correlate** (mean Spearman ρ = 0.047 across the 10 task-pairs) — manipulation propensity is task-dependent, not a stable model trait. See [ranking_stability.json](ranking_stability.json) and [figures/fig_ranking_stability.png](figures/fig_ranking_stability.png).
-- **Frontier-generation lift is non-uniform**: GPT-5 → GPT-5.5 reduces manipulation on 4/5 tasks (T4 Sales 56% → 3%), but DeepSeek V3.2 → V4 Pro *increases* it on 4/5. See [frontier_lift.json](frontier_lift.json) and [figures/fig_frontier_lift.png](figures/fig_frontier_lift.png).
+- **Cross-task model rankings barely correlate** (mean Spearman ρ = 0.047 across the 10 task-pairs) — manipulation propensity is task-dependent, not a stable model trait. See [ranking_stability.json](ranking_stability.json) and [figures/fig_ranking_stability.svg](figures/fig_ranking_stability.svg).
+- **Frontier-generation lift is non-uniform**: GPT-5 → GPT-5.5 reduces manipulation on 4/5 tasks (T4 Sales 56% → 3%), but DeepSeek V3.2 → V4 Pro *increases* it on 4/5. See [frontier_lift.json](frontier_lift.json) and [figures/fig_frontier_lift.svg](figures/fig_frontier_lift.svg).
 - **T1 lie magnitude**: when models lie, Gemini 100% / GPT-5.5 97% / DeepSeek 76% / Grok 79% lie *extremely* (>200pt overstatements); Claude 6%, Llama 1%. See [../task1_bargaining/analysis/lie_magnitude.json](../task1_bargaining/analysis/lie_magnitude.json).
-- **T5 dominates non-additive interactions**: per-(task, model) residuals from an additive linear fit; the top-10 most-surprising cells are all T5 (`prohibitive × high-difficulty` flips sign). See [residuals.json](residuals.json) and [figures/fig_residual_t<N>.png](figures/).
-- **Model archetypes** (15-dim profile clustering): Claude/Llama/DeepSeek vs GPT-5.5/Grok vs Gemini outlier. See [clusters.json](clusters.json) and [figures/fig_dendrogram.png](figures/fig_dendrogram.png).
+- **T5 dominates non-additive interactions**: per-(task, model) residuals from an additive linear fit; the top-10 most-surprising cells are all T5 (`prohibitive × high-difficulty` flips sign). See [residuals.json](residuals.json) and [figures/fig_residual_t<N>.svg](figures/).
+- **Model archetypes** (15-dim profile clustering): Claude/Llama/DeepSeek vs GPT-5.5/Grok vs Gemini outlier. See [clusters.json](clusters.json) and [figures/fig_dendrogram.svg](figures/fig_dendrogram.svg).
 
 ## Reproduction
 
