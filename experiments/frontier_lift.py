@@ -8,7 +8,7 @@ manipulation rate before vs after the upgrade — same scenarios, same
 conditions, only the model changed.
 
 Outputs:
-  paper/cross_task/figures/fig_frontier_lift.svg
+  paper/cross_task/figures/fig_frontier_lift.pdf
   paper/cross_task/frontier_lift.json
 """
 
@@ -291,7 +291,7 @@ def main():
     ax.legend()
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    out = out_dir / "figures" / "fig_frontier_lift.svg"
+    out = out_dir / "figures" / "fig_frontier_lift.pdf"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")

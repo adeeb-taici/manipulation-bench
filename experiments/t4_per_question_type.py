@@ -12,8 +12,8 @@ filtered to the permissive frame to maximise signal.
 
 Outputs:
   paper/task4_sales/analysis/per_check_type.json
-  paper/task4_sales/figures/fig8_check_type_heatmap.svg
-  paper/task4_sales/figures/fig9_check_type_by_frame.svg
+  paper/task4_sales/figures/fig8_check_type_heatmap.pdf
+  paper/task4_sales/figures/fig9_check_type_by_frame.pdf
 """
 
 from __future__ import annotations
@@ -141,7 +141,7 @@ def main():
         fontsize=11,
     )
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig8_check_type_heatmap.svg"
+    fig_path = OUT_DIR / "figures" / "fig8_check_type_heatmap.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")
@@ -167,7 +167,7 @@ def main():
         "T4 Sales — manipulation rate per check_type × frame, by model", fontsize=12, y=1.02
     )
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig9_check_type_by_frame.svg"
+    fig_path = OUT_DIR / "figures" / "fig9_check_type_by_frame.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")

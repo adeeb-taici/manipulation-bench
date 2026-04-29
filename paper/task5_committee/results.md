@@ -125,10 +125,10 @@ Difficulty slope mean magnitude (0.643) is **2× the frame slope** and **3.7× t
 
 | Figure | File |
 |---|---|
-| Bias by frame × model | [figures/fig1_bias_by_frame.svg](figures/fig1_bias_by_frame.svg) |
-| Minimal vs Selfish per-model contrast (the surprise) | [figures/fig2_minimal_vs_selfish.svg](figures/fig2_minimal_vs_selfish.svg) |
-| Per-model frame × difficulty heatmap | [figures/fig3_frame_x_difficulty_heatmap.svg](figures/fig3_frame_x_difficulty_heatmap.svg) |
-| Endpoints comparison: prohibitive vs permissive per model | [figures/fig4_endpoints.svg](figures/fig4_endpoints.svg) |
+| Bias by frame × model | [figures/fig1_bias_by_frame.pdf](figures/fig1_bias_by_frame.pdf) |
+| Minimal vs Selfish per-model contrast (the surprise) | [figures/fig2_minimal_vs_selfish.pdf](figures/fig2_minimal_vs_selfish.pdf) |
+| Per-model frame × difficulty heatmap | [figures/fig3_frame_x_difficulty_heatmap.pdf](figures/fig3_frame_x_difficulty_heatmap.pdf) |
+| Endpoints comparison: prohibitive vs permissive per model | [figures/fig4_endpoints.pdf](figures/fig4_endpoints.pdf) |
 
 ---
 

@@ -9,9 +9,9 @@ Loads each task's prereg_results.json and assembles:
 Outputs:
   paper/cross_task/cross_task_profiles.json         # machine-readable profiles
   paper/cross_task/cross_task_aggregate.md          # per-task aggregate table
-  paper/cross_task/figures/cross_task_heatmap.svg   # 6-model × 15-dim heatmap
-  paper/cross_task/figures/per_task_slopes.svg      # per-task mean |slope| per axis
-  paper/cross_task/figures/per_model_profiles.svg   # 6 small-multiples per model
+  paper/cross_task/figures/cross_task_heatmap.pdf   # 6-model × 15-dim heatmap
+  paper/cross_task/figures/per_task_slopes.pdf      # per-task mean |slope| per axis
+  paper/cross_task/figures/per_model_profiles.pdf   # 6 small-multiples per model
 """
 
 from __future__ import annotations
@@ -332,9 +332,9 @@ def main():
     print(f"saved {out_json}")
 
     emit_aggregate_md(agg, profiles, OUT_DIR / "cross_task_aggregate.md")
-    cross_task_heatmap(profiles, FIG_DIR / "cross_task_heatmap.svg")
-    per_task_slopes_chart(agg, FIG_DIR / "per_task_slopes.svg")
-    per_model_profiles_chart(profiles, FIG_DIR / "per_model_profiles.svg")
+    cross_task_heatmap(profiles, FIG_DIR / "cross_task_heatmap.pdf")
+    per_task_slopes_chart(agg, FIG_DIR / "per_task_slopes.pdf")
+    per_model_profiles_chart(profiles, FIG_DIR / "per_model_profiles.pdf")
 
     # Print headline table
     print()

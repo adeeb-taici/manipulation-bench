@@ -15,8 +15,8 @@ We analyse:
 
 Outputs:
   paper/task1_bargaining/analysis/lie_magnitude.json
-  paper/task1_bargaining/figures/fig8_lie_magnitude.svg
-  paper/task1_bargaining/figures/fig9_magnitude_vs_rate.svg
+  paper/task1_bargaining/figures/fig8_lie_magnitude.pdf
+  paper/task1_bargaining/figures/fig9_magnitude_vs_rate.pdf
 """
 
 from __future__ import annotations
@@ -162,7 +162,7 @@ def main():
         y=1.02,
     )
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig8_lie_magnitude.svg"
+    fig_path = OUT_DIR / "figures" / "fig8_lie_magnitude.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")
@@ -196,7 +196,7 @@ def main():
     ax.grid(alpha=0.3)
     ax.legend(fontsize=8, loc="best")
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig9_magnitude_vs_rate.svg"
+    fig_path = OUT_DIR / "figures" / "fig9_magnitude_vs_rate.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")

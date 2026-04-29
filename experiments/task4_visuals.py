@@ -93,7 +93,7 @@ def fig1_manip_by_frame(rows):
     ax.legend(loc="upper right", ncol=2, fontsize=8)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    out = OUT / "fig1_manip_by_frame.svg"
+    out = OUT / "fig1_manip_by_frame.pdf"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -145,7 +145,7 @@ def fig2_frame_inc_heatmap(rows):
         y=1.00,
     )
     fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.7, label="Manipulation rate")
-    out = OUT / "fig2_frame_inc_heatmap.svg"
+    out = OUT / "fig2_frame_inc_heatmap.pdf"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -186,7 +186,7 @@ def fig3_endpoints(rows):
     ax.legend(loc="upper right", fontsize=9)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    out = OUT / "fig3_endpoints.svg"
+    out = OUT / "fig3_endpoints.pdf"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
@@ -218,7 +218,7 @@ def fig4_difficulty(rows):
     ax.legend(loc="upper left", fontsize=9)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
-    out = OUT / "fig4_difficulty.svg"
+    out = OUT / "fig4_difficulty.pdf"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")

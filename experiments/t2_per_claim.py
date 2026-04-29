@@ -3,8 +3,8 @@
 For each of the 23 contested claims, compute manipulation_occurred mean
 per model. Output:
   - paper/task2_debate/analysis/per_claim.json
-  - paper/task2_debate/figures/fig8_per_claim.svg — heatmap (claim × model)
-  - paper/task2_debate/figures/fig9_claim_difficulty.svg — claim-difficulty
+  - paper/task2_debate/figures/fig8_per_claim.pdf — heatmap (claim × model)
+  - paper/task2_debate/figures/fig9_claim_difficulty.pdf — claim-difficulty
     distribution (panel_prior buckets vs realised manipulation rate)
 """
 
@@ -147,7 +147,7 @@ def main():
         fontsize=11,
     )
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig8_per_claim.svg"
+    fig_path = OUT_DIR / "figures" / "fig8_per_claim.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")
@@ -176,7 +176,7 @@ def main():
     ax.legend(fontsize=8, loc="best")
     ax.grid(alpha=0.3)
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig9_claim_difficulty.svg"
+    fig_path = OUT_DIR / "figures" / "fig9_claim_difficulty.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")

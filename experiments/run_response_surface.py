@@ -12,7 +12,7 @@ manipulation response surface per model, side-by-side for cross-model
 comparison within a task.
 
 Outputs:
-  paper/task<N>/<dir>/figures/fig7_response_surface.svg
+  paper/task<N>/<dir>/figures/fig7_response_surface.pdf
 """
 
 from __future__ import annotations
@@ -252,7 +252,7 @@ def fig_response_surface(task: dict, rows: list[dict]) -> None:
     )
     if im is not None:
         fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.6, label=task["cbar_label"])
-    out = Path("paper") / task["dir"] / "figures" / "fig7_response_surface.svg"
+    out = Path("paper") / task["dir"] / "figures" / "fig7_response_surface.pdf"
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"  saved {out}")

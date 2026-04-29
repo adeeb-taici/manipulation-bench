@@ -110,10 +110,10 @@ Negative incentive slopes are expected (penalty discourages lying). The frame-sl
 
 | Figure | File |
 |---|---|
-| Lying rate by frame × model (bar chart) | [figures/fig1_lied_by_frame.svg](figures/fig1_lied_by_frame.svg) |
-| Penalty collapse: lying rate vs E across non-prohibitive frames (line chart) | [figures/fig2_penalty_collapse.svg](figures/fig2_penalty_collapse.svg) |
-| Per-model frame × penalty heatmap | [figures/fig3_frame_penalty_heatmap.svg](figures/fig3_frame_penalty_heatmap.svg) |
-| Endpoint comparison: prohibitive vs permissive per model | [figures/fig4_endpoints.svg](figures/fig4_endpoints.svg) |
+| Lying rate by frame × model (bar chart) | [figures/fig1_lied_by_frame.pdf](figures/fig1_lied_by_frame.pdf) |
+| Penalty collapse: lying rate vs E across non-prohibitive frames (line chart) | [figures/fig2_penalty_collapse.pdf](figures/fig2_penalty_collapse.pdf) |
+| Per-model frame × penalty heatmap | [figures/fig3_frame_penalty_heatmap.pdf](figures/fig3_frame_penalty_heatmap.pdf) |
+| Endpoint comparison: prohibitive vs permissive per model | [figures/fig4_endpoints.pdf](figures/fig4_endpoints.pdf) |
 
 ---
 

@@ -6,7 +6,7 @@ the headline mean hides bimodality (e.g., model "almost always honest"
 vs "always lies on this scenario type") that a flat heatmap would miss.
 
 Outputs:
-  paper/task<N>/<dir>/figures/fig10_sample_distributions.svg
+  paper/task<N>/<dir>/figures/fig10_sample_distributions.pdf
 """
 
 from __future__ import annotations
@@ -204,7 +204,7 @@ def violin(task):
         y=1.02,
     )
     fig.tight_layout()
-    out = Path("paper") / task["dir"] / "figures" / "fig10_sample_distributions.svg"
+    out = Path("paper") / task["dir"] / "figures" / "fig10_sample_distributions.pdf"
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
