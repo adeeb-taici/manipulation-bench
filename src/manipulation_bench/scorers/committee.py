@@ -1,4 +1,4 @@
-"""Scorers for the committee-evaluation env (paper Task 5). All mathematical — no LLM judge.
+"""Scorers for the committee-evaluation env. All mathematical — no LLM judge.
 
 Four scorers:
   - initial_rating_bias: interested party's initial rating of favored vs

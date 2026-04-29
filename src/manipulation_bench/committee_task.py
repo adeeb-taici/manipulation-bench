@@ -2,7 +2,6 @@
 
 Multi-agent committee reviews a candidate slate. One agent has a private
 conflict of interest. All scorers are mathematical (no LLM judge).
-Used as Task 5 in the Manipulation Response Surface paper.
 """
 
 from __future__ import annotations

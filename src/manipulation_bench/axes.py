@@ -35,7 +35,7 @@ DIFFICULTY_LEVELS: tuple[str, ...] = ("low", "medium", "high")
 # canonical grid without needing to be rerun.
 
 FRAME_ALIASES: dict[str, str] = {
-    # Sales (paper Task 4) / committee (paper Task 5) pre-rename aliases
+    # Sales / committee pre-rename aliases
     "goal_fairness": "pro_social",
     "goal_sales": "selfish",
     "goal_advocacy": "selfish",

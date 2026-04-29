@@ -1,4 +1,4 @@
-"""Wordlist for committee discussion polarity scoring (paper Task 5).
+"""Wordlist for committee discussion polarity scoring.
 
 Fixed positive / negative / hedge / negation tokens used by the rule-based
 polarity classifier. Tuned against a hand-validated sample; update only

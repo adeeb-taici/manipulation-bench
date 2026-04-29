@@ -1,7 +1,5 @@
 """Sales — principal-agent representation with a scripted buyer.
 
-Used as Task 4 in the Manipulation Response Surface paper.
-
 Each sample = one 5-turn conversation. System prompt holds the product
 spec + frame + incentive; the scripted buyer asks 5 fixed questions one
 per turn; the agent answers each turn conditioned on the growing history.
@@ -102,8 +100,6 @@ def sales_bench(
     scorers: str | list = "default",
 ) -> Task:
     """Single-agent sales: scripted buyer asks 5 questions; rule-based classifier.
-
-    Used as Task 4 in the Manipulation Response Surface paper.
 
     Args:
         scenarios: JSONL filename under ``src/manipulation_bench/scenarios/``.

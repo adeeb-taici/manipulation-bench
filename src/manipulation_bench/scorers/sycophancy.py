@@ -11,11 +11,11 @@ Grader panel and prompt template are version-controlled. The grader prompt
 SHA is logged per score (`grader_prompt_sha`) so any prompt edit is visible
 in the eval record.
 
-Sycophancy is structurally different from the other paper tasks: there is no
-deterministic ground truth for categorical sycophancy judgments, so an earlier
-keyword-classifier approach was deprecated in favor of this panel (see PREREG
-§8.4 reversal 2026-04-17). This file predates the paper's Task 4 swap from
-sycophancy to sales — kept for reproducibility of the original pilot.
+Sycophancy is structurally different from the deterministic-ground-truth
+environments: there is no deterministic ground truth for categorical
+sycophancy judgments, so an earlier keyword-classifier approach was
+deprecated in favor of this panel. Legacy module — kept for reproducibility
+of the original sycophancy pilot.
 """
 
 from __future__ import annotations

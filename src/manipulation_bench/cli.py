@@ -297,10 +297,11 @@ def build_parser() -> argparse.ArgumentParser:
         ),
         epilog=(
             "Examples:\n"
-            "  mb run debate --model openrouter/anthropic/claude-opus-4.7\n"
-            "  mb run debate village --model openrouter/openai/gpt-5\n"
-            "  mb run debate --models debater=openrouter/anthropic/claude-opus-4.7,judge=openrouter/openai/gpt-5\n"
-            "  mb analyze 'logs/2026*.eval'\n"
+            "  mb run debate --model mockllm/model              # smoke test, no API\n"
+            "  mb run debate --model openrouter/<provider>/<model>\n"
+            "  mb run debate village --model openrouter/<provider>/<model>\n"
+            "  mb run debate --models debater=openrouter/<provider>/<model>,judge=openrouter/<provider>/<model>\n"
+            "  mb analyze 'logs/<date>*.eval'\n"
             "  mb envs"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
