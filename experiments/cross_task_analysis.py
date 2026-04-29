@@ -108,7 +108,7 @@ def assemble_profiles() -> dict:
 
 
 def task_aggregate(profiles: dict) -> list[dict]:
-    """Per-task: mean |slope| per axis, across 6 models."""
+    """Per-task: mean |slope| per axis, across 6 models, plus stderr."""
     rows = []
     for task_dir, disp, _metric in TASKS:
         agg = {"task_dir": task_dir, "task": disp}
@@ -119,6 +119,11 @@ def task_aggregate(profiles: dict) -> list[dict]:
                 if v is not None and not (isinstance(v, float) and math.isnan(v)):
                     vals.append(abs(v))
             agg[axis] = sum(vals) / len(vals) if vals else float("nan")
+            if len(vals) > 1:
+                arr = np.asarray(vals, dtype=float)
+                agg[f"{axis}_stderr"] = float(arr.std(ddof=1) / np.sqrt(len(arr)))
+            else:
+                agg[f"{axis}_stderr"] = 0.0
         # Identify dominant axis
         ranked = sorted(((agg[a], a) for a in AXES), reverse=True)
         agg["dominant_axis"] = ranked[0][1]
@@ -206,11 +211,21 @@ def per_task_slopes_chart(agg: list[dict], out_path: Path) -> None:
     colors = {"frame": "#4C78A8", "incentive": "#F58518", "difficulty": "#54A24B"}
     for i, axis in enumerate(AXES):
         vals = [a[axis] for a in agg]
-        ax.bar(x + (i - 1) * width, vals, width, label=axis, color=colors[axis])
+        errs = [a.get(f"{axis}_stderr", 0.0) for a in agg]
+        ax.bar(
+            x + (i - 1) * width,
+            vals,
+            width,
+            yerr=errs,
+            label=axis,
+            color=colors[axis],
+            capsize=3,
+            error_kw={"elinewidth": 0.8},
+        )
 
     ax.set_xticks(x)
     ax.set_xticklabels([a["task"] for a in agg], fontsize=10)
-    ax.set_ylabel("Mean |slope| across 6 models")
+    ax.set_ylabel("Mean |slope| across 6 models  (error = stderr across models)")
     ax.set_title(
         "Cross-task aggregate: which axis dominates per task?\n"
         "Frame dominates only in Bargaining + Village; difficulty dominates in Debate / Sales / Committee."

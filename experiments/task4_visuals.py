@@ -65,6 +65,17 @@ def mean(xs):
     return sum(xs) / len(xs) if xs else float("nan")
 
 
+def mean_stderr(xs):
+    """Mean and standard error of mean. Returns (mean, 0) if singleton/empty."""
+    xs = [x for x in xs if x is not None]
+    if not xs:
+        return float("nan"), 0.0
+    if len(xs) == 1:
+        return float(xs[0]), 0.0
+    arr = np.asarray(xs, dtype=float)
+    return float(arr.mean()), float(arr.std(ddof=1) / np.sqrt(len(arr)))
+
+
 def fig1_manip_by_frame(rows):
     fig, ax = plt.subplots(figsize=(11, 6))
     models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
@@ -72,15 +83,21 @@ def fig1_manip_by_frame(rows):
     x = np.arange(len(FRAMES))
     width = 0.13
     for i, m in enumerate(models):
-        means = [
-            mean([r["mr"] for r in rows if r["model"] == m and r["frame"] == f]) for f in FRAMES
+        per_frame = [
+            mean_stderr([r["mr"] for r in rows if r["model"] == m and r["frame"] == f])
+            for f in FRAMES
         ]
+        means = [v[0] for v in per_frame]
+        errs = [v[1] for v in per_frame]
         ax.bar(
             x + (i - (len(models) - 1) / 2) * width,
             means,
             width,
+            yerr=errs,
             label=MODEL_DISPLAY.get(m, m),
             color=colors[i],
+            capsize=2,
+            error_kw={"elinewidth": 0.7},
         )
     ax.set_xticks(x)
     ax.set_xticklabels(FRAME_LABELS, fontsize=10)
@@ -154,18 +171,22 @@ def fig2_frame_inc_heatmap(rows):
 def fig3_endpoints(rows):
     fig, ax = plt.subplots(figsize=(9, 5))
     models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
-    proh = [
-        mean([r["mr"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
+    proh_pairs = [
+        mean_stderr([r["mr"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
         for m in models
     ]
-    perm = [
-        mean([r["mr"] for r in rows if r["model"] == m and r["frame"] == "permissive"])
+    perm_pairs = [
+        mean_stderr([r["mr"] for r in rows if r["model"] == m and r["frame"] == "permissive"])
         for m in models
     ]
+    proh = [p[0] for p in proh_pairs]
+    proh_err = [p[1] for p in proh_pairs]
+    perm = [p[0] for p in perm_pairs]
+    perm_err = [p[1] for p in perm_pairs]
     x = np.arange(len(models))
     w = 0.38
-    ax.bar(x - w / 2, proh, w, label='Prohibitive ("be accurate")', color="#54A24B")
-    ax.bar(x + w / 2, perm, w, label='Permissive ("any strategy")', color="#E45756")
+    ax.bar(x - w / 2, proh, w, yerr=proh_err, capsize=3, error_kw={"elinewidth": 0.8}, label='Prohibitive ("be accurate")', color="#54A24B")
+    ax.bar(x + w / 2, perm, w, yerr=perm_err, capsize=3, error_kw={"elinewidth": 0.8}, label='Permissive ("any strategy")', color="#E45756")
     for i, (p, e) in enumerate(zip(proh, perm)):
         if not np.isnan(e) and not np.isnan(p):
             ax.annotate(
@@ -198,11 +219,13 @@ def fig4_difficulty(rows):
     colors = plt.cm.tab10(np.linspace(0, 1, len(models)))
     x = np.arange(len(DIFFICULTIES))
     for i, m in enumerate(models):
-        means = [
-            mean([r["mr"] for r in rows if r["model"] == m and r["difficulty"] == d])
-            for d in DIFFICULTIES
-        ]
-        ax.plot(x, means, marker="o", linewidth=2, color=colors[i], label=MODEL_DISPLAY.get(m, m))
+        means, errs = [], []
+        for d in DIFFICULTIES:
+            mu, se = mean_stderr([r["mr"] for r in rows if r["model"] == m and r["difficulty"] == d])
+            means.append(mu)
+            errs.append(se)
+        ax.errorbar(x, means, yerr=errs, marker="o", linewidth=2, color=colors[i],
+                    label=MODEL_DISPLAY.get(m, m), capsize=3, elinewidth=0.8)
     ax.set_xticks(x)
     ax.set_xticklabels(
         [

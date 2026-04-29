@@ -70,6 +70,17 @@ def mean(xs):
     return sum(xs) / len(xs) if xs else float("nan")
 
 
+def mean_stderr(xs):
+    """Mean and standard error of mean. Returns (mean, 0) if singleton/empty."""
+    xs = [x for x in xs if x is not None]
+    if not xs:
+        return float("nan"), 0.0
+    if len(xs) == 1:
+        return float(xs[0]), 0.0
+    arr = np.asarray(xs, dtype=float)
+    return float(arr.mean()), float(arr.std(ddof=1) / np.sqrt(len(arr)))
+
+
 def fig1_bias_across_frames(rows):
     """Main figure: per-model manipulation bias across the 5 frame levels."""
     fig, ax = plt.subplots(figsize=(11, 6))
@@ -80,16 +91,22 @@ def fig1_bias_across_frames(rows):
     width = 0.13
 
     for i, model in enumerate(models):
-        means = []
+        means, errs = [], []
         for f in FRAMES:
-            vals = [r["bias"] for r in rows if r["model"] == model and r["frame"] == f]
-            means.append(mean(vals))
+            mu, se = mean_stderr(
+                [r["bias"] for r in rows if r["model"] == model and r["frame"] == f]
+            )
+            means.append(mu)
+            errs.append(se)
         ax.bar(
             x + (i - 2.5) * width,
             means,
             width,
+            yerr=errs,
             label=MODEL_DISPLAY.get(model, model),
             color=colors[i],
+            capsize=2,
+            error_kw={"elinewidth": 0.7},
         )
 
     ax.axhline(0, color="black", linewidth=0.8)
@@ -119,18 +136,40 @@ def fig2_minimal_vs_selfish(rows):
     fig, ax = plt.subplots(figsize=(9, 5.5))
     models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
 
-    min_means, sel_means = [], []
+    min_means, min_errs, sel_means, sel_errs = [], [], [], []
     for model in models:
-        min_vals = [r["bias"] for r in rows if r["model"] == model and r["frame"] == "minimal"]
-        sel_vals = [r["bias"] for r in rows if r["model"] == model and r["frame"] == "selfish"]
-        min_means.append(mean(min_vals))
-        sel_means.append(mean(sel_vals))
+        mu_min, se_min = mean_stderr(
+            [r["bias"] for r in rows if r["model"] == model and r["frame"] == "minimal"]
+        )
+        mu_sel, se_sel = mean_stderr(
+            [r["bias"] for r in rows if r["model"] == model and r["frame"] == "selfish"]
+        )
+        min_means.append(mu_min)
+        min_errs.append(se_min)
+        sel_means.append(mu_sel)
+        sel_errs.append(se_sel)
 
     x = np.arange(len(models))
     width = 0.38
-    ax.bar(x - width / 2, min_means, width, label="Minimal (no instruction)", color="#4C78A8")
     ax.bar(
-        x + width / 2, sel_means, width, label='"Selfish" (explicit instruction)', color="#E45756"
+        x - width / 2,
+        min_means,
+        width,
+        yerr=min_errs,
+        label="Minimal (no instruction)",
+        color="#4C78A8",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+    ax.bar(
+        x + width / 2,
+        sel_means,
+        width,
+        yerr=sel_errs,
+        label='"Selfish" (explicit instruction)',
+        color="#E45756",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
     )
 
     # Annotate inversions
@@ -216,19 +255,41 @@ def fig4_endpoints(rows):
     fig, ax = plt.subplots(figsize=(9, 5))
     models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
 
-    proh = [
-        mean([r["bias"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
+    proh_pairs = [
+        mean_stderr([r["bias"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
         for m in models
     ]
-    perm = [
-        mean([r["bias"] for r in rows if r["model"] == m and r["frame"] == "permissive"])
+    perm_pairs = [
+        mean_stderr([r["bias"] for r in rows if r["model"] == m and r["frame"] == "permissive"])
         for m in models
     ]
+    proh = [p[0] for p in proh_pairs]
+    proh_err = [p[1] for p in proh_pairs]
+    perm = [p[0] for p in perm_pairs]
+    perm_err = [p[1] for p in perm_pairs]
 
     x = np.arange(len(models))
     width = 0.38
-    ax.bar(x - width / 2, proh, width, label='"Do not manipulate"', color="#54A24B")
-    ax.bar(x + width / 2, perm, width, label='"You may exaggerate"', color="#F58518")
+    ax.bar(
+        x - width / 2,
+        proh,
+        width,
+        yerr=proh_err,
+        label='"Do not manipulate"',
+        color="#54A24B",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+    ax.bar(
+        x + width / 2,
+        perm,
+        width,
+        yerr=perm_err,
+        label='"You may exaggerate"',
+        color="#F58518",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
 
     for i, (p, e) in enumerate(zip(proh, perm)):
         ax.annotate(

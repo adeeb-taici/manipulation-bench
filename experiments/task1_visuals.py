@@ -52,7 +52,11 @@ def load_rows():
             if v.get("sample_failed"):
                 continue
             by_id[s.id] = dict(
-                model=("DeepSeek-V4-Pro" if md["model"] == "DeepSeek-v3.2" else ("GPT-5.5" if md["model"] == "GPT-5" else md["model"])),
+                model=(
+                    "DeepSeek-V4-Pro"
+                    if md["model"] == "DeepSeek-v3.2"
+                    else ("GPT-5.5" if md["model"] == "GPT-5" else md["model"])
+                ),
                 frame=md["frame"],
                 incentive=md["expected_penalty"],
                 difficulty=md["difficulty"],
@@ -66,6 +70,17 @@ def mean(xs):
     return sum(xs) / len(xs) if xs else float("nan")
 
 
+def mean_stderr(xs):
+    """Mean and standard error of mean. Returns (mean, 0) if singleton/empty."""
+    xs = [x for x in xs if x is not None]
+    if not xs:
+        return float("nan"), 0.0
+    if len(xs) == 1:
+        return float(xs[0]), 0.0
+    arr = np.asarray(xs, dtype=float)
+    return float(arr.mean()), float(arr.std(ddof=1) / np.sqrt(len(arr)))
+
+
 def fig1_lied_by_frame(rows):
     fig, ax = plt.subplots(figsize=(11, 6))
     models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
@@ -73,15 +88,21 @@ def fig1_lied_by_frame(rows):
     x = np.arange(len(FRAMES))
     width = 0.13
     for i, m in enumerate(models):
-        means = [
-            mean([r["mr"] for r in rows if r["model"] == m and r["frame"] == f]) for f in FRAMES
+        per_frame = [
+            mean_stderr([r["mr"] for r in rows if r["model"] == m and r["frame"] == f])
+            for f in FRAMES
         ]
+        means = [v[0] for v in per_frame]
+        errs = [v[1] for v in per_frame]
         ax.bar(
             x + (i - (len(models) - 1) / 2) * width,
             means,
             width,
+            yerr=errs,
             label=MODEL_DISPLAY.get(m, m),
             color=colors[i],
+            capsize=2,
+            error_kw={"elinewidth": 0.7},
         )
     ax.axhline(0, color="black", linewidth=0.8)
     ax.set_xticks(x)
@@ -105,18 +126,28 @@ def fig2_penalty_collapse(rows):
 
     x = np.arange(len(INCS))
     for i, m in enumerate(models):
-        means = []
+        means, errs = [], []
         for inc in INCS:
-            means.append(
-                mean(
-                    [
-                        r["mr"]
-                        for r in rows
-                        if r["model"] == m and r["incentive"] == inc and r["frame"] != "prohibitive"
-                    ]
-                )
+            mu, se = mean_stderr(
+                [
+                    r["mr"]
+                    for r in rows
+                    if r["model"] == m and r["incentive"] == inc and r["frame"] != "prohibitive"
+                ]
             )
-        ax.plot(x, means, marker="o", linewidth=2, color=colors[i], label=MODEL_DISPLAY.get(m, m))
+            means.append(mu)
+            errs.append(se)
+        ax.errorbar(
+            x,
+            means,
+            yerr=errs,
+            marker="o",
+            linewidth=2,
+            color=colors[i],
+            label=MODEL_DISPLAY.get(m, m),
+            capsize=3,
+            elinewidth=0.8,
+        )
 
     ax.set_xticks(x)
     ax.set_xticklabels(INC_LABELS, fontsize=10)
@@ -188,18 +219,40 @@ def fig3_frame_penalty_heatmap(rows):
 def fig4_endpoints(rows):
     fig, ax = plt.subplots(figsize=(9, 5))
     models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
-    proh = [
-        mean([r["mr"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
+    proh_pairs = [
+        mean_stderr([r["mr"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
         for m in models
     ]
-    perm = [
-        mean([r["mr"] for r in rows if r["model"] == m and r["frame"] == "permissive"])
+    perm_pairs = [
+        mean_stderr([r["mr"] for r in rows if r["model"] == m and r["frame"] == "permissive"])
         for m in models
     ]
+    proh = [p[0] for p in proh_pairs]
+    proh_err = [p[1] for p in proh_pairs]
+    perm = [p[0] for p in perm_pairs]
+    perm_err = [p[1] for p in perm_pairs]
     x = np.arange(len(models))
     w = 0.38
-    ax.bar(x - w / 2, proh, w, label='"Be honest"', color="#54A24B")
-    ax.bar(x + w / 2, perm, w, label='"You may exaggerate"', color="#E45756")
+    ax.bar(
+        x - w / 2,
+        proh,
+        w,
+        yerr=proh_err,
+        label='"Be honest"',
+        color="#54A24B",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+    ax.bar(
+        x + w / 2,
+        perm,
+        w,
+        yerr=perm_err,
+        label='"You may exaggerate"',
+        color="#E45756",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
     for i, (p, e) in enumerate(zip(proh, perm)):
         if not np.isnan(e):
             ax.annotate(

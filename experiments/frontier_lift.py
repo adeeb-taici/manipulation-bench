@@ -227,8 +227,12 @@ def main():
                 f"old_n={len(old_vals)} new_n={len(new_vals)}"
             )
             continue
-        old_mean = float(np.mean(old_vals))
-        new_mean = float(np.mean(new_vals))
+        old_arr = np.asarray(old_vals, dtype=float)
+        new_arr = np.asarray(new_vals, dtype=float)
+        old_mean = float(old_arr.mean())
+        new_mean = float(new_arr.mean())
+        old_se = float(old_arr.std(ddof=1) / np.sqrt(len(old_arr))) if len(old_arr) > 1 else 0.0
+        new_se = float(new_arr.std(ddof=1) / np.sqrt(len(new_arr))) if len(new_arr) > 1 else 0.0
         results.append(
             {
                 "task": spec["task"],
@@ -236,6 +240,8 @@ def main():
                 "new_model": spec["compare_model_new"],
                 "old_mean": old_mean,
                 "new_mean": new_mean,
+                "old_stderr": old_se,
+                "new_stderr": new_se,
                 "delta": new_mean - old_mean,
                 "n_old": len(old_vals),
                 "n_new": len(new_vals),
@@ -268,8 +274,30 @@ def main():
     if any(is_t5):
         # Plot T5 separately on right axis. Easier: plot per-row split — but keep simple: only T1-T4 here.
         pass
-    ax.bar(x - w / 2, old_means, w, label="Original model", color="C0", alpha=0.85)
-    ax.bar(x + w / 2, new_means, w, label="Upgraded model", color="C1", alpha=0.85)
+    old_errs = [r.get("old_stderr", 0.0) for r in results]
+    new_errs = [r.get("new_stderr", 0.0) for r in results]
+    ax.bar(
+        x - w / 2,
+        old_means,
+        w,
+        yerr=old_errs,
+        label="Original model",
+        color="C0",
+        alpha=0.85,
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+    ax.bar(
+        x + w / 2,
+        new_means,
+        w,
+        yerr=new_errs,
+        label="Upgraded model",
+        color="C1",
+        alpha=0.85,
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
     for i, d in enumerate(deltas):
         ax.text(
             i,

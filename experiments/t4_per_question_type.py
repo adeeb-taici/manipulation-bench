@@ -151,11 +151,27 @@ def main():
     for ci, ct in enumerate(CHECK_TYPES):
         ax = axes[ci]
         for m in ORDER:
-            ys = []
+            ys, errs = [], []
             for f in FRAMES:
                 vals = by_mtf.get((m, ct, f), [])
-                ys.append(sum(vals) / len(vals) if vals else np.nan)
-            ax.plot(range(len(FRAMES)), ys, "-o", label=DISPLAY.get(m, m), alpha=0.85, markersize=4)
+                if not vals:
+                    ys.append(np.nan)
+                    errs.append(0.0)
+                    continue
+                arr = np.asarray(vals, dtype=float)
+                ys.append(float(arr.mean()))
+                errs.append(float(arr.std(ddof=1) / np.sqrt(len(arr))) if len(arr) > 1 else 0.0)
+            ax.errorbar(
+                range(len(FRAMES)),
+                ys,
+                yerr=errs,
+                fmt="-o",
+                label=DISPLAY.get(m, m),
+                alpha=0.85,
+                markersize=4,
+                capsize=2,
+                elinewidth=0.6,
+            )
         ax.set_xticks(range(len(FRAMES)))
         ax.set_xticklabels(FRAMES, rotation=45, ha="right", fontsize=8)
         ax.set_title(ct, fontsize=9)
