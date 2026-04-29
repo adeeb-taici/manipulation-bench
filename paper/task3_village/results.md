@@ -8,11 +8,11 @@ This is the authoritative results file for Task 3. Two sections cleanly separate
 
 | Field | Value |
 |---|---|
-| Eval log | `paper/task3_village/eval_log.eval` (540 samples merged from 5 batches by [../../experiments/combine_eval_logs.py](../../experiments/combine_eval_logs.py); chronology in [smoke_log.md](smoke_log.md) + [prereg.md §10](prereg.md)) |
+| Eval log | `paper/task3_village/eval_log.eval` (540 samples merged from 5 batches by [../cross_task/scripts/combine_eval_logs.py](../cross_task/scripts/combine_eval_logs.py); chronology in [smoke_log.md](smoke_log.md) + [prereg.md §10](prereg.md)) |
 | Scenario file | `src/manipulation_bench/scenarios/task3_village_v61_full.jsonl` (+ remaining_v2 for re-launches under amendments) |
 | PREREG commit | `82490a0` (locked 2026-04-24T12:47:31-04:00); **Amendments A1 + A2 applied** |
-| Analysis script | [../../experiments/task3_prereg_analysis.py](../../experiments/task3_prereg_analysis.py) |
-| Figures script | [../../experiments/task3_visuals.py](../../experiments/task3_visuals.py) |
+| Analysis script | [scripts/task3_prereg_analysis.py](scripts/task3_prereg_analysis.py) |
+| Figures script | [scripts/task3_visuals.py](scripts/task3_visuals.py) |
 | Run window | 2026-04-24T20:51 → 2026-04-25T22:55 (UTC), three batches per pipeline log |
 | Concurrency | `--max-connections 6`, `--no-fail-on-error` |
 

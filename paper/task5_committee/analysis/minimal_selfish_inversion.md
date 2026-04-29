@@ -5,7 +5,7 @@ Unexpected finding from the full sweep: for 4 of 6 models, mean bias is **higher
 This document investigates whether the inversion is slate-specific, model-specific, or uniform, and tests two pre-registered hypotheses against the data's structure.
 
 - Source log: `logs/committee_fullsweep_20260422/...nMe8xyseb5QPSzdS8rjvE7.eval`
-- Reanalysis script: see per-cell numbers reproduced below via `experiments/task5_prereg_analysis.py` and inline Python
+- Reanalysis script: see per-cell numbers reproduced below via `../scripts/task5_prereg_analysis.py` and inline Python
 
 ## The two candidate prompts
 

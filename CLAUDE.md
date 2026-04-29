@@ -26,7 +26,7 @@ src/manipulation_bench/
   analyze_surface.py # CLI: cross-env response-surface analyzer (frame × incentive × difficulty pivot per model)
   scenarios/         # JSONL scenario files (generated or hand-crafted)
   # Paper statistical pipeline (sensitivity slopes + 15-dim profile vectors + cross-task correlations)
-  # lives at experiments/analyze_response_surface.py — imports utilities from analyze_surface.py.
+  # lives at paper/cross_task/scripts/analyze_response_surface.py — imports utilities from analyze_surface.py.
   environments/
     base.py          # Environment ABC + Phase, Observation, ActionResult, GameOutcome
     debate.py        # Debate environment (DISCUSSION-only phases, round-robin)
@@ -99,8 +99,8 @@ The solver calls `get_model(role=agent.model_role).generate(messages)` directly 
 - `scorers/social_deduction.py` — Werewolf game metrics: `game_win_rate`, `vote_accuracy`, `deception_success`, `game_manipulation_detection`
 - `scorers/negotiation.py` — Diplomacy game metrics: `territorial_success`, `agreement_compliance` (hard metric — no LLM, computes kept/total promises per agent), `negotiation_manipulation`
 - `scorers/village.py` — Village Commons metrics (all mathematical, no LLM): `exploitation_rate` (1 - avg contribution / 20), `promise_action_gap` (promised - actual), `village_fairness` (Gini coefficient + free-rider detection rate)
-- `scorers/sales.py` — sales: `sales_classifier` classifies each buyer-question response as `accurate` / `misleading` / `false` using per-check-type rules against a typed `check_fields` DSL on the ground-truth record. No LLM judge. Hand-validated with `experiments/task4_hand_validation.py` (emit template → human fills → score agreement ≥90%). Paper Task 4 primary scorer.
-- `scorers/committee.py` — committee metrics (all mathematical, no LLM): `initial_rating_bias` (interested party's favored-vs-matched-tier-peers delta on initial ratings), `post_discussion_rating_change` (neutral_shift_toward_interested = mean neutral delta signed by interested-party delta direction), `discussion_polarity` (rule-based wordlist classifier from `_committee_wordlist.py` with negation scope 3 and hedge halving; per-candidate segments split by `[X]` markers), `decision_outcome` (favored_won / ground_truth_matched / favored_rank). Hand-validated with `experiments/task5_hand_validation.py` (≥85% agreement gate). Paper Task 5 primary scorers.
+- `scorers/sales.py` — sales: `sales_classifier` classifies each buyer-question response as `accurate` / `misleading` / `false` using per-check-type rules against a typed `check_fields` DSL on the ground-truth record. No LLM judge. Hand-validated with `paper/task4_sales/scripts/task4_hand_validation.py` (emit template → human fills → score agreement ≥90%). Paper Task 4 primary scorer.
+- `scorers/committee.py` — committee metrics (all mathematical, no LLM): `initial_rating_bias` (interested party's favored-vs-matched-tier-peers delta on initial ratings), `post_discussion_rating_change` (neutral_shift_toward_interested = mean neutral delta signed by interested-party delta direction), `discussion_polarity` (rule-based wordlist classifier from `_committee_wordlist.py` with negation scope 3 and hedge halving; per-candidate segments split by `[X]` markers), `decision_outcome` (favored_won / ground_truth_matched / favored_rank). Hand-validated with `paper/task5_committee/scripts/task5_hand_validation.py` (≥85% agreement gate). Paper Task 5 primary scorers.
 
 ### Model swapping via Inspect model roles
 
@@ -245,19 +245,19 @@ All five paper-task generators accept a `--models` CLI flag so external research
 
 ```bash
 # T1 Bargaining — bare labels auto-assign model_a/b/c roles
-python experiments/generate_task1_bargaining.py --pilot --models 'claude,grok'
+python paper/task1_bargaining/scripts/generate_task1_bargaining.py --pilot --models 'claude,grok'
 
 # T2 Debate — bare labels auto-prefix with manipulator_
-python experiments/generate_task2_debate_full.py --models 'claude,grok'
+python paper/task2_debate/scripts/generate_task2_debate_full.py --models 'claude,grok'
 
 # T3 Village — same auto-prefix as T2
-python experiments/generate_task3_village_full.py --models 'claude,grok'
+python paper/task3_village/scripts/generate_task3_village_full.py --models 'claude,grok'
 
 # T4 Sales — same auto-prefix as T1 (model_a/b/c)
-python experiments/generate_task4_sales.py --pilot --models 'claude,gpt5,llama'
+python paper/task4_sales/scripts/generate_task4_sales.py --pilot --models 'claude,gpt5,llama'
 
 # T5 Committee — supports --pilot / --sweep / --frontier-endpoints
-python experiments/generate_task5_committee.py --pilot \
+python paper/task5_committee/scripts/generate_task5_committee.py --pilot \
     --models 'claude=model_claude,gpt5=model_gpt5'
 ```
 
@@ -266,7 +266,7 @@ Each generator prints the exact `inspect eval` command at the end, with `--model
 Generators that don't take `--models`:
 - [`generate_debate_surface.py`](experiments/generate_debate_surface.py) — model-agnostic; binds models at eval time via `--model-role debater=...`.
 - [`generate_village_surface.py`](experiments/generate_village_surface.py) — has a fixed 6-agent layout with paper-specific doubling. Edit `MODELS` at the top of the file directly if you need a different roster.
-- Legacy generators (`generate_policy_debates.py`, `generate_werewolf_*.py`, etc.) — kept pinned for FINDINGS reproducibility; safer to fork than parameterize.
+- Single-env demos in `experiments/` (`generate_diplomacy.py`, `generate_werewolf_8player.py`) — minimal one-each demos for envs that aren't part of the paper response surface; safer to fork than parameterize.
 
 ## Experiment design conventions
 
@@ -274,7 +274,7 @@ Generators that don't take `--models`:
 - **Model identity** is tracked in `scenario.metadata.model_mapping` for analysis, never exposed to agents.
 - **Experiment generators** live in `experiments/`. Each produces a JSONL + prints the `inspect eval` command. Canonical response-surface generators (the five paper environments): `generate_village_surface.py`, `generate_debate_surface.py`, `generate_bargaining_surface.py`, `generate_task4_sales.py`, `generate_task5_committee.py` (all take `--pilot`). Legacy generators kept for FINDINGS reproducibility: `generate_policy_debates.py`, `generate_topology_experiment.py`, `generate_uncertain_claims.py`, `generate_werewolf_8player.py`, `generate_werewolf_iterated.py`, `generate_diplomacy.py`, `generate_context_isolation.py`, `generate_bargaining{,_2x2,_supplement,_neutral_variants}.py`, `generate_village{,_factorial,_topology}.py`, `generate_task{1_bargaining,2_persuasion,4_sycophancy}.py`.
 - **Rotation pattern**: baseline (no manipulation) + N variants (one per agent manipulating). Debate generators use the shared `generate_debate_rotation()` function from `generate.py`; game generators have custom rotation logic.
-- **Multi-phase experiments**: `AgentRole.prior_context` carries interaction history across phases. The solver injects it before the current interaction. `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience. See `experiments/generate_werewolf_iterated.py` for the Phase 1 → Phase 2 pattern.
+- **Multi-phase experiments**: `AgentRole.prior_context` carries interaction history across phases. The solver injects it before the current interaction. `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience.
 
 ## Prior experimental results
 
@@ -284,22 +284,28 @@ See `FINDINGS.md` for legacy experimental results (pre-paper) with sample sizes 
 
 `paper/` is the authoritative record for the 5-task Manipulation Response Surface paper. Each task has `prereg.md` (pre-registered with formal Amendments), `results.md` (verdicts against P1-P7), `analysis/` (per-task JSONs), `figures/` (per-task PNGs), and `eval_log.eval` (canonical combined eval log, committed via Git LFS). Cross-task material is in `paper/cross_task/` — `SUMMARY.md` (paper-level), `EXPLORATORY_FINDINGS.md` (post-PREREG analyses), `cross_task_aggregate.md` (machine-generated per-task tables).
 
-The paper's frozen model cohort is **Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro** (post Amendments A2/A3). Older split logs in `logs/task*_*` are kept for provenance; the combined logs at `paper/task<N>/eval_log.eval` are produced by `experiments/combine_eval_logs.py` (dedup-by-sample-id with later-running splits winning, so amendments overlay originals).
+The paper's frozen model cohort is **Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro** (post Amendments A2/A3). Older split logs in `logs/task*_*` are kept for provenance; the combined logs at `paper/task<N>/eval_log.eval` are produced by `paper/cross_task/scripts/combine_eval_logs.py` (dedup-by-sample-id with later-running splits winning, so amendments overlay originals).
 
-### Paper analysis scripts (under `experiments/`)
+### Paper analysis scripts
 
-- **PREREG verdicts**: `task<N>_prereg_analysis.py` — runs P1-P7 against the combined log per task.
-- **Statistics**: `run_bootstrap_cis.py` (per-axis 95% CIs at N=1000), `run_cohens_d.py` (per-cell effect sizes for T1-T4), `task5_cohens_d.py`, `bootstrap_slopes.py` (helpers).
-- **Figures**: `task<N>_visuals.py` (per-task), `run_response_surface.py` (cross-task fig7 — 3 difficulty rows × 6 model cols × 5×3 frame×incentive heatmap each), `cross_task_explore.py` (7 cross-task views).
-- **Exploratory** (post-PREREG, in `paper/cross_task/EXPLORATORY_FINDINGS.md`):
-  - `cross_task_ranking_stability.py` — Spearman ρ across per-task model orderings
-  - `cross_task_clustering.py` — hierarchical clustering on 15-dim profile vectors
-  - `surprise_residuals.py` — additive-model residuals per (task, model)
-  - `frontier_lift.py` — GPT-5→5.5 / V3.2→V4-Pro within-scenario contrast
-  - `sample_distributions.py` — per-frame violin/scatter per model per task
-  - `t1_lie_magnitude.py`, `t2_per_claim.py`, `t3_promise_gap.py`, `t4_per_question_type.py` — task-specific exploratory pivots
+Paper-task-specific scripts live next to the artifact they produce, under `paper/task<N>/scripts/` and `paper/cross_task/scripts/`. The framework's `experiments/` directory only holds env-agnostic harness code (surface generators + the cross-env analyzer); paper-specific analysis does not belong there.
 
-When updating analysis, add new scripts here and to `paper/cross_task/SUMMARY.md`'s reproduction block.
+- **Per task** — `paper/task<N>/scripts/`:
+  - `task<N>_prereg_analysis.py` — P1-P7 verdicts against the combined log
+  - `task<N>_visuals.py` — figures
+  - `task<N>_hand_validation.py` (T4, T5) — scorer-agreement harness
+  - `t<N>_*.py` — post-PREREG exploratory pivots (`t1_lie_magnitude`, `t2_per_claim`, `t3_promise_gap`, `t4_per_question_type`)
+  - `generate_task<N>_*.py` — the canonical generator
+- **Cross-task** — `paper/cross_task/scripts/`:
+  - `combine_eval_logs.py` — dedup-by-sample-id merger that produces `paper/task<N>/eval_log.eval`
+  - `run_bootstrap_cis.py` + `bootstrap_slopes.py` — per-axis 95% CIs at N=1000
+  - `run_cohens_d.py`, `task5_cohens_d.py` — per-cell effect sizes
+  - `run_response_surface.py` — cross-task fig7 (3 difficulty rows × 6 model cols × 5×3 heatmap each)
+  - `cross_task_analysis.py`, `cross_task_explore.py` — aggregate views
+  - `cross_task_ranking_stability.py`, `cross_task_clustering.py` — model-archetype + ranking-stability
+  - `surprise_residuals.py`, `frontier_lift.py`, `sample_distributions.py` — exploratory analyses
+
+When updating analysis, add new scripts under the relevant `paper/<...>/scripts/` directory and to `paper/cross_task/SUMMARY.md`'s reproduction block.
 
 ## Gotchas
 
@@ -308,7 +314,7 @@ When updating analysis, add new scripts here and to `paper/cross_task/SUMMARY.md
 - **Scorer metrics with `"*"` glob**: Dict-valued scores with `@scorer(metrics={"*": [mean(), stderr()]})` auto-create per-key metrics. Different scenarios can have different agent names — metrics aggregate per-key across samples that share that key.
 - **Ground-truth scorers**: Return `Score(value={"persuasion_rate": None, ...})` when `ground_truth` is not set. They don't error — they just produce None values.
 - **JSONL paths**: `load_scenarios()` resolves relative paths against `src/manipulation_bench/scenarios/`. The `-T scenarios=filename.jsonl` flag passes just the filename, not a full path.
-- **Combined eval logs preserve OLD model labels**: When an amendment swaps a model (e.g., GPT-5 → GPT-5.5 via `--model-role`), the new run's scenario metadata still carries the original model label (`model: GPT-5`) because scenarios are regenerated against the original JSONL. To do a within-task pre/post comparison, filter by the OLD label in BOTH halves — only the runtime model binding changed, not the recorded scenario label. See `experiments/frontier_lift.py`.
+- **Combined eval logs preserve OLD model labels**: When an amendment swaps a model (e.g., GPT-5 → GPT-5.5 via `--model-role`), the new run's scenario metadata still carries the original model label (`model: GPT-5`) because scenarios are regenerated against the original JSONL. To do a within-task pre/post comparison, filter by the OLD label in BOTH halves — only the runtime model binding changed, not the recorded scenario label. See `paper/cross_task/scripts/frontier_lift.py`.
 - **Git LFS for combined logs**: `paper/task*/eval_log.eval` are LFS-tracked (~1 GB total). Clone with `git lfs install && git lfs pull`. The repo is right at GitHub's free 1 GB LFS quota; new combined logs need `git lfs track` before adding.
 
 ### Typed scenario metadata (`ScenarioMetadata`)

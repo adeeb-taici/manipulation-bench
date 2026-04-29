@@ -7,7 +7,7 @@ Pre-registered in [../prereg.md](../prereg.md) §8. This document executes the s
 3. Compute the convergence check: Spearman ρ between per-model rankings on raw-bias frame-slope and on Cohen's-d frame-slope. Threshold ρ > 0.7.
 
 - Source log: `logs/committee_fullsweep_20260422/...nMe8xyseb5QPSzdS8rjvE7.eval`
-- Analysis script: [experiments/task5_cohens_d.py](../../../experiments/task5_cohens_d.py)
+- Analysis script: [../scripts/task5_cohens_d.py](../scripts/task5_cohens_d.py)
 - Per-cell CSV: [cohens_d_per_cell.csv](cohens_d_per_cell.csv)
 - Summary JSON: [cohens_d_summary.json](cohens_d_summary.json)
 

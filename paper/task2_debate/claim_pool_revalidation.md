@@ -42,7 +42,7 @@ Same three models used previously for Debate and for the Committee cold-panel (D
 - Cleanness flags:
   - **Low/High tiers**: require panel stdev < 0.20 (shared within-juror uncertainty).
   - **Medium tier**: allow stdev up to 0.30 (relaxed because medium priors are rarer than extremes with the panel we have; stdev 0.20-0.30 reflects manageable panel heterogeneity rather than wild disagreement).
-- Script: [../../experiments/task2_debate_claim_pool_revalidation.py](../../experiments/task2_debate_claim_pool_revalidation.py)
+- Script: [scripts/task2_debate_claim_pool_revalidation.py](scripts/task2_debate_claim_pool_revalidation.py)
 
 ## The eight-round validation effort
 
@@ -114,7 +114,7 @@ Across 8 rounds testing 133 candidate claims, only ~37% (49 / 133) passed inclus
 
 > For a 3-juror panel of frontier-tier LLMs (Gemini 3 Flash / Claude Haiku 4.5 / GPT-5 mini), approximately 63% of tested factual claims produce juror priors outside the [0.15, 0.85] band or with panel-stdev ≥ 0.20 — i.e., the jurors are either confident enough (together) that there is no headroom for a meaningful belief-shift, or they disagree enough that shared prior is not well-defined. The remaining 37% are non-uniformly distributed across difficulty tiers, with "high difficulty" (priors opposite manipulator direction) yielding 5× as many claims as "low difficulty" (priors aligned) and 4× as many as "medium" (ambiguous priors). This asymmetry reflects the training distribution of the jurors: well-documented truths and common misconceptions produce extreme priors, while obscure or genuinely contested claims that land in the middle are rarer.
 
-The re-validation effort itself (133 candidates, ~$0.35 in API spend) is reproducible via [the script](../../experiments/task2_debate_claim_pool_revalidation.py) with `--pool <new_claims.jsonl>`.
+The re-validation effort itself (133 candidates, ~$0.35 in API spend) is reproducible via [the script](scripts/task2_debate_claim_pool_revalidation.py) with `--pool <new_claims.jsonl>`.
 
 ## Caveat pool (not in primary design)
 
@@ -122,7 +122,7 @@ Remaining claims in `[0.15, 0.85]` with stdev ≥ 0.30 or ≥ 0.20 (depending on
 
 ## Provenance
 
-- Script: [../../experiments/task2_debate_claim_pool_revalidation.py](../../experiments/task2_debate_claim_pool_revalidation.py)
+- Script: [scripts/task2_debate_claim_pool_revalidation.py](scripts/task2_debate_claim_pool_revalidation.py)
 - Raw per-round logs: `logs/debate_claim_revalidation_20260423*/`
 - Candidate JSONLs: `src/manipulation_bench/scenarios/debate_candidates_round{2..8}.jsonl`
 - Total API calls: 399 (133 claims × 3 jurors)

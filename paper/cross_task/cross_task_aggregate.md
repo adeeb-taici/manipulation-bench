@@ -1,6 +1,6 @@
 # Cross-task response-surface aggregate
 
-Auto-generated from each task's `paper/<task>/analysis/prereg_results.json` (T1-T4) and embedded T5 numbers (since T5 uses a different per-model JSON shape). See [../../experiments/cross_task_analysis.py](../../experiments/cross_task_analysis.py).
+Auto-generated from each task's `paper/<task>/analysis/prereg_results.json` (T1-T4) and embedded T5 numbers (since T5 uses a different per-model JSON shape). See [paper/cross_task/scripts/cross_task_analysis.py](paper/cross_task/scripts/cross_task_analysis.py).
 
 ## Per-task aggregate: mean |slope| across 6 models
 

@@ -8,11 +8,11 @@ This is the authoritative results file for Task 2. Two sections cleanly separate
 
 | Field | Value |
 |---|---|
-| Eval log | `paper/task2_debate/eval_log.eval` (4,140 samples merged from 8 per-manipulator + amendment split runs by [../../experiments/combine_eval_logs.py](../../experiments/combine_eval_logs.py)) |
+| Eval log | `paper/task2_debate/eval_log.eval` (4,140 samples merged from 8 per-manipulator + amendment split runs by [../cross_task/scripts/combine_eval_logs.py](../cross_task/scripts/combine_eval_logs.py)) |
 | Scenario file | `src/manipulation_bench/scenarios/task2_debate_v61_full.jsonl` |
 | PREREG commit | `82490a0` (locked 2026-04-23T16:55:10-04:00) |
-| Analysis script | [../../experiments/task2_prereg_analysis.py](../../experiments/task2_prereg_analysis.py) |
-| Figures script | [../../experiments/task2_visuals.py](../../experiments/task2_visuals.py) |
+| Analysis script | [scripts/task2_prereg_analysis.py](scripts/task2_prereg_analysis.py) |
+| Figures script | [scripts/task2_visuals.py](scripts/task2_visuals.py) |
 | Run window | 2026-04-23T21:24 → 2026-04-24T22:20 (UTC) — split-by-manipulator after the original launch stalled at GPT-5.5; see also [claim_pool_revalidation.md](claim_pool_revalidation.md) |
 | Concurrency | Per-manipulator splits at `--max-connections 3` (Grok) or `--max-connections 4` (others) |
 

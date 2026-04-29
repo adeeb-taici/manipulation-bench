@@ -65,7 +65,7 @@ P1 fails in 2/5 tasks (Debate, Village). P2 fails in 3/5 (Debate, Sales — conj
 
 ## What's NOT in this file
 
-- Cohen's d secondary analysis (only T5 has the full prereg version; T1-T4 carried out via [../../experiments/run_cohens_d.py](../../experiments/run_cohens_d.py))
+- Cohen's d secondary analysis (only T5 has the full prereg version; T1-T4 carried out via [scripts/run_cohens_d.py](scripts/run_cohens_d.py))
 - Hand-validation status: T4 P7 PASSED at 30/30 = 100% agreement (`sales_classifier` validated). T5 polarity scorer FAILED at 20/26 = 76.9% (below the 85% gate); `discussion_polarity` is dropped from reporting per Amendment A5 in [`../task5_committee/prereg.md`](../task5_committee/prereg.md).
 - Per-claim T2 weighting in cross-task aggregation (see [EXPLORATORY_FINDINGS.md §4](EXPLORATORY_FINDINGS.md))
 
@@ -83,26 +83,26 @@ Past-PREREG analyses live in [EXPLORATORY_FINDINGS.md](EXPLORATORY_FINDINGS.md).
 
 ```bash
 # Re-build all per-task PREREG analysis JSONs
-python experiments/task1_prereg_analysis.py
-python experiments/task2_prereg_analysis.py
-python experiments/task3_prereg_analysis.py
-python experiments/task4_prereg_analysis.py
-python experiments/task5_prereg_analysis.py
+python ../task1_bargaining/scripts/task1_prereg_analysis.py
+python ../task2_debate/scripts/task2_prereg_analysis.py
+python ../task3_village/scripts/task3_prereg_analysis.py
+python ../task4_sales/scripts/task4_prereg_analysis.py
+python ../task5_committee/scripts/task5_prereg_analysis.py
 
 # Cross-task summary + bootstrap CIs + Cohen's d
-python experiments/cross_task_analysis.py
-python experiments/run_bootstrap_cis.py
-python experiments/run_cohens_d.py
-python experiments/run_response_surface.py     # per-task fig7 (3×6 grid: difficulty × model)
+python scripts/cross_task_analysis.py
+python scripts/run_bootstrap_cis.py
+python scripts/run_cohens_d.py
+python scripts/run_response_surface.py     # per-task fig7 (3×6 grid: difficulty × model)
 
 # Exploratory analyses (sec 1-9 of EXPLORATORY_FINDINGS.md)
-python experiments/cross_task_ranking_stability.py
-python experiments/cross_task_clustering.py
-python experiments/surprise_residuals.py
-python experiments/frontier_lift.py
-python experiments/sample_distributions.py
-python experiments/t1_lie_magnitude.py
-python experiments/t2_per_claim.py
-python experiments/t3_promise_gap.py
-python experiments/t4_per_question_type.py
+python scripts/cross_task_ranking_stability.py
+python scripts/cross_task_clustering.py
+python scripts/surprise_residuals.py
+python scripts/frontier_lift.py
+python scripts/sample_distributions.py
+python ../task1_bargaining/scripts/t1_lie_magnitude.py
+python ../task2_debate/scripts/t2_per_claim.py
+python ../task3_village/scripts/t3_promise_gap.py
+python ../task4_sales/scripts/t4_per_question_type.py
 ```

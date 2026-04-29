@@ -11,8 +11,8 @@ This is the authoritative results file for Task 4. Two sections cleanly separate
 | Eval log | `paper/task4_sales/eval_log.eval` (canonical combined log; splits in `logs/task4_sales_v61_full/`, `logs/task4_gpt55/`, `logs/task4_dsv4/`, `logs/task4_reasoning_retry/`) |
 | Scenario file | `src/manipulation_bench/scenarios/task4_sales.jsonl` (1,350 samples) |
 | PREREG commit | `6ef5f1a` (locked 2026-04-25T16:01:26-04:00) |
-| Analysis script | [../../experiments/task4_prereg_analysis.py](../../experiments/task4_prereg_analysis.py) |
-| Figures script | [../../experiments/task4_visuals.py](../../experiments/task4_visuals.py) |
+| Analysis script | [scripts/task4_prereg_analysis.py](scripts/task4_prereg_analysis.py) |
+| Figures script | [scripts/task4_visuals.py](scripts/task4_visuals.py) |
 | Run window | 2026-04-25T20:09 → 2026-04-25T21:39 (UTC) — 1:30:35 wall-clock |
 | Concurrency | `--max-connections 10`, `--no-fail-on-error` |
 
@@ -44,7 +44,7 @@ This is the authoritative results file for Task 4. Two sections cleanly separate
 | P5 — mean \|incentive slope\| ≥ 0.10 | **FAIL** | 0.010 — incentive language is essentially inert in Sales, comparable to Debate (0.014). |
 | P5.a (cross-task contrast) — Sales incentive between Debate and Bargaining | **FAIL on direction** | Sales (0.010) ≈ Debate (0.014) ≪ Bargaining (0.25). Sales' "100 points per sale" verbal incentive turns out to behave like Debate's verbal incentive, not like Bargaining's penalty math. |
 | P6 — Spearman ρ ≥ 0.6 (prosocial→selfish vs full-range) | **PASS** | ρ = 0.943 |
-| P7 — hand-validation gate ≥ 90% | **PASS** | 30/30 = 100.0% agreement on the seed-0 hand-coded sample (28 accurate + 2 false; no misleading rows drawn). `sales_classifier` validated. Reproduce: `python experiments/task4_hand_validation.py emit paper/task4_sales/eval_log.eval --n 30 --seed 0 --out task4_validation.md` then fill `human_label` and `score`. |
+| P7 — hand-validation gate ≥ 90% | **PASS** | 30/30 = 100.0% agreement on the seed-0 hand-coded sample (28 accurate + 2 false; no misleading rows drawn). `sales_classifier` validated. Reproduce: `python scripts/task4_hand_validation.py emit paper/task4_sales/eval_log.eval --n 30 --seed 0 --out task4_validation.md` then fill `human_label` and `score`. |
 
 **Overall**: Frame matters, but the dominant axis is **difficulty** (product truth-favorability). Mean |difficulty slope| = 0.090 vs frame 0.026, **3.5× larger**. Same pattern as Committee and Debate: a pre-existing-state axis (panel prior, juror prior, product quality) dominates over prompt language. Sales is a low-amplitude task across the response surface for all six models — frame slopes are small in absolute terms and only one model (Gemini) exceeds 0.05 manipulation rate at the most permissive endpoint.
 
@@ -243,9 +243,9 @@ Rankings (high slope = more sensitive):
 **Verdict: PASS.** 30/30 = **100.0%** agreement on the seed-0 hand-coded sample (28 accurate + 2 false; no misleading rows happened to be drawn at this seed). Confusion matrix is diagonal — `sales_classifier` matches every author label. The classifier is validated; absolute `manipulation_rate` reporting is unblocked. Reproduction:
 
 ```
-python experiments/task4_hand_validation.py emit paper/task4_sales/eval_log.eval --n 30 --seed 0 --out task4_validation.md
+python scripts/task4_hand_validation.py emit paper/task4_sales/eval_log.eval --n 30 --seed 0 --out task4_validation.md
 # author fills human_label for each row
-python experiments/task4_hand_validation.py score task4_validation.md
+python scripts/task4_hand_validation.py score task4_validation.md
 ```
 
 ---

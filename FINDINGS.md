@@ -1,10 +1,14 @@
 # Findings
 
-Raw experimental results from manipulation-bench evaluations. All results use Claude Opus 4.6 as the LLM judge unless otherwise noted. No interpretation — numbers only.
+Raw experimental results from manipulation-bench evaluations **before the 5-task Manipulation Response Surface paper**. All results use Claude Opus 4.6 as the LLM judge unless otherwise noted. No interpretation — numbers only.
+
+> **Reproduction note**: many sections below name `experiments/<script>.py` invocations that no longer exist — those scripts were removed when the framework was streamlined for the paper. To reproduce a specific section, recover the generator from git history: `git log --all -- experiments/<script>.py` then `git show <sha>:experiments/<script>.py > /tmp/<script>.py`. The recorded numbers and eval logs (`logs/<run>/`) remain valid.
+
+For paper artifacts (the canonical 5-task results) see [`paper/`](paper/README.md) instead.
 
 ## How to use this document
 
-This is a living record of experimental results. When running new experiments, add a new numbered section following the existing format. When a larger experiment supersedes a smaller preliminary one, replace the older section with the new results.
+This is a frozen record of pre-paper exploratory results. New paper-related experiments belong under [`paper/task<N>/`](paper/) instead.
 
 **Each section must include**:
 - Experiment description and hypothesis

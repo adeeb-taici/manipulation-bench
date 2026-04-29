@@ -67,26 +67,30 @@ The combined eval logs (`paper/task<N>/eval_log.eval`) are committed via Git LFS
 
 ```bash
 # Re-build per-task PREREG verdicts (P1-P6/P7) + figures
-for n in 1 2 3 4 5; do python experiments/task${n}_prereg_analysis.py; done
+python task1_bargaining/scripts/task1_prereg_analysis.py
+python task2_debate/scripts/task2_prereg_analysis.py
+python task3_village/scripts/task3_prereg_analysis.py
+python task4_sales/scripts/task4_prereg_analysis.py
+python task5_committee/scripts/task5_prereg_analysis.py
 
 # Bootstrap CIs and Cohen's d (cross-task)
-python experiments/run_bootstrap_cis.py
-python experiments/run_cohens_d.py
+python cross_task/scripts/run_bootstrap_cis.py
+python cross_task/scripts/run_cohens_d.py
 
 # Per-task response-surface figure (3 difficulty rows × 6 model cols × 5×3 frame×incentive heatmap)
-python experiments/run_response_surface.py
+python cross_task/scripts/run_response_surface.py
 
 # Cross-task summary + exploratory analyses
-python experiments/cross_task_analysis.py
-python experiments/cross_task_ranking_stability.py
-python experiments/cross_task_clustering.py
-python experiments/surprise_residuals.py
-python experiments/frontier_lift.py
-python experiments/sample_distributions.py
-python experiments/t1_lie_magnitude.py
-python experiments/t2_per_claim.py
-python experiments/t3_promise_gap.py
-python experiments/t4_per_question_type.py
+python cross_task/scripts/cross_task_analysis.py
+python cross_task/scripts/cross_task_ranking_stability.py
+python cross_task/scripts/cross_task_clustering.py
+python cross_task/scripts/surprise_residuals.py
+python cross_task/scripts/frontier_lift.py
+python cross_task/scripts/sample_distributions.py
+python task1_bargaining/scripts/t1_lie_magnitude.py
+python task2_debate/scripts/t2_per_claim.py
+python task3_village/scripts/t3_promise_gap.py
+python task4_sales/scripts/t4_per_question_type.py
 ```
 
 ## Reproducing the experiments on a new model roster
@@ -96,20 +100,24 @@ Each task's generator now accepts a `--models` flag that overrides the paper ros
 ```bash
 # 1. Generate scenarios with your roster.
 #    Bare labels auto-prefix the role; `label=role` pairs let you pick roles explicitly.
-python experiments/generate_task1_bargaining.py --models 'opus47,haiku45,gpt55,grok4'
-python experiments/generate_task2_debate_full.py  --models 'opus47,haiku45,gpt55,grok4'
-python experiments/generate_task3_village_full.py --models 'opus47,haiku45,gpt55,grok4'
-python experiments/generate_task4_sales.py        --models 'opus47,haiku45,gpt55,grok4'
-python experiments/generate_task5_committee.py    --models 'opus47,haiku45,gpt55,grok4' --sweep
+python task1_bargaining/scripts/generate_task1_bargaining.py --models 'opus47,haiku45,gpt55,grok4'
+python task2_debate/scripts/generate_task2_debate_full.py  --models 'opus47,haiku45,gpt55,grok4'
+python task3_village/scripts/generate_task3_village_full.py --models 'opus47,haiku45,gpt55,grok4'
+python task4_sales/scripts/generate_task4_sales.py        --models 'opus47,haiku45,gpt55,grok4'
+python task5_committee/scripts/generate_task5_committee.py    --models 'opus47,haiku45,gpt55,grok4' --sweep
 
 # 2. Each generator prints the exact `inspect eval ...` command, with each
 #    `--model-role <role>=openrouter/<provider>/<model>` left as a placeholder.
 #    Copy-paste it and substitute your provider strings into each role.
 
 # 3. Score against the same pre-registered analysis used in the paper.
-for n in 1 2 3 4 5; do python experiments/task${n}_prereg_analysis.py; done
-python experiments/run_bootstrap_cis.py
-python experiments/run_cohens_d.py
+python task1_bargaining/scripts/task1_prereg_analysis.py
+python task2_debate/scripts/task2_prereg_analysis.py
+python task3_village/scripts/task3_prereg_analysis.py
+python task4_sales/scripts/task4_prereg_analysis.py
+python task5_committee/scripts/task5_prereg_analysis.py
+python cross_task/scripts/run_bootstrap_cis.py
+python cross_task/scripts/run_cohens_d.py
 ```
 
 Notes:

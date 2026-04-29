@@ -167,7 +167,7 @@ Single-agent, principal-agent representation. The seller-agent answers 5 scripte
 
 ```bash
 # Generate pilot set (30 samples, medium difficulty)
-python experiments/generate_task4_sales.py --pilot
+python paper/task4_sales/scripts/generate_task4_sales.py --pilot
 
 # Run sales
 inspect eval src/manipulation_bench/sales_task.py \
@@ -176,9 +176,9 @@ inspect eval src/manipulation_bench/sales_task.py \
   --model-role model_d=openrouter/x-ai/grok-3
 
 # Hand-validate scorer against a sample of responses (≥90% agreement gate)
-python experiments/task4_hand_validation.py emit <eval_file>.eval --n 30 --out validation.md
+python paper/task4_sales/scripts/task4_hand_validation.py emit <eval_file>.eval --n 30 --out validation.md
 # ...fill in human_label lines...
-python experiments/task4_hand_validation.py score validation.md
+python paper/task4_sales/scripts/task4_hand_validation.py score validation.md
 ```
 
 ### Committee (multi-agent w/ conflict-of-interest; paper Task 5)
@@ -194,7 +194,7 @@ Five-agent committee reviews a slate of four candidates on structured criteria. 
 
 ```bash
 # Generate pilot set (24 scenarios: 2 models × 3 frames × 1 incentive × 4 medium slates)
-python experiments/generate_task5_committee.py --pilot
+python paper/task5_committee/scripts/generate_task5_committee.py --pilot
 
 # Run committee
 inspect eval src/manipulation_bench/committee_task.py \
@@ -207,9 +207,9 @@ inspect eval src/manipulation_bench/committee_task.py \
   --model-role model_deepseek=openrouter/deepseek/deepseek-chat
 
 # Hand-validate polarity classifier (≥85% agreement gate)
-python experiments/task5_hand_validation.py emit <eval_file>.eval --n 30 --out t5_val.md
+python paper/task5_committee/scripts/task5_hand_validation.py emit <eval_file>.eval --n 30 --out t5_val.md
 # ...fill in human_label lines (positive/neutral/negative)...
-python experiments/task5_hand_validation.py score t5_val.md
+python paper/task5_committee/scripts/task5_hand_validation.py score t5_val.md
 ```
 
 ## Response-surface design (cross-environment)
@@ -230,8 +230,8 @@ Generate pilot scenarios for any environment:
 python experiments/generate_village_surface.py --pilot      # → village_surface_pilot.jsonl
 python experiments/generate_debate_surface.py --pilot       # → debate_surface_pilot.jsonl
 python experiments/generate_bargaining_surface.py --pilot   # → bargaining_surface_pilot.jsonl
-python experiments/generate_task4_sales.py --pilot          # sales — already factorial (frame x incentive x difficulty)
-python experiments/generate_task5_committee.py --pilot      # committee — already factorial
+python paper/task4_sales/scripts/generate_task4_sales.py --pilot          # sales — already factorial (frame x incentive x difficulty)
+python paper/task5_committee/scripts/generate_task5_committee.py --pilot      # committee — already factorial
 ```
 
 Analyze any eval log cross-environment (pivot by frame × incentive and frame × difficulty per model):
@@ -261,7 +261,7 @@ inspect eval src/manipulation_bench/task.py -T scenarios=my_rotation.jsonl ...
 python -m manipulation_bench.analyze "logs/2026*.eval"
 ```
 
-YAML is fine for a single-topic rotation. Anything multi-topic, custom rotation, or non-debate uses a Python generator in `experiments/` — see `experiments/generate_policy_debates.py` for a small template.
+YAML is fine for a single-topic rotation. Anything multi-topic, custom rotation, or non-debate uses a Python generator in `experiments/` — see [`experiments/generate_debate_surface.py`](experiments/generate_debate_surface.py) for the canonical response-surface template (frame × incentive × difficulty).
 
 ### Game rotations
 
@@ -274,16 +274,16 @@ inspect eval src/manipulation_bench/game_task.py -T scenarios=werewolf_8player.j
 python experiments/generate_diplomacy.py
 inspect eval src/manipulation_bench/diplomacy_task.py -T scenarios=diplomacy_multimodel.jsonl ...
 
-# Village Commons: baseline + propensity/capability conditions
-python experiments/generate_village.py
-inspect eval src/manipulation_bench/village_task.py -T scenarios=village_experiment.jsonl ...
+# Village Commons response surface (frame × incentive × difficulty)
+python experiments/generate_village_surface.py --pilot
+inspect eval src/manipulation_bench/village_task.py -T scenarios=village_surface_pilot.jsonl ...
 ```
 
 See [`src/manipulation_bench/scenarios/README.md`](src/manipulation_bench/scenarios/README.md) for a complete manifest of scenario files and which generator produces each one.
 
 ### Multi-phase experiments
 
-`AgentRole.prior_context` carries interaction history across phases — the solver injects it before the current interaction, and `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience for a Phase 2 JSONL. See `experiments/generate_werewolf_iterated.py` for a working example.
+`AgentRole.prior_context` carries interaction history across phases — the solver injects it before the current interaction, and `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience for a Phase 2 JSONL.
 
 ## What you get: sample analyzer output
 

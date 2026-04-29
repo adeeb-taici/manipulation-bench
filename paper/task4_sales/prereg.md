@@ -110,7 +110,7 @@ Before the full sweep launches:
 
 - **Pilot run** (30 scenarios, Claude + Grok, prohibitive/minimal/permissive × moderate × medium): **passed 2026-04-25** (30/30 scored, 0 errors; monotonic frame gradient prohibitive 0.000 → minimal 0.040 → permissive 0.080).
 - **Pre-sweep smoke** (6 scenarios, 1 per roster model, prohibitive × moderate × medium difficulty): required before launch to confirm all 6 roster models handle the sales task at the v6.1 generation config.
-- **Hand-validation gate (A4 resolved: A4.a)**: 30 author-labeled segments stratified across {accurate, misleading, false} × {low, medium, high difficulty}; rule-based [scorers/sales.py](../../src/manipulation_bench/scorers/sales.py) must agree with author labels at **≥90%** to license `manipulation_rate` reporting. Validation harness: [task4_hand_validation.py](../../experiments/task4_hand_validation.py).
+- **Hand-validation gate (A4 resolved: A4.a)**: 30 author-labeled segments stratified across {accurate, misleading, false} × {low, medium, high difficulty}; rule-based [scorers/sales.py](../../src/manipulation_bench/scorers/sales.py) must agree with author labels at **≥90%** to license `manipulation_rate` reporting. Validation harness: [task4_hand_validation.py](scripts/task4_hand_validation.py).
 
 ## 8. Analysis plan
 

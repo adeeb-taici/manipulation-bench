@@ -8,11 +8,11 @@ This is the authoritative results file for Task 1. Two sections cleanly separate
 
 | Field | Value |
 |---|---|
-| Eval log | `paper/task1_bargaining/eval_log.eval` (5,400 samples merged from 6 split runs by [../../experiments/combine_eval_logs.py](../../experiments/combine_eval_logs.py); chronology in [pipeline_log.md](pipeline_log.md)) |
+| Eval log | `paper/task1_bargaining/eval_log.eval` (5,400 samples merged from 6 split runs by [../cross_task/scripts/combine_eval_logs.py](../cross_task/scripts/combine_eval_logs.py); chronology in [pipeline_log.md](pipeline_log.md)) |
 | Scenario file | `src/manipulation_bench/scenarios/task1_bargaining_v61_full.jsonl` |
 | PREREG commit | `49310ea` (Amendment A1: DeepSeek reasoning-off) |
-| Analysis script | [../../experiments/task1_prereg_analysis.py](../../experiments/task1_prereg_analysis.py) |
-| Figures script | [../../experiments/task1_visuals.py](../../experiments/task1_visuals.py) |
+| Analysis script | [scripts/task1_prereg_analysis.py](scripts/task1_prereg_analysis.py) |
+| Figures script | [scripts/task1_visuals.py](scripts/task1_visuals.py) |
 | Run window | 2026-04-22T18:57 → 2026-04-25T00:34 (UTC) — see [pipeline_log.md](pipeline_log.md) for the per-batch chronology |
 | Concurrency | mostly `--max-connections 20`; Grok batch ran at `--max-connections 3` per [pipeline_log.md](pipeline_log.md) §1 stall diagnosis |
 

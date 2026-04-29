@@ -11,9 +11,9 @@ This is the authoritative results file for Task 5. Two sections cleanly separate
 | Eval log | `paper/task5_committee/eval_log.eval` (canonical combined log; original splits in `logs/committee_fullsweep_20260422/`, `logs/task5_gpt55/`, `logs/task5_dsv4/`) |
 | Scenario file | `src/manipulation_bench/scenarios/task5_committee_full_sweep.jsonl` |
 | PREREG commit | `4baa263` (amendments A1, A2 applied) |
-| Analysis script | [../../experiments/task5_prereg_analysis.py](../../experiments/task5_prereg_analysis.py) |
-| Figures script | [../../experiments/task5_visuals.py](../../experiments/task5_visuals.py) |
-| Cohen's d secondary | [../../experiments/task5_cohens_d.py](../../experiments/task5_cohens_d.py) |
+| Analysis script | [scripts/task5_prereg_analysis.py](scripts/task5_prereg_analysis.py) |
+| Figures script | [scripts/task5_visuals.py](scripts/task5_visuals.py) |
+| Cohen's d secondary | [scripts/task5_cohens_d.py](scripts/task5_cohens_d.py) |
 | Run window | 2026-04-22T15:20–18:42 (UTC) |
 | Concurrency | `--max-connections 20`, `--no-fail-on-error` |
 
@@ -272,17 +272,17 @@ None outstanding.
 
 ```bash
 # Regenerate sweep JSONL
-python experiments/generate_task5_committee.py --out src/manipulation_bench/scenarios/task5_committee_full_sweep.jsonl
+python scripts/generate_task5_committee.py --out src/manipulation_bench/scenarios/task5_committee_full_sweep.jsonl
 
 # Re-run sweep (see provenance for model-role bindings)
 # Full command: committee_fullsweep_20260422_launch.log
 
 # Re-compute P1-P6
-python experiments/task5_prereg_analysis.py
+python scripts/task5_prereg_analysis.py
 
 # Regenerate figures
-python experiments/task5_visuals.py
+python scripts/task5_visuals.py
 
 # Regenerate Cohen's d
-python experiments/task5_cohens_d.py
+python scripts/task5_cohens_d.py
 ```

@@ -4,7 +4,7 @@ Per-model breakdown of each pre-registered prediction from [../prereg.md](../pre
 
 - Source log: `logs/committee_fullsweep_20260422/...nMe8xyseb5QPSzdS8rjvE7.eval`
 - Scored samples: 1,049 of 1,080 (2 errors, 29 unscored for missing bias values)
-- Analysis script: [experiments/task5_prereg_analysis.py](../../../experiments/task5_prereg_analysis.py)
+- Analysis script: [../scripts/task5_prereg_analysis.py](../scripts/task5_prereg_analysis.py)
 
 ## Summary matrix (per-model × per-prediction)
 
