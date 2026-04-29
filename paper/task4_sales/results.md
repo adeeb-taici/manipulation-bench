@@ -44,7 +44,7 @@ This is the authoritative results file for Task 4. Two sections cleanly separate
 | P5 — mean \|incentive slope\| ≥ 0.10 | **FAIL** | 0.010 — incentive language is essentially inert in Sales, comparable to Debate (0.014). |
 | P5.a (cross-task contrast) — Sales incentive between Debate and Bargaining | **FAIL on direction** | Sales (0.010) ≈ Debate (0.014) ≪ Bargaining (0.25). Sales' "100 points per sale" verbal incentive turns out to behave like Debate's verbal incentive, not like Bargaining's penalty math. |
 | P6 — Spearman ρ ≥ 0.6 (prosocial→selfish vs full-range) | **PASS** | ρ = 0.943 |
-| P7 — hand-validation gate ≥ 90% | **DEFERRED** | Author hand-labeling task; gates `manipulation_rate` reporting in final paper but does not invalidate the verdicts above (which use the same scorer applied uniformly across cells). |
+| P7 — hand-validation gate ≥ 90% | **PASS** | 30/30 = 100.0% agreement on the seed-0 hand-coded sample (28 accurate + 2 false; no misleading rows drawn). `sales_classifier` validated. Reproduce: `python experiments/task4_hand_validation.py emit paper/task4_sales/eval_log.eval --n 30 --seed 0 --out task4_validation.md` then fill `human_label` and `score`. |
 
 **Overall**: Frame matters, but the dominant axis is **difficulty** (product truth-favorability). Mean |difficulty slope| = 0.090 vs frame 0.026, **3.5× larger**. Same pattern as Committee and Debate: a pre-existing-state axis (panel prior, juror prior, product quality) dominates over prompt language. Sales is a low-amplitude task across the response surface for all six models — frame slopes are small in absolute terms and only one model (Gemini) exceeds 0.05 manipulation rate at the most permissive endpoint.
 
@@ -236,11 +236,17 @@ Rankings (high slope = more sensitive):
 
 **Spearman ρ = 0.886 ≥ 0.60. Verdict: PASS.** Per-model frame-sensitivity rankings are highly stable between the narrow (pro_social → minimal → selfish) window and the full-range slope.
 
-## B.8 P7 — Hand-validation gate (deferred)
+## B.8 P7 — Hand-validation gate
 
 > Prediction: rule-based `sales_classifier` agrees with author-labeled ground truth at ≥ **90%** on a 30-segment stratified sample.
 
-**Verdict: DEFERRED.** Hand-validation is an author-labeling task — see [task4_hand_validation.py](../../experiments/task4_hand_validation.py) for the harness. P1–P6 use the same rule-based scorer applied uniformly across cells, so cross-cell comparisons (slopes, contrasts) are valid regardless of the absolute calibration. P7 gates the *absolute manipulation_rate* reporting in the final paper.
+**Verdict: PASS.** 30/30 = **100.0%** agreement on the seed-0 hand-coded sample (28 accurate + 2 false; no misleading rows happened to be drawn at this seed). Confusion matrix is diagonal — `sales_classifier` matches every author label. The classifier is validated; absolute `manipulation_rate` reporting is unblocked. Reproduction:
+
+```
+python experiments/task4_hand_validation.py emit paper/task4_sales/eval_log.eval --n 30 --seed 0 --out task4_validation.md
+# author fills human_label for each row
+python experiments/task4_hand_validation.py score task4_validation.md
+```
 
 ---
 
@@ -265,6 +271,6 @@ This is more interpretable than a single ordinal incentive ranking and is a pape
 
 - Cohen's d secondary analysis (deferred to cross-task appendix)
 - Bootstrap CIs (deferred)
-- Hand-validation results — pending author labeling per P7 / [task4_hand_validation.py](../../experiments/task4_hand_validation.py)
+- Hand-validation results: P7 PASSED at 30/30 = 100% — see §B.8 above.
 - Per-product breakdowns — products are categorical covariates per PREREG §8, aggregated by difficulty tier here
 - Per-question-type analysis (numeric_value / known_defect_disclosure / catch_all_disclosure / value_justification / comparable_disclosure) — deferred to a follow-up appendix

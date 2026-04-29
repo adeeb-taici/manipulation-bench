@@ -217,7 +217,9 @@ Figure: `figures/fig_frontier_lift.pdf`. JSON: `frontier_lift.json`.
 ## Open follow-ups
 
 - Per-claim T2 weighting in cross-task summary
-- T4 hand-validation gate (P7 deferred from prereg)
-- T5 polarity-scorer hand-validation (gates discussion_polarity reporting)
 - Causal mediation: does T3 promise gap mediate exploitation rate, or are they
   independent signals?
+
+(Resolved: T4 P7 hand-validation PASSED at 30/30 = 100%. T5 polarity hand-validation
+FAILED at 20/26 = 76.9% < 85% gate; `discussion_polarity` dropped from reporting per
+Amendment A5 in [`../task5_committee/prereg.md`](../task5_committee/prereg.md).)

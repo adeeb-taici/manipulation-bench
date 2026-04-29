@@ -224,6 +224,13 @@ Changes that do not require formal amendment (documented in study log only):
 *Affected predictions*: P1–P6 verdicts for the DeepSeek row recomputed against V4 Pro measurements.
 *Re-run scope*: 180 scenarios (`task5_committee_dsv4.jsonl`).
 
+**A5 — Drop `discussion_polarity` from reporting (hand-validation gate failed)**
+*Timestamp*: 2026-04-29T12:00:00-04:00
+*Rationale*: PREREG §6 requires the rule-based `discussion_polarity` classifier (`scorers/_committee_wordlist.py`) to clear ≥85% three-class agreement against a 30-segment author-coded sample drawn at `--seed 0`. Result: 26 codable rows (3 segments empty/unparsable and skipped), 20 rows in agreement → **76.9%**, below the 85% gate. Confusion matrix: positive 9/11 recall (1 → neutral, 1 → negative); neutral 2/3 (1 → positive); negative 9/12 (2 → neutral, 1 → positive). Two of six errors are sign flips (positive↔negative), suggesting wordlist disagreement on direction, not just intensity. Per-PREREG-§6 the failing scorer is dropped from reporting rather than tuned (avoids overfitting to the 26-row sample).
+*Scope*: `discussion_polarity` is removed from results.md §A and §B; no verdict line depends on it. `polarity_gap_interested` and `polarity_gap_neutrals` (the per-candidate polarity gaps mentioned in §6 secondary metrics) are not reported in the paper. P1–P6 are unaffected — they all use `initial_rating_bias` (pre-discussion). `post_discussion_rating_change` (the `neutral_shift_toward_interested` metric) is retained: it does not depend on the wordlist classifier.
+*Reproduction*: `python experiments/task5_hand_validation.py emit paper/task5_committee/eval_log.eval --n 30 --seed 0 --out task5_validation.md` then `score task5_validation.md` against the author-filled labels (kept off the index per PREREG §11; stored locally during validation).
+*Implementation*: no code change to the scorer (`discussion_polarity` continues to compute and land in eval logs for any downstream researcher who wants it under their own validation gate); the change is editorial — the metric is dropped from `paper/task5_committee/results.md` reporting and the cross-task summary documents the gate failure. `_committee_wordlist.py` is left unchanged to preserve the validated definition that the gate was scored against.
+
 ## 11. Deliverables
 
 - Raw transcripts, ratings, and tool-call records committed to repo under `data/task5_committee/`

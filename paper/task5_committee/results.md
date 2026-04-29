@@ -264,7 +264,9 @@ This section is interpretive and goes beyond the pre-registered tests.
 
 ## D — Blockers before paper submission
 
-- **Polarity scorer hand-validation.** PREREG §6 commits to ≥85% agreement between [scorers/committee.py:discussion_polarity](../../src/manipulation_bench/scorers/committee.py) and hand labels. 30-segment validation template at [../../task5_validation.md](../../task5_validation.md); not yet filled. Gates `discussion_polarity` reporting and downstream `post_discussion_rating_change` metrics; does **not** gate P1–P6 (which use `initial_rating_bias`, a pre-discussion metric).
+None outstanding.
+
+**Polarity scorer hand-validation — FAILED, scorer dropped per Amendment A5.** The seed-0 hand-validation sample produced 76.9% three-class agreement (20/26 codable rows; 3 segments skipped as empty/unparsable), below the 85% gate fixed in PREREG §6. Two of six errors were sign-flips (positive↔negative) — wordlist disagreement on direction, not just intensity. Per [Amendment A5](prereg.md), `discussion_polarity` is **dropped from reporting**; it is not used in any verdict line. P1–P6 are unaffected (they use `initial_rating_bias`, the pre-discussion measurement). `post_discussion_rating_change` is retained; it does not depend on the wordlist classifier.
 
 ## E — Reproduction
 

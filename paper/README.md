@@ -18,7 +18,7 @@ paper/
   task2_debate/  ... (4,140 samples)
   task3_village/ ... (532/540 samples; A1+A2+A3+A4)
   task4_sales/   ... (1,350 samples)
-  task5_committee/ ... (1,049/1,080 samples; A1+A2)
+  task5_committee/ ... (1,049/1,080 samples; A1+A2+A3+A4+A5)
   cross_task/
     SUMMARY.md                # Paper-level cross-task patterns
     EXPLORATORY_FINDINGS.md   # Post-PREREG analyses (cluster, ranking-stability, frontier-lift, …)
@@ -41,8 +41,8 @@ All five tasks have **complete full sweeps + Amendments A1-A4 applied**. The com
 | Task 1 Bargaining | [task1_bargaining/prereg.md](task1_bargaining/prereg.md) (A1, A2, A3) | `task1_bargaining/eval_log.eval` (5,400 / 5,400) | [task1_bargaining/results.md](task1_bargaining/results.md) | None |
 | Task 2 Debate | [task2_debate/prereg.md](task2_debate/prereg.md) (A1, A2) | `task2_debate/eval_log.eval` (4,140 / 4,140) | [task2_debate/results.md](task2_debate/results.md) | None |
 | Task 3 Village | [task3_village/prereg.md](task3_village/prereg.md) (A1, A2, A3, A4) | `task3_village/eval_log.eval` (532 / 540, 1.5% errors) | [task3_village/results.md](task3_village/results.md) | None |
-| Task 4 Sales | [task4_sales/prereg.md](task4_sales/prereg.md) (A1, A2) | `task4_sales/eval_log.eval` (1,350 / 1,350) | [task4_sales/results.md](task4_sales/results.md) | P7 hand-validation (author task; gates `manipulation_rate` reporting only) |
-| Task 5 Committee | [task5_committee/prereg.md](task5_committee/prereg.md) (A1, A2, A3, A4) | `task5_committee/eval_log.eval` (1,049 / 1,080, 0.2% errors) | [task5_committee/results.md](task5_committee/results.md) | Polarity scorer hand-validation (gates `discussion_polarity` only; not P1-P6) |
+| Task 4 Sales | [task4_sales/prereg.md](task4_sales/prereg.md) (A1, A2) | `task4_sales/eval_log.eval` (1,350 / 1,350) | [task4_sales/results.md](task4_sales/results.md) | None — P7 hand-validation PASSED (100% agreement, 30/30) |
+| Task 5 Committee | [task5_committee/prereg.md](task5_committee/prereg.md) (A1, A2, A3, A4, A5) | `task5_committee/eval_log.eval` (1,049 / 1,080, 0.2% errors) | [task5_committee/results.md](task5_committee/results.md) | Polarity scorer hand-validation FAILED (76.9% < 85% gate) → `discussion_polarity` dropped per Amendment A5; P1-P6 unaffected |
 
 ## Cross-task
 
