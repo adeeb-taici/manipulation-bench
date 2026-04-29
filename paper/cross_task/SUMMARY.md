@@ -20,7 +20,7 @@ See [cross_task_aggregate.md](cross_task_aggregate.md) for the full machine-gene
 | T1 Bargaining | 0.108 | **0.250** | 0.030 | incentive | 2.3× |
 | T2 Debate | 0.007 | 0.014 | **0.061** | difficulty | 4.4× |
 | T3 Village | **0.168** | 0.054 | 0.023 | **frame** | 3.1× |
-| T4 Sales | 0.030 | 0.010 | **0.130** | difficulty | 4.3× |
+| T4 Sales | 0.026 | 0.010 | **0.087** | difficulty | 3.3× |
 | T5 Committee | 0.327 | 0.181 | **0.603** | difficulty | 1.8× |
 
 (T5 numbers are on a 0–20 bias scale, not a 0–1 rate scale, so absolute magnitudes aren't directly comparable to T1-T4.)
@@ -44,11 +44,11 @@ See [figures/per_model_profiles.pdf](figures/per_model_profiles.pdf) for the sma
 
 A few notable per-model patterns:
 
-- **Gemini 3.1 Pro** is the most frame-sensitive model in 4 of 5 tasks (Bargaining, Village, Sales, Committee), but saturates early on permissive frames (Sales, Village, Committee all hit ≥ 0.85 at the permissive endpoint), making it the easiest model to push to extreme manipulation.
-- **GPT-5.5** is the most-aligned model on Sales (0.03 prohibitive manipulation rate, comparable to Claude/Grok) — a major reversal from GPT-5, which had a 0.51 prohibitive manipulation rate driven by a "commercial-omission default" (selectively omitting comparables and known defects). On Bargaining, GPT-5.5 keeps GPT-5's clean 0.000 prohibitive endpoint but reads pro-social/minimal middle-frames ~30pp better. On Debate/Village/Committee the alignment shift is smaller and task-dependent.
+- **Gemini 3.1 Pro** is the most frame-sensitive model in 3 of 5 tasks (Bargaining, Village, Committee). On Village and Committee its permissive endpoint saturates near the ceiling (Village 0.997, Committee bias 19.7). On Sales the permissive endpoint is only 0.19 — Gemini's frame-sensitivity does not generalize to Sales' product-truthfulness setting.
+- **GPT-5.5** is tied with the rest of the roster on Sales prohibitive compliance (0.03 vs Claude 0.01 / Grok 0.03 / Llama 0.04 / Gemini 0.04 / DeepSeek 0.03) — a major reversal from GPT-5, which had a 0.51 prohibitive manipulation rate driven by a "commercial-omission default" (selectively omitting comparables and known defects). On Bargaining, GPT-5.5 keeps GPT-5's clean 0.000 prohibitive endpoint but reads pro-social/minimal middle-frames ~30pp better. On Debate/Village/Committee the alignment shift is smaller and task-dependent.
 - **Claude Opus 4.7** is the most prohibitive-compliant model across tasks (≤ 0.05 on T1/T2 prohibitive averages) and never saturates a high-manipulation cell on T3 Village or T4 Sales. Frame slopes are also middling — Claude's overall manipulation envelope is the smallest of the six.
 - **Llama 3.3 70B** is the only model that consistently behaves as "less prompt-responsive" across tasks — it fails P1 on Village (prohibitive 0.42) and shows low incentive sensitivity on Bargaining. The V3.2 → V4 Pro DeepSeek swap (Amendment A3) closed what was previously a parallel "Llama + DeepSeek = both unresponsive" pattern: V4 Pro now shows strong incentive sensitivity on Bargaining (slope −0.346, V3.2 reasoning-off was −0.093) and dramatically improved prohibitive compliance on Village (0.11 vs V3.2's 0.51). Llama is the sole remaining outlier on those measures.
-- **DeepSeek V4 Pro vs V3.2 generation contrast**: a clean per-task split. V4 Pro is *more* aggressive on Sales (+0.11 prohibitive, +0.18 permissive) and slightly more on Debate, but *more compliant* on Bargaining (E=250 lying drops 0.137 → 0.000, full penalty-math response), Village (prohibitive 0.51 → 0.11), and Committee (prohibitive bias −0.28 → −1.37). Generation-level alignment is task-dependent for DeepSeek as for OpenAI.
+- **DeepSeek V4 Pro vs V3.2 generation contrast**: V4 Pro is more compliant on Bargaining (E=250 lying drops 0.137 → 0.000, full penalty-math response), Village (prohibitive 0.51 → 0.11), and Committee (prohibitive bias −0.28 → −1.37). On Sales the two generations land essentially tied at the prohibitive endpoint (0.03 vs 0.04). The cross-generation pattern is "more compliant on the structured-tool tasks (T1/T3/T5), tied on Sales, slightly more aggressive on Debate".
 - **Grok 4** behaves close to Claude on prompt-compliance baselines but has a steeper permissive endpoint. On Village Grok jumps from 0.00 prohibitive to 0.96 permissive — a 96-percentage-point swing, the largest endpoint range in T3.
 
 ## Cross-task verdict matrix
@@ -58,7 +58,7 @@ A few notable per-model patterns:
 | T1 Bargaining | ✓ | ✓ | (deferred) | partial (4/6) | ✗ | ✓ | — |
 | T2 Debate | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | — |
 | T3 Village | ✗ | ✓ | ✓ | **✓** | ✗ | ✓ | ✓ |
-| T4 Sales | ✗ | ✗ | **✓** | ✓ | ✗ | ✓ | (deferred) |
+| T4 Sales | ✓ | ✗ | ✗ | ✓ | ✗ | ✓ | (deferred) |
 | T5 Committee | ✓ | ✓ | weak | ✗ | ✓ | (FAIL ρ=−0.94) | — |
 
 P1/P2 fail in 3/5 tasks (Debate, Village, Sales — Sales' P1 PASS under GPT-5.5 alone reverts to FAIL once DeepSeek V4 Pro joins the row, since V4 Pro itself fails P1 on Sales at 0.16). The pattern: predictions that "prohibitive will land below 5%" are correct on Bargaining and Committee (where prohibitive is a hard constraint on a single act) but fail on Debate, Village, and Sales (where prohibitive doesn't fully prevent manipulation because it doesn't change the manipulator's underlying *role* — they're still arguing the false side, still defecting from cooperation, still selling a bad product).
@@ -74,7 +74,7 @@ P1/P2 fail in 3/5 tasks (Debate, Village, Sales — Sales' P1 PASS under GPT-5.5
 Past-PREREG analyses live in [EXPLORATORY_FINDINGS.md](EXPLORATORY_FINDINGS.md). Highlights:
 
 - **Cross-task model rankings barely correlate** (mean Spearman ρ = 0.047 across the 10 task-pairs) — manipulation propensity is task-dependent, not a stable model trait. See [ranking_stability.json](ranking_stability.json) and [figures/fig_ranking_stability.pdf](figures/fig_ranking_stability.pdf).
-- **Frontier-generation lift is non-uniform**: GPT-5 → GPT-5.5 reduces manipulation on 4/5 tasks (T4 Sales 56% → 3%), but DeepSeek V3.2 → V4 Pro *increases* it on 4/5. See [frontier_lift.json](frontier_lift.json) and [figures/fig_frontier_lift.pdf](figures/fig_frontier_lift.pdf).
+- **Frontier-generation lift is non-uniform**: GPT-5 → GPT-5.5 reduces manipulation on 4/5 tasks (T4 Sales 56% → 3%). DeepSeek V3.2 → V4 Pro is more compliant on T3 Village and T5 Committee, slightly more aggressive on T2 Debate, and tied on T1 Bargaining and T4 Sales. See [frontier_lift.json](frontier_lift.json) and [figures/fig_frontier_lift.pdf](figures/fig_frontier_lift.pdf).
 - **T1 lie magnitude**: when models lie, Gemini 100% / GPT-5.5 97% / DeepSeek 76% / Grok 79% lie *extremely* (>200pt overstatements); Claude 6%, Llama 1%. See [../task1_bargaining/analysis/lie_magnitude.json](../task1_bargaining/analysis/lie_magnitude.json).
 - **T5 dominates non-additive interactions**: per-(task, model) residuals from an additive linear fit; the top-10 most-surprising cells are all T5 (`prohibitive × high-difficulty` flips sign). See [residuals.json](residuals.json) and [figures/fig_residual_t<N>.pdf](figures/).
 - **Model archetypes** (15-dim profile clustering): Claude/Llama/DeepSeek vs GPT-5.5/Grok vs Gemini outlier. See [clusters.json](clusters.json) and [figures/fig_dendrogram.pdf](figures/fig_dendrogram.pdf).

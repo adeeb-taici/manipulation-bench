@@ -95,10 +95,10 @@
     "old_model": "deepseek",
     "new_model": "deepseek_v4",
     "old_mean": 0.1715555555555556,
-    "new_mean": 0.30400000000000005,
+    "new_mean": 0.0951111111111111,
     "old_stderr": 0.017849656278956634,
-    "new_stderr": 0.021309510508109707,
-    "delta": 0.13244444444444445,
+    "new_stderr": 0.012022319044295151,
+    "delta": -0.0764444444444445,
     "n_old": 225,
     "n_new": 225,
     "metric": "manipulation_rate"

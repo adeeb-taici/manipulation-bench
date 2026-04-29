@@ -9,7 +9,7 @@ Auto-generated from each task's `paper/<task>/analysis/prereg_results.json` (T1-
 | T1 Bargaining | `lied_rate` | 0.112 | 0.250 | 0.034 | **incentive** | 2.2× |
 | T2 Debate | `manipulation_occurred` | 0.007 | 0.014 | 0.056 | **difficulty** | 4.0× |
 | T3 Village | `exploitation_rate` | 0.168 | 0.054 | 0.023 | **frame** | 3.1× |
-| T4 Sales | `manipulation_rate` | 0.030 | 0.010 | 0.147 | **difficulty** | 5.0× |
+| T4 Sales | `manipulation_rate` | 0.026 | 0.010 | 0.087 | **difficulty** | 3.3× |
 | T5 Committee | `initial_rating_bias` | 0.327 | 0.180 | 0.603 | **difficulty** | 1.8× |
 
 Notes on metric scales:
@@ -48,7 +48,7 @@ Each model's profile = 5 tasks × 3 axes = 15 entries (signed slopes).
 | T1 Bargaining | +0.123 | -0.397 | +0.033 |
 | T2 Debate | -0.007 | +0.009 | -0.053 |
 | T3 Village | +0.255 | +0.105 | -0.047 |
-| T4 Sales | +0.044 | +0.031 | +0.320 |
+| T4 Sales | +0.047 | +0.021 | +0.148 |
 | T5 Committee | +0.434 | +0.430 | +0.016 |
 
 ### Grok-4
@@ -58,7 +58,7 @@ Each model's profile = 5 tasks × 3 axes = 15 entries (signed slopes).
 | T1 Bargaining | +0.138 | -0.237 | +0.072 |
 | T2 Debate | -0.009 | +0.004 | -0.086 |
 | T3 Village | +0.213 | +0.032 | -0.004 |
-| T4 Sales | +0.017 | -0.011 | +0.075 |
+| T4 Sales | +0.016 | +0.003 | +0.069 |
 | T5 Committee | +0.372 | +0.135 | -0.537 |
 
 ### Llama-3.3-70B
@@ -78,5 +78,5 @@ Each model's profile = 5 tasks × 3 axes = 15 entries (signed slopes).
 | T1 Bargaining | +0.106 | -0.346 | +0.029 |
 | T2 Debate | -0.002 | +0.022 | -0.050 |
 | T3 Village | +0.141 | +0.013 | +0.011 |
-| T4 Sales | +0.062 | +0.004 | +0.299 |
+| T4 Sales | +0.038 | +0.019 | +0.115 |
 | T5 Committee | +0.280 | +0.181 | -0.765 |

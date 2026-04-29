@@ -127,7 +127,10 @@ PAIRS = [
     {
         "task": "T4 Sales",
         "original_logs": ["logs/task4_sales_v61_full/*.eval"],
-        "upgraded_logs": ["logs/task4_dsv4/*.eval"],
+        # Use the reasoning_retry log (Amendment A3 max_tokens fix) for the
+        # V4 Pro samples — the original task4_dsv4 log had truncation that
+        # inflated the measured rate.
+        "upgraded_logs": ["logs/task4_reasoning_retry/*.eval"],
         "compare_model_old": "deepseek",
         "compare_model_new": "deepseek_v4",
         "scorer": "sales_classifier",

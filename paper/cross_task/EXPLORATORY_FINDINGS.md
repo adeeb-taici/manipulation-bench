@@ -7,18 +7,19 @@ for the paper. All numbers come from the combined eval logs in `paper/task<N>/ev
 ## 1. Manipulation rankings are NOT a stable trait across tasks
 
 Mean off-diagonal Spearman ρ across the 5 tasks' permissive-frame model
-rankings = **0.047** (essentially zero).
+rankings = **0.055** (essentially zero).
 
 | | T1 | T2 | T3 | T4 | T5 |
 |---|---|---|---|---|---|
-| T1 Bargaining | 1.00 | 0.23 | 0.52 | -0.41 | 0.29 |
-| T2 Debate     | 0.23 | 1.00 | -0.60 | -0.31 | -0.09 |
-| T3 Village    | 0.52 | -0.60 | 1.00 | 0.03 | 0.49 |
-| T4 Sales      | -0.41 | -0.31 | 0.03 | 1.00 | 0.31 |
-| T5 Committee  | 0.29 | -0.09 | 0.49 | 0.31 | 1.00 |
+| T1 Bargaining | 1.00 | 0.23 | 0.52 | -0.38 | 0.29 |
+| T2 Debate     | 0.23 | 1.00 | -0.60 | -0.54 | -0.09 |
+| T3 Village    | 0.52 | -0.60 | 1.00 | 0.37 | 0.49 |
+| T4 Sales      | -0.38 | -0.54 | 0.37 | 1.00 | 0.26 |
+| T5 Committee  | 0.29 | -0.09 | 0.49 | 0.26 | 1.00 |
 
 There is no global "manipulability trait" — the model that's most manipulative on
-T2 (GPT-5.5) is least manipulable on T4 (rate=0.027). T2↔T3 is strongly *negative*.
+T2 (GPT-5.5) is least manipulable on T4 (rate=0.027). T2↔T3 and T2↔T4 are both
+strongly *negative*, while T3↔T4 and T1↔T3 are moderately positive.
 
 → **Paper headline candidate**: "Manipulation propensity is task-dependent, not a
 property of the model." This makes a strong case for multi-task evaluation.
@@ -116,14 +117,15 @@ Manipulation rate (misleading + false) by check_type, all conditions averaged:
 
 | Check type | Avg | Peak model |
 |---|---|---|
-| value_justification | 0.189 | DeepSeek V4 Pro 0.548 |
-| numeric_value | 0.158 | Llama 0.229 |
-| catch_all_disclosure | 0.117 | Gemini 0.368 |
-| comparable_disclosure | 0.104 | DeepSeek 0.404 |
+| numeric_value | 0.144 | Llama 0.229 |
+| catch_all_disclosure | 0.060 | Gemini 0.130 |
+| value_justification | 0.044 | Gemini 0.129 |
+| comparable_disclosure | 0.010 | DeepSeek 0.027 |
 
-→ "Why is this priced at X?" (`value_justification`) is the most-manipulable
-question type — 19% manipulation rate on average and 55% for DeepSeek V4 Pro.
-"How does this compare to alternatives?" (`comparable_disclosure`) is least.
+→ Concrete numeric questions ("how much does it cost / what's the spec?") are the most-manipulable
+check_type — 14% manipulation rate on average, peak Llama 23%. Soft disclosures (catch-all and
+value-justification) sit in the middle. Comparable-product disclosures are essentially never
+manipulated (1% average). The gradient is concrete numeric > soft disclosures > comparable mentions.
 
 Figures: `paper/task4_sales/figures/fig8_check_type_heatmap.pdf`,
 `paper/task4_sales/figures/fig9_check_type_by_frame.pdf`.
@@ -155,11 +157,10 @@ JSON: `paper/cross_task/residuals.json`.
 
 ## 8. Sample-distribution shapes (no smoking gun)
 
-Violin plots per (task, model, frame) confirm that for T1, T3, T5 the means
-faithfully represent the distributions (no obvious bimodality). T2 is binary,
-so distributions are uninformative; T4 shows mild bimodality at frame=permissive
-for Gemini and DeepSeek (clusters near 0 and near 0.6) suggesting two modes:
-honest sale vs going-all-in deceptive sale.
+Violin plots per (task, model, frame) confirm that for T1, T3, T4, and T5
+the means faithfully represent the distributions — no obvious bimodality
+in any (model, frame) cell. T2 is binary so distributions are
+uninformative.
 
 Figures: `paper/task<N>/<dir>/figures/fig10_sample_distributions.pdf` (5 figures).
 
@@ -188,12 +189,16 @@ manipulation rate, a near-elimination on the same scenarios.
 | T1 Bargaining | 0.188 | 0.324 | **+0.135** |
 | T2 Debate | 0.194 | 0.232 | +0.038 |
 | T3 Village | 0.664 | 0.298 | **-0.366** |
-| T4 Sales | 0.172 | 0.304 | **+0.132** |
+| T4 Sales | 0.172 | 0.095 | **-0.076** |
 | T5 Committee bias | 2.267 | 2.282 | +0.015 |
 
-V4 Pro is *more* manipulative on 4/5 tasks; only T3 Village (where V3.2 was at
-0.66 ceiling already) drops, and that may be confounded with the
-`tool_choice="auto"` workaround needed for V4 Pro reasoning.
+V4 Pro is more compliant on T3 Village (large drop, 0.66→0.30) and T4 Sales,
+roughly tied on T5 Committee, and slightly more aggressive on T1 Bargaining
+(+0.14) and T2 Debate (+0.04). The mixed direction reflects task structure: V4
+Pro improves on tasks where a strong reasoner can avoid sub-optimal behavior
+(Village's commons defection, Sales' product-truthfulness disclosures) but
+reasons its way *into* manipulation on tasks where it explicitly serves the
+agent's goal (Bargaining valuations, Debate persuasion).
 
 → Generation upgrades are NOT uniformly safety-positive; the direction depends
 on lab and on task. This is a paper-headline-class finding.

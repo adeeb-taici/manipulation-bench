@@ -213,7 +213,7 @@ def main():
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(rec, f, indent=2)
     print(f"wrote {json_path}")
-    print(f"\nMean off-diagonal ρ = {rec['mean_offdiag_rho']}  (1.0 = identical rankings)")
+    print(f"\nMean off-diagonal rho = {rec['mean_offdiag_rho']}  (1.0 = identical rankings)")
 
 
 if __name__ == "__main__":

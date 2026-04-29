@@ -67,6 +67,11 @@ TASK_SPLITS = {
         "logs/task4_sales_v61_full/*.eval",
         "logs/task4_gpt55/*.eval",
         "logs/task4_dsv4/*.eval",
+        # Amendment A3 (2026-04-29): re-run reasoning-on models
+        # (Gemini, Grok, DeepSeek V4 Pro) at max_tokens=16384 to fix
+        # truncation. Listed last so dedup-by-sample-id picks the
+        # un-truncated samples over the original 4096-budget ones.
+        "logs/task4_reasoning_retry/*.eval",
     ],
     "paper/task5_committee/eval_log.eval": [
         "logs/committee_fullsweep_20260422/*.eval",

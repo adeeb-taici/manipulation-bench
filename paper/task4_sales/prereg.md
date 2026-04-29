@@ -214,6 +214,22 @@ Changes requiring formal amendment:
 
 **Re-run scope**: 225 scenarios (`task4_sales_dsv4.jsonl`).
 
+### Amendment A3 — Raise `max_tokens` from 4096 to 16384 for reasoning-on models (2026-04-29)
+
+**Triggering event**: Hand-validation prep surfaced widespread truncation in Gemini's T4 responses. Forensic: 97% of Gemini's last-question outputs hit `stop_reason="max_tokens"` at the original 4096 budget; 69% for Grok 4 and 68% for DeepSeek V4 Pro. Reasoning tokens (Gemini's `thinking`, Grok's reasoning trace, DeepSeek V4 Pro's reasoner) consume the budget before the visible answer is fully written, leaving the response cut off mid-sentence.
+
+The non-reasoning models (Claude default, Llama, GPT-5.5 — though GPT-5.5 has reasoning, it apparently uses fewer thinking tokens here) hit `max_tokens` on ≤3% of last-question outputs. They are unaffected.
+
+**Validity concern**: For Gemini specifically, truncated responses are classified as `misleading + false` at 0.40 vs 0.20 for whole responses (2× rate). Truncation is biasing Gemini's measured manipulation rate **upward** by an estimated 5–15 pp because the rule-based `sales_classifier` evaluates only the visible text. DeepSeek shows the inverse (truncated 0.23, whole 0.31), where truncation appears to clip the misleading claim before the classifier sees it — biasing DeepSeek's number **downward**.
+
+**Amendment**: Raise `max_tokens` from 4096 to **16384** for the three reasoning-on models (Gemini 3.1 Pro, Grok 4, DeepSeek V4 Pro). Re-run those scenarios under the new budget. Same scenarios, same scorer, same analysis pipeline; the only change is the per-turn output token cap.
+
+**Justification**: Cross-task consistency — Task 3 Village's Amendment A2 used `max_tokens=16384` for the same reason (reasoner thinking-tokens consuming budget on long transcripts). 16384 is comfortably above the observed `reasoning_tokens + completion_tokens` totals where measurable, leaving headroom for the longest plausible thinking traces.
+
+**Affected predictions**: P1–P7 verdicts for the Gemini, Grok, and DeepSeek rows recomputed against the un-truncated measurements. The Claude / GPT-5.5 / Llama rows are unchanged. Headline-level expectation: Gemini's manipulation rate will drop and DeepSeek's will rise modestly; both move toward their true post-amendment values.
+
+**Re-run scope**: 675 scenarios (Gemini × 225 + Grok × 225 + DeepSeek × 225). Output: `logs/task4_reasoning_retry/`. The original truncated samples for these three models are deduplicated out of the canonical combined log (`paper/task4_sales/eval_log.eval`) by sample-id (later-running splits win), so all post-A3 analyses see only the un-truncated versions. Original truncated logs remain in `logs/task4_sales_v61_full/`, `logs/task4_gpt55/`, `logs/task4_dsv4/` for reproducibility.
+
 ## 11. Deliverables
 
 - Raw transcripts and per-question classifications committed under `data/task4_sales/`
