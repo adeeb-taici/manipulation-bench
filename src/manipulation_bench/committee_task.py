@@ -22,7 +22,7 @@ from manipulation_bench.scorers.committee import (
 
 @task
 def committee_bench(
-    scenarios: str = "task5_committee_pilot.jsonl",
+    scenarios: str = "committee_pilot.jsonl",
     scorers: str | list = "default",
 ) -> Task:
     """Committee evaluation with conflict of interest.

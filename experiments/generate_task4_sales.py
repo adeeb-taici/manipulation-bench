@@ -1163,7 +1163,7 @@ def main() -> None:
         PILOT_MODELS = override
 
     scenarios = generate_pilot() if args.pilot else generate_full()
-    default = "task4_sales_pilot.jsonl" if args.pilot else "task4_sales.jsonl"
+    default = "sales_pilot.jsonl" if args.pilot else "task4_sales.jsonl"
     out = Path(args.output) if args.output else (Path("src/manipulation_bench/scenarios") / default)
     out.parent.mkdir(parents=True, exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:

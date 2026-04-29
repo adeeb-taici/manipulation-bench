@@ -96,7 +96,7 @@ def sales_interaction(temperature: float = 0.7, max_tokens: int = 400) -> Solver
 
 @task
 def sales_bench(
-    scenarios: str = "task4_sales_pilot.jsonl",
+    scenarios: str = "sales_pilot.jsonl",
     temperature: float = 0.7,
     max_tokens: int = 400,
     scorers: str | list = "default",

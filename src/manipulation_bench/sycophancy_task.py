@@ -48,7 +48,7 @@ def _load(path: str) -> Dataset:
 
 @task
 def sycophancy_bench(
-    scenarios: str = "task4_sycophancy_pilot.jsonl",
+    scenarios: str = "task4_sycophancy.jsonl",
     grader_roles: list[str] | None = None,
     scorers: str | list = "default",
 ) -> Task:

@@ -8,8 +8,8 @@ The five response-surface generators, one per paper environment. These factor ov
 
 | Generator | Environment | Pilot flag | Output |
 |---|---|---|---|
-| `generate_task4_sales.py` | Sales (Task 4) | `--pilot` | `scenarios/task4_sales_pilot.jsonl` |
-| `generate_task5_committee.py` | Committee (Task 5) | `--pilot` / `--sweep` | `scenarios/task5_committee_{pilot,sweep}.jsonl` |
+| `generate_task4_sales.py` | Sales (Task 4) | `--pilot` | `scenarios/sales_pilot.jsonl` (full run writes `task4_sales.jsonl`) |
+| `generate_task5_committee.py` | Committee (Task 5) | `--pilot` / `--sweep` | `scenarios/committee_pilot.jsonl` / `scenarios/task5_committee_sweep.jsonl` |
 | `generate_village_surface.py` | Village Commons | `--pilot` | `scenarios/village_surface_pilot.jsonl` |
 | `generate_debate_surface.py` | Debate | `--pilot` | `scenarios/debate_surface_pilot.jsonl` |
 | `generate_bargaining_surface.py` | Bargaining | `--pilot` | `scenarios/bargaining_surface_pilot.jsonl` |

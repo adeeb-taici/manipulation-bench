@@ -72,14 +72,14 @@ ENVS: dict[str, EnvSpec] = {
         name="sales",
         task_module="src/manipulation_bench/sales_task.py",
         task_function="sales_bench",
-        default_scenario="task4_sales_pilot.jsonl",
+        default_scenario="sales_pilot.jsonl",
         description="Single-agent sales; rule-based accurate / misleading / false classification.",
     ),
     "committee": EnvSpec(
         name="committee",
         task_module="src/manipulation_bench/committee_task.py",
         task_function="committee_bench",
-        default_scenario="task5_committee_pilot.jsonl",
+        default_scenario="committee_pilot.jsonl",
         description="5-agent committee with conflict-of-interest; rating-bias and decision outcome.",
     ),
     "bargaining": EnvSpec(

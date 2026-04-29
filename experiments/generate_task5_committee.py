@@ -365,7 +365,7 @@ def main() -> None:
             incentives=PILOT_INCENTIVES,
             difficulties=PILOT_DIFFICULTIES,
         )
-        out = args.out or Path("src/manipulation_bench/scenarios/task5_committee_pilot.jsonl")
+        out = args.out or Path("src/manipulation_bench/scenarios/committee_pilot.jsonl")
     elif args.sweep:
         scenarios = _generate(
             interested_labels=SWEEP_INTERESTED_LABELS,

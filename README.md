@@ -171,7 +171,7 @@ python experiments/generate_task4_sales.py --pilot
 
 # Run sales
 inspect eval src/manipulation_bench/sales_task.py \
-  -T scenarios=task4_sales_pilot.jsonl \
+  -T scenarios=sales_pilot.jsonl \
   --model-role model_a=openrouter/anthropic/claude-opus-4-6 \
   --model-role model_d=openrouter/x-ai/grok-3
 
@@ -198,7 +198,7 @@ python experiments/generate_task5_committee.py --pilot
 
 # Run committee
 inspect eval src/manipulation_bench/committee_task.py \
-  -T scenarios=task5_committee_pilot.jsonl \
+  -T scenarios=committee_pilot.jsonl \
   --model-role model_claude=openrouter/anthropic/claude-opus-4-6 \
   --model-role model_grok=openrouter/x-ai/grok-3 \
   --model-role model_gpt5=openrouter/openai/gpt-5 \
