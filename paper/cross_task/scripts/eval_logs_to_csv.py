@@ -25,7 +25,7 @@ from typing import Any
 import pandas as pd
 from inspect_ai.log import read_eval_log
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
@@ -65,13 +65,17 @@ def _infer_task_variant(path: Path) -> tuple[str, str]:
     """Infer (task, variant) from log path."""
     task = "unknown"
     for part in path.parts:
-        m = re.match(r"task\d+_\w+", part)
-        if m:
-            task = TASK_DIR_TO_KEY.get(m.group(0), "unknown")
-            break
+        # Try specific-env regex first (handles filenames like task3_village_sweep_42.eval)
         m = re.search(r"task\d+_(bargaining|debate|village|sales|committee)", part)
         if m:
-            task = TASK_DIR_TO_KEY.get(m.group(0), "unknown")
+            key = m.group(0)
+            if key in TASK_DIR_TO_KEY:
+                task = TASK_DIR_TO_KEY[key]
+                break
+        # Then try strict directory-name match (handles task1_bargaining/ etc.)
+        m = re.fullmatch(r"task\d+_\w+", part)
+        if m and m.group(0) in TASK_DIR_TO_KEY:
+            task = TASK_DIR_TO_KEY[m.group(0)]
             break
 
     name = path.name
