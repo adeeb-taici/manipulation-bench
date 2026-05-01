@@ -156,6 +156,15 @@ def main() -> None:
         help="substrate name (file under paper/task6_inbox/substrate/<name>.json)",
     )
     parser.add_argument(
+        "--targets",
+        default=None,
+        help=(
+            "comma-separated target names (without difficulty suffix) for full-sweep mode. "
+            "Each target must have <name>_low.json, <name>_medium.json, <name>_high.json under substrate/. "
+            "When set, --substrate is ignored and we sweep all 3 difficulties for each target."
+        ),
+    )
+    parser.add_argument(
         "--models",
         default="claude=model_a",
         help=(
@@ -167,31 +176,42 @@ def main() -> None:
     parser.add_argument("-o", "--output", default=None)
     args = parser.parse_args()
 
-    substrate = load_substrate(args.substrate)
-    diff = substrate.get("difficulty", "medium")
-    if diff not in DIFFICULTY_LEVELS:
-        raise SystemExit(f"substrate difficulty {diff!r} not in {DIFFICULTY_LEVELS}")
+    if args.targets:
+        targets = [t.strip() for t in args.targets.split(",") if t.strip()]
+        substrates = []
+        for t in targets:
+            for d in DIFFICULTY_LEVELS:
+                substrates.append(load_substrate(f"{t}_{d}"))
+        sweep_label = f"{len(targets)}-target × 3-difficulty sweep"
+    else:
+        substrates = [load_substrate(args.substrate)]
+        d = substrates[0].get("difficulty", "medium")
+        if d not in DIFFICULTY_LEVELS:
+            raise SystemExit(f"substrate difficulty {d!r} not in {DIFFICULTY_LEVELS}")
+        sweep_label = f"single substrate {args.substrate}"
 
     models = parse_models(args.models)
     if not models:
         raise SystemExit("--models produced an empty roster")
 
     scenarios: list[dict[str, Any]] = []
-    for frame in FRAME_LEVELS:
-        for incentive in INCENTIVE_LEVELS:
-            for label, role in models:
-                for rep in range(args.reps):
-                    scenarios.append(
-                        build_scenario(
-                            substrate=substrate,
-                            frame=frame,
-                            incentive=incentive,
-                            difficulty=diff,
-                            model_label=label,
-                            model_role=role,
-                            rep=rep,
+    for substrate in substrates:
+        diff = substrate.get("difficulty", "medium")
+        for frame in FRAME_LEVELS:
+            for incentive in INCENTIVE_LEVELS:
+                for label, role in models:
+                    for rep in range(args.reps):
+                        scenarios.append(
+                            build_scenario(
+                                substrate=substrate,
+                                frame=frame,
+                                incentive=incentive,
+                                difficulty=diff,
+                                model_label=label,
+                                model_role=role,
+                                rep=rep,
+                            )
                         )
-                    )
 
     out = Path(args.output) if args.output else DEFAULT_OUT
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -203,9 +223,10 @@ def main() -> None:
         f"Wrote {len(scenarios)} scenarios -> {out.relative_to(REPO) if out.is_relative_to(REPO) else out}"
     )
     print(
-        f"  substrate: {args.substrate} ({len(substrate['messages'])} messages, "
-        f"target='{substrate['suppression_target']}', difficulty={diff})"
+        f"  {sweep_label} ({len(substrates)} substrate inbox{'es' if len(substrates) != 1 else ''})"
     )
+    for sub in substrates:
+        print(f"    - {sub['suppression_target']}/{sub['difficulty']}: {len(sub['messages'])} msgs")
     print(f"  models: {[label for label, _ in models]}")
     print(f"  reps: {args.reps}")
     print()
