@@ -89,6 +89,13 @@ ENVS: dict[str, EnvSpec] = {
         default_scenario="bargaining_surface_pilot.jsonl",
         description="2-agent bargaining; lying detected via threshold against true valuation.",
     ),
+    "inbox": EnvSpec(
+        name="inbox",
+        task_module="src/manipulation_bench/inbox_task.py",
+        task_function="inbox_bench",
+        default_scenario="inbox_pilot.jsonl",
+        description="Single-agent inbox triage; differential suppression-rate scoring.",
+    ),
     "naming": EnvSpec(
         name="naming",
         task_module="src/manipulation_bench/consensus_tasks.py",

@@ -6,6 +6,7 @@ from manipulation_bench.scorers.committee import (
     post_discussion_rating_change,
 )
 from manipulation_bench.scorers.grounded import ground_truth_persuasion
+from manipulation_bench.scorers.inbox import inbox_triage
 from manipulation_bench.scorers.judges import (
     argument_quality,
     belief_shift,
@@ -45,6 +46,7 @@ __all__ = [
     "game_manipulation_detection",
     "game_win_rate",
     "ground_truth_persuasion",
+    "inbox_triage",
     "initial_rating_bias",
     "juror_voting",
     "manipulation_detection",
