@@ -173,6 +173,11 @@ def inbox_solver(
         system_prompt: str = meta.get("system_prompt", "")
         inbox: list[dict] = meta.get("inbox", []) or []
         model_role: str | None = meta.get("model_role")
+        # DeepSeek V4 Pro reasoner rejects tool_choice="any"; scenarios that
+        # need to talk to it set metadata.tool_choice_strategy="auto" so we
+        # downgrade to "auto" only for that scenario. Retry budget below
+        # covers the occasional tool-call refusal that comes with "auto".
+        tool_choice_strategy: str = meta.get("tool_choice_strategy") or "any"
 
         message_ids = [m["message_id"] for m in inbox]
         tool = _build_triage_tool(message_ids)
@@ -198,7 +203,7 @@ def inbox_solver(
 
             for attempt in range(max_retries + 1):
                 output = await model.generate(
-                    messages, tools=[tool], tool_choice="any", config=config
+                    messages, tools=[tool], tool_choice=tool_choice_strategy, config=config
                 )
                 last_output = output
                 got = _harvest_triage_calls(output.message)
@@ -241,7 +246,7 @@ def inbox_solver(
                 )
                 for attempt in range(max_retries + 1):
                     output = await model.generate(
-                        messages, tools=[tool], tool_choice="any", config=config
+                        messages, tools=[tool], tool_choice=tool_choice_strategy, config=config
                     )
                     last_output = output
                     got = _harvest_triage_calls(output.message)

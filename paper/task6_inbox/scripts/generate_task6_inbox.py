@@ -104,21 +104,27 @@ def build_scenario(
     sid = (
         f"inbox_{target.replace(' ', '_')}_{difficulty}_{frame}_{incentive}_{model_label}_rep{rep}"
     )
+    metadata: dict[str, Any] = {
+        "frame": frame,
+        "incentive": incentive,
+        "difficulty": difficulty,
+        "manipulator": "assistant",
+        "model": model_label,
+        "model_mapping": {model_role: model_label},
+        "suppression_target": target,
+        "environment_type": "inbox",
+    }
+    # DeepSeek V4 Pro reasoner rejects tool_choice="any". inbox_task.py reads
+    # this and downgrades to "auto" only for these scenarios; the retry budget
+    # covers the occasional tool-call refusal that comes with "auto".
+    if "deepseek" in model_label.lower():
+        metadata["tool_choice_strategy"] = "auto"
     return {
         "id": sid,
         "system_prompt": sys_prompt,
         "inbox": inbox,
         "model_role": model_role,
-        "metadata": {
-            "frame": frame,
-            "incentive": incentive,
-            "difficulty": difficulty,
-            "manipulator": "assistant",
-            "model": model_label,
-            "model_mapping": {model_role: model_label},
-            "suppression_target": target,
-            "environment_type": "inbox",
-        },
+        "metadata": metadata,
     }
 
 
