@@ -1,6 +1,6 @@
 # Cross-task summary — Manipulation Response Surface
 
-The five-task response-surface study is complete. This document is the paper-level summary of cross-task patterns. Per-task results live in [../task1_bargaining/results.md](../task1_bargaining/results.md), [../task2_debate/results.md](../task2_debate/results.md), [../task3_village/results.md](../task3_village/results.md), [../task4_sales/results.md](../task4_sales/results.md), [../task5_committee/results.md](../task5_committee/results.md).
+The five-task response-surface study (T1–T5) is complete and used to develop the cluster-split taxonomy summarized below; **Task 6 (Inbox Triage)** is a pre-registered held-out test of that taxonomy on a fresh task and is reported separately at [../task6_inbox/results.md](../task6_inbox/results.md). The cross-task analyses in this document are over T1–T5 only by design — including T6 here would invalidate the held-out generalization claim. Per-task results live in [../task1_bargaining/results.md](../task1_bargaining/results.md), [../task2_debate/results.md](../task2_debate/results.md), [../task3_village/results.md](../task3_village/results.md), [../task4_sales/results.md](../task4_sales/results.md), [../task5_committee/results.md](../task5_committee/results.md), and [../task6_inbox/results.md](../task6_inbox/results.md).
 
 ## Headline finding: tasks split into two clusters by dominant axis
 

@@ -19,6 +19,7 @@ paper/
   task3_village/ ... (532/540 samples; A1+A2+A3+A4)
   task4_sales/   ... (1,350 samples)
   task5_committee/ ... (1,049/1,080 samples; A1+A2+A3+A4+A5)
+  task6_inbox/   ... (1,080 samples; held-out cluster-split test)
   cross_task/
     SUMMARY.md                # Paper-level cross-task patterns
     EXPLORATORY_FINDINGS.md   # Post-PREREG analyses (cluster, ranking-stability, frontier-lift, …)
@@ -34,7 +35,7 @@ paper/
 
 ## Task status
 
-All five tasks have **complete full sweeps + Amendments A1-A4 applied**. The combined eval logs at `paper/task<N>/eval_log.eval` reflect the post-amendment state (GPT-5.5 + DeepSeek V4 Pro).
+T1–T5 have **complete full sweeps + Amendments A1–A5 applied** and form the pre-registered manipulator-response surface. T6 is a pre-registered held-out test of the cluster-split taxonomy derived from T1–T5 and is reported separately. The combined eval logs at `paper/task<N>/eval_log.eval` reflect the post-amendment state (GPT-5.5 + DeepSeek V4 Pro).
 
 | Task | PREREG | Combined log | Results | Outstanding |
 |---|---|---|---|---|
@@ -43,6 +44,7 @@ All five tasks have **complete full sweeps + Amendments A1-A4 applied**. The com
 | Task 3 Village | [task3_village/prereg.md](task3_village/prereg.md) (A1, A2, A3, A4) | `task3_village/eval_log.eval` (532 / 540, 1.5% errors) | [task3_village/results.md](task3_village/results.md) | None |
 | Task 4 Sales | [task4_sales/prereg.md](task4_sales/prereg.md) (A1, A2) | `task4_sales/eval_log.eval` (1,350 / 1,350) | [task4_sales/results.md](task4_sales/results.md) | None — P7 hand-validation PASSED (100% agreement, 30/30) |
 | Task 5 Committee | [task5_committee/prereg.md](task5_committee/prereg.md) (A1, A2, A3, A4, A5) | `task5_committee/eval_log.eval` (1,049 / 1,080, 0.2% errors) | [task5_committee/results.md](task5_committee/results.md) | Polarity scorer hand-validation FAILED (76.9% < 85% gate) → `discussion_polarity` dropped per Amendment A5; P1-P6 unaffected |
+| Task 6 Inbox (held-out) | [task6_inbox/prereg.md](task6_inbox/prereg.md) | `task6_inbox/eval_log.eval` (1,080 / 1,080) | [task6_inbox/results.md](task6_inbox/results.md) | P-T6.7 hand-validation deferred to camera-ready; cluster-split predictions P-T6.4/.5/.6 PASS |
 
 ## Cross-task
 
@@ -72,6 +74,8 @@ python task2_debate/scripts/task2_prereg_analysis.py
 python task3_village/scripts/task3_prereg_analysis.py
 python task4_sales/scripts/task4_prereg_analysis.py
 python task5_committee/scripts/task5_prereg_analysis.py
+python task6_inbox/scripts/task6_prereg_analysis.py     # held-out cluster-split test
+python task6_inbox/scripts/task6_visuals.py
 
 # Bootstrap CIs and Cohen's d (cross-task)
 python cross_task/scripts/run_bootstrap_cis.py
@@ -105,6 +109,7 @@ python task2_debate/scripts/generate_task2_debate_full.py  --models 'opus47,haik
 python task3_village/scripts/generate_task3_village_full.py --models 'opus47,haiku45,gpt55,grok4'
 python task4_sales/scripts/generate_task4_sales.py        --models 'opus47,haiku45,gpt55,grok4'
 python task5_committee/scripts/generate_task5_committee.py    --models 'opus47,haiku45,gpt55,grok4' --sweep
+python task6_inbox/scripts/generate_task6_inbox.py        --models 'opus47,haiku45,gpt55,grok4'
 
 # 2. Each generator prints the exact `inspect eval ...` command, with each
 #    `--model-role <role>=openrouter/<provider>/<model>` left as a placeholder.
@@ -116,6 +121,7 @@ python task2_debate/scripts/task2_prereg_analysis.py
 python task3_village/scripts/task3_prereg_analysis.py
 python task4_sales/scripts/task4_prereg_analysis.py
 python task5_committee/scripts/task5_prereg_analysis.py
+python task6_inbox/scripts/task6_prereg_analysis.py
 python cross_task/scripts/run_bootstrap_cis.py
 python cross_task/scripts/run_cohens_d.py
 ```
