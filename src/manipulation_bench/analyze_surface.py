@@ -48,6 +48,7 @@ _SCORER_SETS: dict[str, set[str]] = {
     "village": {"exploitation_rate", "promise_action_gap", "village_fairness"},
     "debate": {"manipulation_detection", "argument_quality", "belief_shift"},
     "bargaining": {"overstatement_rate"},
+    "inbox": {"inbox_triage"},
     "werewolf": {"game_win_rate", "deception_success"},
     "diplomacy": {"territorial_success", "agreement_compliance"},
 }
@@ -167,6 +168,25 @@ def _bargaining_metric(sample: Any) -> float | None:
         return None
 
 
+def _inbox_metric(sample: Any) -> float | None:
+    score = sample.scores.get("inbox_triage")
+    if score is None:
+        return None
+    val = score.value if hasattr(score, "value") else score
+    if isinstance(val, dict):
+        v = val.get("suppression_rate")
+        if v is None:
+            return None
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return None
+
+
 # Per-env scorer names that carry the shared `manipulation_occurred` boolean.
 _MANIP_SCORERS: dict[str, tuple[str, ...]] = {
     "sales": ("sales_classifier",),
@@ -174,6 +194,7 @@ _MANIP_SCORERS: dict[str, tuple[str, ...]] = {
     "village": ("exploitation_rate",),
     "debate": ("ground_truth_persuasion",),
     "bargaining": ("bargaining_commit", "bargaining_manipulation"),
+    "inbox": ("inbox_triage",),
 }
 
 
@@ -192,6 +213,7 @@ _METRIC_EXTRACTORS = {
     "village": _village_metric,
     "debate": _debate_metric,
     "bargaining": _bargaining_metric,
+    "inbox": _inbox_metric,
 }
 
 METRIC_NAMES = {
@@ -200,6 +222,7 @@ METRIC_NAMES = {
     "village": "exploitation_rate",
     "debate": "belief_shift",
     "bargaining": "overstatement_rate",
+    "inbox": "suppression_rate",
 }
 
 SHARED_METRIC = "manipulation_occurred"
