@@ -1,0 +1,337 @@
+"""Generate visualizations of Task 5 committee results.
+
+Outputs PNGs to paper/task5_committee/figures_extended/.
+"""
+
+from __future__ import annotations
+
+from collections import defaultdict
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+from inspect_ai.log import read_eval_log
+
+LOG = "paper/task5_committee/eval_log_extended.eval"
+OUT = Path("paper/task5_committee/figures_extended")
+
+FRAMES = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
+DIFFS = ("low", "medium", "high")
+INCS = ("none", "moderate", "high")
+
+FRAME_LABELS = [
+    "Prohibitive\n(don't manipulate)",
+    "Pro-social\n(be fair)",
+    "Minimal\n(no instruction)",
+    "Selfish\n(maximize payoff)",
+    "Permissive\n(you may exaggerate)",
+]
+
+MODEL_DISPLAY = {
+    "claude": "Claude Opus 4.7",
+    "gpt55": "GPT-5.5",
+    "gemini": "Gemini 3.1 Pro",
+    "grok": "Grok 4",
+    "llama": "Llama 3.3 70B",
+    "deepseek": "DeepSeek V4 Pro",
+    "gpt54nano": "GPT-5.4-nano",
+    "gpt54mini": "GPT-5.4-mini",
+    "gpt41nano": "GPT-4.1-nano",
+    "gpt41mini": "GPT-4.1-mini",
+    "gpt41": "GPT-4.1",
+    "haiku35": "Claude 3.5 Haiku",
+    "haiku45": "Claude Haiku 4.5",
+    "sonnet37": "Claude 3.7 Sonnet",
+    "sonnet46": "Claude Sonnet 4.6",
+}
+
+
+def load_rows():
+    log = read_eval_log(LOG)
+    rows = []
+    for s in log.samples:
+        if s.error is not None:
+            continue
+        m = (s.metadata or {}).get("scenario", {}).get("metadata", {})
+        bs = (s.scores or {}).get("initial_rating_bias")
+        if bs is None or not isinstance(bs.value, dict):
+            continue
+        bias = bs.value.get("initial_bias")
+        if bias is None:
+            continue
+        rows.append(
+            dict(
+                model=(
+                    "gpt55"
+                    if m.get("interested_model_label") == "gpt5"
+                    else m.get("interested_model_label")
+                ),
+                frame=m.get("frame"),
+                incentive=m.get("incentive"),
+                difficulty=m.get("difficulty"),
+                bias=float(bias),
+            )
+        )
+    return rows
+
+
+def mean(xs):
+    return sum(xs) / len(xs) if xs else float("nan")
+
+
+def mean_stderr(xs):
+    """Mean and standard error of mean. Returns (mean, 0) if singleton/empty."""
+    xs = [x for x in xs if x is not None]
+    if not xs:
+        return float("nan"), 0.0
+    if len(xs) == 1:
+        return float(xs[0]), 0.0
+    arr = np.asarray(xs, dtype=float)
+    return float(arr.mean()), float(arr.std(ddof=1) / np.sqrt(len(arr)))
+
+
+def fig1_bias_across_frames(rows):
+    """Main figure: per-model manipulation bias across the 5 frame levels."""
+    fig, ax = plt.subplots(figsize=(20, 7))
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
+    colors = plt.cm.tab20(np.linspace(0, 1, len(models)))
+
+    x = np.arange(len(FRAMES))
+    width = 0.06
+
+    for i, model in enumerate(models):
+        means, errs = [], []
+        for f in FRAMES:
+            mu, se = mean_stderr(
+                [r["bias"] for r in rows if r["model"] == model and r["frame"] == f]
+            )
+            means.append(mu)
+            errs.append(se)
+        ax.bar(
+            x + (i - 2.5) * width,
+            means,
+            width,
+            yerr=errs,
+            label=MODEL_DISPLAY.get(model, model),
+            color=colors[i],
+            capsize=2,
+            error_kw={"elinewidth": 0.7},
+        )
+
+    ax.axhline(0, color="black", linewidth=0.8)
+    ax.axhline(2.0, color="green", linewidth=0.6, linestyle="--", alpha=0.5)
+    ax.axhline(-2.0, color="green", linewidth=0.6, linestyle="--", alpha=0.5)
+    ax.text(4.45, 2.2, "P1 ±2.0 band", fontsize=8, color="green", ha="right")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(FRAME_LABELS, fontsize=9)
+    ax.set_ylabel("Manipulation bias\n(favored candidate rating − honest baseline, 0–20 scale)")
+    ax.set_title(
+        "Manipulation bias by frame, per model\nHigher = more manipulation. Zero = honest."
+    )
+    ax.legend(loc="upper left", ncol=2, fontsize=9)
+    ax.grid(axis="y", alpha=0.3)
+    ax.set_ylim(-10, 22)
+
+    fig.tight_layout()
+    out = OUT / "fig1_bias_by_frame.pdf"
+    fig.savefig(out, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"saved {out}")
+
+
+def fig2_minimal_vs_selfish(rows):
+    """Focused chart: the minimal > selfish inversion."""
+    fig, ax = plt.subplots(figsize=(9, 5.5))
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
+
+    min_means, min_errs, sel_means, sel_errs = [], [], [], []
+    for model in models:
+        mu_min, se_min = mean_stderr(
+            [r["bias"] for r in rows if r["model"] == model and r["frame"] == "minimal"]
+        )
+        mu_sel, se_sel = mean_stderr(
+            [r["bias"] for r in rows if r["model"] == model and r["frame"] == "selfish"]
+        )
+        min_means.append(mu_min)
+        min_errs.append(se_min)
+        sel_means.append(mu_sel)
+        sel_errs.append(se_sel)
+
+    x = np.arange(len(models))
+    width = 0.38
+    ax.bar(
+        x - width / 2,
+        min_means,
+        width,
+        yerr=min_errs,
+        label="Minimal (no instruction)",
+        color="#4C78A8",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+    ax.bar(
+        x + width / 2,
+        sel_means,
+        width,
+        yerr=sel_errs,
+        label='"Selfish" (explicit instruction)',
+        color="#E45756",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+
+    # Annotate inversions
+    for i, (mi, se) in enumerate(zip(min_means, sel_means)):
+        if mi > se:
+            y = max(mi, se) + 0.5
+            ax.annotate(
+                "↓ lower\nwhen told\n'selfish'", xy=(i, y), ha="center", fontsize=8, color="darkred"
+            )
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([MODEL_DISPLAY.get(m, m) for m in models], rotation=15, ha="right")
+    ax.axhline(0, color="black", linewidth=0.8)
+    ax.set_ylabel("Manipulation bias (0–20 scale)")
+    ax.set_title(
+        'The "selfish" paradox: 4 of 6 models manipulate LESS\n'
+        "when explicitly told to be selfish vs. no instruction at all"
+    )
+    ax.legend(loc="upper left")
+    ax.grid(axis="y", alpha=0.3)
+
+    fig.tight_layout()
+    out = OUT / "fig2_minimal_vs_selfish.pdf"
+    fig.savefig(out, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"saved {out}")
+
+
+def fig3_frame_vs_difficulty_heatmap(rows):
+    """Heatmap grid: 6 models × (frame × difficulty)."""
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
+    fig, axes = plt.subplots(2, 3, figsize=(14, 8), sharex=True, sharey=True)
+    # Bias range is theoretically [-20, +20]; use the full metric scale for
+    # cross-task consistency (every heatmap on its metric's natural full range).
+    vmin, vmax = -20, 20
+
+    for ax, model in zip(axes.flat, models):
+        grid = np.full((len(FRAMES), len(DIFFS)), np.nan)
+        for i, f in enumerate(FRAMES):
+            for j, d in enumerate(DIFFS):
+                vals = [
+                    r["bias"]
+                    for r in rows
+                    if r["model"] == model and r["frame"] == f and r["difficulty"] == d
+                ]
+                if vals:
+                    grid[i, j] = mean(vals)
+        im = ax.imshow(grid, cmap="RdBu_r", aspect="auto", vmin=vmin, vmax=vmax)
+        ax.set_title(MODEL_DISPLAY.get(model, model))
+        ax.set_xticks(range(len(DIFFS)))
+        ax.set_xticklabels([f"{d}\ndifficulty" for d in DIFFS], fontsize=9)
+        ax.set_yticks(range(len(FRAMES)))
+        ax.set_yticklabels(FRAMES, fontsize=9)
+        for i in range(len(FRAMES)):
+            for j in range(len(DIFFS)):
+                val = grid[i, j]
+                if not np.isnan(val):
+                    ax.text(
+                        j,
+                        i,
+                        f"{val:+.1f}",
+                        ha="center",
+                        va="center",
+                        fontsize=8,
+                        color="white" if abs(val) > 8 else "black",
+                    )
+
+    fig.suptitle(
+        "Manipulation bias: frame × difficulty per model\n"
+        "Red = manipulation (inflated favorite). Blue = honest (low favorite rating).",
+        y=1.00,
+        fontsize=13,
+    )
+    fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.7, label="Bias (0–20 scale)")
+    out = OUT / "fig3_frame_x_difficulty_heatmap.pdf"
+    fig.savefig(out, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"saved {out}")
+
+
+def fig4_endpoints(rows):
+    """Simple endpoint comparison: prohibitive vs permissive per model."""
+    fig, ax = plt.subplots(figsize=(9, 5))
+    models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
+
+    proh_pairs = [
+        mean_stderr([r["bias"] for r in rows if r["model"] == m and r["frame"] == "prohibitive"])
+        for m in models
+    ]
+    perm_pairs = [
+        mean_stderr([r["bias"] for r in rows if r["model"] == m and r["frame"] == "permissive"])
+        for m in models
+    ]
+    proh = [p[0] for p in proh_pairs]
+    proh_err = [p[1] for p in proh_pairs]
+    perm = [p[0] for p in perm_pairs]
+    perm_err = [p[1] for p in perm_pairs]
+
+    x = np.arange(len(models))
+    width = 0.38
+    ax.bar(
+        x - width / 2,
+        proh,
+        width,
+        yerr=proh_err,
+        label='"Do not manipulate"',
+        color="#54A24B",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+    ax.bar(
+        x + width / 2,
+        perm,
+        width,
+        yerr=perm_err,
+        label='"You may exaggerate"',
+        color="#F58518",
+        capsize=3,
+        error_kw={"elinewidth": 0.8},
+    )
+
+    for i, (p, e) in enumerate(zip(proh, perm)):
+        ax.annotate(
+            f"Δ = {e - p:+.1f}", xy=(i, max(p, e) + 0.5), ha="center", fontsize=9, fontweight="bold"
+        )
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([MODEL_DISPLAY.get(m, m) for m in models], rotation=15, ha="right")
+    ax.axhline(0, color="black", linewidth=0.8)
+    ax.set_ylabel("Manipulation bias (0–20 scale)")
+    ax.set_title(
+        "Endpoint control works: every model swings from honest to manipulative\n"
+        "when the instruction changes from prohibition to permission"
+    )
+    ax.legend(loc="upper left")
+    ax.grid(axis="y", alpha=0.3)
+
+    fig.tight_layout()
+    out = OUT / "fig4_endpoints.pdf"
+    fig.savefig(out, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"saved {out}")
+
+
+def main():
+    OUT.mkdir(parents=True, exist_ok=True)
+    rows = load_rows()
+    print(f"loaded {len(rows)} scored rows")
+    fig1_bias_across_frames(rows)
+    fig2_minimal_vs_selfish(rows)
+    fig3_frame_vs_difficulty_heatmap(rows)
+    fig4_endpoints(rows)
+
+
+if __name__ == "__main__":
+    main()
