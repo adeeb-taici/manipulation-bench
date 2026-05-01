@@ -8,15 +8,18 @@ version = "0.1.0"
 description = "Multi-agent evaluation framework for studying manipulation"
 requires-python = ">=3.11"
 dependencies = [
-    "inspect-ai>=0.3.80",
-    "pyyaml>=6.0",
-    "diplomacy>=1.1.0",
+    # inspect-ai is pre-1.0; minor-version bumps have historically been
+    # breaking, so we cap at <0.4 (current verified: 0.3.205).
+    "inspect-ai>=0.3.80,<0.4",
+    "pyyaml>=6.0,<7.0",
+    "diplomacy>=1.1.0,<2.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
-    "ruff",
+    "pytest>=7.0,<9.0",
+    # ruff is pre-1.0; breaking changes can happen in minor releases.
+    "ruff>=0.1,<1.0",
 ]
 
 [project.entry-points.inspect_ai]

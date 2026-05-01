@@ -1,6 +1,6 @@
 # Pre-Registration: Committee Evaluation Task
 
-**Status**: DRAFT — awaiting author review, finalization, and timestamp before commit.
+**Status**: LOCKED. Any change after the timestamp below requires a formal amendment (see §10).
 
 **Study**: Manipulation Response Surface (NeurIPS 2026 E&D Track submission).
 **Task**: Committee Evaluation (Task 5 of 5).
