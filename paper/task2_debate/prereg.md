@@ -5,7 +5,7 @@
 **Study**: Manipulation Response Surface (NeurIPS 2026 E&D Track submission).
 **Task**: Debate (Task 2 of 5).
 **Framework version**: Project Brief v6.1.
-**Authors**: Adeeb
+**Authors**: [Anonymous — double-blind submission]
 **Commit hash of codebase at pre-registration**: `b54845aaa5680607b62e1d5334bb65aa984bd570`
 **Timestamp**: 2026-04-23T16:55:10-04:00
 

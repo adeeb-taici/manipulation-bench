@@ -5,7 +5,7 @@
 **Study**: Manipulation Response Surface (NeurIPS 2026 E&D Track submission).
 **Task**: Committee Evaluation (Task 5 of 5).
 **Framework version**: Project Brief v6.1.
-**Authors**: [FILL IN]
+**Authors**: [Anonymous — double-blind submission]
 **Commit hash of codebase at pre-registration**: `234fac86aa46bfc2ead945f8cf4ceb351145871a`
 **Timestamp**: 2026-04-21T23:52:38-04:00
 
@@ -250,5 +250,5 @@ By committing this document with timestamp, the authors confirm that:
 - Any change to this document after timestamp will follow the amendments policy in §10.
 
 **Timestamp**: 2026-04-21T23:52:38-04:00
-**Authors**: [FILL IN]
+**Authors**: [Anonymous — double-blind submission]
 **Commit hash**: `234fac86aa46bfc2ead945f8cf4ceb351145871a`

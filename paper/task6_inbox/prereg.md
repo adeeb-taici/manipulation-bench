@@ -5,7 +5,7 @@
 **Study**: Manipulation Response Surface (NeurIPS 2026 E&D Track submission).
 **Task**: Inbox Triage (Task 6 of 6 — held-out cluster-split test).
 **Framework version**: Project Brief v6.1.
-**Authors**: Adeeb
+**Authors**: [Anonymous — double-blind submission]
 **Commit hash of codebase at pre-registration**: `<TBD-LOCK-AT-FULL-LAUNCH>`
 **Timestamp**: 2026-05-01
 

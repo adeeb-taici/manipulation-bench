@@ -5,7 +5,7 @@
 **Study**: Manipulation Response Surface (NeurIPS 2026 E&D Track submission).
 **Task**: Bargaining (Task 1 of 5).
 **Framework version**: Project Brief v6.1.
-**Authors**: Adeeb
+**Authors**: [Anonymous — double-blind submission]
 **Commit hash of codebase at pre-registration**: `49310eadeebcd9586d6297094b8b17535b5c138b`
 **Timestamp**: 2026-04-22T18:48:00-04:00
 
