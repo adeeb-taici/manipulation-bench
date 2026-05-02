@@ -1,8 +1,8 @@
 """Flatten paper eval logs into a single tidy CSV.
 
-One row per sample (rollout) across the 5 paper tasks × {canonical, extended}
-log variants. Columns: identity/setup + normalized manipulation_metric +
-flattened <scorer>__<key> scores.
+One row per sample (rollout) across the 5 paper tasks × {canonical,
+small_model_sweep} log variants. Columns: identity/setup + normalized
+manipulation_metric + flattened <scorer>__<key> scores.
 
 Re-runnable. Does not modify or delete any source data.
 
@@ -15,15 +15,17 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import csv
 import glob
 import json
 import re
 import sys
+import tempfile
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 import pandas as pd
-from inspect_ai.log import read_eval_log
+from inspect_ai.log import read_eval_log, read_eval_log_samples
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
@@ -33,14 +35,15 @@ from experiments.reanalysis.load import _row_from_sample, _flatten_metadata  # n
 
 DEFAULT_LOGS = [
     REPO_ROOT / "paper/task1_bargaining/eval_log.eval",
-    REPO_ROOT / "paper/task1_bargaining/eval_log_extended.eval",
+    REPO_ROOT / "paper/task1_bargaining/eval_log_small_model_sweep.eval",
     REPO_ROOT / "paper/task2_debate/eval_log.eval",
+    REPO_ROOT / "paper/task2_debate/eval_log_small_model_sweep.eval",
     REPO_ROOT / "paper/task3_village/eval_log.eval",
-    REPO_ROOT / "paper/task3_village/eval_log_extended.eval",
+    REPO_ROOT / "paper/task3_village/eval_log_small_model_sweep.eval",
     REPO_ROOT / "paper/task4_sales/eval_log.eval",
-    REPO_ROOT / "paper/task4_sales/eval_log_extended.eval",
+    REPO_ROOT / "paper/task4_sales/eval_log_small_model_sweep.eval",
     REPO_ROOT / "paper/task5_committee/eval_log.eval",
-    REPO_ROOT / "paper/task5_committee/eval_log_extended.eval",
+    REPO_ROOT / "paper/task5_committee/eval_log_small_model_sweep.eval",
 ]
 
 DEFAULT_OUTPUT = REPO_ROOT / "paper/cross_task/results.csv"
@@ -81,6 +84,8 @@ def _infer_task_variant(path: Path) -> tuple[str, str]:
     name = path.name
     if name == "eval_log_extended.eval":
         variant = "extended"
+    elif name == "eval_log_small_model_sweep.eval":
+        variant = "small_model_sweep"
     elif name == "eval_log.eval":
         variant = "canonical"
     else:
@@ -119,15 +124,19 @@ def _extra_setup_fields(sample: Any, md: dict[str, Any]) -> dict[str, Any]:
 
 
 def _rows_from_log(path: Path) -> list[dict[str, Any]]:
-    """Read one .eval log and produce one row per scored, non-errored sample."""
+    """Read one .eval log and produce one row per scored, non-errored sample.
+
+    Uses read_eval_log_samples() so only one sample is held in memory at a time
+    from Inspect's side.  The test suite can monkeypatch read_eval_log_samples on
+    this module to inject fake data.
+    """
     task, variant = _infer_task_variant(path)
     if task == "unknown":
         print(f"[eval_logs_to_csv] {path}: unknown task, skipping", file=sys.stderr)
         return []
 
-    log = read_eval_log(str(path))
     rows: list[dict[str, Any]] = []
-    for sample in log.samples or []:
+    for sample in read_eval_log_samples(str(path), all_samples_required=False):
         base = _row_from_sample(sample, task)
         if base is None:
             continue
@@ -174,6 +183,16 @@ def _order_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df[leading + metric + rest]
 
 
+def _order_column_names(cols: Iterable[str]) -> list[str]:
+    """Same ordering as _order_columns but operates on a list of column names."""
+    present = list(cols)
+    leading = [c for c in IDENTITY_COLUMNS if c in present]
+    metric = [c for c in NORMALIZED_METRIC_COLUMNS if c in present]
+    leading_set = set(leading) | set(metric)
+    rest = sorted(c for c in present if c not in leading_set)
+    return leading + metric + rest
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument(
@@ -195,19 +214,53 @@ def main() -> None:
         print("[eval_logs_to_csv] no input logs found", file=sys.stderr)
         sys.exit(1)
 
-    rows: list[dict[str, Any]] = []
-    for path in log_paths:
-        rows.extend(_rows_from_log(path))
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_path = Path(tmp_dir)
+        all_keys: set[str] = set()
+        total_rows = 0
 
-    if not rows:
-        print("[eval_logs_to_csv] no samples extracted", file=sys.stderr)
-        sys.exit(1)
+        # Pass 1: process one log at a time, dump rows to per-log JSONL temp files,
+        # track union of all column names.  Memory for each log is freed before the next.
+        tmp_files: list[Path] = []
+        for i, path in enumerate(log_paths):
+            rows = _rows_from_log(path)
+            if not rows:
+                continue
+            for row in rows:
+                all_keys.update(row.keys())
+            tmp_file = tmp_path / f"log_{i}.jsonl"
+            with tmp_file.open("w", encoding="utf-8") as f:
+                for row in rows:
+                    f.write(json.dumps(row, default=str) + "\n")
+            total_rows += len(rows)
+            tmp_files.append(tmp_file)
+            del rows  # free memory before opening next log
 
-    df = pd.DataFrame.from_records(rows)
-    df = _order_columns(df)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(args.output, index=False)
-    print(f"[eval_logs_to_csv] wrote {len(df)} rows × {len(df.columns)} cols -> {args.output}")
+        if not tmp_files:
+            print("[eval_logs_to_csv] no samples extracted", file=sys.stderr)
+            sys.exit(1)
+
+        # Determine final ordered column list from union of all keys seen.
+        ordered_cols = _order_column_names(all_keys)
+
+        # Pass 2: stream each JSONL temp file into the output CSV.
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        with args.output.open("w", newline="", encoding="utf-8") as csv_fh:
+            writer = csv.DictWriter(
+                csv_fh,
+                fieldnames=ordered_cols,
+                extrasaction="ignore",
+            )
+            writer.writeheader()
+            for tmp_file in tmp_files:
+                with tmp_file.open("r", encoding="utf-8") as jf:
+                    for line in jf:
+                        writer.writerow(json.loads(line))
+
+    print(
+        f"[eval_logs_to_csv] wrote {total_rows} rows × {len(ordered_cols)} cols"
+        f" -> {args.output}"
+    )
 
 
 if __name__ == "__main__":
