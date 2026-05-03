@@ -45,15 +45,11 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "src"))
 
-from inspect_ai.log import read_eval_log  # noqa: E402
+from load import load_corpus  # noqa: E402
 
-from manipulation_bench.analyze_surface import (  # noqa: E402
-    _expand_log_paths,
-    collect_rows,
-    detect_environment,
-)
 from manipulation_bench.axes import (  # noqa: E402
     DIFFICULTY_LEVELS,
     FRAME_LEVELS,
@@ -135,19 +131,19 @@ def _zscore(values: list[float]) -> list[float | None]:
 # ── Row loading ──────────────────────────────────────────────────────────
 
 
-def load_rows(log_paths: list[str]) -> list[dict[str, Any]]:
+def load_rows(log_paths: list[str] | None = None) -> list[dict[str, Any]]:
+    """Load rows from the canonical results.csv via load_corpus().
+
+    The ``log_paths`` argument is accepted for backwards-compatibility but
+    ignored — the corpus is always read from load_corpus().
+    """
+    df = load_corpus(verbose=False)
     rows: list[dict[str, Any]] = []
-    for p in _expand_log_paths(log_paths):
-        try:
-            log = read_eval_log(p)
-        except Exception as e:  # noqa: BLE001
-            print(f"[warn] could not read {p}: {e}", file=sys.stderr)
-            continue
-        env = detect_environment(log)
-        if env == "unknown" or env not in TASKS:
-            print(f"[warn] {p}: unrecognised env={env}", file=sys.stderr)
-            continue
-        rows.extend(collect_rows(log, env))
+    for r in df.to_dict(orient="records"):
+        # Rename task -> env to match the analysis functions' expected key
+        row = dict(r)
+        row["env"] = row.pop("task", None)
+        rows.append(row)
     return rows
 
 
@@ -652,7 +648,7 @@ def zscore_continuous(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--logs", nargs="+", required=True, help="Eval log paths or globs")
+    ap.add_argument("--logs", nargs="*", default=None, help="Ignored (kept for CLI compatibility; data is loaded from results.csv)")
     ap.add_argument("--out", type=Path, required=True, help="Output directory")
     ap.add_argument(
         "--n-bootstrap",
@@ -670,7 +666,7 @@ def main() -> None:
     )
     args = ap.parse_args()
 
-    rows = load_rows(args.logs)
+    rows = load_rows()
     if not rows:
         print("No rows loaded from the provided logs.", file=sys.stderr)
         sys.exit(1)

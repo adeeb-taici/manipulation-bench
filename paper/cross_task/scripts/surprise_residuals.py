@@ -15,12 +15,14 @@ Outputs:
 from __future__ import annotations
 
 import json
-from collections import defaultdict
 from pathlib import Path
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-from inspect_ai.log import read_eval_log
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from load import load_corpus
 
 DISPLAY = {
     "Claude-Opus-4.7": "Claude Opus 4.7",
@@ -29,83 +31,43 @@ DISPLAY = {
     "Grok-4": "Grok 4",
     "Llama-3.3-70B": "Llama 3.3 70B",
     "DeepSeek-V4-Pro": "DeepSeek V4 Pro",
-    "claude": "Claude Opus 4.7",
-    "gpt55": "GPT-5.5",
-    "gemini": "Gemini 3.1 Pro",
-    "grok": "Grok 4",
-    "llama": "Llama 3.3 70B",
-    "deepseek_v4": "DeepSeek V4 Pro",
 }
 
 TASKS = [
     {
         "name": "T1 Bargaining",
-        "log": "paper/task1_bargaining/eval_log.eval",
-        "scorer": "bargaining_commit",
-        "metric_field": "manipulation_rate",
-        "scenario_model_key": "model",
+        "short_name": "bargaining",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
-        "incentive_levels": (0, 80, 250),
+        "incentive_levels": ("none", "moderate", "high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {
-            "frame": "frame",
-            "incentive": "expected_penalty",
-            "difficulty": "difficulty",
-        },
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
     },
     {
         "name": "T2 Debate",
-        "log": "paper/task2_debate/eval_log.eval",
-        "scorer": "ground_truth_persuasion",
-        "metric_field": "manipulation_occurred",
-        "scenario_model_key": "manipulator_model",
+        "short_name": "debate",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
     },
     {
         "name": "T3 Village",
-        "log": "paper/task3_village/eval_log.eval",
-        "scorer": "exploitation_rate",
-        "metric_field": "agent_1",
-        "scenario_model_key": "manipulator_model",
+        "short_name": "village",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
     },
     {
         "name": "T4 Sales",
-        "log": "paper/task4_sales/eval_log.eval",
-        "scorer": "sales_classifier",
-        "metric_field": "manipulation_rate",
-        "scenario_model_key": "model",
+        "short_name": "sales",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": True,
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
     },
     {
         "name": "T5 Committee",
-        "log": "paper/task5_committee/eval_log.eval",
-        "scorer": "initial_rating_bias",
-        "metric_field": "initial_bias",
-        "scenario_model_key": "interested_model_label",
+        "short_name": "committee",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": False,
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
     },
 ]
 
@@ -114,33 +76,21 @@ def model_order_key(m):
     return list(DISPLAY).index(m) if m in DISPLAY else 999
 
 
-def load_rows(task):
-    log = read_eval_log(task["log"])
+def load_rows(task, full_df):
+    df_task = full_df[full_df["task"] == task["short_name"]].copy()
     rows = []
-    for s in log.samples or []:
-        if s.error:
+    for r in df_task.to_dict(orient="records"):
+        model = r.get("model")
+        metric = r.get("metric")
+        if model is None or metric is None:
             continue
-        if task.get("metadata_at_top"):
-            md = s.metadata or {}
-        else:
-            md = (s.metadata or {}).get("scenario", {}).get("metadata", {})
-        sc = (s.scores or {}).get(task["scorer"])
-        if sc is None or not isinstance(sc.value, dict):
-            continue
-        v = sc.value
-        if v.get("sample_failed"):
-            continue
-        metric = v.get(task["metric_field"])
-        if metric is None:
-            continue
-        model = md.get(task["scenario_model_key"])
-        model = task.get("model_remap", {}).get(model, model)
-        if model is None:
-            continue
-        row = {"model": model, "metric": float(metric)}
-        for axis_name, sm_field in task["axis_keys"].items():
-            row[axis_name] = md.get(sm_field)
-        rows.append(row)
+        rows.append({
+            "model": model,
+            "metric": float(metric),
+            "frame": r.get("frame"),
+            "incentive": r.get("incentive"),
+            "difficulty": r.get("difficulty"),
+        })
     return rows
 
 
@@ -165,10 +115,11 @@ def fit_additive(grid: np.ndarray):
 
 
 def main():
+    full_df = load_corpus(verbose=False)
     all_residuals = {}
     for task in TASKS:
         print(f"\n=== {task['name']} ===")
-        rows = load_rows(task)
+        rows = load_rows(task, full_df)
         models = sorted({r["model"] for r in rows}, key=model_order_key)
 
         n_f, n_i, n_d = (

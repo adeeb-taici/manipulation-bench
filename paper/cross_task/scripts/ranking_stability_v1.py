@@ -13,13 +13,15 @@ Outputs:
 from __future__ import annotations
 
 import json
-from collections import defaultdict
 from pathlib import Path
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-from inspect_ai.log import read_eval_log
 from scipy.stats import spearmanr
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from load import load_corpus
 
 DISPLAY = {
     "Claude-Opus-4.7": "Claude Opus 4.7",
@@ -28,112 +30,39 @@ DISPLAY = {
     "Grok-4": "Grok 4",
     "Llama-3.3-70B": "Llama 3.3 70B",
     "DeepSeek-V4-Pro": "DeepSeek V4 Pro",
-    "claude": "Claude Opus 4.7",
-    "gpt55": "GPT-5.5",
-    "gemini": "Gemini 3.1 Pro",
-    "grok": "Grok 4",
-    "llama": "Llama 3.3 70B",
-    "deepseek_v4": "DeepSeek V4 Pro",
 }
 
 TASKS = [
-    {
-        "name": "T1 Bargaining",
-        "log": "paper/task1_bargaining/eval_log.eval",
-        "scorer": "bargaining_commit",
-        "metric_field": "manipulation_rate",
-        "scenario_model_key": "model",
-        "axis_keys": {"frame": "frame"},
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
-    },
-    {
-        "name": "T2 Debate",
-        "log": "paper/task2_debate/eval_log.eval",
-        "scorer": "ground_truth_persuasion",
-        "metric_field": "manipulation_occurred",
-        "scenario_model_key": "manipulator_model",
-        "axis_keys": {"frame": "frame"},
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
-    },
-    {
-        "name": "T3 Village",
-        "log": "paper/task3_village/eval_log.eval",
-        "scorer": "exploitation_rate",
-        "metric_field": "agent_1",
-        "scenario_model_key": "manipulator_model",
-        "axis_keys": {"frame": "frame"},
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
-    },
-    {
-        "name": "T4 Sales",
-        "log": "paper/task4_sales/eval_log.eval",
-        "scorer": "sales_classifier",
-        "metric_field": "manipulation_rate",
-        "scenario_model_key": "model",
-        "axis_keys": {"frame": "frame"},
-        "metadata_at_top": True,
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
-    },
-    {
-        "name": "T5 Committee",
-        "log": "paper/task5_committee/eval_log.eval",
-        "scorer": "initial_rating_bias",
-        "metric_field": "initial_bias",
-        "scenario_model_key": "interested_model_label",
-        "axis_keys": {"frame": "frame"},
-        "metadata_at_top": False,
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
-    },
+    {"name": "T1 Bargaining", "short_name": "bargaining"},
+    {"name": "T2 Debate",     "short_name": "debate"},
+    {"name": "T3 Village",    "short_name": "village"},
+    {"name": "T4 Sales",      "short_name": "sales"},
+    {"name": "T5 Committee",  "short_name": "committee"},
 ]
 
 
-def model_canonical(m, remap):
-    if m in remap:
-        return remap[m]
-    return m
-
-
-def display_canonical(m):
-    return DISPLAY.get(m, m)
-
-
-def load_permissive_rates(task):
+def load_permissive_rates(task, full_df):
     """Mean metric per model under frame=permissive (averaged over inc+diff)."""
-    log = read_eval_log(task["log"])
-    bucket = defaultdict(list)
-    for s in log.samples or []:
-        if s.error:
-            continue
-        if task.get("metadata_at_top"):
-            md = s.metadata or {}
-        else:
-            md = (s.metadata or {}).get("scenario", {}).get("metadata", {})
-        sc = (s.scores or {}).get(task["scorer"])
-        if sc is None or not isinstance(sc.value, dict):
-            continue
-        v = sc.value
-        if v.get("sample_failed"):
-            continue
-        metric = v.get(task["metric_field"])
-        if metric is None:
-            continue
-        frame = md.get("frame")
-        if frame != "permissive":
-            continue
-        model = md.get(task["scenario_model_key"])
-        model = model_canonical(model, task.get("model_remap", {}))
-        bucket[display_canonical(model)].append(float(metric))
-    return {m: float(np.mean(v)) for m, v in bucket.items() if v}
+    df_task = full_df[
+        (full_df["task"] == task["short_name"]) & (full_df["frame"] == "permissive")
+    ]
+    result = {}
+    for model, group in df_task.groupby("model"):
+        vals = group["metric"].dropna().tolist()
+        if vals:
+            display = DISPLAY.get(model, model)
+            result[display] = float(np.mean(vals))
+    return result
 
 
 def main():
     print("Loading permissive-frame rates per task ...")
+    full_df = load_corpus(verbose=False)
+    # Preserves v1's mixed-metric definition: T2 ranks models by detection rate, not belief shift.
+    full_df.loc[full_df["task"] == "debate", "metric"] = full_df.loc[full_df["task"] == "debate", "manipulation_occurred"]
     per_task = {}
     for task in TASKS:
-        rates = load_permissive_rates(task)
+        rates = load_permissive_rates(task, full_df)
         per_task[task["name"]] = rates
         print(f"  {task['name']}: {rates}")
 
