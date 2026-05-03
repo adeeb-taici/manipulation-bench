@@ -10,10 +10,10 @@ unchanged; v2 outputs sit alongside them with `_v2` suffixes.
 | v1 method | Where it lived | v2 replacement | Where it lives now |
 |---|---|---|---|
 | Per-(task, model, axis) standardized **slope** across ordinal axis levels | `paper/task<N>/analysis/prereg_results.json[sensitivity_slopes]` | OLS + scipy `dunnett` contrasts vs. baseline (prohibitive / none / low) + per-task Type II ANOVA η² | `paper/task<N>/analysis/regression_v2.json` |
-| Single-point Spearman ρ on n=6 models for cross-task ranking stability | `paper/cross_task/ranking_stability.json` + `figures/fig_ranking_stability.pdf` | Trajectory-level percentile bootstrap (B=2000) on the same ρ statistic, stratified within (task × model × frame × incentive × difficulty) | `paper/cross_task/ranking_stability_v2.json` + `figures/fig2_ranking_stability_v2.pdf`, `figures/fig7_cross_task_rho_v2.pdf` |
-| Mean &#124;slope&#124; per task as a "dominant axis" tiebreaker | `paper/cross_task/cross_task_aggregate.md`, `figures/per_task_slopes.pdf` | Per-task η² for {model, frame, incentive, difficulty}, computed under the same fit that drives the per-(model, axis) Block A | `paper/cross_task/table3_v2.md`, `figures/fig3_per_task_aggregate_v2.pdf` |
-| 15-dim per-model profile of signed slopes | `paper/cross_task/cross_task_profiles.json`, `figures/per_model_profiles.pdf` | Per-model max-|Dunnett-contrast| heatmap (per-task scaled) | `figures/fig4_per_model_profile_v2.pdf` |
-| (none) | (none) | Pooled variance decomposition with bootstrap CI on η²(model:task) − η²(model) | `paper/cross_task/variance_decomp_v2.json` |
+| Single-point Spearman ρ on n=6 models for cross-task ranking stability | `paper/cross_task/analysis/ranking_stability.json` + `figures/fig_ranking_stability.pdf` | Trajectory-level percentile bootstrap (B=2000) on the same ρ statistic, stratified within (task × model × frame × incentive × difficulty) | `paper/cross_task/analysis/ranking_stability_v2.json` + `figures/fig2_ranking_stability_v2.pdf`, `figures/fig7_cross_task_rho_v2.pdf` |
+| Mean &#124;slope&#124; per task as a "dominant axis" tiebreaker | `paper/cross_task/analysis/cross_task_aggregate.md`, `figures/per_task_slopes.pdf` | Per-task η² for {model, frame, incentive, difficulty}, computed under the same fit that drives the per-(model, axis) Block A | `paper/cross_task/analysis/table3_v2.md`, `figures/fig3_per_task_aggregate_v2.pdf` |
+| 15-dim per-model profile of signed slopes | `paper/cross_task/analysis/cross_task_profiles.json`, `figures/per_model_profiles.pdf` | Per-model max-|Dunnett-contrast| heatmap (per-task scaled) | `figures/fig4_per_model_profile_v2.pdf` |
+| (none) | (none) | Pooled variance decomposition with bootstrap CI on η²(model:task) − η²(model) | `paper/cross_task/analysis/variance_decomp_v2.json` |
 
 ### Standard errors per task
 
@@ -60,7 +60,7 @@ across the 10 task-pairs."
 
 **Verification of the v1 number**: v2 reproduces v1's published mean
 ρ = 0.055 to within 0.001 when using v1's *exact* metric definition
-(see [`paper/cross_task/ranking_stability_v2_v1compat.json`](paper/cross_task/ranking_stability_v2_v1compat.json):
+(see [`paper/cross_task/analysis/ranking_stability_v2_v1compat.json`](paper/cross_task/analysis/ranking_stability_v2_v1compat.json):
 bootstrap median mean off-diagonal = +0.072, point estimate = +0.055).
 The v1 published number is correct on the v1 corpus and the v1 metric
 choices.

@@ -52,8 +52,8 @@ PER_TASK_REGRESSION = {
     "sales":      REPO / "paper/task4_sales/analysis/regression_v2.json",
     "committee":  REPO / "paper/task5_committee/analysis/regression_v2.json",
 }
-RANKING_STAB = REPO / "paper/cross_task/ranking_stability_v2.json"
-VARIANCE_DECOMP = REPO / "paper/cross_task/variance_decomp_v2.json"
+RANKING_STAB = REPO / "paper/cross_task/analysis/ranking_stability_v2.json"
+VARIANCE_DECOMP = REPO / "paper/cross_task/analysis/variance_decomp_v2.json"
 
 OUT_DIR = REPO / "paper/cross_task/figures"
 
@@ -329,7 +329,7 @@ def main() -> None:
 
     fig4_per_model_profile(PER_TASK_REGRESSION)
 
-    table3_v2(PER_TASK_REGRESSION, REPO / "paper/cross_task")
+    table3_v2(PER_TASK_REGRESSION, REPO / "paper/cross_task/analysis")
 
     print("[figures] done.")
 

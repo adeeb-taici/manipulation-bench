@@ -17,7 +17,7 @@ each task to contribute equally to the pool, which is the right framing for
 the rank-instability question (does model rank order across tasks come from
 a stable trait?).
 
-Output: paper/cross_task/variance_decomp_v2.json
+Output: paper/cross_task/analysis/variance_decomp_v2.json
 """
 
 from __future__ import annotations
@@ -184,7 +184,7 @@ def main() -> None:
     print(f"[block_d] loaded {len(df)} rows", file=sys.stderr)
     out = run_block_d(df, n_boot=N_BOOT_DEFAULT)
 
-    out_path = REPO / "paper/cross_task/variance_decomp_v2.json"
+    out_path = REPO / "paper/cross_task/analysis/variance_decomp_v2.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, default=str)

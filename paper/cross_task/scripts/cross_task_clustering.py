@@ -6,7 +6,7 @@ clustering. Outputs:
 
   paper/cross_task/figures/fig_dendrogram.pdf
   paper/cross_task/figures/fig_cluster_heatmap.pdf  (clustered profile matrix)
-  paper/cross_task/clusters.json
+  paper/cross_task/analysis/clusters.json
 """
 
 from __future__ import annotations
@@ -19,8 +19,9 @@ import numpy as np
 from scipy.cluster.hierarchy import dendrogram, fcluster, linkage
 from scipy.spatial.distance import pdist, squareform
 
-PROFILES = "paper/cross_task/cross_task_profiles.json"
-OUT_DIR = Path("paper/cross_task")
+PROFILES = "paper/cross_task/analysis/cross_task_profiles.json"
+OUT_DIR = Path("paper/cross_task/analysis")
+FIG_DIR = Path("paper/cross_task/figures")
 
 DISPLAY = {
     "Claude-Opus-4.7": "Claude Opus 4.7",
@@ -65,7 +66,7 @@ def main():
     )
     ax.set_ylabel("Distance")
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig_dendrogram.pdf"
+    fig_path = FIG_DIR /"fig_dendrogram.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")
@@ -114,7 +115,7 @@ def main():
         fontsize=11,
     )
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig_cluster_heatmap.pdf"
+    fig_path = FIG_DIR /"fig_cluster_heatmap.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")
@@ -141,7 +142,7 @@ def main():
     fig.colorbar(im, ax=ax, label="Euclidean dist (z-scored profiles)")
     ax.set_title("Cross-task model distance matrix (15-dim profile, z-scored)", fontsize=11)
     fig.tight_layout()
-    fig_path = OUT_DIR / "figures" / "fig_distance_matrix.pdf"
+    fig_path = FIG_DIR /"fig_distance_matrix.pdf"
     fig.savefig(fig_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {fig_path}")

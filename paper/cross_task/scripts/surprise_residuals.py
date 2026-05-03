@@ -9,7 +9,7 @@ less manipulative than the main effects predict.
 
 Outputs:
   paper/cross_task/figures/fig_residual_<task>.pdf  (one heatmap per task)
-  paper/cross_task/residuals.json
+  paper/cross_task/analysis/residuals.json
 """
 
 from __future__ import annotations
@@ -283,7 +283,7 @@ def main():
         print(f"  flagged cells (>2 SD): {len(flagged)}")
         all_residuals[task["name"]] = flagged
 
-    out_json = Path("paper/cross_task/residuals.json")
+    out_json = Path("paper/cross_task/analysis/residuals.json")
     with open(out_json, "w", encoding="utf-8") as f:
         json.dump(all_residuals, f, indent=2)
     print(f"\nwrote {out_json}")

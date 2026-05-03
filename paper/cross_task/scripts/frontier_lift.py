@@ -9,7 +9,7 @@ conditions, only the model changed.
 
 Outputs:
   paper/cross_task/figures/fig_frontier_lift.pdf
-  paper/cross_task/frontier_lift.json
+  paper/cross_task/analysis/frontier_lift.json
 """
 
 from __future__ import annotations
@@ -258,7 +258,7 @@ def main():
         )
 
     # Save JSON
-    out_dir = Path("paper/cross_task")
+    out_dir = Path("paper/cross_task/analysis")
     out_dir.mkdir(parents=True, exist_ok=True)
     with open(out_dir / "frontier_lift.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)

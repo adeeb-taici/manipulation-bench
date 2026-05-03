@@ -153,7 +153,7 @@ interactions; for T1-T4 (rates ∈ [0,1]) the additive model is much closer
 in absolute size).
 
 Figures: `paper/cross_task/figures/fig_residual_t<N>.pdf` (5 figures).
-JSON: `paper/cross_task/residuals.json`.
+JSON: `paper/cross_task/analysis/residuals.json`.
 
 ## 8. Sample-distribution shapes (no smoking gun)
 

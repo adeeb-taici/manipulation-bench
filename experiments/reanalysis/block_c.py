@@ -18,7 +18,7 @@ Method:
 
 Seeds: numpy.random.SeedSequence(20260430).spawn(B).
 
-Output: paper/cross_task/ranking_stability_v2.json
+Output: paper/cross_task/analysis/ranking_stability_v2.json
 """
 
 from __future__ import annotations
@@ -241,7 +241,7 @@ def main() -> None:
     df = load_corpus(verbose=False)
     print(f"[block_c] loaded {len(df)} rows", file=sys.stderr)
 
-    out_dir = REPO / "paper/cross_task"
+    out_dir = REPO / "paper/cross_task/analysis"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # Primary: permissive-frame ranking

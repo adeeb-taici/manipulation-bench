@@ -7,8 +7,8 @@ Loads each task's prereg_results.json and assembles:
   4. Cross-task verdict matrix.
 
 Outputs:
-  paper/cross_task/cross_task_profiles.json         # machine-readable profiles
-  paper/cross_task/cross_task_aggregate.md          # per-task aggregate table
+  paper/cross_task/analysis/cross_task_profiles.json         # machine-readable profiles
+  paper/cross_task/analysis/cross_task_aggregate.md          # per-task aggregate table
   paper/cross_task/figures/cross_task_heatmap.pdf   # 6-model × 15-dim heatmap
   paper/cross_task/figures/per_task_slopes.pdf      # per-task mean |slope| per axis
   paper/cross_task/figures/per_model_profiles.pdf   # 6 small-multiples per model
@@ -23,8 +23,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-OUT_DIR = Path("paper/cross_task")
-FIG_DIR = OUT_DIR / "figures"
+OUT_DIR = Path("paper/cross_task/analysis")
+FIG_DIR = Path("paper/cross_task/figures")
 
 TASKS = [
     ("task1_bargaining", "T1 Bargaining", "lied_rate"),

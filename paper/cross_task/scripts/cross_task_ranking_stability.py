@@ -7,7 +7,7 @@ across all 10 task pairs. Strong ρ = same model ordering across tasks
 
 Outputs:
   paper/cross_task/figures/fig_ranking_stability.pdf  (5×5 ρ matrix)
-  paper/cross_task/ranking_stability.json
+  paper/cross_task/analysis/ranking_stability.json
 """
 
 from __future__ import annotations
@@ -209,7 +209,7 @@ def main():
             3,
         ),
     }
-    json_path = Path("paper/cross_task/ranking_stability.json")
+    json_path = Path("paper/cross_task/analysis/ranking_stability.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(rec, f, indent=2)
     print(f"wrote {json_path}")
