@@ -78,6 +78,10 @@ TASK_SPLITS = {
         "logs/task5_gpt55/*.eval",
         "logs/task5_dsv4/*.eval",
     ],
+    "paper/task6_inbox/eval_log.eval": [
+        # T6 ran as a single batch with all six paper-roster models.
+        "logs/task6_inbox_fullsweep/*.eval",
+    ],
 }
 
 

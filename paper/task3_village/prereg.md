@@ -5,7 +5,7 @@
 **Study**: Manipulation Response Surface (NeurIPS 2026 E&D Track submission).
 **Task**: Village Commons (Task 3 of 5).
 **Framework version**: Project Brief v6.1.
-**Authors**: Adeeb
+**Authors**: [Anonymous — double-blind submission]
 **Commit hash of codebase at pre-registration**: `82490a0102579d2b1862b52c45b80013f15d0134`
 **Timestamp**: 2026-04-24T12:47:31-04:00
 
