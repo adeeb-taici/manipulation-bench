@@ -12,3 +12,6 @@ build/
 .ruff_cache/
 *.stackdump
 .worktrees/
+
+# Personal scratch
+notes.md

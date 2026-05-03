@@ -46,19 +46,28 @@ MASTER_SEED = 20260430
 N_BOOT_DEFAULT = 2000
 
 
-def _per_task_means(df: pd.DataFrame, ranking: str = "permissive") -> dict[str, pd.Series]:
+def _per_task_means(df: pd.DataFrame, ranking: str = "permissive",
+                    use_v1_metric: bool = False) -> dict[str, pd.Series]:
     """Per-task model-mean Series indexed by CANONICAL_MODELS order.
 
     ranking="permissive" -> mean of primary metric at frame=permissive
     ranking="overall"    -> overall mean across all rows
+
+    use_v1_metric=True replaces T2's metric column with manipulation_occurred
+    (the binary detected-manipulation rate) to match v1's mixed-metric
+    cross_task_ranking_stability.py definition. v2 default uses belief_shift
+    for T2 (matches each task's stated primary metric).
     """
+    metric_col = "metric"
     out = {}
     for t in TASKS:
         sub = df[df["task"] == t]
         if ranking == "permissive":
             sub = sub[sub["frame"] == "permissive"]
-        sub = sub.dropna(subset=["metric"])
-        means = sub.groupby("model", observed=False)["metric"].mean()
+        # v1-compat: T2 ranking by manipulation_occurred (binary), not belief_shift
+        col = "manipulation_occurred" if (use_v1_metric and t == "debate") else metric_col
+        sub = sub.dropna(subset=[col])
+        means = sub.groupby("model", observed=False)[col].mean()
         out[t] = means.reindex(CANONICAL_MODELS)
     return out
 
@@ -92,6 +101,7 @@ def _one_replicate(
     cell_indices: list[np.ndarray],
     cell_sizes: list[int],
     ranking: str,
+    use_v1_metric: bool = False,
 ) -> tuple[dict[tuple[str, str], float], dict[str, np.ndarray]]:
     """Run one bootstrap replicate, return (rho_per_pair, ranks_per_task).
 
@@ -111,7 +121,7 @@ def _one_replicate(
     flat = np.concatenate(resampled_positions)
     boot = df.iloc[flat]
 
-    per_task_means = _per_task_means(boot, ranking=ranking)
+    per_task_means = _per_task_means(boot, ranking=ranking, use_v1_metric=use_v1_metric)
     rho = {pair: _spearman(per_task_means[pair[0]], per_task_means[pair[1]]) for pair in TASK_PAIRS}
 
     # Ranks per task as numpy arrays in CANONICAL_MODELS order
@@ -122,7 +132,8 @@ def _one_replicate(
 
 
 def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
-                ranking: str = "permissive", n_jobs: int = -1) -> dict[str, Any]:
+                ranking: str = "permissive", n_jobs: int = -1,
+                use_v1_metric: bool = False) -> dict[str, Any]:
     """Run the trajectory-level bootstrap for cross-task rho.
 
     Args:
@@ -146,7 +157,7 @@ def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
     cell_sizes = [len(a) for a in cell_indices]
 
     # Point estimate
-    point_means = _per_task_means(df, ranking=ranking)
+    point_means = _per_task_means(df, ranking=ranking, use_v1_metric=use_v1_metric)
     point_rho = {pair: _spearman(point_means[pair[0]], point_means[pair[1]]) for pair in TASK_PAIRS}
 
     # Spawn child seeds
@@ -157,7 +168,7 @@ def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
           f"(n_jobs={n_jobs})", file=sys.stderr)
     t0 = time.time()
     results = Parallel(n_jobs=n_jobs, verbose=0, batch_size="auto")(
-        delayed(_one_replicate)(child, df, cell_indices, cell_sizes, ranking)
+        delayed(_one_replicate)(child, df, cell_indices, cell_sizes, ranking, use_v1_metric)
         for child in children
     )
     elapsed = time.time() - t0
@@ -214,6 +225,7 @@ def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
         "n_boot": n_boot,
         "elapsed_seconds": elapsed,
         "ranking_definition": ranking,
+        "use_v1_metric": use_v1_metric,
         "n_strata": len(cell_indices),
         "tasks": list(TASKS),
         "models": list(CANONICAL_MODELS),
@@ -245,6 +257,15 @@ def main() -> None:
     with open(out_path2, "w", encoding="utf-8") as f:
         json.dump(secondary, f, indent=2, default=str)
     print(f"[block_c] wrote {out_path2}", file=sys.stderr)
+
+    # Tertiary: v1-equivalent metric definition (T2 ranked by manipulation_occurred)
+    # — for honest apples-to-apples comparison with v1's published rho matrix.
+    v1compat = run_block_c(df, n_boot=N_BOOT_DEFAULT, ranking="permissive",
+                            use_v1_metric=True)
+    out_path3 = out_dir / "ranking_stability_v2_v1compat.json"
+    with open(out_path3, "w", encoding="utf-8") as f:
+        json.dump(v1compat, f, indent=2, default=str)
+    print(f"[block_c] wrote {out_path3}", file=sys.stderr)
 
 
 if __name__ == "__main__":

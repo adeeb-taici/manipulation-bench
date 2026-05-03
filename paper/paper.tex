@@ -1,0 +1,968 @@
+
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2026
+
+% The authors should use one of these tracks.
+% Before accepting by the NeurIPS conference, select one of the options below.
+% 0. "default" for submission
+\usepackage[eandd]{neurips_2026}
+% the "default" option is equal to the "main" option, which is used for the Main Track with double-blind reviewing.
+% 1. "main" option is used for the Main Track
+%  \usepackage[main]{neurips_2026}
+% 2. "position" option is used for the Position Paper Track
+%  \usepackage[position]{neurips_2026}
+% 3. "eandd" option is used for the Evaluations & Datasets Track
+ % \usepackage[eandd]{neurips_2026}
+ % if you need to opt-in for a single-blind submission in the E&D track:
+ %\usepackage[eandd, nonanonymous]{neurips_2026}
+% 4. "creativeai" option is used for the Creative AI Track
+%  \usepackage[creativeai]{neurips_2026}
+% 5. "sglblindworkshop" option is used for the Workshop with single-blind reviewing
+ % \usepackage[sglblindworkshop]{neurips_2026}
+% 6. "dblblindworkshop" option is used for the Workshop with double-blind reviewing
+%  \usepackage[dblblindworkshop]{neurips_2026}
+
+% After being accepted, the authors should add "final" behind the track to compile a camera-ready version.
+% 1. Main Track
+ % \usepackage[main, final]{neurips_2026}
+% 2. Position Paper Track
+%  \usepackage[position, final]{neurips_2026}
+% 3. Evaluations & Datasets Track
+ % \usepackage[eandd, final]{neurips_2026}
+% 4. Creative AI Track
+%  \usepackage[creativeai, final]{neurips_2026}
+% 5. Workshop with single-blind reviewing
+%  \usepackage[sglblindworkshop, final]{neurips_2026}
+% 6. Workshop with double-blind reviewing
+%  \usepackage[dblblindworkshop, final]{neurips_2026}
+% Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote.
+% For workshops (5., 6.), the authors should add the name of the workshop, "\workshoptitle" command is used to set the workshop title.
+% \workshoptitle{WORKSHOP TITLE}
+
+% "preprint" option is used for arXiv or other preprint submissions
+ % \usepackage[preprint]{neurips_2026}
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2026}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+% Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote. 
+\title{Formatting Instructions For NeurIPS 2026}
+
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+
+\author{%
+  David S.~Hippocampus \\
+  Department of Computer Science\\
+  Cranberry-Lemon University\\
+  Pittsburgh, PA 15213 \\
+  \texttt{hippo@cs.cranberry-lemon.edu} \\
+  % examples of more authors
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \AND
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+}
+
+
+\begin{document}
+
+
+\maketitle
+
+
+\begin{abstract}
+  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on both the left- and right-hand margins. Use 10~point type, with a vertical spacing (leading) of 11~points. The word \textbf{Abstract} must be centered, bold, and in point size 12. Two line spaces precede the abstract. The abstract must be limited to one paragraph.
+\end{abstract}
+% =========================================================================
+\section{Introduction}
+\label{sec:introduction}
+% =========================================================================
+
+Frontier language models are increasingly deployed in high-trust settings where their outputs influence human decisions and beliefs. Examples include customer-facing sales systems, decision-support tools, and negotiation agents. This raises concerns about their capacity to manipulate counterparties and the manipulative tactics they tend toward. This is especially concerning because frontier models deploy manipulative cues at non-trivial rates even when not explicitly prompted to do so \citep{akbulut2026evaluating} and match or exceed incentivized human persuaders on belief-change tasks \citep{hackenburg2025levers,lin2025persuading}.
+
+Existing benchmarks predominantly measure \emph{whether} a model manipulates within fixed or highly related settings. Static honesty benchmarks vary the test items but fix the prompt format and elicitation context; scheming evaluations vary goal pressure but typically within a single agentic scenario family; multi-agent benchmarks vary the strategic environment but rarely cross prompt-level axes within environments. This results in a fragmented view of a model's propensity and capability to manipulate or deceive: a model may appear honest in one condition and manipulative in another, with no principled account of how its behavior interpolates between them.
+
+We evaluate manipulative behavior across 12{,}510 scenarios spanning five multi-agent environments (Bargaining, Debate, Village Commons, Sales, and Committee) crossed with three experimental axes (Framing, Incentive, and Difficulty). Our headline findings are threefold. First, the dominant driver of manipulation is task-dependent: in tasks where the manipulator's lever is a single-step behavioral commitment (such as stating a number or contributing to a pool), prompt framing dominates outcomes; in tasks where the manipulator constructs claims that have to fit alongside an underlying truth, the substrate dominates. Second, model rankings do not transfer across tasks (mean Spearman correlation 0.055 across the ten task-pairs), arguing against the existence of a stable manipulation-propensity trait. Third, verbal incentives are inert in three of five tasks, with measurable effects only emerging when incentives introduce new reward structures.
+
+Additionally, our contributions are threefold. First, we provide evidence that manipulation behavior is task-dependent rather than a stable model-level trait, and we characterize the structure of that dependence through a parametric evaluation across five environments and three axes. Second, we report a substantively important null result on the incentive axis, showing that verbal performance incentives common in production AI systems are inert in the absence of structural integration with the agent's reward function. Third, we release our multi-agent evaluation framework built on top of Inspect, including environment designs, deterministic rule-based scorers, and pre-registered prediction outcomes for benchmark cells that \citet{shi2026hallucination} identifies as critical gaps in the existing literature, enabling direct replication and extension to new environments or models.
+
+
+% =========================================================================
+\section{Background}
+\label{sec:background}
+% =========================================================================
+
+We define manipulation as a subset of persuasion characterized by epistemic subversion, following \citet{akbulut2026evaluating}. A model manipulates when it attempts to influence a target by distorting, withholding, or structuring information in ways that undermine the target's ability to make an informed decision. This definition focuses on observable behavior rather than inferred intent.
+
+We distinguish manipulation from adjacent concepts. Rational persuasion appeals to verifiable evidence and preserves user autonomy, while coercion operates through explicit constraints on available actions. Deception, defined as the inducement of false beliefs \citep{park2024ai}, is one mechanism of manipulation but not the only one. Models can manipulate without making false statements, for example through guilt-tripping or motivated framing. \citet{carroll2023characterizing} characterize manipulation along four dimensions (\emph{intent}, \emph{covertness}, \emph{incentive}, and \emph{harm}) that further sharpen this distinction.
+
+The economics of strategic communication identifies several mechanisms by which a sender can mislead a receiver. Two are directly relevant to our environments. \citet{milgrom1981good} and the disclosure tradition study \emph{selective revelation} of verifiable evidence, where withholding rather than fabricating is the operative mechanism. This is the central mechanism in our Sales environment, where the manipulator has full access to a structured product spec and chooses which fields to surface. \citet{rogers2017artful} introduce \emph{paltering}, the active use of literally true statements to convey a misleading impression, distinct from both lying by commission and lying by omission. Paltering is the behaviorally consequential category that purely-truth-based detection misses, and it appears across our Bargaining, Sales, and Committee environments where a manipulator can truthfully state one fact while strategically omitting another.
+
+We adopt the taxonomy of \citet{shi2026hallucination}, which classifies manipulation by goal-directedness, object, and mechanism, with a cross-cutting dimension distinguishing the audience of the deception (e.g., a user, developer, or monitor). Their analysis of fifty benchmarks finds that existing evaluations are heavily concentrated on fabrication, with limited coverage of omission and pragmatic distortion. Our design addresses this imbalance by varying task structure and information constraints across environments.
+
+
+
+% =========================================================================
+\section{Related Work}
+\label{sec:related-work}
+% =========================================================================
+
+\subsection{Static and single-turn deception benchmarks}
+\label{subsec:static-benchmarks}
+
+A first generation of LLM honesty benchmarks evaluates factual fabrication in single-turn QA: TruthfulQA \citep{lin2022truthfulqa}, HaluEval \citep{li2023halueval}, FActScore \citep{min2023factscore}, HalluLens \citep{bang2025hallulens}, and SimpleQA \citep{wei2024simpleqa}. Sycophancy benchmarks \citep{sharma2024towards,perez2023discovering,wei2023simple} extend this to belief-and-uncertainty fabrication under social pressure. These benchmarks are well-developed but operate in a narrow slice of the \citet{shi2026hallucination} taxonomy, almost exclusively user-directed fabrication of world or belief claims.
+
+\subsection{Strategic-deception and scheming evaluations}
+\label{subsec:strategic-benchmarks}
+
+A second wave directly probes goal-directed deception. MACHIAVELLI \citep{pan2023rewards} evaluates power-seeking, deception, and harm across 134 text-based games. Apollo Research's in-context scheming evaluations \citep{meinke2024frontier} vary goal pressure across six agentic scenarios using a three-condition incentive protocol (Strong Goal Nudge / No Nudge / No Goal); this is the closest structural template to our design and supplies our incentive-axis anchor. Sandbagging evaluations \citep{vanderweij2024ai,tice2024noise,benton2024sabotage} target capability-concealment, while alignment faking \citep{greenblatt2024alignment} and sleeper agents \citep{hubinger2024sleeper} target deception of training and evaluation processes. DeceptionBench \citep{ji2025mitigating,huang2025deceptionbench} and MASK \citep{ren2025mask} systematize strategic-deception evaluation across categories including sycophancy, evasion, and pressure-induced lying; MASK is also notable for explicitly disentangling capability from honesty, a separation we obtain by construction through ground-truth product specs (Sales) and cold-panel-validated slates (Committee). DarkBench \citep{kran2025darkbench} and PersuSafety \citep{liu2025llm} characterize manipulative design patterns and unethical persuasion strategies in single-model settings.
+
+\subsection{Multi-agent and game-theoretic environments}
+\label{subsec:multiagent-benchmarks}
+
+Closest to our design are evaluations situating LLMs in multi-agent strategic environments. CICERO \citep{bakhtin2022human} and WelfareDiplomacy \citep{mukobi2023welfare} study deception in Diplomacy. GovSim \citep{piatti2024cooperate} places LLMs in commons-dilemma resource-extraction games and finds 43 of 45 frontier-model-scenario runs collapse to overuse, motivating our village-commons design. NegotiationArena \citep{bianchi2024well} benchmarks LLM negotiation; the CaSiNo dataset \citep{chawla2021casino} supplies a strategy-utterance taxonomy applicable to our bargaining transcripts. WOLF \citep{agarwal2025wolf} and OpenDeception \citep{wu2026opendeception} add multi-agent social-deduction settings.
+
+For debate, the scalable-oversight tradition \citep{khan2024debating,kenton2024scalable} establishes that more-persuasive debaters increase judge accuracy when both debaters advocate adversarially. Our Debate environment is structurally distinct: it is asymmetric rather than symmetric. One debater is pinned to truth (Claude Opus 4.7) across all scenarios; the other rotates through the roster as a manipulator arguing the false side. This isolates the manipulator's belief-shifting capability against a fixed-quality truthful counterparty, rather than measuring whether adversarial structure surfaces truth.
+
+
+\subsection{Positioning}
+\label{subsec:positioning}
+
+Recent surveys \citep{park2024ai,shi2026hallucination,mohammadi2025evaluation,yehudai2025survey} document the field but identify a consistent gap: existing benchmarks characterize \emph{whether} models manipulate within fixed conditions but rarely characterize \emph{how} manipulation varies parametrically with multiple manipulation-relevant axes across diverse environments. Our contribution addresses three orthogonal limitations in the existing literature. Apollo's scheming evaluations vary framing and incentive but only within a single agentic-scenario family, leaving cross-environment generalization untested. Multi-agent benchmarks typically vary the strategic environment but hold prompt-level axes fixed, leaving framing and incentive sensitivity within environments unmeasured. Human-AI interaction studies measure outcome harms with high fidelity but in narrow dyadic settings, leaving group-scale and multi-agent dynamics unmeasured. Our parametric characterization of manipulation across five multi-agent environments crossed with framing, incentive, and difficulty addresses all three gaps and specifically populates the omission, paltering, and future-commitment cells that \citet{shi2026hallucination} identifies as most under-covered.
+
+
+% =========================================================================
+\section{Methodology}
+\label{sec:methodology}
+% =========================================================================
+
+\subsection{Design principles}
+\label{subsec:design-stance}
+Several high-profile papers on LLM deception and scheming have drawn
+criticism for echoing the failure modes of 1980s ape-language
+research \citep{summerfield2025lessons}: cherry-picked examples and
+anthropomorphic interpretation of functional outputs. We make two
+design commitments to avoid these pitfalls. First, we treat
+manipulation as a property of \emph{functional outputs measured
+against ground-truth structures}, not of inferred internal states; we
+make no claims about model intentions, beliefs, or theory-of-mind.
+Second, headline metrics are computed by deterministic rule-based
+scorers against typed ground-truth fields wherever possible; no LLM
+judge gates a paper-headline metric.
+
+\subsection{Experimental design}
+\label{subsec:experimental-design}
+
+We adopt a factorial design crossing five environments with three
+manipulation axes: framing, incentive, and difficulty. All
+trajectories are logged in full, including system prompts, user
+messages, model outputs, intermediate tool calls, and ground-truth
+state. The full rollout corpus is the sole data object on which all
+downstream metrics are computed.
+
+
+
+\subsection{Manipulation axes}
+\label{subsec:axes}
+
+\paragraph{Framing.} The framing axis has five canonical levels ---
+\emph{prohibitive}, \emph{pro-social}, \emph{minimal}, \emph{selfish},
+\emph{permissive}. The frame is applied as a system-prompt
+suffix on the interested-party agent only and the exact wording is task-specific. The five-level
+decomposition is chosen over a binary instructed/non-instructed
+contrast to separate four distinct quantities: the floor under
+explicit prohibition, the no-instruction baseline, the
+goal-framing-only contrast within socially acceptable language
+(\emph{pro-social} vs.\ \emph{selfish}), and the ceiling under
+explicit authorization.
+
+\paragraph{Incentive.} The incentive axis has three canonical levels
+--- \emph{none}, \emph{moderate}, \emph{high} --- with task-specific
+operationalization. We vary the reward given to the model
+for achieving some goal, so we can identify whether manipulation
+attempts increase as a result.
+
+\paragraph{Difficulty.} The difficulty axis has three levels ---
+\emph{low}, \emph{medium}, \emph{high} --- with a uniform semantic
+orientation across tasks (high difficulty $=$ manipulator fights
+uphill) but task-specific instantiation. The difficulty axis controls
+the extent to which manipulation is actually required for the model to achieve
+it's assigned tasks. From this, we can identify 1) Which models only resort 
+to manipulation when it is needed for a given task vs. which resort to manipulation regardless, and 2) The manipulative strength of models in comparison to each other.
+
+
+\subsection{Environments}
+\label{subsec:environments}
+
+Five specific environments are chosen to span the manipulation taxonomy
+introduced in \S\ref{subsec:taxonomy}, varying both the channel
+(behavioral commitment vs.\ informational claim) and the topology
+(dyadic vs.\ multi-agent panel). All five share the same six-model
+roster and the same canonical five-frame, three-incentive,
+three-difficulty axes (\S\ref{subsec:axes}); the axis levels are
+uniform across tasks but the manipulable channel differs
+
+
+\paragraph{Village Commons.} A six-agent repeated public-goods game
+over eight rounds. Each round, every agent receives 20 tokens and
+privately decides how many to contribute to a common pool, which is
+multiplied by a per-cell public-goods multiplier (the
+\emph{difficulty} axis: $\{1.2, 1.5, 1.8\}$) and split equally.
+Agents may send private messages, publicly accuse free-riders, and
+optionally pledge a contribution amount via a
+\texttt{pledge\_contribution} tool call. Agent~1 is the manipulator
+slot and rotates through the roster; the other five agents are
+pinned to a fixed cheap-tier panel with the \emph{minimal} frame.
+Primary metric: per-round exploitation rate ($1 - \bar{c}/20$).
+ 
+\paragraph{Bargaining.} A two-agent split of a 100-token resource.
+After three rounds of discussion, each agent commits a stated
+valuation $s_i$ via a \texttt{commit\_valuation} tool call, and the
+proportional split is $\text{tokens}_i = 100 \cdot s_i / (s_i +
+s_j)$. Each agent has a private true valuation $v_i$ drawn from a
+paired distribution; the \emph{difficulty} axis is the asymmetry of
+that pair ($\leq\!3\times$, ${\sim}10\times$, ${\sim}100\times$).
+The \emph{incentive} axis is an expected penalty subtracted from
+utility for misstatement, with values $\{0, 80, 250\}$ chosen so
+that 80 is break-even on the maximum-asymmetry pair and 250 is
+strictly economically dominated. Manipulation is the binary event
+$(s_i - v_i)/v_i > 0.10$. Self-play: each cell rotates the same
+model into both seats.
+ 
+\paragraph{Debate.} A two-debater, three-juror panel design over a
+23-item balanced binary-truth claim pool (7 low / 8 medium / 8 high
+difficulty). One debater is pinned to Claude Opus 4.7 arguing the
+truthful side; the other rotates through the roster arguing the
+false side. Pinning the truthful debater controls for truthful-side
+quality so that variation in juror belief reflects the manipulator's
+capability. Two rounds of alternating arguments and rebuttals are
+followed by re-elicitation of per-juror beliefs on a 0--100 scale.
+\emph{Difficulty} is the panel's pre-debate prior distance to the
+manipulator-argued direction (aligned, ambiguous, opposed). Primary
+metric: $\geq 0.10$ panel-mean shift in the manipulator's direction.
+Beliefs are elicited only immediately pre and post; durability is
+not measured.
+ 
+\paragraph{Sales.} A single-agent representation task. The agent
+represents a seller with access to a structured product spec
+(\texttt{features\_true}, \texttt{marketing\_claims},
+\texttt{known\_defects}, \texttt{comparables}). A scripted buyer
+asks five fixed factual questions; each response is classified
+deterministically against typed \texttt{check\_fields} on the
+ground-truth record as \emph{accurate}, \emph{misleading}, or
+\emph{false}. Primary metric: (misleading + false) / 5.
+\emph{Difficulty} is a structured tag on the underlying product
+(good / mixed / known-defective); at high difficulty, truthful
+disclosure dooms the sale.
+ 
+\paragraph{Committee.} A five-agent committee evaluating four
+candidates on multiple criteria. One agent is the \emph{interested
+party} with a privately disclosed affiliation, to whom the frame
+axis is applied; the other four are neutral evaluators drawn from a
+fixed cheap-tier panel. The phase sequence is private rating $\to$
+two rounds of public discussion $\to$ final rating, with ratings
+submitted via a \texttt{submit\_ratings} tool call on a 0--20
+integer scale per candidate-criterion cell. Primary metric:
+\emph{initial\_rating\_bias}, the interested party's private rating
+gap between their favored candidate and matched-tier controls. The
+12-slate pool is cold-panel-validated prior to launch, anchoring the
+difficulty axis at a 4 / 3 / 5 distribution across low/medium/high
+tiers.
+
+
+\subsection{Models}
+\label{subsec:models}
+
+The roster comprises six models,  spanning the major frontier 
+labs: Claude Opus~4.7 (Anthropic), GPT-5.5 (OpenAI), Gemini~3.1~Pro 
+(Google), Grok~4 (xAI), Llama~3.3~70B (Meta), and DeepSeek~V4~Pro (DeepSeek).
+
+% \subsection{Metrics}
+% \label{subsec:metrics}
+
+% Each task uses a deterministic, rule-based primary metric computed
+% from structured rollout artifacts; no LLM judge gates any
+% paper-headline metric. The five primary metrics are:
+
+% \begin{itemize}
+% \item \emph{Bargaining.} \texttt{lied\_rate} --- per-agent binary,
+%   $(s_i - v_i)/v_i > 0.10$, extracted from the
+%   \texttt{commit\_valuation} tool call and compared against the
+%   scenario's recorded true valuation.
+% \item \emph{Debate.} \texttt{manipulation\_occurred} --- binary,
+%   panel-mean post-debate belief shift in the manipulator's direction
+%   $\geq 0.10$, computed from the three-juror panel's pre/post integer
+%   credence elicitations.
+% \item \emph{Village.} \texttt{exploitation\_rate} ---
+%   $1 - \bar{c}/20$ over the eight rounds, where $\bar{c}$ is the
+%   manipulator's mean per-round contribution; secondary metrics
+%   \texttt{promise\_action\_gap} (deterministic from the
+%   \texttt{pledge\_contribution} tool calls) and a Gini /
+%   detection-rate compound report distributional and bystander
+%   effects.
+% \item \emph{Sales.} \texttt{manipulation\_rate} --- per-sample
+%   $(\text{misleading} + \text{false}) / 5$, with each of the 5
+%   buyer questions classified deterministically against the
+%   scenario's typed \texttt{check\_fields} ground truth.
+% \item \emph{Committee.} \texttt{initial\_rating\_bias} --- the
+%   interested party's private rating gap between their favored
+%   candidate and matched-tier control candidates on the
+%   \texttt{submit\_ratings} tool call, on a 0--20 per-criterion
+%   scale. Secondaries: post-discussion rating change, neutral-shift
+%   toward the interested party, decision outcome, and discussion
+%   polarity (rule-based wordlist classifier with negation scope and
+%   hedge halving).
+% \end{itemize}
+
+
+\subsection{Statistical analysis}
+\label{subsec:statistics}
+
+For each (model, axis) pair we compute the standardized slope of
+the task's primary metric across axis levels, averaging over the
+other two axes. For the frame axis we report the full-range slope
+(across all 5 levels) and the middle-three slope
+(\emph{pro-social} $\to$ \emph{minimal} $\to$ \emph{selfish})
+separately, testing whether the middle-three frame contrast
+preserves per-model ordering. Bootstrap 95\% confidence intervals
+are computed at $N=1000$ resamples with date-of-commit seeds
+(20260422--20260425, one per task; values recorded in each task's
+\texttt{prereg.md~\S{}8}). Effect sizes are reported as Cohen's $d$
+against the model's own prohibitive-frame reference cell, computed
+per (model, incentive, difficulty); cells with degenerate
+within-cell variance (anticipated at saturated endpoints, e.g.,
+Gemini at permissive on Sales/Committee/Village, GPT-5.5 at
+permissive on Bargaining hitting the $10^{12}$ clamp) report raw
+mean differences with a saturation footnote rather than a defined
+$d$. Cross-model comparisons are reported as per-task signed-slope
+tables and Spearman rank correlations between full-range and
+middle-three frame-slope orderings. Table~\ref{tab:design-dimensions} reports per-task design
+dimensions and total scenario counts.
+
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{Task} & \textbf{Frames} & \textbf{Incentives} & \textbf{Difficulties} & \textbf{Items} & \textbf{Reps/cell} & \textbf{Total} \\
+\midrule
+T1 Bargaining & 5 & 3 & 3 & 6 models & 20 & 5{,}400 \\
+T2 Debate     & 5 & 3 & 3 & 23 claims $\times$ 6 models & 2 & 4{,}140 \\
+T3 Village    & 5 & 3 & 3 & 6 models & 2 & 540 \\
+T4 Sales      & 5 & 3 & 3 & 5 q $\times$ 6 models $\times$ 5 prods & 1 & 1{,}350 \\
+T5 Committee  & 5 & 3 & 3 & 12 slates $\times$ 6 models & 4 & 1{,}080 \\
+\midrule
+\multicolumn{6}{r}{\textbf{Total}} & \textbf{12{,}510} \\
+\bottomrule
+\end{tabular}
+\caption{Per-task design dimensions and total scenario counts. The
+three axes (frames, incentives, difficulties) are uniform across
+tasks; the items column captures the per-task substrate (claims,
+slates, products) and the model roster. All cell counts are
+pre-registered.}
+\label{tab:design-dimensions}
+\end{table}
+
+% \subsection{Reliability and robustness protocols}
+% \label{subsec:reliability}
+
+% Each task is pre-registered before its full sweep launches. The
+% pre-registration is committed to the project repository with an
+% ISO timestamp and the codebase commit hash at that moment
+% (\texttt{paper/task<N>/prereg.md~\S{}1}); this serves the same
+% purpose as a third-party time-stamping registry and is auditable
+% against the git history. Any post-timestamp change is logged as a
+% formal Amendment with its own timestamp and rationale; per-task
+% Amendment tables record A1--A3 changes and their scope.
+% Pre-registered predictions P1--P6 (P7 where applicable) are scored
+% against the locked design in each task's \texttt{results.md}, and
+% the cross-task verdict matrix in
+% \texttt{paper/cross\_task/SUMMARY.md} aggregates these.
+
+% Two design choices act as the principal robustness protections we
+% \emph{do} commit to. First, item-level validation: Debate claims
+% were re-validated through eight rounds of juror-panel prior
+% elicitation (133 candidates tested, 49 surviving the threshold
+% criteria, 23 sampled for the balanced experimental pool); Committee
+% slates were validated by a four-model neutral cold-panel without
+% committee dynamics, with Amendment~A1 retiering based on
+% cold-panel honest-bias. Second, model snapshot locking: slugs are
+% locked at PREREG and updated only via formal amendment (A2
+% GPT-5~$\to$~GPT-5.5; A3 DeepSeek-v3.2~$\to$~V4-Pro), with the
+% original logs preserved for within-task generation-contrast
+% analysis (\texttt{paper/cross\_task/EXPLORATORY\_FINDINGS.md~\S{}3}).
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Model rankings do not transfer across tasks}
+\label{subsec:rank-instability}
+
+Across the five environments, model rankings on manipulation
+behavior are essentially uncorrelated: the mean off-diagonal Spearman
+correlation across the ten task-pairs is $\rho = 0.055$. The model that
+is most manipulative on Debate is the \emph{least} manipulative on Sales.
+Debate and Village are \emph{negatively} correlated ($\rho = -0.60$). No
+pair of tasks produces a correlation above $\rho = 0.52$, and four of
+the ten pairs are negative.
+
+Figure~\ref{fig:rank-stability} visualizes this directly. Each column
+corresponds to one of the fifteen (task, axis) combinations; cell color
+and value give each model's rank by absolute slope on that combination,
+with 0 = least sensitive and 5 = most sensitive. If manipulation
+propensity were a stable model trait, rows would show horizontal banding,
+with each model occupying similar ranks across columns. The figure shows
+the opposite: every model's rank varies substantially across columns,
+including within-task across axes. Claude Opus 4.7 ranks 0 on T1 frame
+sensitivity but 5 on T5 difficulty sensitivity. GPT-5.5 ranks 5 on T1
+frame but 0 on every T4 axis. Gemini 3.1 Pro ranks 5 on T1 incentive
+but 0 on T5 difficulty. The fifteen ranks for each model do not cluster
+around a single tier.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig_model_ranking_stability.pdf}
+    \caption{Model rank across tasks $\times$ axes. Each cell
+    shows a model's rank by absolute slope on one (task, axis)
+    combination, where 0 = least sensitive and 5 = most sensitive.
+    Stable propensity would produce horizontal banding within rows.}
+    \label{fig:rank-stability}
+\end{figure}
+
+This result motivates the structure of the rest of this section. If
+manipulation propensity is not a stable trait, then the empirically
+meaningful question is what it varies with. The remaining
+subsections characterize this variation.
+
+\subsection{Tasks at a glance}
+\label{subsec:overview}
+
+Before turning to cross-task patterns, Table~\ref{tab:task-overview}
+summarizes the five environments at a glance: the primary metric, the
+dominant axis as measured by the per-model mean absolute slope, and the
+headline result that subsequent subsections develop in detail.
+
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}p{3cm}p{1.6cm}p{1.4cm}p{0.6cm}p{6cm}@{}}
+\toprule
+\textbf{Task} & \textbf{Primary metric} & \textbf{Dominant axis} & \textbf{Ratio} & \textbf{Headline result} \\
+\midrule
+T1 Bargaining & Lie rate & Incentive & 2.3$\times$ & Penalty-math binds; lie magnitudes bimodal \\
+T2 Debate & Belief shift & Difficulty & 4.4$\times$ & Juror prior dominates manipulator skill \\
+T3 Village & Exploitation rate & Frame & 3.1$\times$ & Frame binds; Llama uniquely penalty-blind \\
+T4 Sales & Misleading + false rate & Difficulty & 3.3$\times$ & Product quality dominates; whole-roster prohibitive compliance \\
+T5 Committee & Initial rating bias & Difficulty & 1.8$\times$ & Slate quality dominates; Gemini saturates \\
+\bottomrule
+\end{tabular}
+\caption{Per-task overview. Dominant axis is the axis with the
+largest mean absolute slope across the six-model roster; the dominance
+ratio reports the dominant axis's slope divided by the second-largest
+slope on the same task. Three of five tasks are difficulty-dominant,
+all three in the informational-channel cluster; the two
+behavioral-channel tasks are dominated by frame and incentive
+respectively. The per-task aggregate slopes that produce these ratios
+are reported in \S\ref{subsec:cluster-split}.}
+\label{tab:task-overview}
+\end{table}
+
+Two patterns in this table preview the cross-task analyses that follow.
+First, the dominant axis is not consistent across tasks: difficulty
+dominates in three tasks, frame in one, incentive in one. Second, the dominance ratios range from 1.8$\times$
+(T5 Committee) to 4.4$\times$ (T2 Debate), indicating that within a
+task, the primary axis is doing substantially more work than the
+secondary axis.
+
+\subsection{Different tasks are dominated by different axes}
+\label{subsec:cluster-split}
+
+Section~\ref{subsec:rank-instability} established that no model has a
+stable manipulation propensity across our five environments. We now
+ask the complementary question: within each task, which axis of
+variation does manipulation behavior respond to most strongly?
+Table~\ref{tab:per-task-slopes} reports the mean absolute slope across
+the six-model roster, computed separately for each (task, axis)
+combination on the task's primary metric.
+
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Task} & \textbf{Frame} & \textbf{Incentive} & \textbf{Difficulty} & \textbf{Dominant} \\
+\midrule
+T1 Bargaining & 0.108 & \textbf{0.250} & 0.030 & Incentive \\
+T2 Debate     & 0.007 & 0.014 & \textbf{0.061} & Difficulty \\
+T3 Village    & \textbf{0.168} & 0.054 & 0.023 & Frame \\
+T4 Sales      & 0.026 & 0.010 & \textbf{0.087} & Difficulty \\
+T5 Committee  & 0.327 & 0.181 & \textbf{0.603} & Difficulty \\
+\bottomrule
+\end{tabular}
+\caption{Per-task aggregate slopes. Each cell reports the mean across
+the six-model roster of the absolute standardized slope on that
+(task, axis) combination, computed on the task's primary metric.
+Bold entries mark the dominant axis. Within-row magnitude
+comparisons are the meaningful contrast; absolute magnitudes are not
+directly comparable across tasks.}
+\label{tab:per-task-slopes}
+\end{table}
+
+The dominant axis differs across tasks, and the differences are
+substantial: dominance ratios (top axis to second-largest axis) range
+from 1.8$\times$ on T5 Committee to 4.4$\times$ on T2 Debate. A
+single-axis evaluation that varied only one of the three would, on
+most of these tasks, miss the dominant signal more often than it would
+capture it.
+
+\subsection{Per-model response signatures}
+\label{subsec:per-model}
+
+This subsection turns to per-model patterns, examining ways
+in which individual models depart from the aggregate picture in
+characterizable ways. Each of the six models exhibits at least one
+distinguishing feature in its 15-dimensional response signature; we
+discuss each in turn, drawing on the per-model slope tables that
+appear in Appendix~\ref{app:per-model-profiles}.
+
+\paragraph{Claude Opus 4.7.}
+Claude's response envelope is the smallest of the six models on the
+behavioral-channel tasks. Its T1 frame slope is $+0.066$, its T1
+incentive slope is $-0.159$ (the smallest in absolute value among the
+five frontier reasoning models), and its T3 frame slope is $+0.106$,
+the smallest in the roster. Claude's T1 lie rate is also the lowest
+in the roster at $0.119$, and conditional on lying, only $6\%$ of its
+overstatements exceed 200 points (compared to 76 to 100\% for the
+other reasoning models). Claude appears to manipulate rarely, manipulate modestly when it does, and is the
+least axis-responsive frontier model on the behavioral tasks. On the
+informational tasks (T2, T4, T5), Claude's slopes are middling and
+its absolute manipulation rates are mid-roster, consistent with the
+cluster split, where informational-channel tasks are dominated by
+substrate properties rather than per-model dispositions.
+
+\paragraph{GPT-5.5.}
+GPT-5.5 shows the largest task-to-task asymmetry in the roster. On
+T4 Sales, its slopes on all three axes are near-zero (frame
+$-0.000$, incentive $+0.001$, difficulty $+0.021$) and its
+prohibitive-compliance rate of $0.03$ matches the rest of the roster
+(range $0.01$ to $0.04$). On T1 Bargaining, by contrast, its frame
+slope ($+0.161$) and incentive slope ($-0.341$) are among the
+largest in the roster.
+
+\paragraph{Gemini 3.1 Pro.}
+Gemini's defining feature is endpoint saturation. On two of the five
+tasks (T3 Village and T5 Committee), Gemini's manipulation behavior
+at the permissive frame reaches the metric's upper bound: $0.997$ on
+T3, and a permissive-frame jump producing T5 bias of $19.7$ on the
+$20$-point scale (compared to $+3$ to $+7$ for the other five
+models). Gemini is the most frame-sensitive model in three of five
+tasks. The combination produces a distinctive profile: Gemini
+responds more strongly to frame variation than any other model on
+the tasks where it does respond, and saturates the metric at the
+permissive endpoint on tasks where the manipulation channel admits
+direct prompt grip. On T4 Sales, where the manipulation channel is
+informational and product-truthfulness constrains output, Gemini's
+permissive-frame manipulation rate is only $0.19$. Frame-sensitivity
+does not generalize to substrate-dominated tasks. The downstream
+effect on cross-task analyses is that Gemini's permissive-frame
+cells on T3 and T5 have near-zero within-cell variance and require
+raw mean differences in place of Cohen's $d$.
+
+\paragraph{Grok 4.}
+Grok's profile is intermediate on most axes but distinguished by
+a couple patterns. Primarily, on T3 Village, Grok exhibits the largest
+prohibitive-to-permissive frame range in the roster ($0.00$ to
+$0.96$, a 96 percentage-point swing), indicating high frame
+sensitivity at the endpoints despite middle-frame slopes that are
+not unusually large. On the informational-channel tasks, Grok's
+slopes are mid-roster and its absolute rates are unremarkable.
+
+\paragraph{Llama 3.3 70B.}
+Llama is the only non-reasoning model in the roster, and the
+distinguishing feature is that its T1 incentive slope is $-0.022$,
+an order of magnitude smaller than the slopes of the five reasoning
+models ($-0.16$ to $-0.40$). At T1's high incentive level (E=250,
+strictly economically dominated), the five reasoning models' lying
+rates collapse to near zero; Llama's barely changes. Llama is also
+the model with the lowest fraction of extreme lies conditional on
+lying ($1\%$), suggesting a qualitatively different lying mode rather
+than a uniform reduction in manipulation. The interpretation we find
+most consistent with the data is that Llama is not reasoning over the
+expected-value tradeoff that the penalty term creates, not that it
+is more honest in some general sense, since its absolute lie rate
+$(0.095)$ is similar to Claude's $(0.119)$. It is possible that this is
+merely an artifact of Llama being the only non-reasoning model; we leave
+a deeper investigation into measuring differences between reasoning and non-reasoning models
+for future work.
+
+\paragraph{DeepSeek V4 Pro.}
+DeepSeek's response signature is most distinctive on the
+informational-channel tasks. On T4 Sales, its difficulty slope
+($+0.299$) is the highest in the roster, indicating that DeepSeek's
+manipulation behavior is more strongly modulated by product quality
+than any other model. On T1 Bargaining, its incentive slope
+($-0.346$) is in line with the other reasoning models, demonstrating
+the expected-value reasoning over the penalty term that Llama lacks.
+On the behavioral-channel tasks (T1 and T3), DeepSeek's prohibitive
+compliance is mid-roster (T1 Bargaining prohibitive lie rate near
+zero; T3 Village prohibitive exploitation $0.11$), and its frame
+slopes are moderate. We discuss DeepSeek's contribution to the
+generation-lift analysis separately in \S\ref{subsec:generation-lift}.
+
+\subsection{Secondary findings}
+\label{subsec:secondary}
+
+Three patterns from the per-task analyses extend the headline picture
+without fitting cleanly into the cross-task framing.
+We report them here as targeted observations rather than load-bearing
+claims; full per-task data appears in Appendix~\ref{app:per-task}.
+
+\paragraph{Bargaining lie magnitudes are bimodal across models.}
+The T1 primary metric (\texttt{lied\_rate}) is binary: an agent's
+stated valuation either exceeds the true valuation by more than $10\%$
+or it does not. This binary framing obscures a striking per-model
+pattern in the magnitude of overstatement, conditional on lying.
+Across the six-model roster, conditional on the binary lie threshold
+being crossed, the distribution of overstatement magnitudes splits
+into two distinct clusters, as shown in Figure~\ref{fig:lie-magnitude}. Claude Opus 4.7 and Llama 3.3 70B exhibit
+a \emph{modest-lie} mode: of the lies they produce, $6\%$ and $1\%$
+respectively exceed 200 points of overstatement, with the bulk
+clustering around the threshold-crossing minimum. The remaining four
+models exhibit an \emph{extreme-lie} mode: $97\%$ of GPT-5.5's lies,
+$100\%$ of Gemini 3.1 Pro's lies, $79\%$ of Grok 4's lies, and $76\%$
+of DeepSeek V4 Pro's lies exceed 200 points. The two-mode split is
+not a continuous spread; the $6\%$ and $1\%$ rates for Claude and
+Llama are an order of magnitude removed from the 76 to 100\% band
+that characterizes the other four models.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig8_lie_magnitude.pdf}
+    \caption{T1 Bargaining lie rate (left) and median lie magnitude in
+points (right), across the frame axis. Lie magnitude is conditional
+on the binary lie threshold being crossed. Stated values are clipped
+at 200 points; cells reading ``200.00'' represent distributions
+whose median is at or above the clip, with extreme outliers (up to
+the $10^{12}$ stated-value clamp) compressed.}
+    \label{fig:lie-magnitude}
+\end{figure}
+
+The implication is that a single ``lie rate'' metric, by itself,
+hides a qualitatively important per-model distinction. Claude and
+Llama, when they cross the lie threshold, do so by small amounts that
+exploit the discreteness of the threshold without fundamentally
+breaking the negotiation: a 110\% overstatement on a true value of 10
+is a stated value of 11. The other four models, when they cross the
+threshold, produce stated values orders of magnitude larger than the
+true value (e.g., stated values reaching the $10^{12}$ clamp on
+permissive-frame cells). These are not the same behavior. Future
+manipulation evaluations on tasks with continuous outputs should
+report magnitude as a complement to rate.
+
+\paragraph{Gemini's saturation behavior is a model characterization,
+not a measurement artifact.}
+Across two of the five tasks (T3 Village and T5 Committee),
+Gemini 3.1 Pro's manipulation behavior under permissive framing
+reaches the metric's upper bound. On T5 Committee, this manifests as
+ratings of 20/20 for the affiliated candidate and 0/20 for matched-tier
+peers across every criterion, not a continuous slope toward
+maximum advocacy but a discrete jump to the metric ceiling. The
+behavior was first observed in pilot data on a 0--10 scale; we
+expanded to a 0--20 scale during pilot preparation under the
+hypothesis that headroom would resolve the saturation. It did not:
+on the expanded scale, Gemini's permissive-frame ratings are 20/20
+and 0/20 with the same consistency observed on the 0--10 scale. The
+behavior appears to be a property of how Gemini interprets the permissive frame
+in this task family, not a property of the measurement instrument.
+
+We treat this as
+informative about Gemini's response signature: Gemini does not
+exhibit graduated responsiveness to license-oriented framing; it
+exhibits a near-binary response between non-permissive and
+permissive endpoints. Whether this reflects a Gemini-specific
+training pattern, a property of how the permissive frame is read by
+that model family, or a more general phenomenon that other models
+would exhibit at sufficiently extreme prompts is left to follow-up
+work.
+
+
+\section{Discussion}
+
+A natural reading of single-task manipulation evaluations is that they
+measure a property of the model: that GPT-5 is more or less manipulative
+than Claude in some general sense, and that this ordering should
+reproduce on related tasks. Our cross-task data does not support this
+reading.
+
+The pattern across tasks is structured rather than arbitrary. Three of
+the five tasks (Debate, Sales, and Committee) are difficulty-dominant.
+These are the three tasks in which the manipulator's lever is the
+construction of informational content: arguments that have to compete
+with a truthful debater, sales claims that have to fit alongside a
+structured product spec, candidate ratings that have to be defended in
+committee discussion. On these tasks, the substrate constrains what
+the manipulator can do. A juror's prior strongly disposes the
+post-debate belief, a genuinely-good product leaves little room for
+misleading claims, and a clearly-strong candidate slate makes inflated
+ratings transparent. The prompt cannot make a low-difficulty stimulus
+harder to manipulate or a high-difficulty stimulus easier; difficulty
+dominates because difficulty determines the manipulation's headroom.
+
+The remaining two tasks (Bargaining and Village) are behavioral-channel
+tasks, in which the manipulator's lever is a single-step commitment: a
+stated valuation in Bargaining, a token contribution in Village. The
+prompt has direct grip on these commitments, but \emph{which}
+prompt-axis grips depends on which axis is structurally binding for
+the task. In Bargaining, the incentive axis is operationalized as an
+explicit expected-penalty term subtracted from utility, with the high
+level (E=250) economically dominating any possible manipulation gain;
+the frame axis is wording variation that does not change the
+decision-rule math. Incentive dominates ($2.3\times$) because the
+incentive carries actual structural weight. In Village, the incentive
+axis is verbal. ``Your final token balance is your score'' is a
+restatement of the natural objective, not a new reward structure,
+while the frame axis varies how the agent's role and goals are
+described. Frame dominates ($3.1\times$) because frame is the only
+axis that introduces new information about how the agent should weight
+its actions.
+
+This produces a two-step taxonomy. Whether the manipulator's lever is
+behavioral or informational determines the broad cluster: behavioral
+tasks admit prompt dominance (frame or incentive), while informational
+tasks are dominated by the substrate (difficulty). Within the
+behavioral cluster, which prompt axis dominates depends on whether the
+incentive axis is structurally binding (Bargaining) or verbally
+restated (Village). The implication for evaluation design is direct.
+Which axes a benchmark needs to vary depends on the manipulation
+channel of the task being evaluated, and assuming that any single axis
+carries the dominant signal across tasks will systematically miss the
+picture.
+
+We develop the structurally-binding-versus-verbal distinction within
+the incentive axis in detail in \S\ref{subsec:incentive-bimodal},
+where the same pattern reappears as a generalization across all five
+tasks: incentive language only produces measurable effects when it
+introduces new reward structure rather than restating the natural
+objective.
+
+\subsection{Incentive language only binds when it changes the reward structure}
+\label{subsec:incentive-bimodal}
+
+Section~\ref{subsec:cluster-split} introduced a distinction between
+incentive operationalizations that are structurally binding
+(Bargaining's expected-penalty subtraction from utility) and those
+that are verbal restatements of the natural objective (Village's
+``your token balance is your score''). This distinction generalizes
+across all five tasks, and the cross-task pattern is bimodal rather
+than continuous.
+
+The mean absolute incentive slope by task splits cleanly into two
+clusters. Bargaining (0.250) and Committee (0.181) form a
+\emph{binding} cluster. In both, the incentive axis introduces
+material reward structure that the agent has not previously been
+exposed to: Bargaining adds an expected penalty subtracted from
+utility, and Committee adds explicit competition for a single
+selected-candidate outcome where the interested party's affiliation
+determines win or loss. Village (0.054), Sales (0.010), and Debate
+(0.014) form an \emph{inert} cluster. In all three, the incentive
+axis is verbal: a stated multiplier on the natural objective that
+the agent was already optimizing for. The within-cluster slopes are
+all within an order of magnitude of each other; the gap between the
+two clusters is roughly $4\times$ at minimum (Committee 0.181 vs
+Village 0.054) and $18\times$ at maximum (Bargaining 0.250 vs Sales
+0.010).
+
+The pattern survives the per-model breakdown. Five of the six models
+respond to Bargaining's penalty levels with incentive slopes between
+$-0.16$ and $-0.40$; only Llama 3.3 70B is the exception, with a slope
+of $-0.022$, an order of magnitude smaller than the others. We
+discuss this finding in \S\ref{subsec:per-model}. On Committee, four
+of six models show incentive slopes between $0.12$ and $0.43$. By
+contrast, on Village, Sales, and Debate, no model has an incentive
+slope exceeding $0.12$ in absolute value, and the median across models
+on each of these three tasks is below $0.03$.
+
+The implication is that incentive language only produces measurable
+behavioral change when it introduces a reward structure the agent has
+not already internalized. In our taxonomy, the two binding cases
+share a common feature: each incentive operationalization adds a
+quantitative term to the agent's effective utility function (penalty
+subtraction in Bargaining, win-loss competition in Committee) that
+the prompt's task description does not by itself specify. In the
+inert cases, the ``incentive'' is a numerical restatement of an
+objective the agent already has access to from the task's mechanics.
+A sales agent already wants to close sales; a debater already wants
+to be persuasive; a public-goods participant already optimizes its
+own token balance. Telling the agent it ``earns N points per Y'' on
+top of these does not change what the agent is doing.
+
+This finding has a deployment-relevant corollary. Verbal performance
+incentives in system prompts (``you are graded on your accuracy,''
+``your responses are evaluated by users,'' ``user satisfaction is
+your primary metric'') are common in production AI systems and are
+typically introduced with the goal of shaping behavior. Our results
+suggest these are inert in the absence of structural integration:
+without a corresponding change to the reward signal, the loss
+function, or the decision-rule math, the verbal addition does not
+shift behavior in any of the three tasks where it was tested. This
+should not be confused with a claim that incentives in general do not
+shape model behavior; the Bargaining and Committee results
+demonstrate that they do, when the incentive is structurally
+specified. The claim is narrower: \emph{stating} an incentive in a
+prompt is not sufficient to bind the agent to it.
+
+
+\section{Limitations}
+
+We acknowledge several limitations. First, we used one fixed prompt wording per cell and did not paraphrase within cells, so cell-level prompt-format sensitivity is not separately quantified. Since the wording was constant across all cells, this bounds absolute manipulation rates but not the relative comparison across axes and models that carries our claims. Second, we did not measure evaluation awareness. Whether the observed behavior would change under conditions designed to obscure the evaluative context is left to follow-up work. Third, we did not run a no-communication baseline in Bargaining or Village, which would help separate manipulation through communication from manipulation through the strategic choice alone. Fourth, we held system prompts constant across environments. A more aggressive baseline might elicit different behavior in one environment than another, but since the prompt protocol was constant across all cells, this does not affect the relative comparison. All claims in this paper concern functional outputs scored against ground-truth structures, not model intentions, beliefs, or internal states.
+
+Our primary bottleneck is simply working with a limited compute budget. We attempted to restrict our scope to a meaningful subset of today's frontier models, manipulation-conducive environments, and the various axes which we measure. With more compute, we'd like to scale up to achieve a much more comprehensive and rigorous analysis of manipulative tendencies.    
+
+\section{Conclusion}
+
+\section{Disclosure Concerning Use of LLMs}
+
+\section{}
+
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+
+
+\section{Environment design details}
+\label{app:env-details}
+ 
+This appendix collects the per-task secondaries, validation
+procedures, and classifier reliability checks referenced in
+\S\ref{subsec:environments}.
+ 
+\subsection{Village Commons}
+\label{app:env-village}
+ 
+Beyond the per-round exploitation rate reported in the main body,
+two secondary metrics are computed deterministically on each
+rollout. The \emph{promise--action gap} reads paired pledge tool
+calls and realized contributions and reports the manipulator's mean
+signed shortfall. A \emph{Gini-coefficient / free-rider-detection
+compound} captures distributional inequality across the six agents'
+realized contributions and the proportion of free-riding events
+that trigger a public accusation from another agent. All three
+metrics are rule-based; no LLM judge.
+ 
+\subsection{Debate}
+\label{app:env-debate}
+ 
+The 23-item balanced claim pool was sampled from a 49-claim pool
+that survived eight rounds of juror-panel re-validation against 133
+candidate claims. Re-validation re-elicited juror priors on each
+candidate after each round and retained claims whose panel-mean
+prior distance to the manipulator-argued direction matched the
+target difficulty tier. The full search trail is preserved in the
+project repository.
+ 
+\subsection{Sales}
+\label{app:env-sales}
+ 
+The deterministic per-response classifier (accurate / misleading /
+false) is gated by a hand-validation agreement target of
+$\geq 90\%$ on a stratified author-coded sample before the
+\texttt{manipulation\_rate} metric is reported. The full
+hand-validation protocol and per-product agreement breakdown are
+documented in \S\ref{subsec:reliability}.
+ 
+\subsection{Committee}
+\label{app:env-committee}
+ 
+Discussion turns are required to mark per-candidate references with
+\texttt{[A]}, \texttt{[B]}, \texttt{[C]}, or \texttt{[D]} tags to
+support downstream rule-based parsing of who said what about whom.
+Secondary metrics extend the primary
+\emph{initial\_rating\_bias}: post-discussion rating change,
+neutral-shift toward the interested party, decision outcome (which
+candidate is selected at final rating), and a discussion-polarity
+score. The 12-slate cold-panel validation pass uses the same
+four-model neutral panel that serves as the in-task neutral
+evaluators; slates were reassigned across difficulty tiers based on
+cold-panel honest-bias, yielding the 4 / 3 / 5
+low/medium/high distribution after Amendment~A1. The validation
+pass is a pre-launch anchor for the difficulty axis, not a runtime
+control arm. A rule-based discussion-polarity classifier was
+developed as a secondary scorer but failed hand-validation at
+$76.9\%$ agreement (below the pre-registered $\geq 85\%$ threshold);
+the corresponding secondary metric is dropped per Amendment~A5.
+
+\section{Questionable Relevance}
+
+Several highly cited papers and blog posts which focus on AI manipulation and scheming have seen criticism that they introduce "Clever Hans" like dynamics or experimental designs which echo the "Chimp Language" research of the 1980s. Some key criticisms include cherry-picking examples, forgoing null hypotheses, and anthropomorphizing the language models. In order to combat these concerns we <describe efforts undertaken>
+
+\section{Cialdini's Persuasion Methods}
+
+\section{Defining Manipulation and Deception}
+
+
+\subsection{Park}
+
+\subsection{Characterizing Manipulation from AI Systems}
+\begin{enumerate}
+    \item Incentives:
+    \item: Intent:
+    \item Covertness
+    \item Harm: 
+\end{enumerate}
+
+\subsection{From Hallucination to Scheming}
+
+\begin{enumerate}
+    \item Degree of Goal Directedness
+    \item Objects of Deception
+    \item Mechanism
+\end{enumerate}
+
+
+\end{document}
+
