@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import matplotlib.pyplot as plt
 import numpy as np
-from bootstrap_slopes import bootstrap_aggregate_cis, bootstrap_slope_cis
+from _bootstrap_slopes import bootstrap_aggregate_cis, bootstrap_slope_cis
 from load import load_corpus
 
 
