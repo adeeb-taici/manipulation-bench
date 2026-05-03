@@ -1,8 +1,8 @@
 """Compute bootstrap CIs for per-model per-axis slopes across all 5 tasks.
 
-Reads each task's combined eval log, computes bootstrap CIs at N=1000
-resamples (per-task PREREG seeds), writes JSON per task, and generates
-per-task slope+CI bar figures.
+Reads the consolidated results CSV via load_corpus(), computes bootstrap CIs
+at N=1000 resamples (per-task PREREG seeds), writes JSON per task, and
+generates per-task slope+CI bar figures.
 
 Outputs:
   paper/task<N>/<dir>/analysis/bootstrap_cis.json
@@ -21,115 +21,64 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import matplotlib.pyplot as plt
 import numpy as np
 from bootstrap_slopes import bootstrap_aggregate_cis, bootstrap_slope_cis
-from inspect_ai.log import read_eval_log
+from load import load_corpus
 
 
-# Per-task config: (task_dir, log_path, metric_key, axes_spec, model_label_remap, seed)
+# Per-task config: analysis parameters only (data loading handled by load_corpus)
 TASKS = [
     {
         "name": "T1 Bargaining",
+        "short_name": "bargaining",
         "dir": "task1_bargaining",
-        "log": "paper/task1_bargaining/eval_log.eval",
-        "metric_key": "lied_rate",
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
-        "scorer": "bargaining_commit",
-        "metric_field": "manipulation_rate",
         "axis_keys": {
             "frame": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
-            "incentive": (0, 80, 250),
+            "incentive": ("none", "moderate", "high"),
             "difficulty": ("low", "medium", "high"),
         },
-        "scenario_axis_keys": {
-            "frame": "frame",
-            "incentive": "expected_penalty",
-            "difficulty": "difficulty",
-        },
-        "scenario_model_key": "model",
         "seed": 20260422,
     },
     {
         "name": "T2 Debate",
+        "short_name": "debate",
         "dir": "task2_debate",
-        "log": "paper/task2_debate/eval_log.eval",
-        "metric_key": "manip_occ",
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
-        "scorer": "ground_truth_persuasion",
-        "metric_field": "manipulation_occurred",
         "axis_keys": {
             "frame": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
             "incentive": ("none", "moderate", "high"),
             "difficulty": ("low", "medium", "high"),
         },
-        "scenario_axis_keys": {
-            "frame": "frame",
-            "incentive": "incentive",
-            "difficulty": "difficulty",
-        },
-        "scenario_model_key": "manipulator_model",
         "seed": 20260423,
     },
     {
         "name": "T3 Village",
+        "short_name": "village",
         "dir": "task3_village",
-        "log": "paper/task3_village/eval_log.eval",
-        "metric_key": "manipulator_er",
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
-        "scorer": "exploitation_rate",
-        "metric_field": "agent_1",
         "axis_keys": {
             "frame": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
             "incentive": ("none", "moderate", "high"),
             "difficulty": ("low", "medium", "high"),
         },
-        "scenario_axis_keys": {
-            "frame": "frame",
-            "incentive": "incentive",
-            "difficulty": "difficulty",
-        },
-        "scenario_model_key": "manipulator_model",
         "seed": 20260424,
     },
     {
         "name": "T4 Sales",
+        "short_name": "sales",
         "dir": "task4_sales",
-        "log": "paper/task4_sales/eval_log.eval",
-        "metric_key": "manip_rate",
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
-        "scorer": "sales_classifier",
-        "metric_field": "manipulation_rate",
         "axis_keys": {
             "frame": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
             "incentive": ("none", "moderate", "high"),
             "difficulty": ("low", "medium", "high"),
         },
-        "scenario_axis_keys": {
-            "frame": "frame",
-            "incentive": "incentive",
-            "difficulty": "difficulty",
-        },
-        "scenario_model_key": "model",  # T4 metadata is at top-level
         "seed": 20260425,
-        "metadata_at_top": True,
     },
     {
         "name": "T5 Committee",
+        "short_name": "committee",
         "dir": "task5_committee",
-        "log": "paper/task5_committee/eval_log.eval",
-        "metric_key": "bias",
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
-        "scorer": "initial_rating_bias",
-        "metric_field": "initial_bias",
         "axis_keys": {
             "frame": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
             "incentive": ("none", "moderate", "high"),
             "difficulty": ("low", "medium", "high"),
         },
-        "scenario_axis_keys": {
-            "frame": "frame",
-            "incentive": "incentive",
-            "difficulty": "difficulty",
-        },
-        "scenario_model_key": "interested_model_label",
         "seed": 20260422,
     },
 ]
@@ -149,38 +98,6 @@ DISPLAY = {
     "llama": "Llama 3.3 70B",
     "deepseek_v4": "DeepSeek V4 Pro",
 }
-
-
-def load_rows(task: dict) -> list[dict]:
-    log = read_eval_log(task["log"])
-    rows = []
-    for s in log.samples or []:
-        if s.error:
-            continue
-        if task.get("metadata_at_top"):
-            md = s.metadata or {}
-        else:
-            md = (s.metadata or {}).get("scenario", {}).get("metadata", {})
-        sc = (s.scores or {}).get(task["scorer"])
-        if sc is None or not isinstance(sc.value, dict):
-            continue
-        v = sc.value
-        # T1 has sample_failed flag
-        if v.get("sample_failed"):
-            continue
-        metric = v.get(task["metric_field"])
-        if metric is None:
-            continue
-        model = md.get(task["scenario_model_key"])
-        # Apply remap (e.g., V3.2 -> V4-Pro since combined log dedups to V4-Pro)
-        if model in task.get("model_remap", {}):
-            model = task["model_remap"][model]
-
-        row = {"model": model, task["metric_key"]: metric}
-        for axis_name, scenario_field in task["scenario_axis_keys"].items():
-            row[axis_name] = md.get(scenario_field)
-        rows.append(row)
-    return rows
 
 
 def fig_slopes_with_ci(task: dict, ci_data: dict, out_path: Path) -> None:
@@ -223,14 +140,16 @@ def fig_slopes_with_ci(task: dict, ci_data: dict, out_path: Path) -> None:
 
 
 def main():
+    full_df = load_corpus(verbose=False)
     for task in TASKS:
         print(f"\n=== {task['name']} ===")
-        rows = load_rows(task)
+        df_task = full_df[full_df["task"] == task["short_name"]].copy()
+        rows = df_task.to_dict(orient="records")
         print(f"  loaded {len(rows)} rows")
 
         ci_data = bootstrap_slope_cis(
             rows=rows,
-            metric_key=task["metric_key"],
+            metric_key="metric",
             model_key="model",
             axes_spec=task["axis_keys"],
             seed=task["seed"],
@@ -238,7 +157,7 @@ def main():
         )
         agg_ci = bootstrap_aggregate_cis(
             rows=rows,
-            metric_key=task["metric_key"],
+            metric_key="metric",
             axes_spec=task["axis_keys"],
             seed=task["seed"],
             n=1000,

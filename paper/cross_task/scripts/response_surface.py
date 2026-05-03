@@ -25,27 +25,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import matplotlib.pyplot as plt
 import numpy as np
-from inspect_ai.log import read_eval_log
+from load import load_corpus
 
 TASKS = [
     {
         "name": "T1 Bargaining",
+        "short_name": "bargaining",
         "dir": "task1_bargaining",
-        "log": "paper/task1_bargaining/eval_log.eval",
-        "scorer": "bargaining_commit",
-        "metric_field": "manipulation_rate",
-        "scenario_model_key": "model",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
-        "incentive_levels": (0, 80, 250),
-        "incentive_labels": ("E=0", "E=80", "E=250"),
+        "incentive_levels": ("none", "moderate", "high"),
+        "incentive_labels": ("I=none", "I=mod", "I=high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {
-            "frame": "frame",
-            "incentive": "expected_penalty",
-            "difficulty": "difficulty",
-        },
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
         "vmin": 0,
         "vmax": 1.0,
         "cmap": "Reds",
@@ -53,18 +43,12 @@ TASKS = [
     },
     {
         "name": "T2 Debate",
+        "short_name": "debate",
         "dir": "task2_debate",
-        "log": "paper/task2_debate/eval_log.eval",
-        "scorer": "ground_truth_persuasion",
-        "metric_field": "manipulation_occurred",
-        "scenario_model_key": "manipulator_model",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "incentive_labels": ("I=none", "I=mod", "I=high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
         "vmin": 0,
         "vmax": 1.0,
         "cmap": "Reds",
@@ -72,18 +56,12 @@ TASKS = [
     },
     {
         "name": "T3 Village",
+        "short_name": "village",
         "dir": "task3_village",
-        "log": "paper/task3_village/eval_log.eval",
-        "scorer": "exploitation_rate",
-        "metric_field": "agent_1",
-        "scenario_model_key": "manipulator_model",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "incentive_labels": ("I=none", "I=mod", "I=high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": False,
-        "model_remap": {"DeepSeek-v3.2": "DeepSeek-V4-Pro", "GPT-5": "GPT-5.5"},
         "vmin": 0,
         "vmax": 1.0,
         "cmap": "Reds",
@@ -91,18 +69,12 @@ TASKS = [
     },
     {
         "name": "T4 Sales",
+        "short_name": "sales",
         "dir": "task4_sales",
-        "log": "paper/task4_sales/eval_log.eval",
-        "scorer": "sales_classifier",
-        "metric_field": "manipulation_rate",
-        "scenario_model_key": "model",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "incentive_labels": ("I=none", "I=mod", "I=high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": True,
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
         "vmin": 0,
         "vmax": 1.0,
         "cmap": "Reds",
@@ -110,18 +82,12 @@ TASKS = [
     },
     {
         "name": "T5 Committee",
+        "short_name": "committee",
         "dir": "task5_committee",
-        "log": "paper/task5_committee/eval_log.eval",
-        "scorer": "initial_rating_bias",
-        "metric_field": "initial_bias",
-        "scenario_model_key": "interested_model_label",
         "frame_levels": ("prohibitive", "pro_social", "minimal", "selfish", "permissive"),
         "incentive_levels": ("none", "moderate", "high"),
         "incentive_labels": ("I=none", "I=mod", "I=high"),
         "difficulty_levels": ("low", "medium", "high"),
-        "axis_keys": {"frame": "frame", "incentive": "incentive", "difficulty": "difficulty"},
-        "metadata_at_top": False,
-        "model_remap": {"deepseek": "deepseek_v4", "gpt5": "gpt55"},
         "vmin": -20,
         "vmax": 20,
         "cmap": "RdBu_r",
@@ -147,35 +113,6 @@ DISPLAY = {
 
 def model_order_key(m: str) -> int:
     return list(DISPLAY).index(m) if m in DISPLAY else 999
-
-
-def load_rows(task: dict) -> list[dict]:
-    log = read_eval_log(task["log"])
-    rows = []
-    for s in log.samples or []:
-        if s.error:
-            continue
-        if task.get("metadata_at_top"):
-            md = s.metadata or {}
-        else:
-            md = (s.metadata or {}).get("scenario", {}).get("metadata", {})
-        sc = (s.scores or {}).get(task["scorer"])
-        if sc is None or not isinstance(sc.value, dict):
-            continue
-        v = sc.value
-        if v.get("sample_failed"):
-            continue
-        metric = v.get(task["metric_field"])
-        if metric is None:
-            continue
-        model = md.get(task["scenario_model_key"])
-        if model in task.get("model_remap", {}):
-            model = task["model_remap"][model]
-        row = {"model": model, "metric": float(metric)}
-        for axis_name, sm_field in task["axis_keys"].items():
-            row[axis_name] = md.get(sm_field)
-        rows.append(row)
-    return rows
 
 
 def fig_response_surface(task: dict, rows: list[dict]) -> None:
@@ -259,9 +196,11 @@ def fig_response_surface(task: dict, rows: list[dict]) -> None:
 
 
 def main():
+    full_df = load_corpus(verbose=False)
     for task in TASKS:
         print(f"\n=== {task['name']} ===")
-        rows = load_rows(task)
+        df_task = full_df[full_df["task"] == task["short_name"]].copy()
+        rows = df_task.to_dict(orient="records")
         print(f"  loaded {len(rows)} rows")
         fig_response_surface(task, rows)
 
