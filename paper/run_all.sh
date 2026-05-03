@@ -18,10 +18,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
+PYTHON="${PYTHON:-python3}"
+
 run() {
     echo
     echo "=== $1 ==="
-    python "$1"
+    "$PYTHON" "$1"
 }
 
 run_csv() {
