@@ -1,4 +1,4 @@
-"""Block C: cross-task ranking-stability bootstrap.
+"""Cross-task ranking-stability bootstrap.
 
 Replaces the n=6-models point estimate of pairwise Spearman rho with
 trajectory-level percentile bootstrap CIs.
@@ -131,7 +131,7 @@ def _one_replicate(
     return rho, ranks_arrays
 
 
-def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
+def run_ranking_stability(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
                 ranking: str = "permissive", n_jobs: int = -1,
                 use_v1_metric: bool = False) -> dict[str, Any]:
     """Run the trajectory-level bootstrap for cross-task rho.
@@ -164,7 +164,7 @@ def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
     ss = np.random.SeedSequence(MASTER_SEED)
     children = ss.spawn(n_boot)
 
-    print(f"[block_c] running {n_boot} bootstrap replicates on {len(cell_indices)} strata "
+    print(f"[ranking_stability] running {n_boot} bootstrap replicates on {len(cell_indices)} strata "
           f"(n_jobs={n_jobs})", file=sys.stderr)
     t0 = time.time()
     results = Parallel(n_jobs=n_jobs, verbose=0, batch_size="auto")(
@@ -172,7 +172,7 @@ def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
         for child in children
     )
     elapsed = time.time() - t0
-    print(f"[block_c] done in {elapsed:.1f}s ({elapsed/n_boot*1000:.1f} ms/rep)", file=sys.stderr)
+    print(f"[ranking_stability] done in {elapsed:.1f}s ({elapsed/n_boot*1000:.1f} ms/rep)", file=sys.stderr)
 
     # Aggregate rho stats
     rho_arrays = {pair: np.array([r[0][pair] for r in results], dtype=float) for pair in TASK_PAIRS}
@@ -239,33 +239,33 @@ def run_block_c(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT,
 
 def main() -> None:
     df = load_corpus(verbose=False)
-    print(f"[block_c] loaded {len(df)} rows", file=sys.stderr)
+    print(f"[ranking_stability] loaded {len(df)} rows", file=sys.stderr)
 
     out_dir = REPO / "paper/cross_task/analysis"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # Primary: permissive-frame ranking
-    primary = run_block_c(df, n_boot=N_BOOT_DEFAULT, ranking="permissive")
+    primary = run_ranking_stability(df, n_boot=N_BOOT_DEFAULT, ranking="permissive")
     out_path = out_dir / "ranking_stability_v2.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(primary, f, indent=2, default=str)
-    print(f"[block_c] wrote {out_path}", file=sys.stderr)
+    print(f"[ranking_stability] wrote {out_path}", file=sys.stderr)
 
     # Secondary: overall-mean ranking (descriptive sidekick)
-    secondary = run_block_c(df, n_boot=N_BOOT_DEFAULT, ranking="overall")
+    secondary = run_ranking_stability(df, n_boot=N_BOOT_DEFAULT, ranking="overall")
     out_path2 = out_dir / "ranking_stability_v2_overall.json"
     with open(out_path2, "w", encoding="utf-8") as f:
         json.dump(secondary, f, indent=2, default=str)
-    print(f"[block_c] wrote {out_path2}", file=sys.stderr)
+    print(f"[ranking_stability] wrote {out_path2}", file=sys.stderr)
 
     # Tertiary: v1-equivalent metric definition (T2 ranked by manipulation_occurred)
     # — for honest apples-to-apples comparison with v1's published rho matrix.
-    v1compat = run_block_c(df, n_boot=N_BOOT_DEFAULT, ranking="permissive",
+    v1compat = run_ranking_stability(df, n_boot=N_BOOT_DEFAULT, ranking="permissive",
                             use_v1_metric=True)
     out_path3 = out_dir / "ranking_stability_v2_v1compat.json"
     with open(out_path3, "w", encoding="utf-8") as f:
         json.dump(v1compat, f, indent=2, default=str)
-    print(f"[block_c] wrote {out_path3}", file=sys.stderr)
+    print(f"[ranking_stability] wrote {out_path3}", file=sys.stderr)
 
 
 if __name__ == "__main__":

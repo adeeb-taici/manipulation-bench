@@ -1,4 +1,4 @@
-"""Block D: variance decomposition with bootstrap CI on the eta^2 difference.
+"""Variance decomposition with bootstrap CI on the eta^2 difference.
 
 Pooled OLS fit across all trajectories with within-task z-scoring:
 
@@ -101,27 +101,27 @@ def _one_boot_replicate(seed: np.random.SeedSequence, df: pd.DataFrame) -> dict[
         return {}
 
 
-def run_block_d(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT, n_jobs: int = -1) -> dict[str, Any]:
+def run_variance_decomposition(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT, n_jobs: int = -1) -> dict[str, Any]:
     df = df.dropna(subset=["task", "model", "frame", "incentive", "difficulty", "metric"]).copy()
     df = df.reset_index(drop=True)
 
     # Point estimate
     df_z = _zscore_within_task(df)
     point_eta = _eta_squared(df_z)
-    print(f"[block_d] point eta^2:", file=sys.stderr)
+    print(f"[variance_decomposition] point eta^2:", file=sys.stderr)
     for term, v in point_eta.items():
         print(f"  {term:35s}  {v:.4f}", file=sys.stderr)
 
     # Bootstrap
     ss = np.random.SeedSequence(MASTER_SEED)
     children = ss.spawn(n_boot)
-    print(f"[block_d] running {n_boot} bootstrap replicates (n_jobs={n_jobs})", file=sys.stderr)
+    print(f"[variance_decomposition] running {n_boot} bootstrap replicates (n_jobs={n_jobs})", file=sys.stderr)
     t0 = time.time()
     boot_results = Parallel(n_jobs=n_jobs, verbose=0, batch_size="auto")(
         delayed(_one_boot_replicate)(child, df) for child in children
     )
     elapsed = time.time() - t0
-    print(f"[block_d] done in {elapsed:.1f}s ({elapsed/n_boot:.2f} s/rep)", file=sys.stderr)
+    print(f"[variance_decomposition] done in {elapsed:.1f}s ({elapsed/n_boot:.2f} s/rep)", file=sys.stderr)
 
     # Collect bootstrap distribution per term
     all_terms = sorted({k for r in boot_results for k in r.keys()})
@@ -181,14 +181,14 @@ def run_block_d(df: pd.DataFrame, n_boot: int = N_BOOT_DEFAULT, n_jobs: int = -1
 
 def main() -> None:
     df = load_corpus(verbose=False)
-    print(f"[block_d] loaded {len(df)} rows", file=sys.stderr)
-    out = run_block_d(df, n_boot=N_BOOT_DEFAULT)
+    print(f"[variance_decomposition] loaded {len(df)} rows", file=sys.stderr)
+    out = run_variance_decomposition(df, n_boot=N_BOOT_DEFAULT)
 
     out_path = REPO / "paper/cross_task/analysis/variance_decomp_v2.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, default=str)
-    print(f"[block_d] wrote {out_path}", file=sys.stderr)
+    print(f"[variance_decomposition] wrote {out_path}", file=sys.stderr)
 
 
 if __name__ == "__main__":

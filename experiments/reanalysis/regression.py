@@ -1,4 +1,4 @@
-"""Block A: per-(task, model, axis) regression + Dunnett contrasts.
+"""Per-(task, model, axis) regression + Dunnett contrasts.
 
 For each task × model × axis cut:
   - Omnibus axis effect: OLS F-test on the categorical-axis term.
@@ -14,8 +14,8 @@ For each task × model × axis cut:
       committee           -> cluster on slate_id
   - Saturation flag: residual SD < 1e-6 anywhere -> mark cell saturated.
 
-Block B (axis x model interaction LR test per task) lives here too —
-it's a natural companion fit on the same data.
+Companion: per-task axis x model interaction LR test (run on the same
+data inside the per-task driver).
 
 Outputs go to paper/task<N>/analysis/regression_v2.json (one per task).
 The schema is documented at the bottom of this module.
@@ -126,8 +126,8 @@ def _per_task_eta(df_task: pd.DataFrame, axes: tuple[str, ...], task: str) -> di
     return {"se_method": se_label, "n": int(len(sub)), "eta_squared": eta, "ss_total": ss_total}
 
 
-def _block_a_cell(df_cell: pd.DataFrame, task: str, axis: str) -> dict[str, Any]:
-    """Run Block A on one (task, model, axis) cell."""
+def _regression_cell(df_cell: pd.DataFrame, task: str, axis: str) -> dict[str, Any]:
+    """Run the per-(task, model, axis) regression on one cell."""
     levels = AXIS_LEVELS[axis]
     baseline = levels[0]
 
@@ -243,7 +243,7 @@ def _block_a_cell(df_cell: pd.DataFrame, task: str, axis: str) -> dict[str, Any]
 
 
 def _interaction_lr(df_task: pd.DataFrame, axis: str, task: str) -> dict[str, Any]:
-    """Block B: F-test for axis x model interaction within a task."""
+    """F-test for axis x model interaction within a task."""
     sub = df_task.dropna(subset=["metric", "model", axis]).copy()
     if len(sub) == 0 or sub["model"].nunique() < 2:
         return {"skipped": "insufficient_data"}
@@ -296,8 +296,8 @@ def _interaction_lr(df_task: pd.DataFrame, axis: str, task: str) -> dict[str, An
         return {"error": str(e), "se_method": se_label}
 
 
-def run_block_a(df: pd.DataFrame, task: str) -> dict[str, Any]:
-    """Run Block A + Block B for one task."""
+def run_regression(df: pd.DataFrame, task: str) -> dict[str, Any]:
+    """Run per-(model, axis) regression + axis x model interaction LR for one task."""
     df_task = df[df["task"] == task]
     axes = AXES_BY_TASK[task]
     out: dict[str, Any] = {
@@ -315,22 +315,22 @@ def run_block_a(df: pd.DataFrame, task: str) -> dict[str, Any]:
     for model in out["models"]:
         df_cell = df_task[df_task["model"] == model]
         for axis in axes:
-            out["per_model"][model][axis] = _block_a_cell(df_cell, task, axis)
+            out["per_model"][model][axis] = _regression_cell(df_cell, task, axis)
     out["per_model"] = {k: dict(v) for k, v in out["per_model"].items()}
     return out
 
 
 def main() -> None:
     df = load_corpus(verbose=False)
-    print(f"[block_a] loaded {len(df)} rows", file=sys.stderr)
+    print(f"[regression] loaded {len(df)} rows", file=sys.stderr)
 
     for task in ("bargaining", "debate", "village", "sales", "committee"):
-        result = run_block_a(df, task)
+        result = run_regression(df, task)
         out_path = REPO / OUT_DIR_BY_TASK[task]
         out_path.parent.mkdir(parents=True, exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=2, default=str)
-        print(f"[block_a] {task}: wrote {out_path}", file=sys.stderr)
+        print(f"[regression] {task}: wrote {out_path}", file=sys.stderr)
 
 
 if __name__ == "__main__":

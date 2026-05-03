@@ -1,6 +1,7 @@
-"""Block E: redraw fig 2/3/4/7 + Table 3 (v2).
+"""Redraw fig 2/3/4/7 + Table 3 (v2).
 
-Reads the JSONs produced by block_a / block_c / block_d and emits PDFs
+Reads the JSONs produced by regression / ranking_stability /
+variance_decomposition and emits PDFs
 with `_v2` suffix, alongside the v1 originals (which stay untouched).
 
 Figures:

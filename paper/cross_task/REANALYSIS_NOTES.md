@@ -11,7 +11,7 @@ unchanged; v2 outputs sit alongside them with `_v2` suffixes.
 |---|---|---|---|
 | Per-(task, model, axis) standardized **slope** across ordinal axis levels | `paper/task<N>/analysis/prereg_results.json[sensitivity_slopes]` | OLS + scipy `dunnett` contrasts vs. baseline (prohibitive / none / low) + per-task Type II ANOVA η² | `paper/task<N>/analysis/regression_v2.json` |
 | Single-point Spearman ρ on n=6 models for cross-task ranking stability | `paper/cross_task/analysis/ranking_stability.json` + `figures/fig_ranking_stability.pdf` | Trajectory-level percentile bootstrap (B=2000) on the same ρ statistic, stratified within (task × model × frame × incentive × difficulty) | `paper/cross_task/analysis/ranking_stability_v2.json` + `figures/fig2_ranking_stability_v2.pdf`, `figures/fig7_cross_task_rho_v2.pdf` |
-| Mean &#124;slope&#124; per task as a "dominant axis" tiebreaker | `paper/cross_task/analysis/cross_task_aggregate.md`, `figures/per_task_slopes.pdf` | Per-task η² for {model, frame, incentive, difficulty}, computed under the same fit that drives the per-(model, axis) Block A | `paper/cross_task/analysis/table3_v2.md`, `figures/fig3_per_task_aggregate_v2.pdf` |
+| Mean &#124;slope&#124; per task as a "dominant axis" tiebreaker | `paper/cross_task/analysis/cross_task_aggregate.md`, `figures/per_task_slopes.pdf` | Per-task η² for {model, frame, incentive, difficulty}, computed under the same fit that drives the per-(model, axis) regression | `paper/cross_task/analysis/table3_v2.md`, `figures/fig3_per_task_aggregate_v2.pdf` |
 | 15-dim per-model profile of signed slopes | `paper/cross_task/analysis/cross_task_profiles.json`, `figures/per_model_profiles.pdf` | Per-model max-|Dunnett-contrast| heatmap (per-task scaled) | `figures/fig4_per_model_profile_v2.pdf` |
 | (none) | (none) | Pooled variance decomposition with bootstrap CI on η²(model:task) − η²(model) | `paper/cross_task/analysis/variance_decomp_v2.json` |
 
@@ -41,14 +41,14 @@ All v2 outputs are deterministic given the corpus + master seed
 `20260430`. Scripts:
 
 - `experiments/reanalysis/load.py` — trajectory dataframe loader.
-- `experiments/reanalysis/block_a.py` — Block A + B per-task regression.
-- `experiments/reanalysis/block_c.py` — Block C ranking-stability bootstrap.
-- `experiments/reanalysis/block_d.py` — Block D variance decomposition.
-- `experiments/reanalysis/figures.py` — Block E figure + table v2.
+- `experiments/reanalysis/regression.py` — per-task regression + axis x model interaction LR.
+- `experiments/reanalysis/ranking_stability.py` — cross-task ranking-stability bootstrap.
+- `experiments/reanalysis/variance_decomposition.py` — pooled variance decomposition.
+- `experiments/reanalysis/figures.py` — figures + table v2.
 
-End-to-end: `python -m experiments.reanalysis.{load,block_a,block_c,block_d,figures}`.
+End-to-end: `python -m experiments.reanalysis.{load,regression,ranking_stability,variance_decomposition,figures}`.
 
-Total wall-clock for the four analysis blocks: ~3 minutes on this machine.
+Total wall-clock for the four analysis stages: ~3 minutes on this machine.
 
 ## Headline-finding survival check
 
@@ -252,7 +252,7 @@ These are sentences pulled from `paper/cross_task/SUMMARY.md` and per-task
 6. **Per-task `results.md` files** — the v1 standardized-slope point
    estimates are unchanged; only the *interpretation* of small slopes
    needs revision (a small slope on a noisy outcome may not be
-   distinguishable from zero under v2's CIs). The Block A `regression_v2.json`
+   distinguishable from zero under v2's CIs). The per-task `regression_v2.json`
    files contain the per-cell Dunnett intervals needed to update those
    per-task interpretations.
 

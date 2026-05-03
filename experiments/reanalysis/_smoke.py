@@ -2,10 +2,10 @@
 
 Runs three things end-to-end before launching expensive analyses:
   1. Loader sanity check: row counts per task, cluster-id presence.
-  2. Block A on a single (task=T1, model=Claude, axis=frame) cell:
+  2. Regression on a single (task=T1, model=Claude, axis=frame) cell:
      - statsmodels OLS for omnibus F + per-task eta^2
      - scipy.stats.dunnett for contrasts vs prohibitive baseline
-  3. Block C 50-rep bootstrap of cross-task ranking-stability rho matrix.
+  3. Ranking-stability 50-rep bootstrap of cross-task rho matrix.
 
 Prints results to stdout. No file outputs.
 """
@@ -43,8 +43,8 @@ def _format_rows(df: pd.DataFrame) -> None:
     print(f"  models present: {sorted(df['model'].unique())}")
 
 
-def _block_a_smoke(df: pd.DataFrame) -> None:
-    print(f"\n[2] Block A smoke: T1 Bargaining, Claude-Opus-4.7, frame axis")
+def _regression_smoke(df: pd.DataFrame) -> None:
+    print(f"\n[2] Regression smoke: T1 Bargaining, Claude-Opus-4.7, frame axis")
     cell = df[(df["task"] == "bargaining") & (df["model"] == "Claude-Opus-4.7")].copy()
     cell = cell.dropna(subset=["metric", "frame"])
     cell["frame"] = pd.Categorical(cell["frame"], categories=FRAME_LEVELS, ordered=False)
@@ -75,8 +75,8 @@ def _block_a_smoke(df: pd.DataFrame) -> None:
         print(f"    {lvl:11s}  diff={diff:+.4f}  95% CI=[{lo:+.4f}, {hi:+.4f}]  p={pval:.3e}")
 
 
-def _block_c_smoke(df: pd.DataFrame, n_boot: int = 50) -> None:
-    print(f"\n[3] Block C smoke: cross-task rho bootstrap, n_boot={n_boot}")
+def _ranking_stability_smoke(df: pd.DataFrame, n_boot: int = 50) -> None:
+    print(f"\n[3] Ranking-stability smoke: cross-task rho bootstrap, n_boot={n_boot}")
     print(f"  ranking definition: per-task model order by mean primary metric at frame=permissive")
 
     tasks_in_corpus = ["bargaining", "debate", "village", "sales", "committee"]
@@ -148,8 +148,8 @@ def _block_c_smoke(df: pd.DataFrame, n_boot: int = 50) -> None:
 def main() -> None:
     df = load_corpus(verbose=False)
     _format_rows(df)
-    _block_a_smoke(df)
-    _block_c_smoke(df, n_boot=50)
+    _regression_smoke(df)
+    _ranking_stability_smoke(df, n_boot=50)
 
 
 if __name__ == "__main__":
