@@ -225,21 +225,46 @@ def _row_from_sample(sample: Any, env: str) -> dict[str, Any] | None:
     }
 
 
-def load_corpus(tasks: Iterable[str] | None = None, verbose: bool = True) -> pd.DataFrame:
-    """Load the 5-task combined eval logs into a single trajectory-level dataframe.
+RESULTS_CSV = REPO_ROOT / "paper/cross_task/results.csv"
 
-    Args:
-        tasks: subset of task names to load; default = all five.
-        verbose: print per-task row count to stderr.
 
-    Returns:
-        DataFrame with columns:
-            sample_id, task, model, frame, incentive, difficulty,
-            cluster_id, metric, manipulation_occurred
+def _load_from_csv(
+    csv_path: Path, tasks: tuple[str, ...], verbose: bool
+) -> pd.DataFrame:
+    """Read paper/cross_task/results.csv and shape it like _row_from_sample output.
+
+    The CSV has the same identity columns plus all flattened scorer scores;
+    we subset to the 9 columns load_corpus has historically returned and
+    rename `manipulation_metric` -> `metric` to match the legacy schema.
+
+    Filters to variant=='canonical' so the v2 pipeline ignores the
+    small_model_sweep rows (they carry non-CANONICAL_MODELS labels and
+    would be dropped by the model filter below anyway, but filtering by
+    variant up front is cheaper and explicit).
     """
-    selected = tuple(tasks) if tasks is not None else tuple(LOG_PATHS.keys())
+    if verbose:
+        print(f"[load] reading {csv_path.relative_to(REPO_ROOT)}", file=sys.stderr)
+    df = pd.read_csv(csv_path, low_memory=False)
+    df = df[df["variant"] == "canonical"]
+    df = df[df["task"].isin(tasks)]
+    df = df.rename(columns={"manipulation_metric": "metric"})
+    keep = [
+        "sample_id", "task", "model", "frame", "incentive", "difficulty",
+        "cluster_id", "metric", "manipulation_occurred",
+    ]
+    df = df[keep].reset_index(drop=True)
+    if verbose:
+        for t, n in df.groupby("task").size().items():
+            print(f"[load] {t}: {n} rows (from csv)", file=sys.stderr)
+    return df
+
+
+def _load_from_eval_logs(
+    tasks: tuple[str, ...], verbose: bool
+) -> pd.DataFrame:
+    """Walk each task's combined .eval log and run _row_from_sample. Slow."""
     rows: list[dict[str, Any]] = []
-    for task in selected:
+    for task in tasks:
         path = LOG_PATHS[task]
         if not path.exists():
             fallback = LOG_PATHS_FALLBACK.get(task)
@@ -252,9 +277,6 @@ def load_corpus(tasks: Iterable[str] | None = None, verbose: bool = True) -> pd.
                     print(f"[load] {task}: log not found, skipping", file=sys.stderr)
                 continue
         log = read_eval_log(str(path))
-        # detect_environment is for the cross-task pipeline; we drive by explicit
-        # task name and tolerate a 'unknown' detection (T1 bargaining_commit isn't
-        # in the upstream registry as of this writing).
         env = detect_environment(log)
         if env != task and env != "unknown":
             print(f"[warn] {path} detected env={env}, expected {task}", file=sys.stderr)
@@ -265,8 +287,44 @@ def load_corpus(tasks: Iterable[str] | None = None, verbose: bool = True) -> pd.
                 rows.append(r)
         if verbose:
             print(f"[load] {task}: {len(rows) - n_before} rows", file=sys.stderr)
+    return pd.DataFrame(rows)
 
-    df = pd.DataFrame(rows)
+
+def load_corpus(
+    tasks: Iterable[str] | None = None,
+    verbose: bool = True,
+    source: str = "auto",
+) -> pd.DataFrame:
+    """Load the 5-task combined eval logs into a single trajectory-level dataframe.
+
+    Args:
+        tasks: subset of task names to load; default = all five.
+        verbose: print per-task row count to stderr.
+        source: "csv" reads paper/cross_task/results.csv (~30s for full corpus).
+                "eval" walks the raw .eval files (slow, multi-minute).
+                "auto" (default) uses csv if it exists, else falls back to eval.
+
+    Returns:
+        DataFrame with columns:
+            sample_id, task, model, frame, incentive, difficulty,
+            cluster_id, metric, manipulation_occurred
+    """
+    selected = tuple(tasks) if tasks is not None else tuple(LOG_PATHS.keys())
+
+    if source == "auto":
+        source = "csv" if RESULTS_CSV.exists() else "eval"
+    if source == "csv":
+        if not RESULTS_CSV.exists():
+            raise FileNotFoundError(
+                f"source='csv' but {RESULTS_CSV} does not exist; "
+                "regenerate it with `python paper/cross_task/scripts/eval_logs_to_csv.py`"
+            )
+        df = _load_from_csv(RESULTS_CSV, selected, verbose=verbose)
+    elif source == "eval":
+        df = _load_from_eval_logs(selected, verbose=verbose)
+    else:
+        raise ValueError(f"source must be 'auto', 'csv', or 'eval'; got {source!r}")
+
     if df.empty:
         return df
 
@@ -277,7 +335,6 @@ def load_corpus(tasks: Iterable[str] | None = None, verbose: bool = True) -> pd.
         if unmapped:
             print(f"[load] dropped non-canonical model labels: {unmapped}", file=sys.stderr)
 
-    # Drop rows whose model isn't in the canonical roster (rare label noise).
     df = df[df["model"].isin(CANONICAL_MODELS)].reset_index(drop=True)
     return df
 
