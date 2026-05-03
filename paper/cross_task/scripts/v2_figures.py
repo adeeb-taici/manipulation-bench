@@ -22,8 +22,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO))
+REPO = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(Path(__file__).parent))
 
 TASKS = ("bargaining", "debate", "village", "sales", "committee")
 TASK_LABELS = {

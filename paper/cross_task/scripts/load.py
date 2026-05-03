@@ -10,7 +10,8 @@ the cluster-id pull plus model-name canonicalization that the v1 prereg
 scripts each implement separately.
 
 Usage:
-    from experiments.reanalysis.load import load_corpus
+    # From a sibling script in paper/cross_task/scripts/:
+    from load import load_corpus
     df = load_corpus()
 """
 
@@ -24,7 +25,7 @@ from typing import Any
 import pandas as pd
 from inspect_ai.log import read_eval_log
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from manipulation_bench.analyze_surface import (  # noqa: E402

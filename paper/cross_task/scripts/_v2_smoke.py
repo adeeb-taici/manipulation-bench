@@ -21,10 +21,10 @@ import pandas as pd
 from scipy.stats import dunnett, spearmanr
 import statsmodels.formula.api as smf
 
-REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO))
+REPO = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(Path(__file__).parent))
 
-from experiments.reanalysis.load import load_corpus, CANONICAL_MODELS  # noqa: E402
+from load import load_corpus, CANONICAL_MODELS  # noqa: E402
 
 FRAME_LEVELS = ("prohibitive", "pro_social", "minimal", "selfish", "permissive")
 

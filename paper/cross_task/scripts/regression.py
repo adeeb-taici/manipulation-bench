@@ -36,10 +36,10 @@ import pandas as pd
 import statsmodels.formula.api as smf
 from scipy.stats import dunnett
 
-REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO))
+REPO = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(Path(__file__).parent))
 
-from experiments.reanalysis.load import CANONICAL_MODELS, CLUSTER_COL, load_corpus  # noqa: E402
+from load import CANONICAL_MODELS, CLUSTER_COL, load_corpus  # noqa: E402
 
 AXES_BY_TASK = {
     "bargaining": ("frame", "incentive", "difficulty"),

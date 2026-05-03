@@ -6,8 +6,8 @@ returns a {model: {axis_level: ... slope CI ...}} structure.
 Used by per-task analysis scripts. PREREG specifies N=1000 resamples,
 seed per task (date-of-commit).
 
-Usage:
-    from experiments.bootstrap_slopes import bootstrap_slope_cis
+Usage (from a sibling script in paper/cross_task/scripts/):
+    from bootstrap_slopes import bootstrap_slope_cis
     cis = bootstrap_slope_cis(rows, metric_key, axes_spec, seed=20260422, n=1000)
 """
 

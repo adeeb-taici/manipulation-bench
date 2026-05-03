@@ -40,13 +40,15 @@ specifications and survive the saturation cleanly.
 All v2 outputs are deterministic given the corpus + master seed
 `20260430`. Scripts:
 
-- `experiments/reanalysis/load.py` — trajectory dataframe loader.
-- `experiments/reanalysis/regression.py` — per-task regression + axis x model interaction LR.
-- `experiments/reanalysis/ranking_stability.py` — cross-task ranking-stability bootstrap.
-- `experiments/reanalysis/variance_decomposition.py` — pooled variance decomposition.
-- `experiments/reanalysis/figures.py` — figures + table v2.
+- `paper/cross_task/scripts/load.py` — trajectory dataframe loader (used by both v1 and v2 scripts).
+- `paper/cross_task/scripts/regression.py` — per-task regression + axis x model interaction LR.
+- `paper/cross_task/scripts/ranking_stability_v2.py` — cross-task ranking-stability bootstrap.
+- `paper/cross_task/scripts/variance_decomposition.py` — pooled variance decomposition.
+- `paper/cross_task/scripts/v2_figures.py` — figures + table v2.
 
-End-to-end: `python -m experiments.reanalysis.{load,regression,ranking_stability,variance_decomposition,figures}`.
+End-to-end: run each as a script from the repo root, e.g.
+`python paper/cross_task/scripts/regression.py`,
+then `ranking_stability_v2.py`, `variance_decomposition.py`, `v2_figures.py`.
 
 Total wall-clock for the four analysis stages: ~3 minutes on this machine.
 

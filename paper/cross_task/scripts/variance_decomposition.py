@@ -34,10 +34,10 @@ import statsmodels.formula.api as smf
 from joblib import Parallel, delayed
 from statsmodels.stats.anova import anova_lm
 
-REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO))
+REPO = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(Path(__file__).parent))
 
-from experiments.reanalysis.load import load_corpus  # noqa: E402
+from load import load_corpus  # noqa: E402
 
 MASTER_SEED = 20260430
 N_BOOT_DEFAULT = 1000

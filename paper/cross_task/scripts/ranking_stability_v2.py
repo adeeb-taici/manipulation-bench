@@ -35,10 +35,10 @@ import pandas as pd
 from joblib import Parallel, delayed
 from scipy.stats import spearmanr
 
-REPO = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO))
+REPO = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(Path(__file__).parent))
 
-from experiments.reanalysis.load import CANONICAL_MODELS, load_corpus  # noqa: E402
+from load import CANONICAL_MODELS, load_corpus  # noqa: E402
 
 TASKS = ("bargaining", "debate", "village", "sales", "committee")
 TASK_PAIRS = [(a, b) for i, a in enumerate(TASKS) for b in TASKS[i+1:]]

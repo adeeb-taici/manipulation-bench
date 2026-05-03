@@ -28,10 +28,10 @@ import pandas as pd
 from inspect_ai.log import read_eval_log, read_eval_log_samples
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(Path(__file__).parent))
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from experiments.reanalysis.load import _row_from_sample, _flatten_metadata  # noqa: E402
+from load import _row_from_sample, _flatten_metadata  # noqa: E402
 
 DEFAULT_LOGS = [
     REPO_ROOT / "paper/task1_bargaining/eval_log.eval",
