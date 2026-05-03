@@ -322,7 +322,8 @@ def main():
     ax.legend()
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    out = out_dir / "figures" / "fig_frontier_lift.pdf"
+    out = Path("paper/cross_task/figures") / "fig_frontier_lift.pdf"
+    out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"saved {out}")
