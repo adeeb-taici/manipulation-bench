@@ -41,6 +41,7 @@ LOG_PATHS = {
     "village":    REPO_ROOT / "paper/task3_village/eval_log.eval",
     "sales":      REPO_ROOT / "paper/task4_sales/eval_log.eval",
     "committee":  REPO_ROOT / "paper/task5_committee/eval_log.eval",
+    "inbox":      REPO_ROOT / "paper/task6_inbox/eval_log.eval",
 }
 
 # eval_log_extended.eval files (May 2026 corpus refresh) sit alongside the
@@ -56,17 +57,20 @@ LOG_PATHS_FALLBACK = {
         ("village",    "task3_village"),
         ("sales",      "task4_sales"),
         ("committee",  "task5_committee"),
+        ("inbox",      "task6_inbox"),
     )
 }
 
 # Per-task cluster column for cluster-robust SEs.
 # T1, T3 have no item-level clustering (one outcome per trajectory).
+# T6 uses suppression_target (2 substrates: RippleMetrics, billing complaints).
 CLUSTER_COL = {
     "bargaining": None,    # HC3
     "debate":     "claim_id",
     "village":    None,    # HC3
     "sales":      "scenario_id",  # product+difficulty pairing
     "committee":  "slate_id",
+    "inbox":      "suppression_target",
 }
 
 # Canonical model labels — paper roster of 6.
@@ -101,6 +105,30 @@ CANONICAL_MODELS = (
     "DeepSeek-V4-Pro",
 )
 
+# Display labels for figures — pretty-printed, with spaces.
+MODEL_LABELS = {
+    "Claude-Opus-4.7": "Claude Opus 4.7",
+    "GPT-5.5":         "GPT-5.5",
+    "Gemini-3.1-Pro":  "Gemini 3.1 Pro",
+    "Grok-4":          "Grok 4",
+    "Llama-3.3-70B":   "Llama 3.3 70B",
+    "DeepSeek-V4-Pro": "DeepSeek V4 Pro",
+}
+
+# Canonical task ordering and display labels for cross-task figures/tables.
+TASKS = ("bargaining", "debate", "village", "sales", "committee", "inbox")
+TASK_LABELS = {
+    "bargaining": "T1 Bargaining",
+    "debate":     "T2 Debate",
+    "village":    "T3 Village",
+    "sales":      "T4 Sales",
+    "committee":  "T5 Committee",
+    "inbox":      "T6 Inbox",
+}
+
+# T1 stores incentive as expected_penalty (0/80/250); canonical levels are labels.
+T1_INCENTIVE_MAP = {0: "none", 80: "moderate", 250: "high"}
+
 
 def _flatten_metadata(sample: Any) -> dict[str, Any]:
     """Same logic as analyze_surface._sample_meta but returns the flattened dict."""
@@ -122,7 +150,7 @@ def _t1_incentive_canonical(raw: Any) -> str | None:
         v = int(raw)
     except (TypeError, ValueError):
         return canonical_incentive(raw)
-    return {0: "none", 80: "moderate", 250: "high"}.get(v)
+    return T1_INCENTIVE_MAP.get(v)
 
 
 def _row_from_sample(sample: Any, env: str) -> dict[str, Any] | None:
@@ -190,6 +218,16 @@ def _row_from_sample(sample: Any, env: str) -> dict[str, Any] | None:
             return None
         m_raw = bs.value.get("manipulation_occurred")
         manip = float(m_raw) if m_raw is not None else None
+        incentive = canonical_incentive(md.get("incentive"))
+    elif env == "inbox":
+        it = (sample.scores or {}).get("inbox_triage")
+        if it is None or not isinstance(it.value, dict):
+            return None
+        metric = it.value.get("suppression_rate")
+        m_raw = it.value.get("manipulation_occurred")
+        manip = float(m_raw) if m_raw is not None else None
+        if metric is None and manip is None:
+            return None
         incentive = canonical_incentive(md.get("incentive"))
     else:
         return None

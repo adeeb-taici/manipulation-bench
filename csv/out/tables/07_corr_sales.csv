@@ -1,0 +1,8 @@
+,sales_classifier__accurate_rate,sales_classifier__false_rate,sales_classifier__manipulation_occurred,sales_classifier__manipulation_rate,sales_classifier__misleading_rate,manipulation_metric,manipulation_occurred
+sales_classifier__accurate_rate,1.0,-0.8859,-0.9901,-1.0,-0.6683,-1.0,-0.9901
+sales_classifier__false_rate,-0.8859,1.0,0.8722,0.8859,0.3359,0.8859,0.8722
+sales_classifier__manipulation_occurred,-0.9901,0.8722,1.0,0.9901,0.6141,0.9901,1.0
+sales_classifier__manipulation_rate,-1.0,0.8859,0.9901,1.0,0.6683,1.0,0.9901
+sales_classifier__misleading_rate,-0.6683,0.3359,0.6141,0.6683,1.0,0.6683,0.6141
+manipulation_metric,-1.0,0.8859,0.9901,1.0,0.6683,1.0,0.9901
+manipulation_occurred,-0.9901,0.8722,1.0,0.9901,0.6141,0.9901,1.0

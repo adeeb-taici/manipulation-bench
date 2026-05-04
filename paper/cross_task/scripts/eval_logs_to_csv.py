@@ -44,6 +44,19 @@ DEFAULT_LOGS = [
     REPO_ROOT / "paper/task4_sales/eval_log_small_model_sweep.eval",
     REPO_ROOT / "paper/task5_committee/eval_log.eval",
     REPO_ROOT / "paper/task5_committee/eval_log_small_model_sweep.eval",
+    REPO_ROOT / "paper/task6_inbox/eval_log.eval",
+]
+
+# T6 has no combined sweep log yet; pick up per-model sweeps from logs/*_sweep/<label>_t6/.
+# Matches patterns:
+#   logs/openai_sweep/gpt41_t6/<timestamp>_inbox-bench_<id>.eval
+#   logs/openai_sweep/gpt41nano_t6_pilot/...      <- pilot variant, kept distinct
+#   logs/anthropic_sweep/haiku35_t6/<timestamp>_inbox-bench_<id>.eval
+DEFAULT_T6_SWEEP_GLOBS = [
+    "logs/openai_sweep/*_t6/*.eval",
+    "logs/openai_sweep/*_t6_pilot/*.eval",
+    "logs/anthropic_sweep/*_t6/*.eval",
+    "logs/anthropic_sweep/*_t6_pilot/*.eval",
 ]
 
 DEFAULT_OUTPUT = REPO_ROOT / "paper/cross_task/results.csv"
@@ -54,22 +67,56 @@ TASK_DIR_TO_KEY = {
     "task3_village": "village",
     "task4_sales": "sales",
     "task5_committee": "committee",
+    "task6_inbox": "inbox",
 }
 
 
 def _resolve_log_paths(glob_arg: str | None) -> list[Path]:
-    """Default: 9 paper logs that exist on disk. Glob: explicit override."""
+    """Default: paper combined logs + T6 per-model sweep logs that exist on disk."""
     if glob_arg:
         return sorted(Path(p) for p in glob.glob(glob_arg) if Path(p).suffix == ".eval")
-    return [p for p in DEFAULT_LOGS if p.exists()]
+    paths = [p for p in DEFAULT_LOGS if p.exists()]
+    for pattern in DEFAULT_T6_SWEEP_GLOBS:
+        paths.extend(
+            Path(p) for p in glob.glob(str(REPO_ROOT / pattern))
+            if Path(p).suffix == ".eval"
+        )
+    # Stable ordering, deduplicated.
+    return sorted({p.resolve() for p in paths})
+
+
+_SWEEP_DIR_RE = re.compile(
+    r"^(?P<label>[a-z0-9]+)_t(?P<n>\d+)(?P<pilot>_pilot)?$"
+)
+_SWEEP_TASK_BY_N = {
+    "1": "bargaining", "2": "debate", "3": "village",
+    "4": "sales",      "5": "committee", "6": "inbox",
+}
 
 
 def _infer_task_variant(path: Path) -> tuple[str, str]:
-    """Infer (task, variant) from log path."""
+    """Infer (task, variant) from log path.
+
+    Recognized layouts:
+      - paper/taskN_<env>/eval_log.eval                          -> (env, canonical)
+      - paper/taskN_<env>/eval_log_small_model_sweep.eval        -> (env, small_model_sweep)
+      - paper/taskN_<env>/eval_log_extended.eval                 -> (env, extended)
+      - logs/{openai,anthropic}_sweep/<label>_tN[_pilot]/*.eval  -> (env_for_N, small_model_sweep)
+    """
+    parts = path.parts
+
+    # Per-model sweep directory: logs/<provider>_sweep/<label>_tN[_pilot]/<file>.eval
+    for i, part in enumerate(parts):
+        if part.endswith("_sweep") and i + 1 < len(parts):
+            m = _SWEEP_DIR_RE.match(parts[i + 1])
+            if m and m.group("n") in _SWEEP_TASK_BY_N:
+                variant = "pilot" if m.group("pilot") else "small_model_sweep"
+                return _SWEEP_TASK_BY_N[m.group("n")], variant
+
     task = "unknown"
-    for part in path.parts:
+    for part in parts:
         # Try specific-env regex first (handles filenames like task3_village_sweep_42.eval)
-        m = re.search(r"task\d+_(bargaining|debate|village|sales|committee)", part)
+        m = re.search(r"task\d+_(bargaining|debate|village|sales|committee|inbox)", part)
         if m:
             key = m.group(0)
             if key in TASK_DIR_TO_KEY:

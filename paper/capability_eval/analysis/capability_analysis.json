@@ -1,0 +1,285 @@
+{
+  "elo_spearman_per_task": {
+    "bargaining": {
+      "n": 15,
+      "rho": 0.36404293381037567,
+      "p": 0.18222354833672832,
+      "models": [
+        "Claude-Opus-4.7",
+        "GPT-5.5",
+        "Gemini-3.1-Pro",
+        "Grok-4",
+        "Llama-3.3-70B",
+        "DeepSeek-V4-Pro",
+        "gpt41",
+        "gpt41mini",
+        "gpt41nano",
+        "gpt54mini",
+        "gpt54nano",
+        "haiku35",
+        "haiku45",
+        "sonnet37",
+        "sonnet46"
+      ]
+    },
+    "debate": {
+      "n": 10,
+      "rho": -0.3939393939393939,
+      "p": 0.25999776683488757,
+      "models": [
+        "Claude-Opus-4.7",
+        "GPT-5.5",
+        "Gemini-3.1-Pro",
+        "Grok-4",
+        "Llama-3.3-70B",
+        "DeepSeek-V4-Pro",
+        "gpt41",
+        "gpt41nano",
+        "gpt54mini",
+        "gpt54nano"
+      ]
+    },
+    "village": {
+      "n": 11,
+      "rho": -0.4727272727272727,
+      "p": 0.1419985202063199,
+      "models": [
+        "Claude-Opus-4.7",
+        "GPT-5.5",
+        "Gemini-3.1-Pro",
+        "Grok-4",
+        "Llama-3.3-70B",
+        "DeepSeek-V4-Pro",
+        "gpt41",
+        "gpt41mini",
+        "gpt41nano",
+        "gpt54mini",
+        "gpt54nano"
+      ]
+    },
+    "sales": {
+      "n": 15,
+      "rho": -0.42359266244226856,
+      "p": 0.1156285771941138,
+      "models": [
+        "Claude-Opus-4.7",
+        "GPT-5.5",
+        "Gemini-3.1-Pro",
+        "Grok-4",
+        "Llama-3.3-70B",
+        "DeepSeek-V4-Pro",
+        "gpt41",
+        "gpt41mini",
+        "gpt41nano",
+        "gpt54mini",
+        "gpt54nano",
+        "haiku35",
+        "haiku45",
+        "sonnet37",
+        "sonnet46"
+      ]
+    },
+    "committee": {
+      "n": 15,
+      "rho": 0.5522790409057425,
+      "p": 0.032777312676504536,
+      "models": [
+        "Claude-Opus-4.7",
+        "GPT-5.5",
+        "Gemini-3.1-Pro",
+        "Grok-4",
+        "Llama-3.3-70B",
+        "DeepSeek-V4-Pro",
+        "gpt41",
+        "gpt41mini",
+        "gpt41nano",
+        "gpt54mini",
+        "gpt54nano",
+        "haiku35",
+        "haiku45",
+        "sonnet37",
+        "sonnet46"
+      ]
+    },
+    "inbox": {
+      "n": 15,
+      "rho": -0.008936554059963471,
+      "p": 0.9747840925301918,
+      "models": [
+        "haiku35",
+        "haiku45",
+        "sonnet37",
+        "sonnet46",
+        "gpt41",
+        "gpt41mini",
+        "gpt41nano",
+        "gpt54mini",
+        "gpt54nano",
+        "Claude-Opus-4.7",
+        "GPT-5.5",
+        "Gemini-3.1-Pro",
+        "Grok-4",
+        "Llama-3.3-70B",
+        "DeepSeek-V4-Pro"
+      ]
+    }
+  },
+  "mean_rate_by_task_tier": {
+    "bargaining__flagship": 0.258300683887447,
+    "bargaining__small": 0.16666666666666669,
+    "bargaining__average": 0.14722222222222223,
+    "debate__flagship": -0.09143344786408295,
+    "debate__small": -0.07996099484156227,
+    "debate__average": -0.09444927536231884,
+    "village__flagship": 0.3533112894524415,
+    "village__small": 0.5241486950642326,
+    "village__average": 0.5775297752808989,
+    "sales__flagship": 0.06622222222222222,
+    "sales__small": 0.08391111111111112,
+    "sales__average": 0.07333333333333333,
+    "committee__flagship": 3.3825678022348376,
+    "committee__small": 0.1673940273122284,
+    "committee__average": 1.1723883537591484,
+    "inbox__small": 0.030460588793922126,
+    "inbox__average": 0.05783179012345679,
+    "inbox__flagship": 0.19688786008230452
+  },
+  "generation_pair_deltas": {
+    "haiku35->haiku45": {
+      "bargaining": {
+        "prev_rate": 0.68,
+        "current_rate": 0.018333333333333333,
+        "delta": -0.6616666666666667
+      },
+      "sales": {
+        "prev_rate": 0.13955555555555557,
+        "current_rate": 0.05511111111111111,
+        "delta": -0.08444444444444446
+      },
+      "committee": {
+        "prev_rate": 0.02824055555555556,
+        "current_rate": -0.331945,
+        "delta": -0.36018555555555554
+      },
+      "inbox": {
+        "prev_rate": 0.47160493827160493,
+        "current_rate": 0.14814814814814814,
+        "delta": -0.3234567901234568
+      }
+    },
+    "sonnet37->sonnet46": {
+      "bargaining": {
+        "prev_rate": 0.03888888888888889,
+        "current_rate": 0.05722222222222222,
+        "delta": 0.018333333333333333
+      },
+      "sales": {
+        "prev_rate": 0.10488888888888889,
+        "current_rate": 0.08533333333333334,
+        "delta": -0.019555555555555548
+      },
+      "committee": {
+        "prev_rate": 2.147203592814371,
+        "current_rate": 2.440273888888889,
+        "delta": 0.29307029607451796
+      },
+      "inbox": {
+        "prev_rate": 0.18441358024691357,
+        "current_rate": 0.0849537037037037,
+        "delta": -0.09945987654320987
+      }
+    },
+    "gpt41->GPT-5.5": {
+      "bargaining": {
+        "prev_rate": 0.05722222222222222,
+        "current_rate": 0.3611111111111111,
+        "delta": 0.3038888888888889
+      },
+      "debate": {
+        "prev_rate": -0.08769662921348315,
+        "current_rate": -0.09503913043478261,
+        "delta": -0.007342501221299466
+      },
+      "village": {
+        "prev_rate": 0.4835707865168539,
+        "current_rate": 0.4032303370786517,
+        "delta": -0.08034044943820223
+      },
+      "sales": {
+        "prev_rate": 0.05777777777777778,
+        "current_rate": 0.02666666666666667,
+        "delta": -0.031111111111111114
+      },
+      "committee": {
+        "prev_rate": 0.47471629213483146,
+        "current_rate": 1.0185194444444445,
+        "delta": 0.5438031523096131
+      },
+      "inbox": {
+        "prev_rate": 0.2875,
+        "current_rate": 0.0076388888888888895,
+        "delta": -0.2798611111111111
+      }
+    },
+    "gpt41mini->gpt54mini": {
+      "bargaining": {
+        "prev_rate": 0.2833333333333333,
+        "current_rate": 0.20944444444444443,
+        "delta": -0.07388888888888889
+      },
+      "village": {
+        "prev_rate": 0.5038640449438202,
+        "current_rate": 0.6511955056179776,
+        "delta": 0.14733146067415737
+      },
+      "sales": {
+        "prev_rate": 0.052444444444444446,
+        "current_rate": 0.050666666666666665,
+        "delta": -0.001777777777777781
+      },
+      "committee": {
+        "prev_rate": 0.6613376,
+        "current_rate": -0.5592616666666667,
+        "delta": -1.2205992666666665
+      },
+      "inbox": {
+        "prev_rate": -0.02361111111111111,
+        "current_rate": -0.014429012345679011,
+        "delta": 0.0091820987654321
+      }
+    },
+    "gpt41nano->gpt54nano": {
+      "bargaining": {
+        "prev_rate": 0.005,
+        "current_rate": 0.035,
+        "delta": 0.030000000000000002
+      },
+      "debate": {
+        "prev_rate": -0.08563559322033898,
+        "current_rate": -0.08257971014492754,
+        "delta": 0.0030558830754114363
+      },
+      "village": {
+        "prev_rate": 0.3973,
+        "current_rate": 0.662504705882353,
+        "delta": 0.265204705882353
+      },
+      "sales": {
+        "prev_rate": 0.07288888888888889,
+        "current_rate": 0.04088888888888889,
+        "delta": -0.032
+      },
+      "committee": {
+        "prev_rate": -0.5111754189944134,
+        "current_rate": 0.041202777777777776,
+        "delta": 0.5523781967721912
+      },
+      "inbox": {
+        "prev_rate": -0.6294871794871795,
+        "current_rate": -0.22816358024691358,
+        "delta": 0.4013235992402659
+      }
+    }
+  },
+  "n_models_in_capability": 15
+}

@@ -25,26 +25,14 @@ import numpy as np
 REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(Path(__file__).parent))
 
-TASKS = ("bargaining", "debate", "village", "sales", "committee")
-TASK_LABELS = {
-    "bargaining": "T1 Bargaining",
-    "debate":     "T2 Debate",
-    "village":    "T3 Village",
-    "sales":      "T4 Sales",
-    "committee":  "T5 Committee",
-}
-MODELS = (
-    "Claude-Opus-4.7", "GPT-5.5", "Gemini-3.1-Pro",
-    "Grok-4", "Llama-3.3-70B", "DeepSeek-V4-Pro",
+from load import (  # noqa: E402
+    CANONICAL_MODELS as MODELS,
+    MODEL_LABELS,
+    TASK_LABELS,
 )
-MODEL_LABELS = {
-    "Claude-Opus-4.7": "Claude Opus 4.7",
-    "GPT-5.5":         "GPT-5.5",
-    "Gemini-3.1-Pro":  "Gemini 3.1 Pro",
-    "Grok-4":          "Grok 4",
-    "Llama-3.3-70B":   "Llama 3.3 70B",
-    "DeepSeek-V4-Pro": "DeepSeek V4 Pro",
-}
+
+# v2 figures cover T1–T5 only (no T6 inbox).
+TASKS = ("bargaining", "debate", "village", "sales", "committee")
 
 PER_TASK_REGRESSION = {
     "bargaining": REPO / "paper/task1_bargaining/analysis/regression_v2.json",

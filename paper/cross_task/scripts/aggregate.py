@@ -18,10 +18,14 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from load import CANONICAL_MODELS, MODEL_REMAP  # noqa: E402
 
 OUT_DIR = Path("paper/cross_task/analysis")
 FIG_DIR = Path("paper/cross_task/figures")
@@ -35,28 +39,8 @@ TASKS = [
 ]
 AXES = ("frame", "incentive", "difficulty")
 
-# Each task's prereg_results.json uses different model-key conventions.
-# T1/T2/T3 use full label like "Claude-Opus-4.7"; T4 uses lowercase "claude";
-# T5's prereg_results.json wasn't authored under the new analysis script
-# (predates it), so we fall back to a manual pulled-numbers map for T5.
-
-CANONICAL_MODELS = (
-    "Claude-Opus-4.7",
-    "GPT-5.5",
-    "Gemini-3.1-Pro",
-    "Grok-4",
-    "Llama-3.3-70B",
-    "DeepSeek-V4-Pro",
-)
-
-T4_MODEL_MAP = {
-    "claude": "Claude-Opus-4.7",
-    "gpt55": "GPT-5.5",
-    "gemini": "Gemini-3.1-Pro",
-    "grok": "Grok-4",
-    "llama": "Llama-3.3-70B",
-    "deepseek": "DeepSeek-V4-Pro",
-}
+# T4's prereg_results.json keys models lowercase; map via the shared remap.
+T4_MODEL_MAP = MODEL_REMAP
 
 # Task 5's analysis script doesn't emit prereg_results.json in the same shape,
 # so embed its slopes directly from results.md §A.4 (recompute from
