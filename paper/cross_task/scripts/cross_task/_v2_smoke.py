@@ -21,7 +21,7 @@ import pandas as pd
 from scipy.stats import dunnett, spearmanr
 import statsmodels.formula.api as smf
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(Path(__file__).parent))
 
 from load import load_corpus, CANONICAL_MODELS  # noqa: E402

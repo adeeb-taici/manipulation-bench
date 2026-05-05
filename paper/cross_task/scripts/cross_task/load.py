@@ -25,7 +25,7 @@ from typing import Any
 import pandas as pd
 from inspect_ai.log import read_eval_log
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from manipulation_bench.analyze_surface import (  # noqa: E402

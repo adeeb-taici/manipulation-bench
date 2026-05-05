@@ -27,7 +27,7 @@ from typing import Any, Iterable
 import pandas as pd
 from inspect_ai.log import read_eval_log, read_eval_log_samples
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(Path(__file__).parent))
 sys.path.insert(0, str(REPO_ROOT / "src"))
 

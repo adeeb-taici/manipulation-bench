@@ -22,7 +22,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(Path(__file__).parent))
 
 from load import (  # noqa: E402

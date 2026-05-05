@@ -16,7 +16,7 @@ import csv
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(Path(__file__).parent))
 
 from eval_logs_to_csv import (  # noqa: E402

@@ -35,7 +35,7 @@ import pandas as pd
 from joblib import Parallel, delayed
 from scipy.stats import spearmanr
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(Path(__file__).parent))
 
 from load import CANONICAL_MODELS, load_corpus  # noqa: E402

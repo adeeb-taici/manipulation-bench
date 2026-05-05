@@ -17,7 +17,7 @@ from typing import Any
 
 from inspect_ai.log import read_eval_log_samples
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(Path(__file__).parent))
 
 from load import _row_from_sample, _flatten_metadata  # noqa: E402

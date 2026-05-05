@@ -36,7 +36,7 @@ import pandas as pd
 import statsmodels.formula.api as smf
 from scipy.stats import dunnett
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(Path(__file__).parent))
 
 from load import CANONICAL_MODELS, CLUSTER_COL, load_corpus  # noqa: E402
