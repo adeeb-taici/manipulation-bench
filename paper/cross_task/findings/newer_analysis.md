@@ -101,7 +101,7 @@ Incremental R² from interaction: **+0.0385** (the interaction term explains an 
 
 ## 3. Multiple-testing correction across the prior p-values
 
-**Inputs:** all reported p-values from `paper/capability_eval/FINDINGS.md` (per-task ELO regressions, F1; tier × frame and tier × incentive ANOVAs, F2). 14 tests total. Other documents report descriptive statistics (η², spreads, correlations) without formal p-values, so they're not in this correction.
+**Inputs:** all reported p-values from `capability_eval.md` (per-task ELO regressions, F1; tier × frame and tier × incentive ANOVAs, F2). 14 tests total. Other documents report descriptive statistics (η², spreads, correlations) without formal p-values, so they're not in this correction.
 
 **Method:** Holm-Bonferroni and Benjamini-Hochberg FDR, both globally across all 14 tests and within-family (per-task ELO panel as one family; tier × frame ANOVA panel as another).
 
@@ -157,7 +157,7 @@ pooled over frame × difficulty. 95% CI from a 2,000-rep nonparametric bootstrap
 
 Bargaining is the **only** task where high incentive deters manipulation. In Village and Committee the same axis label produces the opposite-signed effect.
 
-**Why the sign flips.** The mechanism is documented in [`INCENTIVE_TRACES.md`](INCENTIVE_TRACES.md): Bargaining's `incentive=high` is a numeric audit penalty that enters the agent's expected-value calculation (`max(payoff_truth, payoff_lie − 250)`), and models write the arithmetic out and conclude lying is dominated. The other four tasks operationalize "high incentive" as prompt language about stakes (stronger payoff framing, token-balance bonus emphasis) — sentences the agent reads but that don't change any term in its objective. When the only effect is making the goal feel more salient, agents pursue it harder, which in Village and Committee means *more* exploitation and rating bias.
+**Why the sign flips.** The mechanism is documented in [`incentive_traces.md`](incentive_traces.md): Bargaining's `incentive=high` is a numeric audit penalty that enters the agent's expected-value calculation (`max(payoff_truth, payoff_lie − 250)`), and models write the arithmetic out and conclude lying is dominated. The other four tasks operationalize "high incentive" as prompt language about stakes (stronger payoff framing, token-balance bonus emphasis) — sentences the agent reads but that don't change any term in its objective. When the only effect is making the goal feel more salient, agents pursue it harder, which in Village and Committee means *more* exploitation and rating bias.
 
 So the axis label is doing three structurally different things across the response surface:
 - **Bargaining**: structurally binding penalty → expected-value math changes → manipulation drops.

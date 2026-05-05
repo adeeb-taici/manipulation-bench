@@ -2,7 +2,7 @@
 
 The mixed-effects model put incentive=high at **−14.9 pp** (CI [−16.5, −13.3], p < 1e-70) — but that's pooled, and the cross-document synthesis flagged that the deterrence is essentially carried by Bargaining alone (the only task with a *structurally binding* audit penalty). What does the deterrence look like inside the trajectory? This note pulls 12 matched (E=0, E=250) bargaining pairs — same model, same frame (permissive), same difficulty (high), same valuation pair, same rep — and inspects the manipulator's discussion turns side by side.
 
-Source script: [`scripts/04_incentive_traces.py`](scripts/04_incentive_traces.py). Full pairs: [`out/04_traces/matched_pairs.json`](out/04_traces/matched_pairs.json).
+Source script: [`../scripts/newer/04_incentive_traces.py`](../scripts/newer/04_incentive_traces.py). Full pairs: [`../scripts/newer/out/04_traces/matched_pairs.json`](../scripts/newer/out/04_traces/matched_pairs.json).
 
 ---
 

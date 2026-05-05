@@ -2,14 +2,14 @@
 
 A single narrative across the four findings documents in this repo:
 
-- [`FINDINGS.md`](FINDINGS.md) — pre-paper exploratory experiments (§1-§18), 4-model paper-1 roster (Claude Opus 4.6, GPT-5, Gemini 2.5 Pro, Grok 3) plus juror panel.
-- [`paper/cross_task/FINDINGS_FROM_FIRST_PRINCIPLES.md`](paper/cross_task/FINDINGS_FROM_FIRST_PRINCIPLES.md) — bottom-up read of the paper's 5-task corpus on the frozen 6-model roster (Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro).
-- [`csv/FINDINGS.md`](csv/FINDINGS.md) — 26,637-row corpus analysis (paper roster + 9 small-model sweep) with cluster-bootstrap CIs and capability ladder analysis.
-- [`paper/capability_eval/FINDINGS.md`](paper/capability_eval/FINDINGS.md) — capability-axis (LMArena ELO + tier + generation) regressions on the same corpus.
+- [`legacy_pre_paper.md`](legacy_pre_paper.md) — pre-paper exploratory experiments (§1-§18), 4-model paper-1 roster (Claude Opus 4.6, GPT-5, Gemini 2.5 Pro, Grok 3) plus juror panel.
+- [`first_principles.md`](first_principles.md) — bottom-up read of the paper's 5-task corpus on the frozen 6-model roster (Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro).
+- [`corpus.md`](corpus.md) — 26,637-row corpus analysis (paper roster + 9 small-model sweep) with cluster-bootstrap CIs and capability ladder analysis.
+- [`capability_eval.md`](capability_eval.md) — capability-axis (LMArena ELO + tier + generation) regressions on the same corpus.
 
 This document **summarizes** rather than replaces. Citations point back to the source for full sample sizes and reproduction commands. Contradictions across documents are flagged with **⚠ Conflict** boxes and a proposed resolution.
 
-A note on rosters: the legacy doc and paper/cross-task doc reference different model generations. Where a model is named without version, "Claude Opus 4.6 / GPT-5 / Gemini 2.5 Pro / Grok 3" refers to the legacy roster (`FINDINGS.md`); "Claude Opus 4.7 / GPT-5.5 / Gemini 3.1 Pro / Grok 4 / Llama 3.3 70B / DeepSeek V4 Pro" refers to the paper roster.
+A note on rosters: the legacy doc and paper/cross-task doc reference different model generations. Where a model is named without version, "Claude Opus 4.6 / GPT-5 / Gemini 2.5 Pro / Grok 3" refers to the legacy roster (`legacy_pre_paper.md`); "Claude Opus 4.7 / GPT-5.5 / Gemini 3.1 Pro / Grok 4 / Llama 3.3 70B / DeepSeek V4 Pro" refers to the paper roster.
 
 ---
 
@@ -21,11 +21,11 @@ The strongest result that survives across documents: a model's "manipulativeness
 
 - Bargaining dose-response (`FINDINGS §9`) showed three qualitatively distinct shapes on the same task: GPT-5 a cliff (manipulates at 73-100% until penalty strictly dominates, then drops to 0); Claude a smooth two-step decay; Grok a smooth, low, easily-deterred curve.
 - The paper's 5-task surface (`paper/cross_task/FINDINGS_FROM_FIRST_PRINCIPLES §3`) confirmed this for the 4.7-era roster: every frontier model shifts +27 to +38 percentage points from prohibitive → permissive frame; **none are immune**, but baselines and slopes differ.
-- Variance decomposition (`csv/FINDINGS §3`) makes this quantitative: scenario explains 35-40% of variance in committee/debate/sales while model explains only 1-11% — **the cell matters more than the model in 3 of 5 tasks**.
+- Variance decomposition (`corpus.md §3`) makes this quantitative: scenario explains 35-40% of variance in committee/debate/sales while model explains only 1-11% — **the cell matters more than the model in 3 of 5 tasks**.
 
 ### 1.2 Gemini is the most manipulative frontier model on the paper roster
 
-`csv/FINDINGS §1` (paired, scenario-controlled head-to-head, `08_ranking_cross_task.csv`): Gemini-3.1-Pro +40 net wins-minus-losses, the highest of any model. Per-task wins: bargaining +10, committee +14, debate +2, sales +9, village +5 — strictly positive in every task. `paper/cross_task/FINDINGS_FROM_FIRST_PRINCIPLES §8`: Gemini is top-tier manipulative in **all 5 tasks**, the only model with that property. Below Gemini the paired sums are DeepSeek +26, Grok +19, GPT-5.5 +13, Llama +2, Claude −4 — but the within-pack ordering is sensitive to scenario coverage. Notable: GPT-5.5's +8 on debate vs −10 on sales is the largest sign-flip in the table.
+`corpus.md §1` (paired, scenario-controlled head-to-head, `08_ranking_cross_task.csv`): Gemini-3.1-Pro +40 net wins-minus-losses, the highest of any model. Per-task wins: bargaining +10, committee +14, debate +2, sales +9, village +5 — strictly positive in every task. `paper/cross_task/FINDINGS_FROM_FIRST_PRINCIPLES §8`: Gemini is top-tier manipulative in **all 5 tasks**, the only model with that property. Below Gemini the paired sums are DeepSeek +26, Grok +19, GPT-5.5 +13, Llama +2, Claude −4 — but the within-pack ordering is sensitive to scenario coverage. Notable: GPT-5.5's +8 on debate vs −10 on sales is the largest sign-flip in the table.
 
 > **⚠ Conflict 1: who is "most manipulative"?**
 > Legacy `FINDINGS §1` (debate, 4-model 4.6-era roster) gave Grok 3 the biggest instructed-baseline delta (+0.46) and called Grok the most-effective debate manipulator. The paper roster's headline says Gemini.
@@ -34,13 +34,13 @@ The strongest result that survives across documents: a model's "manipulativeness
 
 ### 1.3 Sales and debate manipulation tap different mechanisms
 
-`csv/FINDINGS §1` / `02_task_rank_correlation_canonical.csv`: Spearman rank correlation between sales and debate model rankings is **−0.77** on the canonical roster (the largest cross-task anti-correlation in the matrix; bargaining-village is +0.77 on the same roster, the largest positive correlation). GPT-5.5 wins debate (+8) but loses sales (−10); Llama-3.3-70B wins sales (+9) but loses debate (−6); Claude wins debate (+5) but loses sales (−8). `FROM_FIRST_PRINCIPLES §8` corroborates from the raw rates: GPT-5.5 is most manipulative on debate (30%) and least on sales (13%).
+`corpus.md §1` / `02_task_rank_correlation_canonical.csv`: Spearman rank correlation between sales and debate model rankings is **−0.77** on the canonical roster (the largest cross-task anti-correlation in the matrix; bargaining-village is +0.77 on the same roster, the largest positive correlation). GPT-5.5 wins debate (+8) but loses sales (−10); Llama-3.3-70B wins sales (+9) but loses debate (−6); Claude wins debate (+5) but loses sales (−8). `FROM_FIRST_PRINCIPLES §8` corroborates from the raw rates: GPT-5.5 is most manipulative on debate (30%) and least on sales (13%).
 
 There is no single underlying "manipulativeness" trait. Factual misrepresentation against a clear ground truth (sales) and rhetorical persuasion under uncertainty (debate) are at least two distinct behaviors.
 
 ### 1.4 Bargaining is the cleanest task; debate's binary outcome is the noisiest
 
-`csv/FINDINGS §3`: model η² = 0.244 on bargaining (highest in the corpus); 0.014 on debate (below the noise floor). Combined with debate's flat axis effects on `manipulation_occurred` (`csv/FINDINGS §2`), the debate task's binary outcome is not measuring much of what we want. The rich signal in debate lives in the per-scorer columns (manipulation_detection, argument_quality, belief_shift) — see Conflict 2 below.
+`corpus.md §3`: model η² = 0.244 on bargaining (highest in the corpus); 0.014 on debate (below the noise floor). Combined with debate's flat axis effects on `manipulation_occurred` (`corpus.md §2`), the debate task's binary outcome is not measuring much of what we want. The rich signal in debate lives in the per-scorer columns (manipulation_detection, argument_quality, belief_shift) — see Conflict 2 below.
 
 > **⚠ Conflict 2: is debate's frame response flat or strong?**
 > `FROM_FIRST_PRINCIPLES §5`: pooled `manipulation_occurred` shifts by only −0.04 to +0.08 from prohibitive → permissive. Looks flat.
@@ -57,7 +57,7 @@ There is no single underlying "manipulativeness" trait. Factual misrepresentatio
 - **Polar:** prohibitive frame → 0% manipulation across every frontier model (paper roster, `FROM_FIRST_PRINCIPLES §4`); dose-response monotone in audit penalty (`FINDINGS §16`: 39.5% at E=0 → 0.0% at E=250).
 - **Three curve shapes** on the legacy roster (`FINDINGS §9`): GPT-5 cliff, Claude two-step decay, Grok easily deterred.
 - **Audit penalty is the single strongest deterrent** found in any paper task — a ~15× collapse between E=0 and E=30 penalty utility.
-- **Bargaining is the *only* task where higher incentive reduces manipulation** (`csv/FINDINGS §2`: 0.42 → 0.10). In every other task, higher incentive correlates with more.
+- **Bargaining is the *only* task where higher incentive reduces manipulation** (`corpus.md §2`: 0.42 → 0.10). In every other task, higher incentive correlates with more.
 
 ### 2.2 Debate (Task 2)
 
@@ -70,7 +70,7 @@ There is no single underlying "manipulativeness" trait. Factual misrepresentatio
 ### 2.3 Village Commons (Task 3)
 
 - **Polar:** village-permissive → 100% manipulation across every frontier model (`FROM_FIRST_PRINCIPLES §4`).
-- **Frame is the dominant axis** (`csv/FINDINGS §2`: spread 0.63 across frames, the largest of any task).
+- **Frame is the dominant axis** (`corpus.md §2`: spread 0.63 across frames, the largest of any task).
 - **Topology amplifies the goal effect** (`FINDINGS §18`): paired and isolated channels produce the largest max−coop deltas. Full visibility suppresses the goal effect for both Claude and GPT-5.
 - **GPT-5 / isolated / max ≈ pure defection:** exploit rate 0.887, promise gap +7.26 tokens (a third of the endowment broken every round).
 - **Claude shows a "pro-social cue beats prohibition" pattern** (`FROM_FIRST_PRINCIPLES §7`): pro_social frame yields 5.6% village manipulation vs prohibitive 27.8%. No other model on the paper roster shows this dip — worth investigating whether it's a Claude-specific alignment fingerprint.
@@ -82,14 +82,14 @@ There is no single underlying "manipulativeness" trait. Factual misrepresentatio
 - **Opus is the only model that substantially refuses permissive-frame instructions** — 6.7% accommodation vs 42-99% for the other five (Gemini 99.4%, Grok 94%, Llama 97%).
 - **Stated RLHF pressure has no detectable effect** in either the legacy single-turn sycophancy run or the paper sales runs.
 - **Capability *helps* sales honesty.** Smaller models confabulate more against ground truth. The clearest signal in the corpus that capability reduces manipulation in some envs.
-- **`gpt41nano` exception** (`csv/FINDINGS §1`): cleanest small model on 4 of 5 tasks, but flips to *most* manipulative in sales paired analysis (+7). Hypothesis: capability failure — confabulates against detailed product specs because it can't track them.
+- **`gpt41nano` exception** (`corpus.md §1`): cleanest small model on 4 of 5 tasks, but flips to *most* manipulative in sales paired analysis (+7). Hypothesis: capability failure — confabulates against detailed product specs because it can't track them.
 
 ### 2.5 Committee (Task 5)
 
-- **Difficulty effect is large but partly confounded** (`csv/FINDINGS §2`): low-difficulty 0.96, high-difficulty 0.26, spread 0.70 — but `scenario_group` is 1:1 nested in `difficulty`, so within-cluster the effect is unidentifiable. Treat as suggestive.
-- **Capability *hurts* committee.** Frontier 0.72, mid 0.57, small 0.42 in tier buckets; Anthropic family slope +0.12 per size step; OpenAI gpt41 slope +0.10; ELO regression β = +1.55 (`paper/capability_eval/FINDINGS Finding 1`). Bigger models produce more structural rating bias.
+- **Difficulty effect is large but partly confounded** (`corpus.md §2`): low-difficulty 0.96, high-difficulty 0.26, spread 0.70 — but `scenario_group` is 1:1 nested in `difficulty`, so within-cluster the effect is unidentifiable. Treat as suggestive.
+- **Capability *hurts* committee.** Frontier 0.72, mid 0.57, small 0.42 in tier buckets; Anthropic family slope +0.12 per size step; OpenAI gpt41 slope +0.10; ELO regression β = +1.55 (`capability_eval.md Finding 1`). Bigger models produce more structural rating bias.
 - **Sonnet on committee is unusually bad** (`FROM_FIRST_PRINCIPLES §10`): sonnet46/37 sit at 71%, comparable to Grok-4 and DeepSeek. Anthropic models are comparatively *worse* on committee than on bargaining — opposite of the pattern in §2.1.
-- **Orthogonal scorers exist:** `decision_outcome__ground_truth_matched` and `post_discussion_rating_change__interested_delta_favored` are uncorrelated with `manipulation_occurred` (`csv/FINDINGS §5`). They capture **whether the manipulation succeeded**, not whether it was attempted. Committee is the cleanest task for an attempted-vs-successful split.
+- **Orthogonal scorers exist:** `decision_outcome__ground_truth_matched` and `post_discussion_rating_change__interested_delta_favored` are uncorrelated with `manipulation_occurred` (`corpus.md §5`). They capture **whether the manipulation succeeded**, not whether it was attempted. Committee is the cleanest task for an attempted-vs-successful split.
 
 ---
 
@@ -97,7 +97,7 @@ There is no single underlying "manipulativeness" trait. Factual misrepresentatio
 
 ### 3.1 Frame is the strongest lever in every task except debate
 
-`csv/FINDINGS §2` axis spreads (max − min): village 0.63, bargaining 0.41, committee 0.40, sales 0.20, debate 0.02 (on `manipulation_occurred` — see Conflict 2). The pattern across documents:
+`corpus.md §2` axis spreads (max − min): village 0.63, bargaining 0.41, committee 0.40, sales 0.20, debate 0.02 (on `manipulation_occurred` — see Conflict 2). The pattern across documents:
 
 - Permissive prompting collapses honesty.
 - Prohibitive prompting holds at floor for some models in some tasks (Claude bargaining: 0.0% across 480 events with audit penalty E=0; bargaining-prohibitive across all paper-roster models).
@@ -107,13 +107,13 @@ There is no single underlying "manipulativeness" trait. Factual misrepresentatio
 
 - Sycophancy: incentive shift produces ≤0.034 movement on accommodation (`FINDINGS §14`).
 - Debate: I=0/5/20 produces 0.013 movement on manipulation_detection (`FINDINGS §15`).
-- Pooled tier × incentive ANOVA interaction is null (p=0.80) (`paper/capability_eval/FINDINGS Finding 2`).
+- Pooled tier × incentive ANOVA interaction is null (p=0.80) (`capability_eval.md Finding 2`).
 
 **Concrete penalties (audit, payoff loss) move behavior; described incentives do not.** Bargaining's expected-penalty axis, where the incentive is a *real* utility cost, produced the steepest dose-response in the corpus.
 
 ### 3.3 Capability is task-conditional, not monotonic
 
-Per-task ELO regression (`paper/capability_eval/FINDINGS Finding 1`, n=29,352, controls for axis cell):
+Per-task ELO regression (`capability_eval.md Finding 1`, n=29,352, controls for axis cell):
 
 | Task | β per +100 ELO | Direction |
 |---|---|---|
@@ -124,19 +124,19 @@ Per-task ELO regression (`paper/capability_eval/FINDINGS Finding 1`, n=29,352, c
 | inbox | +0.029 * | capability hurts |
 | committee | +1.55 *** | capability hurts (different scale) |
 
-Within-family generation deltas (`csv/FINDINGS §8a`, `paper/capability_eval/FINDINGS Finding 3`) tell the same story: haiku 3.5 → 4.5 collapsed bargaining manipulation by 80 points; sonnet 3.7 → 4.6 didn't move on bargaining (already at floor) but committee got *worse*; gpt41 → GPT-5.5 added 30 points on bargaining lying.
+Within-family generation deltas (`corpus.md §8a`, `capability_eval.md Finding 3`) tell the same story: haiku 3.5 → 4.5 collapsed bargaining manipulation by 80 points; sonnet 3.7 → 4.6 didn't move on bargaining (already at floor) but committee got *worse*; gpt41 → GPT-5.5 added 30 points on bargaining lying.
 
 > **⚠ Conflict 3: how big is the haiku 3.5 → 4.5 bargaining collapse?**
-> `csv/FINDINGS §8a` / `09_recency_pairs.csv`: **−0.7956** (scenario-paired bootstrap on n=45 paired scenarios, CI [−0.871, −0.718], point estimates 0.8267 → 0.0311). `frac_newer_higher = 0.0` — newer is lower in 100% of bootstrap resamples.
-> `paper/capability_eval/FINDINGS Finding 3`: −0.66 (per-cell mean delta, bootstrap CI [−0.74, −0.58]).
+> `corpus.md §8a` / `09_recency_pairs.csv`: **−0.7956** (scenario-paired bootstrap on n=45 paired scenarios, CI [−0.871, −0.718], point estimates 0.8267 → 0.0311). `frac_newer_higher = 0.0` — newer is lower in 100% of bootstrap resamples.
+> `capability_eval.md Finding 3`: −0.66 (per-cell mean delta, bootstrap CI [−0.74, −0.58]).
 >
 > **Resolution:** csv pipeline pairs on scenario_id (rows where both models ran on the same scenario), capability_eval averages over (frame × incentive × difficulty) cells. Both confirm a large negative delta with non-overlapping CIs above zero. Cite the scenario-paired number (−0.80 [−0.87, −0.72]) as the headline because it controls for scenario directly; mention the cell-mean version as a robustness check.
 
 ### 3.4 Within-family generation effects are real but family-specific
 
-`paper/capability_eval/FINDINGS Finding 3`: 4 of 5 within-family generation upgrades reduce inbox suppression rate by 10pp+; 3 of 5 reduce sales manipulation. Direction in bargaining and committee is family-specific — Anthropic's haiku update collapsed bargaining lying, OpenAI's gpt41 → GPT-5.5 *added* 30pp.
+`capability_eval.md Finding 3`: 4 of 5 within-family generation upgrades reduce inbox suppression rate by 10pp+; 3 of 5 reduce sales manipulation. Direction in bargaining and committee is family-specific — Anthropic's haiku update collapsed bargaining lying, OpenAI's gpt41 → GPT-5.5 *added* 30pp.
 
-The clearest "frontier-current" signal: K-means on per-(task, frame) profile vectors separates the 4 newest frontier models (Opus 4.7, GPT-5.5, Gemini 3.1 Pro, DeepSeek V4 Pro) into a clean cluster (`paper/capability_eval/FINDINGS Finding 4`).
+The clearest "frontier-current" signal: K-means on per-(task, frame) profile vectors separates the 4 newest frontier models (Opus 4.7, GPT-5.5, Gemini 3.1 Pro, DeepSeek V4 Pro) into a clean cluster (`capability_eval.md Finding 4`).
 
 ### 3.5 Communication topology amplifies the goal effect
 
@@ -168,7 +168,7 @@ This null is informative: **prior exposure to manipulation, knowledge about mani
 
 ### 4.1 Scenario clustering inflates apparent precision
 
-`csv/FINDINGS §4`: ICC of `manipulation_occurred` across `scenario_group` is 0.36-0.42 in committee/debate/sales. **Row-bootstrap CIs are 2.5-4× too narrow** in those tasks. 39 of 45 (model, task) cells underestimate uncertainty by ≥1.5×. Any 0.05-0.10 rate difference in committee/debate/sales without paired analysis or cluster CIs is noise.
+`corpus.md §4`: ICC of `manipulation_occurred` across `scenario_group` is 0.36-0.42 in committee/debate/sales. **Row-bootstrap CIs are 2.5-4× too narrow** in those tasks. 39 of 45 (model, task) cells underestimate uncertainty by ≥1.5×. Any 0.05-0.10 rate difference in committee/debate/sales without paired analysis or cluster CIs is noise.
 
 ### 4.2 The §10 "default neutral" numbers were a single-wording artifact
 
@@ -194,10 +194,10 @@ When a paper amendment swapped a model (e.g., GPT-5 → GPT-5.5 via `--model-rol
 
 ## 5. Open questions, in priority order
 
-From `csv/FINDINGS §7`, `paper/capability_eval/FINDINGS Caveats`, `FROM_FIRST_PRINCIPLES "Concrete next steps"`:
+From `corpus.md §7`, `capability_eval.md Caveats`, `FROM_FIRST_PRINCIPLES "Concrete next steps"`:
 
 1. **Attempted vs successful manipulation** — split using committee's orthogonal `decision_outcome__ground_truth_matched` and `post_discussion_rating_change__interested_delta_favored`. Extend to other tasks where ground-truth columns exist.
-2. **Debate re-analysis** using paired manipulator vs truthful scorer columns. The binary `manipulation_occurred` is too low-signal for cross-model claims (csv/FINDINGS §3, §5).
+2. **Debate re-analysis** using paired manipulator vs truthful scorer columns. The binary `manipulation_occurred` is too low-signal for cross-model claims (corpus.md §3, §5).
 3. **Why does `gpt41nano` flip in sales?** Cleanest small model on 4 of 5 tasks, *most* manipulative in sales paired analysis. Capability failure or something else?
 4. **Verify the Claude pro-social cue (§2.3) cross-task** — does the pro_social-frame dip happen elsewhere? Is it Claude-specific?
 5. **Verify the §13 / §18 narrowing of "Claude prompt-invariance"** with an explicit topology × frame × goal design.
@@ -211,7 +211,7 @@ From `csv/FINDINGS §7`, `paper/capability_eval/FINDINGS Caveats`, `FROM_FIRST_P
 
 For quick verification. All numbers below are from the canonical (frontier-6) roster unless noted; sources in parentheses.
 
-### A. Per-model `manipulation_occurred` rate by task (`csv/out/tables/02_model_task_rate_canonical.csv`)
+### A. Per-model `manipulation_occurred` rate by task (`paper/cross_task/scripts/corpus/out/tables/02_model_task_rate_canonical.csv`)
 
 | Model | Bargaining | Committee | Debate | Sales | Village | Mean |
 |---|---:|---:|---:|---:|---:|---:|
@@ -222,7 +222,7 @@ For quick verification. All numbers below are from the canonical (frontier-6) ro
 | Claude-Opus-4.7   | 0.156 | 0.626 | 0.267 | 0.160 | 0.556 | 0.353 |
 | Llama-3.3-70B     | 0.157 | 0.617 | 0.146 | 0.360 | 0.460 | 0.348 |
 
-### B. Axis spreads per task (`csv/out/tables/03_axis_effect_sizes.csv`)
+### B. Axis spreads per task (`paper/cross_task/scripts/corpus/out/tables/03_axis_effect_sizes.csv`)
 
 Max−min level rate. Largest axis per task in **bold**.
 
@@ -234,7 +234,7 @@ Max−min level rate. Largest axis per task in **bold**.
 | Sales      | 0.199 | 0.026 | **0.485** |
 | Village    | **0.631** | 0.146 | 0.038 |
 
-### C. Variance decomposition: η² (`csv/out/tables/05_eta_squared.csv`)
+### C. Variance decomposition: η² (`paper/cross_task/scripts/corpus/out/tables/05_eta_squared.csv`)
 
 | Factor | Bargaining | Committee | Debate | Sales | Village |
 |---|---:|---:|---:|---:|---:|
@@ -246,7 +246,7 @@ Max−min level rate. Largest axis per task in **bold**.
 
 `scenario_group` outweighs `model` in every task where it's measurable (committee/debate/sales).
 
-### D. Paired head-to-head, sum across 5 tasks (`csv/out/tables/08_ranking_cross_task.csv`)
+### D. Paired head-to-head, sum across 5 tasks (`paper/cross_task/scripts/corpus/out/tables/08_ranking_cross_task.csv`)
 
 | Model | Sum | Bargaining | Committee | Debate | Sales | Village |
 |---|---:|---:|---:|---:|---:|---:|
@@ -259,7 +259,7 @@ Max−min level rate. Largest axis per task in **bold**.
 
 Small-model standouts: `haiku35` +16 on the cohort it ran (bargaining/committee/sales); `gpt41nano` −36 net (lowest), but +7 on sales.
 
-### E. Per-task ELO regression coefficients (`paper/capability_eval/analysis/capability_regression.json`)
+### E. Per-task ELO regression coefficients (`paper/cross_task/analysis/capability_eval_capability_regression.json`)
 
 `manipulation_metric ~ ELO_per100 + frame + incentive + difficulty`, HC3 SEs.
 
@@ -272,7 +272,7 @@ Small-model standouts: `haiku35` +16 on the cohort it ran (bargaining/committee/
 | inbox      | 2,715  | +0.029 | [+0.006, +0.052] | 0.015 |
 | committee  | 2,624  | +1.55  | [+1.36, +1.74]   | 4.5e−56 (different scale: signed rating bias on 0-10) |
 
-### F. Within-family generation deltas (`csv/out/tables/09_recency_pairs.csv`)
+### F. Within-family generation deltas (`paper/cross_task/scripts/corpus/out/tables/09_recency_pairs.csv`)
 
 Scenario-paired bootstrap on shared scenarios.
 
@@ -285,7 +285,7 @@ Scenario-paired bootstrap on shared scenarios.
 | sonnet37 → sonnet46 | committee  | 167 | 0.713 | 0.749 | +0.036 | [−0.012, +0.084] | flat |
 | sonnet37 → sonnet46 | sales      | 225 | 0.364 | 0.342 | −0.022 | [−0.071, +0.027] | flat |
 
-### G. Tier-bucket rates with cluster CIs where available (`csv/out/tables/09_tier_buckets.csv`)
+### G. Tier-bucket rates with cluster CIs where available (`paper/cross_task/scripts/corpus/out/tables/09_tier_buckets.csv`)
 
 | Tier | Bargaining | Committee | Debate | Sales | Village |
 |---|---:|---:|---:|---:|---:|
@@ -295,7 +295,7 @@ Scenario-paired bootstrap on shared scenarios.
 
 † cluster-bootstrap; bargaining and village use row-bootstrap (no scenario_group). Frontier > mid > small in committee, debate, village; bargaining is mid < small < frontier (inverted-U); sales is essentially flat.
 
-### H. ICC and CI inflation (`csv/out/tables/06_icc_per_task.csv`)
+### H. ICC and CI inflation (`paper/cross_task/scripts/corpus/out/tables/06_icc_per_task.csv`)
 
 | Task | n | n_clusters | ICC |
 |---|---:|---:|---:|
@@ -305,4 +305,4 @@ Scenario-paired bootstrap on shared scenarios.
 | bargaining | 13,499 | 0 | — (no scenario column) |
 | village    | 969 | 0 | — (no scenario column) |
 
-Row CIs underestimate uncertainty by 2.5-4× in the three clustered tasks (`csv/FINDINGS §4`).
+Row CIs underestimate uncertainty by 2.5-4× in the three clustered tasks (`corpus.md §4`).

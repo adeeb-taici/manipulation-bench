@@ -40,14 +40,14 @@ specifications and survive the saturation cleanly.
 All v2 outputs are deterministic given the corpus + master seed
 `20260430`. Scripts:
 
-- `paper/cross_task/scripts/load.py` — trajectory dataframe loader (used by both v1 and v2 scripts).
-- `paper/cross_task/scripts/regression.py` — per-task regression + axis x model interaction LR.
-- `paper/cross_task/scripts/ranking_stability_v2.py` — cross-task ranking-stability bootstrap.
-- `paper/cross_task/scripts/variance_decomposition.py` — pooled variance decomposition.
-- `paper/cross_task/scripts/v2_figures.py` — figures + table v2.
+- `paper/cross_task/scripts/cross_task/load.py` — trajectory dataframe loader (used by both v1 and v2 scripts).
+- `paper/cross_task/scripts/cross_task/regression.py` — per-task regression + axis x model interaction LR.
+- `paper/cross_task/scripts/cross_task/ranking_stability_v2.py` — cross-task ranking-stability bootstrap.
+- `paper/cross_task/scripts/cross_task/variance_decomposition.py` — pooled variance decomposition.
+- `paper/cross_task/scripts/cross_task/v2_figures.py` — figures + table v2.
 
 End-to-end: run each as a script from the repo root, e.g.
-`python paper/cross_task/scripts/regression.py`,
+`python paper/cross_task/scripts/cross_task/regression.py`,
 then `ranking_stability_v2.py`, `variance_decomposition.py`, `v2_figures.py`.
 
 Total wall-clock for the four analysis stages: ~3 minutes on this machine.
@@ -62,7 +62,7 @@ across the 10 task-pairs."
 
 **Verification of the v1 number**: v2 reproduces v1's published mean
 ρ = 0.055 to within 0.001 when using v1's *exact* metric definition
-(see [`paper/cross_task/analysis/ranking_stability_v2_v1compat.json`](paper/cross_task/analysis/ranking_stability_v2_v1compat.json):
+(see [`../analysis/ranking_stability_v2_v1compat.json`](../analysis/ranking_stability_v2_v1compat.json):
 bootstrap median mean off-diagonal = +0.072, point estimate = +0.055).
 The v1 published number is correct on the v1 corpus and the v1 metric
 choices.

@@ -5,7 +5,7 @@ The paper's headline rank-instability claim is **mean off-diagonal Spearman ρ =
 1. How tight is the bootstrap CI around 0.055?
 2. Is 0.055 distinguishable from the permutation null where model labels are shuffled within each task?
 
-Source script: [`scripts/05_spearman_bootstrap.py`](scripts/05_spearman_bootstrap.py). B = 2000, cluster-resample where `cluster_id` is populated (committee/debate/sales), row-resample on bargaining/village.
+Source script: [`../scripts/newer/05_spearman_bootstrap.py`](../scripts/newer/05_spearman_bootstrap.py). B = 2000, cluster-resample where `cluster_id` is populated (committee/debate/sales), row-resample on bargaining/village.
 
 ---
 
@@ -70,8 +70,8 @@ The task × model interaction F-test (paper's stronger inferential claim, F ≈ 
 
 ## Output files
 
-- [`out/05_spearman_bootstrap.csv`](out/05_spearman_bootstrap.csv) — per-pair ρ + bootstrap CI.
-- [`out/05_spearman_bootstrap_summary.txt`](out/05_spearman_bootstrap_summary.txt) — headline numbers.
+- [`../scripts/newer/out/05_spearman_bootstrap.csv`](../scripts/newer/out/05_spearman_bootstrap.csv) — per-pair ρ + bootstrap CI.
+- [`../scripts/newer/out/05_spearman_bootstrap_summary.txt`](../scripts/newer/out/05_spearman_bootstrap_summary.txt) — headline numbers.
 
 ## Caveats
 

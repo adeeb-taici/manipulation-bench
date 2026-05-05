@@ -2,11 +2,11 @@
 
 Parallel analysis layered on top of the main paper artifacts. Adds a model-capability axis (LMArena ELO + tier + generation) to the cross-task results without modifying the existing pipeline.
 
-This is **not pre-registered** — analyses here belong in `paper/cross_task/EXPLORATORY_FINDINGS.md`, not `prereg.md`.
+This is **not pre-registered** — analyses here belong in `paper/cross_task/findings/exploratory.md`, not `prereg.md`.
 
 ## Capability metadata
 
-`paper/cross_task/model_capability.csv` — frozen LMArena snapshot keyed on the model strings used in `results.csv`.
+`paper/cross_task/data/model_capability.csv` — frozen LMArena snapshot keyed on the model strings used in `results.csv`.
 
 Columns:
 - `elo` — Arena Score from `arena.ai/leaderboard/text` (or OpenLM mirror) on `elo_date`.
@@ -16,7 +16,7 @@ Columns:
 
 ## Scripts
 
-All scripts read `paper/cross_task/results.csv` and `paper/cross_task/model_capability.csv` via the shared loader in `_capability_io.py`. Outputs go to `analysis/` and `figures/` in this directory.
+All scripts read `paper/cross_task/data/results.csv` and `paper/cross_task/data/model_capability.csv` via the shared loader in `_capability_io.py`. Outputs go to `analysis/` and `figures/` in this directory.
 
 | Script | What it does |
 |---|---|
@@ -30,7 +30,7 @@ All scripts read `paper/cross_task/results.csv` and `paper/cross_task/model_capa
 ## Reproduce
 
 ```bash
-cd paper/capability_eval/scripts
+cd paper/cross_task/scripts/capability
 python3 capability_analysis.py
 python3 capability_regression.py
 python3 capability_anova.py

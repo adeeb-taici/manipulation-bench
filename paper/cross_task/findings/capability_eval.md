@@ -126,7 +126,7 @@ The paper's primary 5-frame × 3-incentive heatmap (and frame × difficulty), fa
 ## Reproduce
 
 ```bash
-cd paper/capability_eval/scripts
+cd paper/cross_task/scripts/capability
 python3 capability_analysis.py
 python3 capability_regression.py
 python3 capability_anova.py
@@ -135,4 +135,4 @@ python3 capability_frontier_lift.py
 python3 capability_clustering.py
 ```
 
-All scripts read `paper/cross_task/results.csv` and `paper/cross_task/model_capability.csv`. Outputs go to `paper/capability_eval/{analysis,figures}/`.
+All scripts read `paper/cross_task/data/results.csv` and `paper/cross_task/data/model_capability.csv`. Outputs go to `paper/cross_task/{analysis,figures/capability}/`.

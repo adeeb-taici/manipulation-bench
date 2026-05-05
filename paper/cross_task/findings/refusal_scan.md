@@ -2,7 +2,7 @@
 
 Quick check: how often did models refuse or fail to comply across the canonical-roster paper runs? The cross-document synthesis flagged this as a missing carve-out — capability-axis interpretations could be confounded by smaller models refusing the task more often than they complete it.
 
-Source script: [`scripts/05_refusal_scan.py`](scripts/05_refusal_scan.py). Outputs in [`out/05_refusals/`](out/05_refusals/).
+Source script: [`../scripts/newer/05_refusal_scan.py`](../scripts/newer/05_refusal_scan.py). Outputs in [`../scripts/newer/out/05_refusals/`](../scripts/newer/out/05_refusals/).
 
 ## Method
 
@@ -76,7 +76,7 @@ Refusal rates by frame, pooled across tasks:
 
 Debate is excluded because its content-refusal pattern is independent of frame (rate 0.32-0.37 across all 5 frames, basically flat). For the other 5 tasks, refusal concentrates in **permissive** and **selfish** frames — the cells where the manipulation pressure is highest. This is the expected pattern for a value-aligned model: when explicitly instructed to manipulate, refuse.
 
-The strongest frame-conditional refusal is **Claude on sales × prohibitive (0.49)** — Claude refuses to do its scripted-sales role on the prohibitive frame ~half the time. This shows up as low manipulation rate in §1 of FINDINGS.md but partially because Claude isn't engaging with the task at all, not because it's selling honestly. Worth a footnote in any "Claude Opus has the lowest sales manipulation rate" claim.
+The strongest frame-conditional refusal is **Claude on sales × prohibitive (0.49)** — Claude refuses to do its scripted-sales role on the prohibitive frame ~half the time. This shows up as low manipulation rate in §1 of newer_analysis.md but partially because Claude isn't engaging with the task at all, not because it's selling honestly. Worth a footnote in any "Claude Opus has the lowest sales manipulation rate" claim.
 
 ## What this changes
 
@@ -94,6 +94,6 @@ The strongest frame-conditional refusal is **Claude on sales × prohibitive (0.4
 
 ## Output files
 
-- [`out/05_refusals/per_sample.csv`](out/05_refusals/per_sample.csv) — per-sample refusal counts.
-- [`out/05_refusals/task_model_summary.csv`](out/05_refusals/task_model_summary.csv) — per (task, model).
-- [`out/05_refusals/task_frame_summary.csv`](out/05_refusals/task_frame_summary.csv) — per (task, frame).
+- [`../scripts/newer/out/05_refusals/per_sample.csv`](../scripts/newer/out/05_refusals/per_sample.csv) — per-sample refusal counts.
+- [`../scripts/newer/out/05_refusals/task_model_summary.csv`](../scripts/newer/out/05_refusals/task_model_summary.csv) — per (task, model).
+- [`../scripts/newer/out/05_refusals/task_frame_summary.csv`](../scripts/newer/out/05_refusals/task_frame_summary.csv) — per (task, frame).

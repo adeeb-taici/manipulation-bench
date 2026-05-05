@@ -1,7 +1,7 @@
 # Paper-text impact of the Bargaining incentive recoding
 
 The Bargaining `incentive=none` ↔ `high` swap (rationale in
-[`FINDINGS.md`](FINDINGS.md) §4 and [`INCENTIVE_TRACES.md`](INCENTIVE_TRACES.md))
+[`newer_analysis.md`](newer_analysis.md) §4 and [`incentive_traces.md`](incentive_traces.md))
 makes the axis label uniform across all six tasks: `high` always
 denotes "maximum pressure toward manipulation," `none` denotes "no
 pressure / strongest deterrent in place." The data files
@@ -59,7 +59,7 @@ Two problems:
    recoded convention, `incentive=high` (E=0, no penalty) maximizes
    manipulation pressure and `incentive=none` (E=250, dominated lying)
    minimizes it. The §4 forest plot
-   ([`paper/newer_analysis/figures/incentive_forest.png`](figures/incentive_forest.png))
+   ([`../figures/newer/incentive_forest.png`](../figures/newer/incentive_forest.png))
    shows Bargaining's effect is large and same-signed as Village/Committee
    — high incentive → more manipulation, everywhere — but Bargaining's
    magnitude (Δ = +0.42 to +0.79 across 5/6 models) is the largest in
@@ -72,7 +72,7 @@ is removed, manipulation rises sharply) and the other five tasks
 (verbal restatements of objectives the agent already has — small or
 null effects). Committee's 0.181 incentive slope is mostly
 substrate-driven; per-model deltas
-([`out/incentive_forest.csv`](out/incentive_forest.csv)) confirm only
+([`../scripts/newer/out/incentive_forest.csv`](../scripts/newer/out/incentive_forest.csv)) confirm only
 GPT-5.5 (+0.27) and DeepSeek (+0.18) have CI-significant positive
 effects on Committee's incentive=high vs. none.
 
@@ -158,12 +158,12 @@ Add (or fold into the existing paragraph) something like:
 
 ### Pooled mixed-effects coefficient (not currently in .tex)
 
-The `paper/newer_analysis/FINDINGS.md` §1 reports the pooled
+The `newer_analysis.md` §1 reports the pooled
 `incentive=high` coefficient at $-0.149$ (deters). After recode this
 is $+0.244$ (promotes), p < 1e-200. The .tex doesn't currently quote
 this number, so no edit is required, but anyone re-running the
 released code will see the recoded value.
-[`paper/newer_analysis/FINDINGS.md`](FINDINGS.md) has been updated to
+[`newer_analysis.md`](newer_analysis.md) has been updated to
 reflect the new direction in §1 and §4.
 
 ## Summary table
@@ -183,10 +183,10 @@ reflect the new direction in §1 and §4.
 ## Reproduction
 
 The recoded CSV is at
-[`paper/cross_task/results.csv`](../cross_task/results.csv); the
+[`../data/results.csv`](../data/results.csv); the
 pre-recode backup is at
-[`paper/cross_task/results.csv.pre_recode_bak`](../cross_task/results.csv.pre_recode_bak).
+[`../data/results.csv.pre_recode_bak`](../data/results.csv.pre_recode_bak).
 All consuming analyses have been re-run; the headline figure is
-[`figures/incentive_forest.png`](figures/incentive_forest.png) and the
+[`../figures/newer/incentive_forest.png`](../figures/newer/incentive_forest.png) and the
 per-cell numbers are in
-[`out/incentive_forest.csv`](out/incentive_forest.csv).
+[`../scripts/newer/out/incentive_forest.csv`](../scripts/newer/out/incentive_forest.csv).
