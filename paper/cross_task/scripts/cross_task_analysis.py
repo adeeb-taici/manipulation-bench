@@ -205,7 +205,7 @@ def cross_task_heatmap(profiles: dict, out_path: Path) -> None:
 
 def per_task_slopes_chart(agg: list[dict], out_path: Path) -> None:
     """Bar chart: per-task mean |slope| per axis."""
-    fig, ax = plt.subplots(figsize=(11, 6))
+    fig, ax = plt.subplots(figsize=(11, 4))
     x = np.arange(len(TASKS))
     width = 0.27
     colors = {"frame": "#4C78A8", "incentive": "#F58518", "difficulty": "#54A24B"}
@@ -224,13 +224,18 @@ def per_task_slopes_chart(agg: list[dict], out_path: Path) -> None:
         )
 
     ax.set_xticks(x)
-    ax.set_xticklabels([a["task"] for a in agg], fontsize=10)
-    ax.set_ylabel("Mean |slope| across 6 models  (error = stderr across models)")
+    ax.set_xticklabels([a["task"] for a in agg], fontsize=13)
+    ax.tick_params(axis="y", labelsize=12)
+    ax.set_ylabel(
+        "Mean |slope| across 6 models\n(error = stderr across models)",
+        fontsize=13,
+    )
     ax.set_title(
         "Cross-task aggregate: which axis dominates per task?\n"
-        "Frame dominates only in Bargaining + Village; difficulty dominates in Debate / Sales / Committee."
+        "Frame dominates only in Bargaining + Village; difficulty dominates in Debate / Sales / Committee.",
+        fontsize=13,
     )
-    ax.legend(loc="upper left")
+    ax.legend(loc="upper left", fontsize=12)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
     fig.savefig(out_path, dpi=150, bbox_inches="tight")

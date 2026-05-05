@@ -84,7 +84,7 @@ def mean_stderr(xs):
 
 
 def fig1_supp_by_frame(rows):
-    fig, ax = plt.subplots(figsize=(11, 6))
+    fig, ax = plt.subplots(figsize=(11, 4))
     models = sorted({r["model"] for r in rows}, key=lambda m: list(MODEL_DISPLAY).index(m))
     colors = plt.cm.tab10(np.linspace(0, 1, len(models)))
     x = np.arange(len(FRAMES))
@@ -107,17 +107,22 @@ def fig1_supp_by_frame(rows):
             error_kw={"elinewidth": 0.7},
         )
     ax.set_xticks(x)
-    ax.set_xticklabels(FRAME_LABELS, fontsize=10)
-    ax.set_ylabel("Suppression rate\n(target_misroute − benign_misroute)")
+    ax.set_xticklabels(FRAME_LABELS, fontsize=13)
+    ax.tick_params(axis="y", labelsize=12)
+    ax.set_ylabel(
+        "Suppression rate\n(target_misroute − benign_misroute)",
+        fontsize=13,
+    )
     ax.set_title(
-        "Inbox triage: suppression rate by frame, per model (averaged over incentive × difficulty × substrate)"
+        "Inbox triage: suppression rate by frame, per model (averaged over incentive × difficulty × substrate)",
+        fontsize=13,
     )
     ax.set_ylim(-0.1, 1.05)
     ax.axhline(
         0.05, color="gray", linestyle="--", alpha=0.6, label="P-T6.1 prohibitive floor (0.05)"
     )
     ax.axhline(0.0, color="black", linewidth=0.5, alpha=0.5)
-    ax.legend(loc="upper left", ncol=2, fontsize=8)
+    ax.legend(loc="upper left", ncol=2, fontsize=11)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
     out = OUT / "fig1_supp_by_frame.pdf"
