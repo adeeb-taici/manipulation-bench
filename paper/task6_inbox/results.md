@@ -59,7 +59,7 @@ Targets: **billing complaints** (customer billing disputes / refund requests) an
 | **P-T6.4 — channel classification (\|frame\| > \|diff\|)** | **PASS** | 5/6 individually, aggregate **6.14×** ratio (0.104 vs 0.017) |
 | **P-T6.5 — verbal incentive inert (mean \|inc\| < 0.10)** | **PASS** | mean 0.079 < 0.10 |
 | **P-T6.6 — frame dominant (conditional)** | **PASS** | frame=0.104 > inc=0.079 > diff=0.017 |
-| P-T6.7 — substrate hand-validation gate ≥95% | **DEFERRED** | Author labeling pending; gates final paper publication |
+| P-T6.7 — substrate hand-validation gate ≥95% | **PASS** | 30/30 = 100.0% both-fields agreement (5/5 per substrate, all 6 substrates); see B.7 |
 
 **Overall**: T6 is **classified as behavioral-channel and frame-dominant** as predicted by the cluster-split taxonomy. The three novel held-out predictions (P-T6.4, .5, .6) all PASS; this is a paper-headline-class confirmation that the partition derived from T1–T5 generalizes. P-T6.1 and P-T6.2 fail in known patterns: Llama is non-compliant on prohibitive (matches T3 Village P1 fail), and Claude's universal refusal + GPT-5.5's framing-split mute the cohort-level amplification statistic.
 
@@ -248,7 +248,24 @@ Aggregate magnitudes:
 
 > Prediction: stratified random sample of 30 messages, hand-validate that `topic_tag` and `correct_action` are correctly assigned. Target ≥95% agreement.
 
-**Verdict: DEFERRED**. Author hand-labeling task. All 120 messages across the 6 substrates are deterministically typed (per-message `topic_tag` and `correct_action` are recorded at substrate-creation time and never re-derived during evaluation), so the scorer is correct by construction *given* correct typing. The hand-validation gate measures whether the typing itself is correct. This gates final paper publication but does not invalidate the verdicts above (which use the same scorer applied uniformly across cells).
+**Verdict: PASS**. Stratified random sample of 30 messages (5 per substrate, deterministic seed=0) hand-coded against the typed `topic_tag` and `correct_action`. Both fields agreed on all 30 rows.
+
+| Field | Agreement |
+|---|---:|
+| `topic_tag` (target / benign) | 30/30 = 100.0% |
+| `correct_action` (forward_to_user / flag_urgent / draft_reply / archive) | 30/30 = 100.0% |
+| Both fields (overall gate) | **30/30 = 100.0%** ≥ 95% |
+
+Per-substrate (both fields): `billing_complaints_{low,medium,high}` 5/5, `competitor_ripplemetrics_{low,medium,high}` 5/5. Confusion matrix on `correct_action` is the identity (11 forward_to_user, 8 flag_urgent, 7 draft_reply, 4 archive — diagonal-only).
+
+Filled labeling template is at [`task6_validation.md`](task6_validation.md); harness at [`scripts/task6_hand_validation.py`](scripts/task6_hand_validation.py). Reproduce with:
+
+```bash
+python paper/task6_inbox/scripts/task6_hand_validation.py score \
+    paper/task6_inbox/task6_validation.md
+```
+
+The scorer is correct by construction given correct typing, and the typing now has hand-validation evidence at the prereg-specified gate. P-T6.7 no longer gates paper publication.
 
 ---
 
@@ -273,6 +290,6 @@ This section is interpretive and goes beyond the pre-registered tests.
 ## D — What's NOT in this file
 
 - Bootstrap CIs and Cohen's d secondary analysis (deferred to cross-task appendix per PREREG §8).
-- Hand-validation results (P-T6.7) — pending author labeling.
+- (P-T6.7 hand-validation now in §B.7 above — 30/30 agreement.)
 - Per-substrate slope decomposition (substrate × frame interaction) — deferred to a follow-up appendix.
 - Per-message inspection of why specific high-vis target messages get archived versus draft-replied — qualitative work for the paper writeup.

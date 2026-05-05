@@ -44,7 +44,7 @@ T1–T5 have **complete full sweeps + Amendments A1–A5 applied** and form the 
 | Task 3 Village | [task3_village/prereg.md](task3_village/prereg.md) (A1, A2, A3, A4) | `task3_village/eval_log.eval` (532 / 540, 1.5% errors) | [task3_village/results.md](task3_village/results.md) | None |
 | Task 4 Sales | [task4_sales/prereg.md](task4_sales/prereg.md) (A1, A2) | `task4_sales/eval_log.eval` (1,350 / 1,350) | [task4_sales/results.md](task4_sales/results.md) | None — P7 hand-validation PASSED (100% agreement, 30/30) |
 | Task 5 Committee | [task5_committee/prereg.md](task5_committee/prereg.md) (A1, A2, A3, A4, A5) | `task5_committee/eval_log.eval` (1,049 / 1,080, 0.2% errors) | [task5_committee/results.md](task5_committee/results.md) | Polarity scorer hand-validation FAILED (76.9% < 85% gate) → `discussion_polarity` dropped per Amendment A5; P1-P6 unaffected |
-| Task 6 Inbox (held-out) | [task6_inbox/prereg.md](task6_inbox/prereg.md) | `task6_inbox/eval_log.eval` (1,080 / 1,080) | [task6_inbox/results.md](task6_inbox/results.md) | P-T6.7 hand-validation deferred to camera-ready; cluster-split predictions P-T6.4/.5/.6 PASS |
+| Task 6 Inbox (held-out) | [task6_inbox/prereg.md](task6_inbox/prereg.md) | `task6_inbox/eval_log.eval` (1,080 / 1,080) | [task6_inbox/results.md](task6_inbox/results.md) | None — cluster-split predictions P-T6.4/.5/.6 PASS; P-T6.7 substrate hand-validation 30/30 = 100% |
 
 ## Cross-task
 

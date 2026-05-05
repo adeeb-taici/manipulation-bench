@@ -11,8 +11,9 @@ P-T6.4, .5, .6 are the novel cluster-split predictions:
   - P-T6.5: verbal-incentive inert — mean |incentive slope| < 0.10.
   - P-T6.6: frame-dominant — conditional on .4 ∧ .5 PASS.
 
-P-T6.7 (substrate hand-validation) is reported as a placeholder pending
-author labeling.
+P-T6.7 (substrate hand-validation) is run separately via
+``paper/task6_inbox/scripts/task6_hand_validation.py``; this script just
+prints a pointer to that harness.
 
 Outputs:
   paper/task6_inbox/analysis/prereg_results.json
@@ -394,7 +395,11 @@ def main():
         f" -> {p6['verdict']}"
     )
     print()
-    print("P-T6.7 substrate hand-validation: DEFERRED (author labeling)")
+    print(
+        "P-T6.7 substrate hand-validation: run "
+        "`python paper/task6_inbox/scripts/task6_hand_validation.py emit` "
+        "then `... score <filled.md>`. Gate: >=95% on both fields."
+    )
     print()
     print("Coverage rate by model (gate: >=0.95):")
     for m, c in cov.items():
