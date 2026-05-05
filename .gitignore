@@ -11,3 +11,23 @@ dist/
 build/
 .ruff_cache/
 *.stackdump
+
+# Working-set scenario splits from intermediate generator runs.
+# Canonical scenarios committed under their structured names are tracked;
+# these patterns only catch the throw-away splits.
+src/manipulation_bench/scenarios/task1_bargaining_remaining_*.jsonl
+src/manipulation_bench/scenarios/task1_bargaining_pilot.jsonl
+src/manipulation_bench/scenarios/task1_bargaining_v61_pilot.jsonl
+src/manipulation_bench/scenarios/task1_bargaining_llama_retry.jsonl
+src/manipulation_bench/scenarios/task2_debate_remaining_*.jsonl
+src/manipulation_bench/scenarios/task5_committee_*_smoke*.jsonl
+src/manipulation_bench/scenarios/task5_committee_prohibitive_cheap.jsonl
+src/manipulation_bench/scenarios/inbox_pilot_*.jsonl
+
+# LaTeX compile artifacts
+paper/figures/_test_compile.*
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.xdv
