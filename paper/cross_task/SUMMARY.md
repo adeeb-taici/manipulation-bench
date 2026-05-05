@@ -65,13 +65,13 @@ P1 fails in 2/5 tasks (Debate, Village). P2 fails in 3/5 (Debate, Sales — conj
 
 ## What's NOT in this file
 
-- Cohen's d secondary analysis (only T5 has the full prereg version; T1-T4 carried out via [scripts/run_cohens_d.py](scripts/run_cohens_d.py))
+- Cohen's d secondary analysis (only T5 has the full prereg version; T1-T4 carried out via [scripts/cross_task/cohens_d.py](scripts/cross_task/cohens_d.py))
 - Hand-validation status: T4 P7 PASSED at 30/30 = 100% agreement (`sales_classifier` validated). T5 polarity scorer FAILED at 20/26 = 76.9% (below the 85% gate); `discussion_polarity` is dropped from reporting per Amendment A5 in [`../task5_committee/prereg.md`](../task5_committee/prereg.md).
-- Per-claim T2 weighting in cross-task aggregation (see [EXPLORATORY_FINDINGS.md §4](EXPLORATORY_FINDINGS.md))
+- Per-claim T2 weighting in cross-task aggregation (see [findings/exploratory.md §4](findings/exploratory.md))
 
 ## Exploratory follow-ups (post-PREREG)
 
-Past-PREREG analyses live in [EXPLORATORY_FINDINGS.md](EXPLORATORY_FINDINGS.md). Highlights:
+Past-PREREG analyses live in [findings/exploratory.md](findings/exploratory.md). Highlights:
 
 - **Cross-task model rankings barely correlate** (mean Spearman ρ = 0.055 across the 10 task-pairs) — manipulation propensity is task-dependent, not a stable model trait. See [ranking_stability.json](ranking_stability.json) and [figures/fig_ranking_stability.pdf](figures/fig_ranking_stability.pdf).
 - **Frontier-generation lift is non-uniform**: GPT-5 → GPT-5.5 reduces manipulation on 4/5 tasks (T4 Sales 56% → 3%). DeepSeek V3.2 → V4 Pro is more compliant on T3 Village (-0.37) and T4 Sales (-0.08), slightly more aggressive on T1 Bargaining (+0.14) and T2 Debate (+0.04), and roughly tied on T5 Committee. See [frontier_lift.json](frontier_lift.json) and [figures/fig_frontier_lift.pdf](figures/fig_frontier_lift.pdf).
@@ -90,17 +90,17 @@ python ../task4_sales/scripts/task4_prereg_analysis.py
 python ../task5_committee/scripts/task5_prereg_analysis.py
 
 # Cross-task summary + bootstrap CIs + Cohen's d
-python scripts/cross_task_analysis.py
-python scripts/run_bootstrap_cis.py
-python scripts/run_cohens_d.py
-python scripts/run_response_surface.py     # per-task fig7 (3×6 grid: difficulty × model)
+python scripts/cross_task/aggregate.py
+python scripts/cross_task/bootstrap_cis.py
+python scripts/cross_task/cohens_d.py
+python scripts/cross_task/response_surface.py     # per-task fig7 (3×6 grid: difficulty × model)
 
-# Exploratory analyses (sec 1-9 of EXPLORATORY_FINDINGS.md)
-python scripts/cross_task_ranking_stability.py
-python scripts/cross_task_clustering.py
-python scripts/surprise_residuals.py
-python scripts/frontier_lift.py
-python scripts/sample_distributions.py
+# Exploratory analyses (sec 1-9 of findings/exploratory.md)
+python scripts/cross_task/ranking_stability_v2.py
+python scripts/cross_task/clustering.py
+python scripts/cross_task/surprise_residuals.py
+python scripts/cross_task/frontier_lift.py
+python scripts/cross_task/sample_distributions.py
 python ../task1_bargaining/scripts/t1_lie_magnitude.py
 python ../task2_debate/scripts/t2_per_claim.py
 python ../task3_village/scripts/t3_promise_gap.py

@@ -5,7 +5,7 @@ The Bargaining `incentive=none` ↔ `high` swap (rationale in
 makes the axis label uniform across all six tasks: `high` always
 denotes "maximum pressure toward manipulation," `none` denotes "no
 pressure / strongest deterrent in place." The data files
-(`paper/cross_task/results.csv`) and downstream analyses
+(`paper/cross_task/data/results.csv`) and downstream analyses
 (`regression_v2.json`, mixed-effects, forest plot, Cohen's d, response
 surface) have all been re-run against the recoded labels.
 

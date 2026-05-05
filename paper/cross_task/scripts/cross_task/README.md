@@ -6,18 +6,18 @@
 
 | File | Purpose |
 |---|---|
-| `load.py` | `load_corpus()` returns a per-rollout dataframe across all 5 tasks. Reads `paper/cross_task/results.csv` by default (~0.13s for the full ~12.5k-row corpus); falls back to walking `paper/task<N>/eval_log.eval` if the CSV is missing. Used by 13 of the other scripts. |
+| `load.py` | `load_corpus()` returns a per-rollout dataframe across all 5 tasks. Reads `paper/cross_task/data/results.csv` by default (~0.13s for the full ~12.5k-row corpus); falls back to walking `paper/task<N>/eval_log.eval` if the CSV is missing. Used by 13 of the other scripts. |
 
 ## Tooling (regenerate the CSV / merge raw logs)
 
 | File | Purpose |
 |---|---|
-| `eval_logs_to_csv.py` | Walks each task's eval log and produces `paper/cross_task/results.csv` (one row per rollout, ~85 columns: identity + axes + flattened scorer scores). Run this when eval logs change. |
+| `eval_logs_to_csv.py` | Walks each task's eval log and produces `paper/cross_task/data/results.csv` (one row per rollout, ~85 columns: identity + axes + flattened scorer scores). Run this when eval logs change. |
 | `combine_eval_logs.py` | Merges per-task split logs (e.g., `logs/task1_fullsweep_*`, `logs/task1_gpt55`, `logs/task1_dsv4`) into the canonical `paper/task<N>/eval_log.eval` via dedup-by-sample-id (later splits win). |
 
 ## v2 statistical pipeline (paper-amendment reanalysis)
 
-Reads `load_corpus()`. Outputs go to `paper/task<N>/analysis/regression_v2.json` and `paper/cross_task/analysis/*_v2.*`. See [../REANALYSIS_NOTES.md](../REANALYSIS_NOTES.md) for the methods diff and headline-finding survival check.
+Reads `load_corpus()`. Outputs go to `paper/task<N>/analysis/regression_v2.json` and `paper/cross_task/analysis/*_v2.*`. See [../../findings/reanalysis_notes.md](../../findings/reanalysis_notes.md) for the methods diff and headline-finding survival check.
 
 | File | Produces |
 |---|---|
@@ -64,7 +64,7 @@ The original paper analyses. Most read `load_corpus()`; one walks split logs (se
 | Per-task figures (v1 + v2 coexist by filename) | `paper/task<N>/figures/` |
 | Cross-task analysis (JSONs + .md) | `paper/cross_task/analysis/` |
 | Cross-task figures | `paper/cross_task/figures/` |
-| Trajectory dataframe (the aggregate) | `paper/cross_task/results.csv` |
+| Trajectory dataframe (the aggregate) | `paper/cross_task/data/results.csv` |
 
 ## Adding a new cross-task script
 

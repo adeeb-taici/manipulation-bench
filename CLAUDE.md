@@ -26,7 +26,7 @@ src/manipulation_bench/
   analyze_surface.py # CLI: cross-env response-surface analyzer (frame × incentive × difficulty pivot per model)
   scenarios/         # JSONL scenario files (generated or hand-crafted)
   # Paper statistical pipeline (sensitivity slopes + 15-dim profile vectors + cross-task correlations)
-  # lives at paper/cross_task/scripts/analyze_response_surface.py — imports utilities from analyze_surface.py.
+  # lives at paper/cross_task/scripts/cross_task/analyze_response_surface.py — imports utilities from analyze_surface.py.
   environments/
     base.py          # Environment ABC + Phase, Observation, ActionResult, GameOutcome
     debate.py        # Debate environment (DISCUSSION-only phases, round-robin)
@@ -278,17 +278,17 @@ Generators that don't take `--models`:
 
 ## Prior experimental results
 
-See `FINDINGS.md` for legacy experimental results (pre-paper) with sample sizes and reproduction commands. Reference this file when the user asks about earlier prototype experiments. When new eval runs complete that don't belong in the paper, add results to FINDINGS.md following the established format.
+See `paper/cross_task/findings/legacy_pre_paper.md` for legacy experimental results (pre-paper) with sample sizes and reproduction commands. Reference this file when the user asks about earlier prototype experiments. When new eval runs complete that don't belong in the paper, add results there following the established format.
 
 ## Paper artifacts (NeurIPS 2026 E&D)
 
-`paper/` is the authoritative record for the 5-task Manipulation Response Surface paper. Each task has `prereg.md` (pre-registered with formal Amendments), `results.md` (verdicts against P1-P7), `analysis/` (per-task JSONs), `figures/` (per-task PNGs), and `eval_log.eval` (canonical combined eval log, committed via Git LFS). Cross-task material is in `paper/cross_task/` — `SUMMARY.md` (paper-level), `EXPLORATORY_FINDINGS.md` (post-PREREG analyses), `cross_task_aggregate.md` (machine-generated per-task tables).
+`paper/` is the authoritative record for the 5-task Manipulation Response Surface paper. Each task has `prereg.md` (pre-registered with formal Amendments), `results.md` (verdicts against P1-P7), `analysis/` (per-task JSONs), `figures/` (per-task PNGs), and `eval_log.eval` (canonical combined eval log, committed via Git LFS). Cross-task material is in `paper/cross_task/` — `SUMMARY.md` (paper-level), `findings/exploratory.md` (post-PREREG analyses), `cross_task_aggregate.md` (machine-generated per-task tables).
 
-The paper's frozen model cohort is **Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro** (post Amendments A2/A3). Older split logs in `logs/task*_*` are kept for provenance; the combined logs at `paper/task<N>/eval_log.eval` are produced by `paper/cross_task/scripts/combine_eval_logs.py` (dedup-by-sample-id with later-running splits winning, so amendments overlay originals).
+The paper's frozen model cohort is **Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro** (post Amendments A2/A3). Older split logs in `logs/task*_*` are kept for provenance; the combined logs at `paper/task<N>/eval_log.eval` are produced by `paper/cross_task/scripts/cross_task/combine_eval_logs.py` (dedup-by-sample-id with later-running splits winning, so amendments overlay originals).
 
 ### Paper analysis scripts
 
-Paper-task-specific scripts live next to the artifact they produce, under `paper/task<N>/scripts/` and `paper/cross_task/scripts/`. The framework's `experiments/` directory only holds env-agnostic harness code (surface generators + the cross-env analyzer); paper-specific analysis does not belong there.
+Paper-task-specific scripts live next to the artifact they produce, under `paper/task<N>/scripts/` and `paper/cross_task/scripts/cross_task/`. The framework's `experiments/` directory only holds env-agnostic harness code (surface generators + the cross-env analyzer); paper-specific analysis does not belong there.
 
 - **Per task** — `paper/task<N>/scripts/`:
   - `task<N>_prereg_analysis.py` — P1-P7 verdicts against the combined log
@@ -296,14 +296,17 @@ Paper-task-specific scripts live next to the artifact they produce, under `paper
   - `task<N>_hand_validation.py` (T4, T5) — scorer-agreement harness
   - `t<N>_*.py` — post-PREREG exploratory pivots (`t1_lie_magnitude`, `t2_per_claim`, `t3_promise_gap`, `t4_per_question_type`)
   - `generate_task<N>_*.py` — the canonical generator
-- **Cross-task** — `paper/cross_task/scripts/`:
+- **Cross-task** — `paper/cross_task/scripts/cross_task/`:
   - `combine_eval_logs.py` — dedup-by-sample-id merger that produces `paper/task<N>/eval_log.eval`
-  - `run_bootstrap_cis.py` + `bootstrap_slopes.py` — per-axis 95% CIs at N=1000
-  - `run_cohens_d.py`, `task5_cohens_d.py` — per-cell effect sizes
-  - `run_response_surface.py` — cross-task fig7 (3 difficulty rows × 6 model cols × 5×3 heatmap each)
-  - `cross_task_analysis.py`, `cross_task_explore.py` — aggregate views
-  - `cross_task_ranking_stability.py`, `cross_task_clustering.py` — model-archetype + ranking-stability
+  - `bootstrap_cis.py` + `_bootstrap_slopes.py` — per-axis 95% CIs at N=1000
+  - `cohens_d.py` — per-cell effect sizes
+  - `response_surface.py` — cross-task fig7 (3 difficulty rows × 6 model cols × 5×3 heatmap each)
+  - `aggregate.py`, `explore.py` — aggregate views
+  - `ranking_stability_v2.py`, `clustering.py` — model-archetype + ranking-stability
   - `surprise_residuals.py`, `frontier_lift.py`, `sample_distributions.py` — exploratory analyses
+- **Corpus (CSV pipeline)** — `paper/cross_task/scripts/corpus/`: 01–10 numbered scripts for the corpus-level analysis; data lives at `paper/cross_task/data/corpus.csv`
+- **Newer analysis** — `paper/cross_task/scripts/newer/`: 01–05 numbered scripts for post-consolidation analyses; findings at `paper/cross_task/findings/newer_analysis.md`
+- **Capability eval** — `paper/cross_task/scripts/capability/`: capability-focused analyses; findings at `paper/cross_task/findings/capability_eval.md`
 
 When updating analysis, add new scripts under the relevant `paper/<...>/scripts/` directory and to `paper/cross_task/SUMMARY.md`'s reproduction block.
 
@@ -314,7 +317,7 @@ When updating analysis, add new scripts under the relevant `paper/<...>/scripts/
 - **Scorer metrics with `"*"` glob**: Dict-valued scores with `@scorer(metrics={"*": [mean(), stderr()]})` auto-create per-key metrics. Different scenarios can have different agent names — metrics aggregate per-key across samples that share that key.
 - **Ground-truth scorers**: Return `Score(value={"persuasion_rate": None, ...})` when `ground_truth` is not set. They don't error — they just produce None values.
 - **JSONL paths**: `load_scenarios()` resolves relative paths against `src/manipulation_bench/scenarios/`. The `-T scenarios=filename.jsonl` flag passes just the filename, not a full path.
-- **Combined eval logs preserve OLD model labels**: When an amendment swaps a model (e.g., GPT-5 → GPT-5.5 via `--model-role`), the new run's scenario metadata still carries the original model label (`model: GPT-5`) because scenarios are regenerated against the original JSONL. To do a within-task pre/post comparison, filter by the OLD label in BOTH halves — only the runtime model binding changed, not the recorded scenario label. See `paper/cross_task/scripts/frontier_lift.py`.
+- **Combined eval logs preserve OLD model labels**: When an amendment swaps a model (e.g., GPT-5 → GPT-5.5 via `--model-role`), the new run's scenario metadata still carries the original model label (`model: GPT-5`) because scenarios are regenerated against the original JSONL. To do a within-task pre/post comparison, filter by the OLD label in BOTH halves — only the runtime model binding changed, not the recorded scenario label. See `paper/cross_task/scripts/cross_task/frontier_lift.py`.
 - **Git LFS for combined logs**: `paper/task*/eval_log.eval` are LFS-tracked (~1 GB total). Clone with `git lfs install && git lfs pull`. The repo is right at GitHub's free 1 GB LFS quota; new combined logs need `git lfs track` before adding.
 
 ### Typed scenario metadata (`ScenarioMetadata`)

@@ -1,6 +1,6 @@
 # Newer analyses — three statistical gaps from the prior synthesis
 
-Three analyses requested to plug gaps identified during the cross-document review of the four prior findings files. All three run against `paper/cross_task/results.csv` (canonical frontier-6 roster: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro). Scripts in `scripts/`, raw outputs in `out/`.
+Three analyses requested to plug gaps identified during the cross-document review of the four prior findings files. All three run against `paper/cross_task/data/results.csv` (canonical frontier-6 roster: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro). Scripts in `scripts/`, raw outputs in `out/`.
 
 ---
 
@@ -182,13 +182,13 @@ The pooled −14.9 pp coefficient is the average of these three regimes weighted
 ## Reproduction
 
 ```bash
-cd paper/newer_analysis
-python3 scripts/01_mixed_effects.py        # ~10s, writes out/01_*
-python3 scripts/02_task_model_interaction.py  # ~3s, writes out/02_*
-python3 scripts/03_multiple_testing.py     # <1s, writes out/03_*
-python3 scripts/incentive_forest.py        # ~5s, writes out/incentive_forest.csv + figures/incentive_forest.{png,pdf}
+cd paper/cross_task/scripts/newer
+python3 01_mixed_effects.py        # ~10s, writes out/01_*
+python3 02_task_model_interaction.py  # ~3s, writes out/02_*
+python3 03_multiple_testing.py     # <1s, writes out/03_*
+python3 incentive_forest.py        # ~5s, writes out/incentive_forest.csv + figures/incentive_forest.{png,pdf}
 ```
 
-Inputs: `paper/cross_task/results.csv` (29,352 rows; 13,573 after restricting to canonical frontier-6).
+Inputs: `paper/cross_task/data/results.csv` (29,352 rows; 13,573 after restricting to canonical frontier-6).
 
 Dependencies: `pandas`, `numpy`, `statsmodels`, `scipy`, `matplotlib`. All present in the project's existing environment.

@@ -1,8 +1,8 @@
-"""Append T6 inbox rows to paper/cross_task/results.csv.
+"""Append T6 inbox rows to paper/cross_task/data/results.csv.
 
 Memory-light alternative to a full eval_logs_to_csv rerun: reads only the T6
 canonical log + the OpenAI/Anthropic sweep T6 logs, produces rows in the same
-schema as the existing results.csv, then concatenates.
+schema as the existing data/results.csv, then concatenates.
 
 Reuses _row_from_sample() from load.py for schema consistency.
 """

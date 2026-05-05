@@ -1,4 +1,4 @@
-"""Append T6 (inbox triage) rows to paper/cross_task/results.csv.
+"""Append T6 (inbox triage) rows to paper/cross_task/data/results.csv.
 
 Reads only T6 eval logs (frontier-6 canonical + per-model sweeps + pilot)
 and appends them to the existing CSV. Used when the full T1-T6 regeneration

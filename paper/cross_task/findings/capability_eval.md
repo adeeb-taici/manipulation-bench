@@ -4,7 +4,7 @@ Exploratory analysis of how model capability — proxied by LMArena ELO, capabil
 
 **Status**: post-hoc, not pre-registered. Belongs in `paper/cross_task/EXPLORATORY_FINDINGS.md` if cited in the paper.
 
-**Inputs**: `paper/cross_task/results.csv` (~28k samples, 15 models) joined with `paper/cross_task/model_capability.csv` (LMArena snapshot 2026-05-03; 12/15 ELOs from `arena.ai/leaderboard/text` direct, 3/15 from the OpenLM mirror).
+**Inputs**: `paper/cross_task/data/results.csv` (~28k samples, 15 models) joined with `paper/cross_task/data/model_capability.csv` (LMArena snapshot 2026-05-03; 12/15 ELOs from `arena.ai/leaderboard/text` direct, 3/15 from the OpenLM mirror).
 
 ---
 

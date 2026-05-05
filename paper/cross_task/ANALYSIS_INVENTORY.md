@@ -21,9 +21,9 @@ Every task has the standard set under `paper/task<N>/`. T6 has the prereg subset
 | `task4_hand_validation.py`, `task5_hand_validation.py` | Rule-based scorer agreement vs human labels | n/a (scorer QA) | Core methodology | App. validation gate |
 | `extract_actions.py` (each task) | Pull tool calls for sample traces | n/a (presentation) | Supplementary | "Conversation Examples" appendix |
 
-**Notable absence on the binary side:** none of the per-task scripts above analyze `manipulation_occurred` directly. Every per-task analysis is on the per-task primary metric (magnitude). This is the gap the csv/FINDINGS pipeline fills.
+**Notable absence on the binary side:** none of the per-task scripts above analyze `manipulation_occurred` directly. Every per-task analysis is on the per-task primary metric (magnitude). This is the gap the corpus pipeline fills (see `paper/cross_task/scripts/corpus/`).
 
-## Cross-task analyses (`paper/cross_task/scripts/`)
+## Cross-task analyses (`paper/cross_task/scripts/cross_task/`)
 
 | Script | What it computes | Outcome metric | Role |
 |---|---|---|---|
@@ -52,7 +52,9 @@ Every task has the standard set under `paper/task<N>/`. T6 has the prereg subset
 
 | Location | Purpose | Role |
 |---|---|---|
-| `paper/capability_eval/scripts/*.py` (`capability_analysis`, `capability_anova`, `capability_clustering`, `capability_frontier_lift`, `capability_regression`, `capability_response_surface`) | Capability-eval companion study (separate from main response surface) | **Supplementary** — entire `capability_eval/` is a separate sub-study; not in main paper §4 |
+| `paper/cross_task/scripts/capability/*.py` (`capability_analysis`, `capability_anova`, `capability_clustering`, `capability_frontier_lift`, `capability_regression`, `capability_response_surface`) | Capability-eval companion study (separate from main response surface) | **Supplementary** — entire capability sub-study is not in main paper §4; findings at `paper/cross_task/findings/capability_eval.md` |
+| `paper/cross_task/scripts/corpus/*.py` (01–10 numbered scripts) | Binary-metric (`manipulation_occurred`) counterpart to the magnitude analyses | **Supplementary** — corpus-level analyses; findings at `paper/cross_task/findings/corpus.md` |
+| `paper/cross_task/scripts/newer/*.py` (01–05 numbered scripts) | Post-consolidation deeper analyses | **Supplementary** — findings at `paper/cross_task/findings/newer_analysis.md` |
 
 ## Per-task documentation (markdown)
 
@@ -61,9 +63,9 @@ Every task has the standard set under `paper/task<N>/`. T6 has the prereg subset
 | `paper/task<N>/prereg.md` | Pre-registered protocol | Core methodology (App. references) |
 | `paper/task<N>/results.md` | Per-task verdicts | Core (App. C) |
 | `paper/cross_task/SUMMARY.md` | Cross-task synthesis | Effectively the source for §4 |
-| `paper/cross_task/EXPLORATORY_FINDINGS.md` | Post-PREREG exploratory analyses | Supplementary |
-| `paper/cross_task/REANALYSIS_NOTES.md` | v1→v2 method diff | Supplementary methods doc |
-| `paper/cross_task/FINDINGS_FROM_FIRST_PRINCIPLES.md` | Bottom-up bottom-up read of `results.csv` | Supplementary (no preconceptions) |
+| `paper/cross_task/findings/exploratory.md` | Post-PREREG exploratory analyses | Supplementary |
+| `paper/cross_task/findings/reanalysis_notes.md` | v1→v2 method diff | Supplementary methods doc |
+| `paper/cross_task/findings/first_principles.md` | Bottom-up read of `data/results.csv` | Supplementary (no preconceptions) |
 
 ## Summary by metric × scope
 
@@ -85,7 +87,9 @@ Every task has the standard set under `paper/task<N>/`. T6 has the prereg subset
 
 **Supplementary (exists, useful, not load-bearing for headline):**
 - `cohens_d.py`, `regression_v2`, `surprise_residuals`, `clustering`, `frontier_lift`
-- All `paper/capability_eval/`
+- All `paper/cross_task/scripts/capability/`
+- All `paper/cross_task/scripts/corpus/`
+- All `paper/cross_task/scripts/newer/`
 - All `t<N>_*` exploratory drilldowns
 
 **Deprecated:**
@@ -94,7 +98,7 @@ Every task has the standard set under `paper/task<N>/`. T6 has the prereg subset
 
 ## The biggest asymmetry
 
-**Every cross-task analysis in the paper uses the per-task primary (magnitude) metric.** There is *no* cross-task analysis on `manipulation_occurred` aside from the deprecated v1 ranking script's T2 column. csv/FINDINGS's pipeline (the 8 scripts under `csv/scripts/`) is a binary-metric counterpart that doesn't currently exist in `paper/`. That is the meaningful gap a port fills:
+**Every cross-task analysis in the paper uses the per-task primary (magnitude) metric.** There is *no* cross-task analysis on `manipulation_occurred` aside from the deprecated v1 ranking script's T2 column. The corpus pipeline (`paper/cross_task/scripts/corpus/`) is a binary-metric counterpart. That is the meaningful gap it fills:
 
 - Adding presence-of-manipulation analyses lets us cross-check every magnitude finding under the binary lens (does the channel split survive? does ranking instability survive? do per-model signatures change?).
 - It also makes `manipulation_occurred` directly comparable across tasks without normalization, which the magnitude metrics aren't (T5 bias is on a 0–20 scale; T2 belief shift can be negative; etc.).

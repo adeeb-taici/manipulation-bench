@@ -6,8 +6,8 @@ Every statistical procedure run across the corpus, terse.
 
 | Name | Rows | Source file |
 |---|---|---|
-| Response-surface CSV | 26,637 (all) / 13,573 (canonical-6) | `paper/cross_task/results.csv` |
-| Capability-axis CSV | ~29k (with inbox) | `paper/cross_task/results.csv` joined with `model_capability.csv` |
+| Response-surface CSV | 26,637 (all) / 13,573 (canonical-6) | `paper/cross_task/data/results.csv` |
+| Capability-axis CSV | ~29k (with inbox) | `paper/cross_task/data/results.csv` joined with `model_capability.csv` |
 | Bargaining eval log | 5,400 samples | `paper/task1_bargaining/eval_log.eval` |
 
 **Canonical-6 roster:** Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B, DeepSeek V4 Pro.

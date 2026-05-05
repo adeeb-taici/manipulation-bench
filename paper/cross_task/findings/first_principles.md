@@ -1,6 +1,6 @@
 # Findings from first principles
 
-A bottom-up analysis of `paper/cross_task/results.csv` (26,637 rollouts × 85 columns; 5 tasks; 15 models — 6 frontier + 9 small-model sweep). Done independently of the prior `SUMMARY.md` / `EXPLORATORY_FINDINGS.md` / `REANALYSIS_NOTES.md` to see what falls out of the data without preconceptions.
+A bottom-up analysis of `paper/cross_task/data/results.csv` (26,637 rollouts × 85 columns; 5 tasks; 15 models — 6 frontier + 9 small-model sweep). Done independently of the prior `SUMMARY.md` / `EXPLORATORY_FINDINGS.md` / `REANALYSIS_NOTES.md` to see what falls out of the data without preconceptions.
 
 All numbers below restrict to the canonical (frontier-6) variant unless noted.
 
