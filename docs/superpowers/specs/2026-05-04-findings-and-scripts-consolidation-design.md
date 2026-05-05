@@ -41,7 +41,12 @@ paper/cross_task/
 │   ├── spearman_bootstrap.md          # was paper/newer_analysis/SPEARMAN_BOOTSTRAP_FINDINGS.md
 │   ├── consolidated.md                # was repo-root FINDINGS_CONSOLIDATED.md
 │   ├── notes.md                       # was repo-root findings_notes.md
-│   └── legacy_pre_paper.md            # was repo-root FINDINGS.md (1412-line legacy log)
+│   ├── legacy_pre_paper.md            # was repo-root FINDINGS.md (1412-line legacy log)
+│   ├── methods.md                     # was paper/newer_analysis/METHODS.md
+│   ├── refusal_scan.md                # was paper/newer_analysis/REFUSAL_SCAN.md
+│   ├── incentive_traces.md            # was paper/newer_analysis/INCENTIVE_TRACES.md
+│   ├── capability_eval_README.md      # was paper/capability_eval/README.md
+│   └── reanalysis_notes.md            # was paper/cross_task/REANALYSIS_NOTES.md
 │
 ├── scripts/
 │   ├── cross_task/                    # was paper/cross_task/scripts/*.py (sub-namespaced)
@@ -50,8 +55,10 @@ paper/cross_task/
 │   └── newer/                         # was paper/newer_analysis/ scripts
 │
 ├── data/
-│   ├── results.csv                    # already here (post-recode)
-│   ├── results.csv.pre_recode_bak     # already here
+│   ├── results.csv                    # MOVED from paper/cross_task/results.csv
+│   ├── results.csv.pre_recode_bak     # MOVED from paper/cross_task/results.csv.pre_recode_bak
+│   ├── results.csv.bak                # MOVED from paper/cross_task/results.csv.bak
+│   ├── model_capability.csv           # MOVED from paper/cross_task/model_capability.csv
 │   └── corpus.csv                     # was csv/results.csv
 │
 ├── figures/
@@ -93,13 +100,13 @@ Output: a single audit table mapping `old_path → new_path` plus a list of ever
 
 Each step is move + simultaneous in-script path fix, so each commit boundary is consistent.
 
-1. **Data first** — `csv/results.csv` → `paper/cross_task/data/corpus.csv`.
+1. **Data first** — create `paper/cross_task/data/`; move `paper/cross_task/results.csv`, `results.csv.bak`, `results.csv.pre_recode_bak`, `model_capability.csv` into it; move `csv/results.csv` → `paper/cross_task/data/corpus.csv`. Patch every script (`paper/cross_task/scripts/*.py`, `paper/capability_eval/scripts/*.py`, `paper/newer_analysis/scripts/*.py`) that references the old `paper/cross_task/results.csv` to point at `paper/cross_task/data/results.csv`.
 2. **Cross-cutting scripts** (one source dir at a time):
-   1. `csv/scripts/` → `paper/cross_task/scripts/corpus/` (CSV reads → `data/corpus.csv`; figures → `figures/corpus/`)
-   2. `paper/capability_eval/` → `paper/cross_task/scripts/capability/` + `figures/capability/`
-   3. `paper/newer_analysis/` → `paper/cross_task/scripts/newer/` + `figures/newer/`
-3. **In-place sub-namespacing** — existing `paper/cross_task/scripts/*.py` move into `paper/cross_task/scripts/cross_task/`. Update any imports.
-4. **Findings docs** — move + rename + update internal links (each doc references its own figures/scripts that just moved).
+   1. `csv/scripts/` → `paper/cross_task/scripts/corpus/` (CSV reads → `data/corpus.csv`; figures → `figures/corpus/`; tables → `paper/cross_task/scripts/corpus/out/tables/`, since they're paired with the script)
+   2. `paper/capability_eval/scripts/` → `paper/cross_task/scripts/capability/`; analysis JSONs → `paper/cross_task/analysis/`; figures → `paper/cross_task/figures/capability/`
+   3. `paper/newer_analysis/scripts/` → `paper/cross_task/scripts/newer/`; `out/` → `paper/cross_task/scripts/newer/out/`; figures → `paper/cross_task/figures/newer/`
+3. **In-place sub-namespacing** — existing `paper/cross_task/scripts/*.py` move into `paper/cross_task/scripts/cross_task/`. Update any imports (e.g., `from load import ...` becomes `from paper.cross_task.scripts.cross_task.load import ...` or, more likely, scripts run as `python -m` and use sibling-import which still works in the new flat dir).
+4. **Findings docs** — move + rename + update internal links (each doc references its own figures/scripts that just moved). This includes the companion `.md` files (`METHODS.md`, `REFUSAL_SCAN.md`, `INCENTIVE_TRACES.md`, `capability_eval/README.md`, `REANALYSIS_NOTES.md`).
 5. **Root-level docs** — move into `paper/cross_task/findings/`.
 
 ### Phase 3 — Smoke tests
