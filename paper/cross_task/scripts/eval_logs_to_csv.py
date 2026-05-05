@@ -59,7 +59,7 @@ DEFAULT_T6_SWEEP_GLOBS = [
     "logs/anthropic_sweep/*_t6_pilot/*.eval",
 ]
 
-DEFAULT_OUTPUT = REPO_ROOT / "paper/cross_task/results.csv"
+DEFAULT_OUTPUT = REPO_ROOT / "paper/cross_task/data/results.csv"
 
 TASK_DIR_TO_KEY = {
     "task1_bargaining": "bargaining",

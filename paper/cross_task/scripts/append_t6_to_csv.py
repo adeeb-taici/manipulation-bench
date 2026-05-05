@@ -25,7 +25,7 @@ from eval_logs_to_csv import (  # noqa: E402
     _rows_from_log,
 )
 
-DEFAULT_OUTPUT = REPO_ROOT / "paper/cross_task/results.csv"
+DEFAULT_OUTPUT = REPO_ROOT / "paper/cross_task/data/results.csv"
 
 
 def collect_t6_log_paths() -> list[Path]:

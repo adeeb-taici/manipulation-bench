@@ -1,9 +1,9 @@
 {
   "n_boot": 2000,
-  "elapsed_seconds": 27.335588932037354,
+  "elapsed_seconds": 28.507662057876587,
   "ranking_definition": "permissive",
   "use_v1_metric": true,
-  "n_strata": 1350,
+  "n_strata": 1620,
   "tasks": [
     "bargaining",
     "debate",
@@ -66,8 +66,8 @@
       "task_a": "bargaining",
       "task_b": "debate",
       "point": 0.23190841426097936,
-      "boot_median": 0.29418129511353663,
-      "ci_lo": -0.08571428571428573,
+      "boot_median": 0.3142857142857143,
+      "ci_lo": -0.08699835103793246,
       "ci_hi": 0.8116794499134279,
       "ci_excludes_zero": false,
       "n_valid_reps": 2000
@@ -86,8 +86,8 @@
       "task_a": "bargaining",
       "task_b": "sales",
       "point": -0.3768511731740915,
-      "boot_median": -0.4285714285714286,
-      "ci_lo": -0.6571428571428573,
+      "boot_median": -0.40583972495671394,
+      "ci_lo": -0.6382330071658223,
       "ci_hi": -0.08571428571428573,
       "ci_excludes_zero": true,
       "n_valid_reps": 2000
@@ -97,7 +97,7 @@
       "task_b": "committee",
       "point": 0.28988551782622424,
       "boot_median": 0.2571428571428572,
-      "ci_lo": -0.08571428571428573,
+      "ci_lo": -0.028571428571428574,
       "ci_hi": 0.7714285714285715,
       "ci_excludes_zero": false,
       "n_valid_reps": 2000
@@ -106,9 +106,9 @@
       "task_a": "debate",
       "task_b": "village",
       "point": -0.6,
-      "boot_median": -0.48571428571428577,
-      "ci_lo": -0.8804062740424288,
-      "ci_hi": 0.20291986247835694,
+      "boot_median": -0.4638168285219587,
+      "ci_lo": -0.8406680016960504,
+      "ci_hi": 0.2,
       "ci_excludes_zero": false,
       "n_valid_reps": 2000
     },
@@ -118,7 +118,7 @@
       "point": -0.5428571428571429,
       "boot_median": -0.4285714285714286,
       "ci_lo": -0.8857142857142858,
-      "ci_hi": 0.05797710356524484,
+      "ci_hi": 0.028571428571428574,
       "ci_excludes_zero": false,
       "n_valid_reps": 2000
     },
@@ -126,9 +126,9 @@
       "task_a": "debate",
       "task_b": "committee",
       "point": -0.08571428571428573,
-      "boot_median": -0.058413046099447405,
-      "ci_lo": -0.6667366910003157,
-      "ci_hi": 0.48571428571428577,
+      "boot_median": -0.08571428571428573,
+      "ci_lo": -0.6571428571428573,
+      "ci_hi": 0.4638168285219587,
       "ci_excludes_zero": false,
       "n_valid_reps": 2000
     },
@@ -156,9 +156,9 @@
       "task_a": "sales",
       "task_b": "committee",
       "point": 0.2571428571428572,
-      "boot_median": 0.17393131069573453,
-      "ci_lo": -0.34786262139146906,
-      "ci_hi": 0.4928053803045812,
+      "boot_median": 0.2,
+      "ci_lo": -0.3714285714285715,
+      "ci_hi": 0.550782483869826,
       "ci_excludes_zero": false,
       "n_valid_reps": 2000
     }
@@ -167,62 +167,62 @@
     "bargaining": {
       "Claude-Opus-4.7": {
         "modal_rank": 1,
-        "stability_pct": 99.5,
+        "stability_pct": 99.8,
         "rank_distribution": {
-          "1": 1990,
-          "2": 10
+          "1": 1996,
+          "2": 4
         },
         "median_rank": 1.0
       },
       "GPT-5.5": {
         "modal_rank": 6,
-        "stability_pct": 99.6,
+        "stability_pct": 99.65,
         "rank_distribution": {
-          "5": 8,
-          "6": 1992
+          "5": 7,
+          "6": 1993
         },
         "median_rank": 6.0
       },
       "Gemini-3.1-Pro": {
         "modal_rank": 4,
-        "stability_pct": 51.0,
+        "stability_pct": 51.2,
         "rank_distribution": {
           "3": 35,
-          "4": 1020,
-          "5": 938,
-          "6": 7
+          "4": 1024,
+          "5": 936,
+          "6": 5
         },
         "median_rank": 4.5
       },
       "Grok-4": {
         "modal_rank": 4,
-        "stability_pct": 49.55,
+        "stability_pct": 49.45,
         "rank_distribution": {
-          "3": 38,
-          "4": 991,
-          "5": 966,
-          "6": 5
+          "3": 39,
+          "4": 989,
+          "5": 969,
+          "6": 3
         },
         "median_rank": 4.5
       },
       "Llama-3.3-70B": {
         "modal_rank": 2,
-        "stability_pct": 99.35000000000001,
+        "stability_pct": 99.65,
         "rank_distribution": {
-          "1": 9,
-          "2": 1987,
-          "3": 4
+          "1": 4,
+          "2": 1993,
+          "3": 3
         },
         "median_rank": 2.0
       },
       "DeepSeek-V4-Pro": {
         "modal_rank": 3,
-        "stability_pct": 95.3,
+        "stability_pct": 95.25,
         "rank_distribution": {
-          "2": 6,
-          "3": 1906,
-          "4": 83,
-          "5": 5
+          "2": 5,
+          "3": 1905,
+          "4": 87,
+          "5": 3
         },
         "median_rank": 3.0
       }
@@ -230,77 +230,76 @@
     "debate": {
       "Claude-Opus-4.7": {
         "modal_rank": 5,
-        "stability_pct": 39.25,
+        "stability_pct": 38.800000000000004,
         "rank_distribution": {
-          "1": 28,
-          "2": 155,
-          "3": 275,
-          "4": 683,
-          "5": 785,
-          "6": 74
+          "1": 48,
+          "2": 138,
+          "3": 267,
+          "4": 702,
+          "5": 776,
+          "6": 69
         },
         "median_rank": 4.0
       },
       "GPT-5.5": {
         "modal_rank": 6,
-        "stability_pct": 94.15,
+        "stability_pct": 94.89999999999999,
         "rank_distribution": {
-          "2": 2,
-          "3": 1,
-          "4": 19,
-          "5": 95,
-          "6": 1883
+          "3": 2,
+          "4": 25,
+          "5": 75,
+          "6": 1898
         },
         "median_rank": 6.0
       },
       "Gemini-3.1-Pro": {
         "modal_rank": 4,
-        "stability_pct": 32.85,
+        "stability_pct": 35.8,
         "rank_distribution": {
-          "1": 101,
-          "2": 367,
-          "3": 476,
-          "4": 657,
-          "5": 357,
-          "6": 42
+          "1": 79,
+          "2": 396,
+          "3": 436,
+          "4": 716,
+          "5": 352,
+          "6": 21
         },
         "median_rank": 3.5
       },
       "Grok-4": {
         "modal_rank": 2,
-        "stability_pct": 42.9,
+        "stability_pct": 40.050000000000004,
         "rank_distribution": {
-          "1": 715,
-          "2": 858,
-          "3": 231,
-          "4": 166,
-          "5": 29,
+          "1": 737,
+          "2": 801,
+          "3": 259,
+          "4": 161,
+          "5": 41,
           "6": 1
         },
         "median_rank": 2.0
       },
       "Llama-3.3-70B": {
         "modal_rank": 1,
-        "stability_pct": 45.800000000000004,
+        "stability_pct": 45.050000000000004,
         "rank_distribution": {
-          "1": 916,
-          "2": 749,
-          "3": 209,
-          "4": 107,
-          "5": 19
+          "1": 901,
+          "2": 796,
+          "3": 189,
+          "4": 94,
+          "5": 20
         },
         "median_rank": 1.5
       },
       "DeepSeek-V4-Pro": {
         "modal_rank": 4,
-        "stability_pct": 36.3,
+        "stability_pct": 35.25,
         "rank_distribution": {
-          "1": 63,
-          "2": 266,
-          "3": 393,
-          "4": 726,
-          "5": 507,
-          "6": 45
+          "1": 64,
+          "2": 257,
+          "3": 424,
+          "4": 705,
+          "5": 514,
+          "6": 36
         },
         "median_rank": 4.0
       }
@@ -316,29 +315,27 @@
       },
       "GPT-5.5": {
         "modal_rank": 3,
-        "stability_pct": 56.45,
+        "stability_pct": 54.1,
         "rank_distribution": {
-          "2": 871,
-          "3": 1129
+          "2": 918,
+          "3": 1082
         },
         "median_rank": 3.0
       },
       "Gemini-3.1-Pro": {
         "modal_rank": 6,
-        "stability_pct": 99.9,
+        "stability_pct": 100.0,
         "rank_distribution": {
-          "5": 2,
-          "6": 1998
+          "6": 2000
         },
         "median_rank": 6.0
       },
       "Grok-4": {
         "modal_rank": 5,
-        "stability_pct": 99.85000000000001,
+        "stability_pct": 99.95,
         "rank_distribution": {
           "4": 1,
-          "5": 1997,
-          "6": 2
+          "5": 1999
         },
         "median_rank": 5.0
       },
@@ -353,10 +350,10 @@
       },
       "DeepSeek-V4-Pro": {
         "modal_rank": 2,
-        "stability_pct": 56.45,
+        "stability_pct": 54.1,
         "rank_distribution": {
-          "2": 1129,
-          "3": 871
+          "2": 1082,
+          "3": 918
         },
         "median_rank": 2.0
       }
@@ -364,12 +361,11 @@
     "sales": {
       "Claude-Opus-4.7": {
         "modal_rank": 3,
-        "stability_pct": 69.55,
+        "stability_pct": 68.5,
         "rank_distribution": {
-          "2": 562,
-          "3": 1391,
-          "4": 46,
-          "5": 1
+          "2": 592,
+          "3": 1370,
+          "4": 38
         },
         "median_rank": 3.0
       },
@@ -383,45 +379,45 @@
       },
       "Gemini-3.1-Pro": {
         "modal_rank": 6,
-        "stability_pct": 59.9,
+        "stability_pct": 62.050000000000004,
         "rank_distribution": {
-          "4": 174,
-          "5": 628,
-          "6": 1198
+          "4": 204,
+          "5": 555,
+          "6": 1241
         },
         "median_rank": 6.0
       },
       "Grok-4": {
         "modal_rank": 2,
-        "stability_pct": 79.4,
+        "stability_pct": 77.60000000000001,
         "rank_distribution": {
-          "2": 1588,
-          "3": 407,
-          "4": 5
+          "2": 1552,
+          "3": 438,
+          "4": 10
         },
         "median_rank": 2.0
       },
       "Llama-3.3-70B": {
         "modal_rank": 5,
-        "stability_pct": 42.85,
+        "stability_pct": 44.2,
         "rank_distribution": {
           "2": 1,
           "3": 4,
-          "4": 336,
-          "5": 857,
-          "6": 802
+          "4": 332,
+          "5": 884,
+          "6": 779
         },
         "median_rank": 5.0
       },
       "DeepSeek-V4-Pro": {
         "modal_rank": 4,
-        "stability_pct": 77.0,
+        "stability_pct": 76.85,
         "rank_distribution": {
-          "2": 5,
+          "2": 3,
           "3": 27,
-          "4": 1540,
-          "5": 335,
-          "6": 93
+          "4": 1537,
+          "5": 342,
+          "6": 91
         },
         "median_rank": 4.0
       }
@@ -429,22 +425,22 @@
     "committee": {
       "Claude-Opus-4.7": {
         "modal_rank": 3,
-        "stability_pct": 50.05,
+        "stability_pct": 53.449999999999996,
         "rank_distribution": {
-          "1": 4,
-          "2": 341,
-          "3": 1001,
-          "4": 654
+          "1": 3,
+          "2": 305,
+          "3": 1069,
+          "4": 623
         },
         "median_rank": 3.0
       },
       "GPT-5.5": {
         "modal_rank": 2,
-        "stability_pct": 64.4,
+        "stability_pct": 64.45,
         "rank_distribution": {
-          "1": 184,
-          "2": 1288,
-          "3": 306,
+          "1": 207,
+          "2": 1289,
+          "3": 282,
           "4": 222
         },
         "median_rank": 2.0
@@ -467,22 +463,23 @@
       },
       "Llama-3.3-70B": {
         "modal_rank": 1,
-        "stability_pct": 90.5,
+        "stability_pct": 89.45,
         "rank_distribution": {
-          "1": 1810,
-          "2": 185,
-          "3": 5
+          "1": 1789,
+          "2": 204,
+          "3": 6,
+          "4": 1
         },
         "median_rank": 1.0
       },
       "DeepSeek-V4-Pro": {
         "modal_rank": 4,
-        "stability_pct": 56.2,
+        "stability_pct": 57.75,
         "rank_distribution": {
-          "1": 2,
-          "2": 186,
-          "3": 688,
-          "4": 1124
+          "1": 1,
+          "2": 202,
+          "3": 642,
+          "4": 1155
         },
         "median_rank": 4.0
       }

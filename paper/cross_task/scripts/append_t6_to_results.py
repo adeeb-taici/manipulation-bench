@@ -22,9 +22,9 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from load import _row_from_sample, _flatten_metadata  # noqa: E402
 
-EXISTING_CSV = REPO_ROOT / "paper/cross_task/results.csv"
-DEST_CSV = REPO_ROOT / "paper/cross_task/results.csv"
-CSV_MIRROR = REPO_ROOT / "csv/results.csv"
+EXISTING_CSV = REPO_ROOT / "paper/cross_task/data/results.csv"
+DEST_CSV = REPO_ROOT / "paper/cross_task/data/results.csv"
+CSV_MIRROR = REPO_ROOT / "paper/cross_task/data/corpus.csv"
 
 T6_LOGS: list[Path] = [
     REPO_ROOT / "paper/task6_inbox/eval_log.eval",

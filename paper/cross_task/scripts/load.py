@@ -264,13 +264,13 @@ def _row_from_sample(sample: Any, env: str) -> dict[str, Any] | None:
     }
 
 
-RESULTS_CSV = REPO_ROOT / "paper/cross_task/results.csv"
+RESULTS_CSV = REPO_ROOT / "paper/cross_task/data/results.csv"
 
 
 def _load_from_csv(
     csv_path: Path, tasks: tuple[str, ...], verbose: bool
 ) -> pd.DataFrame:
-    """Read paper/cross_task/results.csv and shape it like _row_from_sample output.
+    """Read paper/cross_task/data/results.csv and shape it like _row_from_sample output.
 
     The CSV has the same identity columns plus all flattened scorer scores;
     we subset to the 9 columns load_corpus has historically returned and
@@ -339,7 +339,7 @@ def load_corpus(
     Args:
         tasks: subset of task names to load; default = all five.
         verbose: print per-task row count to stderr.
-        source: "csv" reads paper/cross_task/results.csv (~30s for full corpus).
+        source: "csv" reads paper/cross_task/data/results.csv (~30s for full corpus).
                 "eval" walks the raw .eval files (slow, multi-minute).
                 "auto" (default) uses csv if it exists, else falls back to eval.
 
