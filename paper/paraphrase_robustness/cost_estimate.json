@@ -1,0 +1,16 @@
+{
+  "T3_village": {
+    "avg_per_scenario": 1.3633429034404545,
+    "n_observed": 529,
+    "projected": 245.4017226192818,
+    "scenarios": 180
+  },
+  "T4_sales": {
+    "avg_per_scenario": 0.049676447185185206,
+    "n_observed": 1350,
+    "projected": 22.35440123333334,
+    "scenarios": 450
+  },
+  "total_projected": 267.75612385261513,
+  "total_with_15pct_buffer": 307.91954243050736
+}
