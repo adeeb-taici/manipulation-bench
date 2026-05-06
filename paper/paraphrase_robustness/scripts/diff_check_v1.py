@@ -20,9 +20,48 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "paper" / "task1_bargaining" / "scripts"))
 sys.path.insert(0, str(ROOT / "paper" / "task3_village" / "scripts"))
 sys.path.insert(0, str(ROOT / "paper" / "task4_sales" / "scripts"))
 sys.path.insert(0, str(ROOT / "paper" / "paraphrase_robustness" / "scripts"))
+
+
+def diff_t1() -> list[str]:
+    from generate_task1_bargaining import build_prompt as production_build  # type: ignore[import-not-found]
+    from generate_paraphrase_sweep import (  # type: ignore[import-not-found]
+        T1_DIFFICULTY,
+        T1_DIFFICULTY_PAIRS,
+        T1_INCENTIVE_PENALTY,
+        FRAMES,
+        t1_build_prompt,
+    )
+
+    pairs = T1_DIFFICULTY_PAIRS[T1_DIFFICULTY]
+    issues: list[str] = []
+    # Walk all 5 frames × 5 difficulty pairs × both seats
+    for frame in FRAMES:
+        for v_a, v_b in pairs:
+            for agent_name, other_name, true_value in (
+                ("agent_a", "agent_b", v_a),
+                ("agent_b", "agent_a", v_b),
+            ):
+                prod = production_build(
+                    frame, agent_name, other_name, true_value, T1_INCENTIVE_PENALTY
+                )
+                addendum = t1_build_prompt(
+                    frame, agent_name, other_name, true_value, T1_INCENTIVE_PENALTY,
+                    paraphrase_version=1,
+                )
+                if prod != addendum:
+                    first = next(
+                        (i for i, (a, b) in enumerate(zip(prod, addendum)) if a != b),
+                        min(len(prod), len(addendum)),
+                    )
+                    issues.append(
+                        f"T1 {frame}/{agent_name} v={true_value}: mismatch at char {first} "
+                        f"(lengths {len(prod)} vs {len(addendum)})"
+                    )
+    return issues
 
 
 def diff_t3() -> list[str]:
@@ -94,6 +133,11 @@ def diff_t4() -> list[str]:
 def main() -> None:
     print("Diff-checking paraphrase_version=1 against production generators...")
     print()
+    t1_issues = diff_t1()
+    print(f"T1 Bargaining: {len(t1_issues)} mismatches")
+    for issue in t1_issues:
+        print(f"  - {issue}")
+    print()
     t3_issues = diff_t3()
     print(f"T3 Village: {len(t3_issues)} mismatches")
     for issue in t3_issues:
@@ -104,11 +148,11 @@ def main() -> None:
     for issue in t4_issues:
         print(f"  - {issue}")
     print()
-    total = len(t3_issues) + len(t4_issues)
+    total = len(t1_issues) + len(t3_issues) + len(t4_issues)
     if total:
         print(f"FAIL: {total} mismatches. Paraphrase generator's v1 path is NOT byte-identical to production.")
         sys.exit(1)
-    print("PASS: paraphrase_version=1 is byte-identical to production T3 + T4 generators.")
+    print("PASS: paraphrase_version=1 is byte-identical to production T1 + T3 + T4 generators.")
 
 
 if __name__ == "__main__":

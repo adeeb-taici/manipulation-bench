@@ -309,6 +309,89 @@ implementation is structured as follows. *This is a description of the Phase
    metadata fields it already knows; the new `paraphrase_version` field is
    ignored by all existing analysis scripts.
 
+## 8a. Amendment 1 — T1 Bargaining substituted for T3 Village (2026-05-06)
+
+**Triggering event**: T3 Village paraphrase smoke test on a single model (Claude
+Opus 4.7, 15 scenarios at the held-fixed cell) took 49 minutes 48 seconds wall-clock
+at `--max-connections=6` (matching the production T3 sweep config). Extrapolating
+to the full 180-scenario, 6-model T3 design under the same concurrency cap
+yields ~8–10 hours of wall-clock — incompatible with the rebuttal timeline.
+
+**Amendment**: Substitute T1 Bargaining for T3 Village as the commissive task
+in this addendum's primary sweep. T3 Village is deferred to the camera-ready
+revision. T4 Sales (assertive task) is unchanged.
+
+**Justification**:
+
+1. **Same cluster**: T1 Bargaining is the second commissive task in the paper's
+   response-surface taxonomy ([cross_task/SUMMARY.md §Headline finding](../cross_task/SUMMARY.md)).
+   Both T1 and T3 are in the "prompt-dominant" cluster — manipulation lever is
+   a behavioral choice the prompt directly addresses (committing a stated
+   valuation in T1; contributing tokens in T3). Reviewer's request for "one
+   commissive task and one assertive task" is satisfied with T1 + T4.
+2. **Single-agent**: T1 Bargaining is single-agent (each scenario = one
+   commit-valuation decision per agent in self-play; no multi-round
+   bystander panel). Wall-clock per scenario is ~30–60 seconds vs.
+   T3's ~17 minutes. The full T1 paraphrase sweep (450 scenarios at
+   `--max-connections=10`) completes in ~30 min.
+3. **Frame slope is non-trivial**: T1's per-task aggregate |frame slope| is
+   0.108 vs. incentive's 0.250 (Table 2 dominance ratio 2.3x). The frame
+   slope is meaningfully measurable on T1, so a paraphrase check on the
+   frame axis here genuinely tests whether the frame-axis measurement is
+   wording-stable. The headline T1 claim is INCENTIVE-dominance, not
+   frame-dominance, so the appendix interpretation is shifted accordingly
+   (see §5 below).
+4. **T3 deferred not abandoned**: T3 Village paraphrase artifacts (PREREG
+   §1, paraphrases.json, single-model smoke at
+   [logs/paraphrase_t3_smoke/](../paraphrase_robustness/)) remain in this
+   directory for camera-ready completion. The full T3 sweep is the same
+   inspect-eval command pattern, just with a different scenarios JSONL
+   (`paraphrase_t3_village.jsonl` already generated and committed).
+
+**Held-fixed cell for T1**: `(incentive=moderate, difficulty=low)` —
+across-models avg |frame slope| 0.099 vs. per-task mean 0.112 (distance
+0.013, closest cell across the 9). The 3 high-incentive cells (E=250 = strictly
+dominated penalty) all have ~0 frame slope and were intentionally excluded
+from "representative" selection.
+
+**Held-fixed cell rationale**: The chosen (moderate, low) cell sits inside
+the "frame matters" subspace of T1 — at moderate penalty (E=80, break-even),
+prompt framing has measurable effect; at high penalty (E=250), models are
+penalty-dominated and frame is inert. The cell-selection script
+[`scripts/pick_representative_cells.py`](scripts/pick_representative_cells.py)
+output is in `cell_selection.json`.
+
+**Paraphrases**: 10 new paraphrases (4 frames × 2 versions) committed verbatim
+to `paraphrases.json` and wired into `axes.py` `FRAME_PARAPHRASES["bargaining"]`.
+The `minimal` frame is the empty-suffix neutral baseline by design (no wording
+text exists); all 3 versions are intentionally identical (empty), reported as
+n/a in the per-frame paraphrase comparison. v1 prohibitive preserves the
+production text's `{true_value}` placeholder; v2/v3 also include the
+placeholder. v1 of every frame is sourced directly from the production T1
+generator's `FRAME_SUFFIX` dict — NOT from `axes.py FRAME_PROMPTS["bargaining"]`
+(the latter is the abstract surface-analyzer canonicalization, with different
+wording). Diff-check
+([`scripts/diff_check_v1.py`](scripts/diff_check_v1.py)) verifies v1
+byte-identity to production T1: 0 mismatches across all 5 frames × 5
+difficulty pairs × 2 agent seats.
+
+**Pass criterion for T1 (P-T1)**: For v ∈ {1, 2, 3}, the dominance ratio
+`R_T1,v = T1_INCENTIVE_TABLE2 / |paraphrase frame slope_v|` ≥ 1.15. The 1.15x
+floor is "within 2× of original" applied to T1's Table-2 dominance ratio of
+2.3x: 2.3 / 2 = 1.15. Passing means incentive remains at least 1.15x frame
+on every paraphrase version — i.e., T1's incentive-dominance direction is
+preserved.
+
+**Cost estimate update**: Per-scenario cost for T1 self-play (2 agents same
+model, 3 negotiation rounds + commit) averages ~$0.05–0.20/scenario across
+the roster. Full T1 paraphrase sweep: 450 × ~$0.10 ≈ $45. Combined T1 + T4
+addendum: ~$67. Original combined T3 + T4 budget was ~$267; T1 substitution
+is ~$200 cheaper.
+
+**Affected predictions**: P-A (T3 directional consistency) is no longer
+evaluated in the rebuttal addendum — to be re-introduced for the camera-ready.
+P-B (T4) and P-C (magnitude stability) unchanged. New P-T1 added per above.
+
 ## 9. Amendments and versioning
 
 Same amendment process as parent prereg files (cf.

@@ -164,7 +164,42 @@ def pick_cell(per_cell, target_abs):
     return best, sorted(table, key=lambda x: x[2])
 
 
+def load_t1_rows():
+    log = read_eval_log("paper/task1_bargaining/eval_log.eval")
+    by_id = {}
+    incentive_label = {0: "none", 80: "moderate", 250: "high"}
+    for s in log.samples:
+        if s.error:
+            continue
+        md = (s.metadata or {}).get("scenario", {}).get("metadata", {})
+        bs = (s.scores or {}).get("bargaining_commit")
+        if bs is None or not isinstance(bs.value, dict):
+            continue
+        rate = bs.value.get("manipulation_rate")
+        if rate is None or bs.value.get("sample_failed"):
+            continue
+        model = md.get("model")
+        if model == "GPT-5":
+            model = "GPT-5.5"
+        elif model == "DeepSeek-v3.2":
+            model = "DeepSeek-V4-Pro"
+        # incentive is stored as a numeric expected_penalty
+        inc_num = md.get("expected_penalty")
+        inc_label = incentive_label.get(inc_num)
+        by_id[s.id] = dict(
+            model=model,
+            frame=md.get("frame"),
+            incentive=inc_label,
+            difficulty=md.get("difficulty"),
+            metric=float(rate),
+        )
+    return list(by_id.values())
+
+
 def main():
+    print("Loading T1 Bargaining log...")
+    t1 = load_t1_rows()
+    print(f"  {len(t1)} rows")
     print("Loading T3 Village log...")
     t3 = load_t3_rows()
     print(f"  {len(t3)} rows")
@@ -174,7 +209,7 @@ def main():
 
     out = {}
 
-    for name, rows in [("T3_village", t3), ("T4_sales", t4)]:
+    for name, rows in [("T1_bargaining", t1), ("T3_village", t3), ("T4_sales", t4)]:
         agg = aggregate_frame_slope(rows)
         per_cell, models = per_cell_frame_slopes(rows)
         target = agg["mean_abs"]

@@ -1,4 +1,75 @@
 {
+  "T1_bargaining": {
+    "mean_abs_frame_slope": 0.11175408648872337,
+    "per_cell_table": [
+      {
+        "incentive": "moderate",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.09875,
+        "dist": 0.013004086488723365
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.14375000000000002,
+        "dist": 0.03199591351127665
+      },
+      {
+        "incentive": "none",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.17151315789473684,
+        "dist": 0.05975907140601347
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.17375,
+        "dist": 0.06199591351127662
+      },
+      {
+        "incentive": "none",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.19083333333333333,
+        "dist": 0.07907924684460996
+      },
+      {
+        "incentive": "none",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.19666666666666666,
+        "dist": 0.08491258017794329
+      },
+      {
+        "incentive": "high",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.011666666666666665,
+        "dist": 0.10008741982205671
+      },
+      {
+        "incentive": "high",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.01,
+        "dist": 0.10175408648872337
+      },
+      {
+        "incentive": "high",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.009166666666666667,
+        "dist": 0.1025874198220567
+      }
+    ],
+    "chosen": {
+      "incentive": "moderate",
+      "difficulty": "low"
+    },
+    "models_seen": [
+      "Claude-Opus-4.7",
+      "DeepSeek-V4-Pro",
+      "GPT-5.5",
+      "Gemini-3.1-Pro",
+      "Grok-4",
+      "Llama-3.3-70B"
+    ]
+  },
   "T3_village": {
     "mean_abs_frame_slope": 0.16761762105119826,
     "per_cell_table": [
