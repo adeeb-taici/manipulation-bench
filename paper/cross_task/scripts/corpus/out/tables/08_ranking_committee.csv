@@ -1,0 +1,16 @@
+,model,wins_minus_losses,n_significant_pairs,task
+0,Gemini-3.1-Pro,14,14,committee
+1,Grok-4,11,13,committee
+2,DeepSeek-V4-Pro,10,12,committee
+3,sonnet46,8,12,committee
+4,sonnet37,5,11,committee
+5,GPT-5.5,3,11,committee
+6,Llama-3.3-70B,3,11,committee
+7,Claude-Opus-4.7,2,12,committee
+8,gpt54nano,-3,13,committee
+9,gpt54mini,-4,12,committee
+10,gpt41,-7,11,committee
+11,haiku45,-9,11,committee
+12,haiku35,-9,11,committee
+13,gpt41mini,-10,12,committee
+14,gpt41nano,-14,14,committee

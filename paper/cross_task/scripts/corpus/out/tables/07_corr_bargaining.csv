@@ -1,0 +1,14 @@
+,bargaining_commit__agent_a_deviation,bargaining_commit__agent_a_lied,bargaining_commit__agent_a_stated,bargaining_commit__agent_a_true,bargaining_commit__agent_b_deviation,bargaining_commit__agent_b_lied,bargaining_commit__agent_b_stated,bargaining_commit__agent_b_true,bargaining_commit__manipulation_occurred,bargaining_commit__manipulation_rate,bargaining_commit__mean_deviation,manipulation_metric,manipulation_occurred
+bargaining_commit__agent_a_deviation,1.0,0.9444,0.5178,-0.122,0.5881,0.6355,0.5071,0.1179,0.7488,0.8013,0.7877,0.8013,0.7488
+bargaining_commit__agent_a_lied,0.9444,1.0,0.5484,-0.0826,0.6284,0.7097,0.5181,0.0891,0.8439,0.8874,0.8276,0.8874,0.8439
+bargaining_commit__agent_a_stated,0.5178,0.5484,1.0,0.6989,0.5151,0.5236,-0.0015,-0.4598,0.5461,0.5673,0.5714,0.5673,0.5461
+bargaining_commit__agent_a_true,-0.122,-0.0826,0.6989,1.0,0.128,0.0922,-0.4185,-0.6901,0.0274,0.0194,0.03,0.0194,0.0274
+bargaining_commit__agent_b_deviation,0.5881,0.6284,0.5151,0.128,1.0,0.9469,0.5728,-0.1216,0.7984,0.8328,0.8517,0.8328,0.7984
+bargaining_commit__agent_b_lied,0.6355,0.7097,0.5236,0.0922,0.9469,1.0,0.5913,-0.0785,0.9032,0.9256,0.8947,0.9256,0.9032
+bargaining_commit__agent_b_stated,0.5071,0.5181,-0.0015,-0.4185,0.5728,0.5913,1.0,0.6567,0.59,0.6024,0.6208,0.6024,0.59
+bargaining_commit__agent_b_true,0.1179,0.0891,-0.4598,-0.6901,-0.1216,-0.0785,0.6567,1.0,0.0023,0.003,-0.0062,0.003,0.0023
+bargaining_commit__manipulation_occurred,0.7488,0.8439,0.5461,0.0274,0.7984,0.9032,0.59,0.0023,1.0,0.9908,0.9573,0.9908,1.0
+bargaining_commit__manipulation_rate,0.8013,0.8874,0.5673,0.0194,0.8328,0.9256,0.6024,0.003,0.9908,1.0,0.9597,1.0,0.9908
+bargaining_commit__mean_deviation,0.7877,0.8276,0.5714,0.03,0.8517,0.8947,0.6208,-0.0062,0.9573,0.9597,1.0,0.9597,0.9573
+manipulation_metric,0.8013,0.8874,0.5673,0.0194,0.8328,0.9256,0.6024,0.003,0.9908,1.0,0.9597,1.0,0.9908
+manipulation_occurred,0.7488,0.8439,0.5461,0.0274,0.7984,0.9032,0.59,0.0023,1.0,0.9908,0.9573,0.9908,1.0

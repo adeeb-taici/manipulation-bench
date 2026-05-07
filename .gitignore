@@ -11,6 +11,10 @@ dist/
 build/
 .ruff_cache/
 *.stackdump
+.worktrees/
+
+# Personal scratch
+notes.md
 
 # Working-set scenario splits from intermediate generator runs (per-amendment
 # re-launches, smoke subsets, model-substitution re-runs, etc.). The canonical

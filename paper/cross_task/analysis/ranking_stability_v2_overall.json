@@ -1,0 +1,474 @@
+{
+  "n_boot": 2000,
+  "elapsed_seconds": 30.53439688682556,
+  "ranking_definition": "overall",
+  "use_v1_metric": false,
+  "n_strata": 1620,
+  "tasks": [
+    "bargaining",
+    "debate",
+    "village",
+    "sales",
+    "committee"
+  ],
+  "models": [
+    "Claude-Opus-4.7",
+    "GPT-5.5",
+    "Gemini-3.1-Pro",
+    "Grok-4",
+    "Llama-3.3-70B",
+    "DeepSeek-V4-Pro"
+  ],
+  "point_means": {
+    "bargaining": {
+      "Claude-Opus-4.7": 0.11888888888888889,
+      "GPT-5.5": 0.3611111111111111,
+      "Gemini-3.1-Pro": 0.39166666666666666,
+      "Grok-4": 0.2972222222222222,
+      "Llama-3.3-70B": 0.095,
+      "DeepSeek-V4-Pro": 0.3236929922135706
+    },
+    "debate": {
+      "Claude-Opus-4.7": -0.10831,
+      "GPT-5.5": -0.09503913043478261,
+      "Gemini-3.1-Pro": -0.07687173913043478,
+      "Grok-4": -0.08492188405797102,
+      "Llama-3.3-70B": -0.0716676811594203,
+      "DeepSeek-V4-Pro": -0.09576130434782608
+    },
+    "village": {
+      "Claude-Opus-4.7": 0.16382222222222223,
+      "GPT-5.5": 0.4032303370786517,
+      "Gemini-3.1-Pro": 0.4888888888888889,
+      "Grok-4": 0.28201333333333334,
+      "Llama-3.3-70B": 0.5126413793103448,
+      "DeepSeek-V4-Pro": 0.2983421686746988
+    },
+    "sales": {
+      "Claude-Opus-4.7": 0.03911111111111112,
+      "GPT-5.5": 0.02666666666666667,
+      "Gemini-3.1-Pro": 0.1288888888888889,
+      "Grok-4": 0.04977777777777778,
+      "Llama-3.3-70B": 0.1111111111111111,
+      "DeepSeek-V4-Pro": 0.09511111111111112
+    },
+    "committee": {
+      "Claude-Opus-4.7": 1.7937620111731842,
+      "GPT-5.5": 1.0185194444444443,
+      "Gemini-3.1-Pro": 11.306478888888888,
+      "Grok-4": 3.4199829545454548,
+      "Llama-3.3-70B": 1.6106472222222221,
+      "DeepSeek-V4-Pro": 2.281947222222222
+    }
+  },
+  "rho": {
+    "bargaining__vs__debate": {
+      "task_a": "bargaining",
+      "task_b": "debate",
+      "point": -0.028571428571428574,
+      "boot_median": -0.028571428571428574,
+      "ci_lo": -0.3142857142857143,
+      "ci_hi": 0.3714285714285715,
+      "ci_excludes_zero": false,
+      "n_valid_reps": 2000
+    },
+    "bargaining__vs__village": {
+      "task_a": "bargaining",
+      "task_b": "village",
+      "point": 0.14285714285714288,
+      "boot_median": 0.14285714285714288,
+      "ci_lo": 0.08571428571428573,
+      "ci_hi": 0.4285714285714286,
+      "ci_excludes_zero": true,
+      "n_valid_reps": 2000
+    },
+    "bargaining__vs__sales": {
+      "task_a": "bargaining",
+      "task_b": "sales",
+      "point": 0.08571428571428573,
+      "boot_median": 0.08571428571428573,
+      "ci_lo": -0.2,
+      "ci_hi": 0.2571428571428572,
+      "ci_excludes_zero": false,
+      "n_valid_reps": 2000
+    },
+    "bargaining__vs__committee": {
+      "task_a": "bargaining",
+      "task_b": "committee",
+      "point": 0.3714285714285715,
+      "boot_median": 0.3714285714285715,
+      "ci_lo": 0.3142857142857143,
+      "ci_hi": 0.3714285714285715,
+      "ci_excludes_zero": true,
+      "n_valid_reps": 2000
+    },
+    "debate__vs__village": {
+      "task_a": "debate",
+      "task_b": "village",
+      "point": 0.8285714285714287,
+      "boot_median": 0.7714285714285715,
+      "ci_lo": 0.3714285714285715,
+      "ci_hi": 0.942857142857143,
+      "ci_excludes_zero": true,
+      "n_valid_reps": 2000
+    },
+    "debate__vs__sales": {
+      "task_a": "debate",
+      "task_b": "sales",
+      "point": 0.6571428571428573,
+      "boot_median": 0.6571428571428573,
+      "ci_lo": 0.2571428571428572,
+      "ci_hi": 0.942857142857143,
+      "ci_excludes_zero": true,
+      "n_valid_reps": 2000
+    },
+    "debate__vs__committee": {
+      "task_a": "debate",
+      "task_b": "committee",
+      "point": 0.14285714285714288,
+      "boot_median": 0.3142857142857143,
+      "ci_lo": -0.14285714285714288,
+      "ci_hi": 0.7142857142857143,
+      "ci_excludes_zero": false,
+      "n_valid_reps": 2000
+    },
+    "village__vs__sales": {
+      "task_a": "village",
+      "task_b": "sales",
+      "point": 0.6,
+      "boot_median": 0.6,
+      "ci_lo": 0.4285714285714286,
+      "ci_hi": 0.6571428571428573,
+      "ci_excludes_zero": true,
+      "n_valid_reps": 2000
+    },
+    "village__vs__committee": {
+      "task_a": "village",
+      "task_b": "committee",
+      "point": -0.14285714285714288,
+      "boot_median": -0.14285714285714288,
+      "ci_lo": -0.14285714285714288,
+      "ci_hi": 0.2,
+      "ci_excludes_zero": false,
+      "n_valid_reps": 2000
+    },
+    "sales__vs__committee": {
+      "task_a": "sales",
+      "task_b": "committee",
+      "point": 0.6,
+      "boot_median": 0.6,
+      "ci_lo": 0.3714285714285715,
+      "ci_hi": 0.7714285714285715,
+      "ci_excludes_zero": true,
+      "n_valid_reps": 2000
+    }
+  },
+  "rank_stability": {
+    "bargaining": {
+      "Claude-Opus-4.7": {
+        "modal_rank": 2,
+        "stability_pct": 99.8,
+        "rank_distribution": {
+          "1": 4,
+          "2": 1996
+        },
+        "median_rank": 2.0
+      },
+      "GPT-5.5": {
+        "modal_rank": 5,
+        "stability_pct": 99.9,
+        "rank_distribution": {
+          "4": 1,
+          "5": 1998,
+          "6": 1
+        },
+        "median_rank": 5.0
+      },
+      "Gemini-3.1-Pro": {
+        "modal_rank": 6,
+        "stability_pct": 100.0,
+        "rank_distribution": {
+          "6": 2000
+        },
+        "median_rank": 6.0
+      },
+      "Grok-4": {
+        "modal_rank": 3,
+        "stability_pct": 99.4,
+        "rank_distribution": {
+          "3": 1988,
+          "4": 12
+        },
+        "median_rank": 3.0
+      },
+      "Llama-3.3-70B": {
+        "modal_rank": 1,
+        "stability_pct": 99.75,
+        "rank_distribution": {
+          "1": 1995,
+          "2": 5
+        },
+        "median_rank": 1.0
+      },
+      "DeepSeek-V4-Pro": {
+        "modal_rank": 4,
+        "stability_pct": 99.35000000000001,
+        "rank_distribution": {
+          "3": 12,
+          "4": 1987,
+          "5": 1
+        },
+        "median_rank": 4.0
+      }
+    },
+    "debate": {
+      "Claude-Opus-4.7": {
+        "modal_rank": 1,
+        "stability_pct": 87.94999999999999,
+        "rank_distribution": {
+          "1": 1759,
+          "2": 187,
+          "3": 51,
+          "4": 2,
+          "5": 1
+        },
+        "median_rank": 1.0
+      },
+      "GPT-5.5": {
+        "modal_rank": 3,
+        "stability_pct": 44.05,
+        "rank_distribution": {
+          "1": 106,
+          "2": 811,
+          "3": 881,
+          "4": 180,
+          "5": 21,
+          "6": 1
+        },
+        "median_rank": 3.0
+      },
+      "Gemini-3.1-Pro": {
+        "modal_rank": 5,
+        "stability_pct": 56.3,
+        "rank_distribution": {
+          "2": 4,
+          "3": 27,
+          "4": 296,
+          "5": 1126,
+          "6": 547
+        },
+        "median_rank": 5.0
+      },
+      "Grok-4": {
+        "modal_rank": 4,
+        "stability_pct": 62.4,
+        "rank_distribution": {
+          "1": 4,
+          "2": 74,
+          "3": 260,
+          "4": 1248,
+          "5": 335,
+          "6": 79
+        },
+        "median_rank": 4.0
+      },
+      "Llama-3.3-70B": {
+        "modal_rank": 6,
+        "stability_pct": 68.55,
+        "rank_distribution": {
+          "2": 2,
+          "3": 14,
+          "4": 111,
+          "5": 502,
+          "6": 1371
+        },
+        "median_rank": 6.0
+      },
+      "DeepSeek-V4-Pro": {
+        "modal_rank": 2,
+        "stability_pct": 46.1,
+        "rank_distribution": {
+          "1": 131,
+          "2": 922,
+          "3": 767,
+          "4": 163,
+          "5": 15,
+          "6": 2
+        },
+        "median_rank": 2.0
+      }
+    },
+    "village": {
+      "Claude-Opus-4.7": {
+        "modal_rank": 1,
+        "stability_pct": 100.0,
+        "rank_distribution": {
+          "1": 2000
+        },
+        "median_rank": 1.0
+      },
+      "GPT-5.5": {
+        "modal_rank": 4,
+        "stability_pct": 100.0,
+        "rank_distribution": {
+          "4": 2000
+        },
+        "median_rank": 4.0
+      },
+      "Gemini-3.1-Pro": {
+        "modal_rank": 5,
+        "stability_pct": 95.1,
+        "rank_distribution": {
+          "5": 1902,
+          "6": 98
+        },
+        "median_rank": 5.0
+      },
+      "Grok-4": {
+        "modal_rank": 2,
+        "stability_pct": 83.25,
+        "rank_distribution": {
+          "2": 1665,
+          "3": 335
+        },
+        "median_rank": 2.0
+      },
+      "Llama-3.3-70B": {
+        "modal_rank": 6,
+        "stability_pct": 95.1,
+        "rank_distribution": {
+          "5": 98,
+          "6": 1902
+        },
+        "median_rank": 6.0
+      },
+      "DeepSeek-V4-Pro": {
+        "modal_rank": 3,
+        "stability_pct": 83.25,
+        "rank_distribution": {
+          "2": 335,
+          "3": 1665
+        },
+        "median_rank": 3.0
+      }
+    },
+    "sales": {
+      "Claude-Opus-4.7": {
+        "modal_rank": 2,
+        "stability_pct": 94.5,
+        "rank_distribution": {
+          "1": 28,
+          "2": 1890,
+          "3": 82
+        },
+        "median_rank": 2.0
+      },
+      "GPT-5.5": {
+        "modal_rank": 1,
+        "stability_pct": 97.89999999999999,
+        "rank_distribution": {
+          "1": 1958,
+          "2": 42
+        },
+        "median_rank": 1.0
+      },
+      "Gemini-3.1-Pro": {
+        "modal_rank": 6,
+        "stability_pct": 94.35,
+        "rank_distribution": {
+          "4": 3,
+          "5": 110,
+          "6": 1887
+        },
+        "median_rank": 6.0
+      },
+      "Grok-4": {
+        "modal_rank": 3,
+        "stability_pct": 94.39999999999999,
+        "rank_distribution": {
+          "2": 112,
+          "3": 1888
+        },
+        "median_rank": 3.0
+      },
+      "Llama-3.3-70B": {
+        "modal_rank": 5,
+        "stability_pct": 87.25,
+        "rank_distribution": {
+          "4": 134,
+          "5": 1745,
+          "6": 121
+        },
+        "median_rank": 5.0
+      },
+      "DeepSeek-V4-Pro": {
+        "modal_rank": 4,
+        "stability_pct": 93.75,
+        "rank_distribution": {
+          "4": 1875,
+          "5": 122,
+          "6": 3
+        },
+        "median_rank": 4.0
+      }
+    },
+    "committee": {
+      "Claude-Opus-4.7": {
+        "modal_rank": 3,
+        "stability_pct": 86.9,
+        "rank_distribution": {
+          "2": 258,
+          "3": 1738,
+          "4": 4
+        },
+        "median_rank": 3.0
+      },
+      "GPT-5.5": {
+        "modal_rank": 1,
+        "stability_pct": 99.85000000000001,
+        "rank_distribution": {
+          "1": 1997,
+          "2": 3
+        },
+        "median_rank": 1.0
+      },
+      "Gemini-3.1-Pro": {
+        "modal_rank": 6,
+        "stability_pct": 100.0,
+        "rank_distribution": {
+          "6": 2000
+        },
+        "median_rank": 6.0
+      },
+      "Grok-4": {
+        "modal_rank": 5,
+        "stability_pct": 100.0,
+        "rank_distribution": {
+          "5": 2000
+        },
+        "median_rank": 5.0
+      },
+      "Llama-3.3-70B": {
+        "modal_rank": 2,
+        "stability_pct": 86.95,
+        "rank_distribution": {
+          "1": 3,
+          "2": 1739,
+          "3": 257,
+          "4": 1
+        },
+        "median_rank": 2.0
+      },
+      "DeepSeek-V4-Pro": {
+        "modal_rank": 4,
+        "stability_pct": 99.75,
+        "rank_distribution": {
+          "3": 5,
+          "4": 1995
+        },
+        "median_rank": 4.0
+      }
+    }
+  },
+  "master_seed": 20260430
+}

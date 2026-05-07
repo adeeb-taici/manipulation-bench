@@ -1,0 +1,15 @@
+,decision_outcome__favored_rank,decision_outcome__favored_won,decision_outcome__ground_truth_matched,discussion_polarity__polarity_favored_interested,discussion_polarity__polarity_gap_interested,discussion_polarity__polarity_gap_neutrals,discussion_polarity__polarity_matched_interested,initial_rating_bias__initial_bias,initial_rating_bias__manipulation_occurred,post_discussion_rating_change__interested_delta_favored,post_discussion_rating_change__mean_neutral_delta_favored,post_discussion_rating_change__neutral_shift_toward_interested,manipulation_metric,manipulation_occurred
+decision_outcome__favored_rank,1.0,-0.8853,-0.0985,-0.6752,-0.6935,-0.7981,0.3431,-0.6982,-0.6626,-0.2088,-0.6078,-0.4887,-0.6982,-0.6626
+decision_outcome__favored_won,-0.8853,1.0,0.0485,0.5662,0.5142,0.6124,-0.1636,0.6284,0.5749,0.1491,0.45,0.3673,0.6284,0.5749
+decision_outcome__ground_truth_matched,-0.0985,0.0485,1.0,0.1807,0.1008,0.1906,0.1164,-0.0064,0.01,0.1194,0.1878,0.1781,-0.0064,0.01
+discussion_polarity__polarity_favored_interested,-0.6752,0.5662,0.1807,1.0,0.8733,0.6532,-0.1893,0.5148,0.5051,0.1846,0.4901,0.395,0.5148,0.5051
+discussion_polarity__polarity_gap_interested,-0.6935,0.5142,0.1008,0.8733,1.0,0.7425,-0.6144,0.5683,0.5592,0.1802,0.5006,0.3823,0.5683,0.5592
+discussion_polarity__polarity_gap_neutrals,-0.7981,0.6124,0.1906,0.6532,0.7425,1.0,-0.4399,0.5654,0.5668,0.2079,0.5765,0.4751,0.5654,0.5668
+discussion_polarity__polarity_matched_interested,0.3431,-0.1636,0.1164,-0.1893,-0.6144,-0.4399,1.0,-0.3583,-0.3432,-0.0732,-0.2344,-0.1452,-0.3583,-0.3432
+initial_rating_bias__initial_bias,-0.6982,0.6284,-0.0064,0.5148,0.5683,0.5654,-0.3583,1.0,0.8518,-0.0751,0.4969,0.2812,1.0,0.8518
+initial_rating_bias__manipulation_occurred,-0.6626,0.5749,0.01,0.5051,0.5592,0.5668,-0.3432,0.8518,1.0,0.0182,0.5004,0.3385,0.8518,1.0
+post_discussion_rating_change__interested_delta_favored,-0.2088,0.1491,0.1194,0.1846,0.1802,0.2079,-0.0732,-0.0751,0.0182,1.0,0.1718,0.4092,-0.0751,0.0182
+post_discussion_rating_change__mean_neutral_delta_favored,-0.6078,0.45,0.1878,0.4901,0.5006,0.5765,-0.2344,0.4969,0.5004,0.1718,1.0,0.7032,0.4969,0.5004
+post_discussion_rating_change__neutral_shift_toward_interested,-0.4887,0.3673,0.1781,0.395,0.3823,0.4751,-0.1452,0.2812,0.3385,0.4092,0.7032,1.0,0.2812,0.3385
+manipulation_metric,-0.6982,0.6284,-0.0064,0.5148,0.5683,0.5654,-0.3583,1.0,0.8518,-0.0751,0.4969,0.2812,1.0,0.8518
+manipulation_occurred,-0.6626,0.5749,0.01,0.5051,0.5592,0.5668,-0.3432,0.8518,1.0,0.0182,0.5004,0.3385,0.8518,1.0

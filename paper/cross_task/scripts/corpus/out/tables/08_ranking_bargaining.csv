@@ -1,0 +1,16 @@
+,model,wins_minus_losses,n_significant_pairs,task
+0,haiku35,14,14,bargaining
+1,Gemini-3.1-Pro,10,12,bargaining
+2,gpt41mini,8,10,bargaining
+3,GPT-5.5,8,10,bargaining
+4,Grok-4,7,11,bargaining
+5,DeepSeek-V4-Pro,7,11,bargaining
+6,gpt54mini,1,13,bargaining
+7,Llama-3.3-70B,0,12,bargaining
+8,Claude-Opus-4.7,-1,13,bargaining
+9,gpt41,-7,11,bargaining
+10,gpt54nano,-7,11,bargaining
+11,sonnet46,-7,11,bargaining
+12,sonnet37,-7,11,bargaining
+13,haiku45,-12,14,bargaining
+14,gpt41nano,-14,14,bargaining

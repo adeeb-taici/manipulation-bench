@@ -1,0 +1,12 @@
+,model,wins_minus_losses,n_significant_pairs,task
+0,Gemini-3.1-Pro,5,5,village
+1,Grok-4,5,5,village
+2,gpt54nano,5,5,village
+3,gpt54mini,5,5,village
+4,GPT-5.5,4,4,village
+5,DeepSeek-V4-Pro,4,4,village
+6,Claude-Opus-4.7,-2,6,village
+7,Llama-3.3-70B,-4,8,village
+8,gpt41,-4,8,village
+9,gpt41mini,-9,9,village
+10,gpt41nano,-9,9,village

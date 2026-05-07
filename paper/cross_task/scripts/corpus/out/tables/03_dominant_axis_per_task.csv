@@ -1,0 +1,6 @@
+task,axis,spread,min_level,max_level
+bargaining,frame,0.4144,prohibitive,permissive
+committee,difficulty,0.6997,high,low
+debate,difficulty,0.0865,high,low
+sales,difficulty,0.4853,low,high
+village,frame,0.6309,prohibitive,permissive
