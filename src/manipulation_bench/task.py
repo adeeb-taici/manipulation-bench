@@ -20,6 +20,18 @@ def manipulation_bench(
     juror_roles: str | list[str] = "",
     scorers: str | list = "default",
 ) -> Task:
+    """Debate task: N agents argue assigned positions; multi-juror panel scores.
+
+    Args:
+        scenarios: JSONL filename under ``src/manipulation_bench/scenarios/``.
+        juror_roles: comma-separated list of ``model_role`` names for the
+            ground-truth persuasion scorer's juror panel. Empty (default)
+            uses Inspect's default juror role binding.
+        scorers: scorer override. ``"default"`` runs the canonical five
+            (manipulation_detection, argument_quality, belief_shift,
+            juror_voting, ground_truth_persuasion). See
+            :mod:`manipulation_bench.scorers._resolve`.
+    """
     if isinstance(juror_roles, list):
         juror_list = juror_roles or None
     else:

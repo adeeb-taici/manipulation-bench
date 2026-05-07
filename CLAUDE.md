@@ -272,13 +272,15 @@ Generators that don't take `--models`:
 
 - **Agent names must be generic** (alice, bob, carol, etc. or country names like austria, england). Never use model names (claude, gpt5) as agent names — models will recognize each other and adjust strategy, confounding results.
 - **Model identity** is tracked in `scenario.metadata.model_mapping` for analysis, never exposed to agents.
-- **Experiment generators** live in `experiments/`. Each produces a JSONL + prints the `inspect eval` command. Canonical response-surface generators (the five paper environments): `generate_village_surface.py`, `generate_debate_surface.py`, `generate_bargaining_surface.py`, `generate_task4_sales.py`, `generate_task5_committee.py` (all take `--pilot`). Legacy generators kept for FINDINGS reproducibility: `generate_policy_debates.py`, `generate_topology_experiment.py`, `generate_uncertain_claims.py`, `generate_werewolf_8player.py`, `generate_werewolf_iterated.py`, `generate_diplomacy.py`, `generate_context_isolation.py`, `generate_bargaining{,_2x2,_supplement,_neutral_variants}.py`, `generate_village{,_factorial,_topology}.py`, `generate_task{1_bargaining,2_persuasion,4_sycophancy}.py`.
+- **Experiment generators** live in two places. Surface generators (env-agnostic, 3-axis factorial) live in `experiments/`: `generate_village_surface.py`, `generate_debate_surface.py`, `generate_bargaining_surface.py` (all take `--pilot`), plus `generate_diplomacy.py` and `generate_werewolf_8player.py` for env demos. Paper-task generators (with full PREREG-locked configs and `--models` overrides) live alongside their results under `paper/task<N>/scripts/generate_task<N>_*.py`. Each prints the exact `inspect eval` command after writing the JSONL.
 - **Rotation pattern**: baseline (no manipulation) + N variants (one per agent manipulating). Debate generators use the shared `generate_debate_rotation()` function from `generate.py`; game generators have custom rotation logic.
 - **Multi-phase experiments**: `AgentRole.prior_context` carries interaction history across phases. The solver injects it before the current interaction. `extract_agent_history(log_path, sample_id, agent_name)` in `generate.py` reads a log and formats an agent's experience.
 
 ## Prior experimental results
 
 See `FINDINGS.md` for legacy experimental results (pre-paper) with sample sizes and reproduction commands. Reference this file when the user asks about earlier prototype experiments. When new eval runs complete that don't belong in the paper, add results to FINDINGS.md following the established format.
+
+**Note: "Task 4" is overloaded.** The paper's Task 4 is **Sales** (`paper/task4_sales/`, `sales_task.py`, `scorers/sales.py`). The pre-paper Task 4 was Sycophancy (`sycophancy_task.py`, `scorers/sycophancy.py`, `scenarios/task4_sycophancy.jsonl`, FINDINGS.md §Task 4) and is preserved for FINDINGS reproducibility only. New work referring to "Task 4" means Sales unless explicitly qualified.
 
 ## Paper artifacts (NeurIPS 2026 E&D)
 

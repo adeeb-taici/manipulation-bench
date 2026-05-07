@@ -30,6 +30,12 @@ paper/
     frontier_lift.json        # GPT-5→5.5 / V3.2→V4-Pro within-scenario contrasts
     residuals.json            # Cells flagged by additive-model residual analysis
     figures/                  # All cross-task figures
+  paraphrase_robustness/      # Rebuttal addendum: paraphrase-robustness check on T1 + T4
+    PREREG_paraphrase_robustness.md  # Pre-registration + Amendment 1 (T3 → T1 substitution)
+    paraphrases.json          # 30 paraphrases (T1 + T3 + T4 frame levels × 3 versions)
+    eval_log_t1.eval          # T1 paraphrase sweep (450 scenarios; LFS)
+    eval_log_t4.eval          # T4 paraphrase sweep (450 samples; LFS)
+    analysis/results.json     # Per-paraphrase per-model frame slopes + verdict
   README.md                   # This file
 ```
 
@@ -65,65 +71,70 @@ Six models, locked at PREREG time and updated via Amendments A2 (GPT-5 → GPT-5
 
 ## Reproducing analysis
 
-The combined eval logs (`paper/task<N>/eval_log.eval`) are committed via Git LFS — clone with `git lfs install && git lfs pull` to fetch them. Then:
+The combined eval logs (`paper/task<N>/eval_log.eval`) are committed via Git LFS — clone with `git lfs install && git lfs pull` to fetch them. All commands below assume **you are in the repo root** (the directory that contains this `paper/` folder).
 
 ```bash
 # Re-build per-task PREREG verdicts (P1-P6/P7) + figures
-python task1_bargaining/scripts/task1_prereg_analysis.py
-python task2_debate/scripts/task2_prereg_analysis.py
-python task3_village/scripts/task3_prereg_analysis.py
-python task4_sales/scripts/task4_prereg_analysis.py
-python task5_committee/scripts/task5_prereg_analysis.py
-python task6_inbox/scripts/task6_prereg_analysis.py     # held-out cluster-split test
-python task6_inbox/scripts/task6_visuals.py
+python paper/task1_bargaining/scripts/task1_prereg_analysis.py
+python paper/task2_debate/scripts/task2_prereg_analysis.py
+python paper/task3_village/scripts/task3_prereg_analysis.py
+python paper/task4_sales/scripts/task4_prereg_analysis.py
+python paper/task5_committee/scripts/task5_prereg_analysis.py
+python paper/task6_inbox/scripts/task6_prereg_analysis.py     # held-out cluster-split test
+python paper/task6_inbox/scripts/task6_visuals.py
 
 # Bootstrap CIs and Cohen's d (cross-task)
-python cross_task/scripts/run_bootstrap_cis.py
-python cross_task/scripts/run_cohens_d.py
+python paper/cross_task/scripts/run_bootstrap_cis.py
+python paper/cross_task/scripts/run_cohens_d.py
 
 # Per-task response-surface figure (3 difficulty rows × 6 model cols × 5×3 frame×incentive heatmap)
-python cross_task/scripts/run_response_surface.py
+python paper/cross_task/scripts/run_response_surface.py
 
 # Cross-task summary + exploratory analyses
-python cross_task/scripts/cross_task_analysis.py
-python cross_task/scripts/cross_task_ranking_stability.py
-python cross_task/scripts/cross_task_clustering.py
-python cross_task/scripts/surprise_residuals.py
-python cross_task/scripts/frontier_lift.py
-python cross_task/scripts/sample_distributions.py
-python task1_bargaining/scripts/t1_lie_magnitude.py
-python task2_debate/scripts/t2_per_claim.py
-python task3_village/scripts/t3_promise_gap.py
-python task4_sales/scripts/t4_per_question_type.py
+python paper/cross_task/scripts/cross_task_analysis.py
+python paper/cross_task/scripts/cross_task_ranking_stability.py
+python paper/cross_task/scripts/cross_task_clustering.py
+python paper/cross_task/scripts/surprise_residuals.py
+python paper/cross_task/scripts/frontier_lift.py
+python paper/cross_task/scripts/sample_distributions.py
+python paper/task1_bargaining/scripts/t1_lie_magnitude.py
+python paper/task2_debate/scripts/t2_per_claim.py
+python paper/task3_village/scripts/t3_promise_gap.py
+python paper/task4_sales/scripts/t4_per_question_type.py
+
+# Paraphrase-robustness addendum (rebuttal — T1 + T4)
+python paper/paraphrase_robustness/scripts/analyze_paraphrase_robustness.py \
+    --t1-log paper/paraphrase_robustness/eval_log_t1.eval \
+    --t4-log paper/paraphrase_robustness/eval_log_t4.eval
 ```
 
 ## Reproducing the experiments on a new model roster
 
-Each task's generator now accepts a `--models` flag that overrides the paper roster while keeping the rest of the design (axes, reps per cell, scorer, analysis) fixed. The recipe is uniform across all five tasks:
+Each task's generator accepts a `--models` flag that overrides the paper roster while keeping the rest of the design (axes, reps per cell, scorer, analysis) fixed. Recipe (run from the repo root):
 
 ```bash
 # 1. Generate scenarios with your roster.
 #    Bare labels auto-prefix the role; `label=role` pairs let you pick roles explicitly.
-python task1_bargaining/scripts/generate_task1_bargaining.py --models 'opus47,haiku45,gpt55,grok4'
-python task2_debate/scripts/generate_task2_debate_full.py  --models 'opus47,haiku45,gpt55,grok4'
-python task3_village/scripts/generate_task3_village_full.py --models 'opus47,haiku45,gpt55,grok4'
-python task4_sales/scripts/generate_task4_sales.py        --models 'opus47,haiku45,gpt55,grok4'
-python task5_committee/scripts/generate_task5_committee.py    --models 'opus47,haiku45,gpt55,grok4' --sweep
-python task6_inbox/scripts/generate_task6_inbox.py        --models 'opus47,haiku45,gpt55,grok4'
+python paper/task1_bargaining/scripts/generate_task1_bargaining.py --models 'opus47,haiku45,gpt55,grok4'
+python paper/task2_debate/scripts/generate_task2_debate_full.py    --models 'opus47,haiku45,gpt55,grok4'
+python paper/task3_village/scripts/generate_task3_village_full.py  --models 'opus47,haiku45,gpt55,grok4'
+python paper/task4_sales/scripts/generate_task4_sales.py           --models 'opus47,haiku45,gpt55,grok4'
+python paper/task5_committee/scripts/generate_task5_committee.py   --models 'opus47,haiku45,gpt55,grok4' --sweep
+python paper/task6_inbox/scripts/generate_task6_inbox.py           --models 'opus47,haiku45,gpt55,grok4'
 
 # 2. Each generator prints the exact `inspect eval ...` command, with each
 #    `--model-role <role>=openrouter/<provider>/<model>` left as a placeholder.
 #    Copy-paste it and substitute your provider strings into each role.
 
 # 3. Score against the same pre-registered analysis used in the paper.
-python task1_bargaining/scripts/task1_prereg_analysis.py
-python task2_debate/scripts/task2_prereg_analysis.py
-python task3_village/scripts/task3_prereg_analysis.py
-python task4_sales/scripts/task4_prereg_analysis.py
-python task5_committee/scripts/task5_prereg_analysis.py
-python task6_inbox/scripts/task6_prereg_analysis.py
-python cross_task/scripts/run_bootstrap_cis.py
-python cross_task/scripts/run_cohens_d.py
+python paper/task1_bargaining/scripts/task1_prereg_analysis.py
+python paper/task2_debate/scripts/task2_prereg_analysis.py
+python paper/task3_village/scripts/task3_prereg_analysis.py
+python paper/task4_sales/scripts/task4_prereg_analysis.py
+python paper/task5_committee/scripts/task5_prereg_analysis.py
+python paper/task6_inbox/scripts/task6_prereg_analysis.py
+python paper/cross_task/scripts/run_bootstrap_cis.py
+python paper/cross_task/scripts/run_cohens_d.py
 ```
 
 Notes:

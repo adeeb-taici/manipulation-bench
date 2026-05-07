@@ -1,18 +1,19 @@
-# Paraphrase-Robustness Sweep — Launch Instructions
+# Paraphrase-Robustness Sweep — Launch Instructions (frozen runbook)
 
-**Status as of 2026-05-06**: PREREG committed (`1533930`); generator + helper +
-diff-check + analyzer all built; v1 byte-identity verified. **Sweep not yet
-launched** — requires API keys. The user will run the commands below.
+**Status (frozen 2026-05-06 after sweep completion)**: T1 Bargaining + T4 Sales sweeps **completed**; eval logs at `eval_log_t1.eval` and `eval_log_t4.eval`. T3 Village deferred to camera-ready per PREREG Amendment 1; the T3 commands below remain operational and the JSONL is generated.
+
+This file is the runbook capturing the exact commands used to launch the addendum sweeps. Kept for provenance and future re-runs.
 
 ## Pre-flight checklist
 
 - [x] PREREG committed before any sweep launch (`1533930`).
-- [x] `paraphrase_t3_village.jsonl` (180 scenarios) generated.
-- [x] `paraphrase_t4_sales.jsonl` (450 samples) generated.
-- [x] v1 byte-identity diff-check PASSED (`scripts/diff_check_v1.py`).
-- [x] Analyzer ready (`scripts/analyze_paraphrase_robustness.py`).
-- [ ] API keys configured in `.env` at repo root:
-      `OPENROUTER_API_KEY`, `DEEPSEEK_API_KEY`, `DEEPSEEK_BASE_URL=https://api.deepseek.com/v1`.
+- [x] PREREG Amendment 1 committed before T1 launch (`2e3bca3`).
+- [x] `paraphrase_t1_bargaining.jsonl` (450 scenarios) generated and run.
+- [x] `paraphrase_t4_sales.jsonl` (450 samples) generated and run.
+- [x] `paraphrase_t3_village.jsonl` (180 scenarios) generated; deferred to camera-ready.
+- [x] v1 byte-identity diff-check PASSED across T1 + T3 + T4 (`scripts/diff_check_v1.py`).
+- [x] Analyzer (`scripts/analyze_paraphrase_robustness.py`) executed against T1 + T4 logs; PASS on all criteria.
+- [x] API keys configured at sweep time: `OPENROUTER_API_KEY`, `DEEPSEEK_API_KEY`, `DEEPSEEK_BASE_URL=https://api.deepseek.com/v1`.
 
 ## 1. Smoke test (recommended, ~$12)
 

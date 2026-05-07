@@ -11,11 +11,19 @@ For pre-paper exploratory results see [`FINDINGS.md`](FINDINGS.md).
 ## Quick start (new researchers)
 
 ```bash
+# 1. Install. (Required: Python 3.11+. Optional: `uv pip install -e ".[dev]"` works too.)
 pip install -e ".[dev]"
-cp .env.example .env   # add OPENROUTER_API_KEY (optional for the smoke test)
+
+# 2. Fetch the paper's combined eval logs (~1 GB total). Skip if you only want
+#    to run new evals from scratch.
+git lfs install && git lfs pull
+
+# 3. Provider keys. Most models go through OpenRouter; DeepSeek's reasoner
+#    needs the official DeepSeek API for tool calls (see paper/README.md).
+cp .env.example .env   # then add OPENROUTER_API_KEY (and DEEPSEEK_* if needed)
 
 # Smoke test — local, no API key.
-mb run debate --model mockllm/model --limit 1
+mb run debate --model mockllm/model --judge mockllm/model --limit 1
 
 # List available environments.
 mb envs
@@ -32,6 +40,8 @@ mb run debate village sales --model openrouter/anthropic/claude-opus-4.7
 # Analyze the most recent matching log.
 mb analyze 'logs/2026*.eval'
 ```
+
+If `mb` is not on your `PATH` after install, use `python -m manipulation_bench.cli` instead — same CLI, same flags.
 
 `mb run` discovers the model_roles in each environment's default scenario JSONL and binds them all to `--model`, so you don't have to enumerate them manually. Pass `--models name=id,name=id` to override individual roles. `--scenarios <file.jsonl>` swaps in a custom scenario. Any other flag (e.g., `--max-connections`, `--no-fail-on-error`) is forwarded verbatim to `inspect eval`.
 
@@ -50,10 +60,13 @@ Power users can keep using `inspect eval src/manipulation_bench/<task>.py …` d
 
 ```bash
 pip install -e ".[dev]"
-cp .env.example .env   # add your OPENROUTER_API_KEY
+git lfs install && git lfs pull   # fetch the paper's combined eval logs (~1 GB)
+cp .env.example .env              # add your OPENROUTER_API_KEY
 ```
 
-Most models are accessed through [OpenRouter](https://openrouter.ai). Model IDs use the format `openrouter/provider/model-name`. DeepSeek's reasoning models can also be hit through DeepSeek's official API — see [`paper/README.md`](paper/README.md#model-cohort) for the configuration the paper uses.
+Without `git lfs pull`, the files at `paper/task<N>/eval_log.eval` are 100-byte LFS pointers and the paper analysis scripts will fail with cryptic parse errors. If you only want to run new evals (not reproduce the paper), the LFS pull is optional.
+
+Most models are accessed through [OpenRouter](https://openrouter.ai). Model IDs use the format `openrouter/provider/model-name`. DeepSeek's reasoning model needs the official DeepSeek API (set `DEEPSEEK_API_KEY` and `DEEPSEEK_BASE_URL=https://api.deepseek.com/v1` in `.env`) — see [`paper/README.md`](paper/README.md#model-cohort) and [`docs/provider_quirks.md`](docs/provider_quirks.md) for the configuration the paper uses.
 
 ## Quick start (advanced — direct `inspect eval`)
 

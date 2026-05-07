@@ -12,17 +12,25 @@ build/
 .ruff_cache/
 *.stackdump
 
-# Working-set scenario splits from intermediate generator runs.
-# Canonical scenarios committed under their structured names are tracked;
-# these patterns only catch the throw-away splits.
-src/manipulation_bench/scenarios/task1_bargaining_remaining_*.jsonl
-src/manipulation_bench/scenarios/task1_bargaining_pilot.jsonl
-src/manipulation_bench/scenarios/task1_bargaining_v61_pilot.jsonl
+# Working-set scenario splits from intermediate generator runs (per-amendment
+# re-launches, smoke subsets, model-substitution re-runs, etc.). The canonical
+# scenario JSONLs (e.g. task1_bargaining.jsonl, task4_sales.jsonl) are tracked;
+# these patterns catch the throw-away splits that accumulate during paper runs.
+src/manipulation_bench/scenarios/*_remaining*.jsonl
+src/manipulation_bench/scenarios/*_smoke*.jsonl
+src/manipulation_bench/scenarios/*_pilot*.jsonl
+src/manipulation_bench/scenarios/*_dsv4*.jsonl
+src/manipulation_bench/scenarios/*_gpt55*.jsonl
+src/manipulation_bench/scenarios/*_v61_*.jsonl
+src/manipulation_bench/scenarios/*_reasoning_retry*.jsonl
 src/manipulation_bench/scenarios/task1_bargaining_llama_retry.jsonl
-src/manipulation_bench/scenarios/task2_debate_remaining_*.jsonl
-src/manipulation_bench/scenarios/task5_committee_*_smoke*.jsonl
 src/manipulation_bench/scenarios/task5_committee_prohibitive_cheap.jsonl
-src/manipulation_bench/scenarios/inbox_pilot_*.jsonl
+# Paper paraphrase-robustness intermediate smoke + per-task splits
+# (canonical paraphrase_t1_bargaining.jsonl / paraphrase_t4_sales.jsonl are
+# tracked alongside the eval logs; the v3 (deferred) T3 design is also tracked).
+!src/manipulation_bench/scenarios/paraphrase_t1_bargaining.jsonl
+!src/manipulation_bench/scenarios/paraphrase_t4_sales.jsonl
+!src/manipulation_bench/scenarios/paraphrase_t3_village.jsonl
 
 # LaTeX compile artifacts
 paper/figures/_test_compile.*

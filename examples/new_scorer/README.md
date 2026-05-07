@@ -14,6 +14,8 @@ mathematical scorer and an LLM-judge scorer.
 
 ## Use it
 
+Two ways to wire a custom scorer in. First, hardcoded in a task file:
+
 ```python
 # In your task file, import and add to the scorer list:
 from examples.new_scorer.my_scorer import guess_accuracy, response_clarity
@@ -26,14 +28,14 @@ def my_task() -> Task:
     )
 ```
 
-Once the pluggable-scorers override lands (Tier 2b in
-[`paper/cross_task/EXPLORATORY_FINDINGS.md`](../../paper/cross_task/EXPLORATORY_FINDINGS.md)
-roadmap), you'll also be able to pass them on the CLI:
+Second, pluggable via the `-T scorers=...` flag (no fork needed):
 
 ```bash
-mb run my_env --model openrouter/... \
+mb run debate --model openrouter/... \
   -T scorers=examples.new_scorer.my_scorer.guess_accuracy
 ```
+
+Bare names (e.g. `manipulation_detection`) hit the built-in `manipulation_bench.scorers` registry; dotted paths are imported. Comma-separated lists work. The resolver lives in [`src/manipulation_bench/scorers/_resolve.py`](../../src/manipulation_bench/scorers/_resolve.py).
 
 ## Three-step checklist for your own scorer
 
@@ -60,8 +62,8 @@ mb run my_env --model openrouter/... \
 3. **Register**:
    - Add the import to `src/manipulation_bench/scorers/__init__.py`
      and to `__all__`.
-   - Add to the relevant task file's `scorer=[…]` list.
-   - (Or once Tier 2b lands, pass via `-T scorers=…`.)
+   - Either add to the relevant task file's `scorer=[…]` list, or
+     pass via `-T scorers=…` at eval time (see "Use it" above).
 
 ## Common gotchas
 
