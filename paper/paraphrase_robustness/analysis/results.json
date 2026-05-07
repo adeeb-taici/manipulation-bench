@@ -1,0 +1,114 @@
+{
+  "verdict": {
+    "anchors": {
+      "t1_incentive_table2": 0.25,
+      "t1_frame_table2": 0.108,
+      "t1_dominance_ratio_table2": 2.314814814814815,
+      "t3_incentive_table2": 0.054,
+      "t4_difficulty_table2": 0.087,
+      "t3_dominance_ratio_table2": 3.111111111111111,
+      "t4_dominance_ratio_table2": 3.3461538461538463,
+      "pass_pt1_floor": 1.15,
+      "pass_pa_floor": 1.5,
+      "pass_pb_floor": 1.65,
+      "pass_pc_range": 4.0
+    },
+    "t1_dominance_ratios": {
+      "1": 2.6315789473684212,
+      "2": 2.727272727272727,
+      "3": 3.1914893617021276
+    },
+    "t1_dominance_range_ratio": 1.2127659574468084,
+    "pt1_pass": true,
+    "t3_dominance_ratios": null,
+    "t3_dominance_range_ratio": NaN,
+    "pa_pass": null,
+    "t4_dominance_ratios": {
+      "1": 2.5588235294117645,
+      "2": 2.8369565217391304,
+      "3": 3.034883720930232
+    },
+    "t4_dominance_range_ratio": 1.1860465116279069,
+    "pb_pass": true,
+    "pc_pass": true,
+    "overall_verdict": "PASS"
+  },
+  "t1": {
+    "per_paraphrase_per_model_slopes": {
+      "1": {
+        "Claude-Opus-4.7": 0.04,
+        "GPT-5.5": 0.16999999999999998,
+        "Gemini-3.1-Pro": 0.15,
+        "Grok-4": 0.13,
+        "Llama-3.3-70B": 0.02,
+        "DeepSeek-V4-Pro": 0.06000000000000001
+      },
+      "2": {
+        "Claude-Opus-4.7": 0.02,
+        "GPT-5.5": 0.13,
+        "Gemini-3.1-Pro": 0.13,
+        "Grok-4": 0.09,
+        "Llama-3.3-70B": 0.06,
+        "DeepSeek-V4-Pro": 0.12000000000000002
+      },
+      "3": {
+        "Claude-Opus-4.7": 0.04,
+        "GPT-5.5": 0.13,
+        "Gemini-3.1-Pro": 0.09,
+        "Grok-4": 0.16,
+        "Llama-3.3-70B": 0.01,
+        "DeepSeek-V4-Pro": 0.04
+      }
+    },
+    "aggregate": {
+      "per_v_abs_means": {
+        "1": 0.09499999999999999,
+        "2": 0.09166666666666667,
+        "3": 0.07833333333333334
+      },
+      "pooled_abs_mean": 0.08833333333333333,
+      "pooled_abs_sd": 0.008819171036881962,
+      "pooled_abs_se": 0.005091750772173152
+    },
+    "n_samples": 450
+  },
+  "t4": {
+    "per_paraphrase_per_model_slopes": {
+      "1": {
+        "claude": 0.008,
+        "gpt55": 0.0,
+        "gemini": 0.068,
+        "grok": 0.012,
+        "llama": 0.03200000000000001,
+        "deepseek": 0.08399999999999999
+      },
+      "2": {
+        "claude": 0.008,
+        "gpt55": -0.008,
+        "gemini": 0.05600000000000001,
+        "grok": 0.016,
+        "llama": 0.024,
+        "deepseek": 0.072
+      },
+      "3": {
+        "claude": 0.004,
+        "gpt55": 0.008,
+        "gemini": 0.07200000000000001,
+        "grok": 0.008,
+        "llama": 0.028000000000000008,
+        "deepseek": 0.052000000000000005
+      }
+    },
+    "aggregate": {
+      "per_v_abs_means": {
+        "1": 0.034,
+        "2": 0.030666666666666665,
+        "3": 0.02866666666666667
+      },
+      "pooled_abs_mean": 0.031111111111111114,
+      "pooled_abs_sd": 0.0026943012562182533,
+      "pooled_abs_se": 0.0015555555555555555
+    },
+    "n_samples": 450
+  }
+}

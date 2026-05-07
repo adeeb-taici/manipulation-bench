@@ -1,6 +1,6 @@
 # experiments/
 
-Generic, paper-agnostic harness — scenario generators and a cross-env analyzer that work with any model roster. Paper-specific generators and analyses live next to their paper artifact under [`../paper/task<N>/scripts/`](../paper/) and [`../paper/cross_task/scripts/`](../paper/cross_task/scripts/).
+Generic, study-agnostic harness — scenario generators and a cross-env analyzer that work with any model roster. Study-specific generators and analyses (with PREREG-locked configs) live next to their artifacts under [`../paper/task<N>/scripts/`](../paper/) and [`../paper/cross_task/scripts/`](../paper/cross_task/scripts/).
 
 Each script here is a standalone CLI — `python experiments/<name>.py --help`.
 
@@ -14,7 +14,7 @@ The three cross-env generators that produce typed scenarios (frame × incentive 
 | [`generate_debate_surface.py`](generate_debate_surface.py) | Debate | `debate_surface_pilot.jsonl` |
 | [`generate_village_surface.py`](generate_village_surface.py) | Village Commons | `village_surface_pilot.jsonl` |
 
-Sales and Committee generators are paper-specific and live under [`../paper/task4_sales/scripts/`](../paper/task4_sales/scripts/) / [`../paper/task5_committee/scripts/`](../paper/task5_committee/scripts/).
+Sales and Committee generators carry PREREG-locked study configs and live under [`../paper/task4_sales/scripts/`](../paper/task4_sales/scripts/) / [`../paper/task5_committee/scripts/`](../paper/task5_committee/scripts/).
 
 ## Single-env demos (one each)
 
@@ -25,11 +25,11 @@ Sales and Committee generators are paper-specific and live under [`../paper/task
 
 ## Cross-env analyzer
 
-`python -m manipulation_bench.analyze_surface <log>` (defined in `src/`) auto-detects the env and pivots into a frame × incentive / frame × difficulty grid per model. The heavier statistical pipeline used by the paper (sensitivity slopes + bootstrap CIs + 15-dim profile vectors + cross-task correlations) lives at [`../paper/cross_task/scripts/analyze_response_surface.py`](../paper/cross_task/scripts/analyze_response_surface.py).
+`python -m manipulation_bench.analyze_surface <log>` (defined in `src/`) auto-detects the env and pivots into a frame × incentive / frame × difficulty grid per model. The heavier statistical pipeline (sensitivity slopes + bootstrap CIs + 15-dim profile vectors + cross-task correlations) lives at [`../paper/cross_task/scripts/analyze_response_surface.py`](../paper/cross_task/scripts/analyze_response_surface.py).
 
 ## Adding a new environment
 
-Each step below lists the exact file(s) to touch. The pattern is parallel to how Committee (Task 5) was added on top of the existing Debate/Village scaffolding.
+Each step below lists the exact file(s) to touch. The pattern is parallel to how Committee was added on top of the existing Debate/Village scaffolding.
 
 1. **Environment class** — implement the `Environment` ABC in a new `../src/manipulation_bench/environments/<name>.py`. Contract: `base.py`. Reference implementations: `village.py` (tool-call actions, deterministic state) and `committee.py` (multi-phase private → discussion → final). Register in `environments/__init__.py`.
 2. **Task wrapper** — new `../src/manipulation_bench/<name>_task.py` that calls `game_solver.game_interaction()` with the scorer list. Single-agent tasks (no counterparty LLM) can write their own solver — see `sales_task.py`. Add the task name to `_registry.py` for Inspect discovery.

@@ -15,3 +15,31 @@ build/
 
 # Personal scratch
 notes.md
+
+# Working-set scenario splits from intermediate generator runs (per-amendment
+# re-launches, smoke subsets, model-substitution re-runs, etc.). The canonical
+# scenario JSONLs (e.g. task1_bargaining.jsonl, task4_sales.jsonl) are tracked;
+# these patterns catch the throw-away splits that accumulate during paper runs.
+src/manipulation_bench/scenarios/*_remaining*.jsonl
+src/manipulation_bench/scenarios/*_smoke*.jsonl
+src/manipulation_bench/scenarios/*_pilot*.jsonl
+src/manipulation_bench/scenarios/*_dsv4*.jsonl
+src/manipulation_bench/scenarios/*_gpt55*.jsonl
+src/manipulation_bench/scenarios/*_v61_*.jsonl
+src/manipulation_bench/scenarios/*_reasoning_retry*.jsonl
+src/manipulation_bench/scenarios/task1_bargaining_llama_retry.jsonl
+src/manipulation_bench/scenarios/task5_committee_prohibitive_cheap.jsonl
+# Paper paraphrase-robustness intermediate smoke + per-task splits
+# (canonical paraphrase_t1_bargaining.jsonl / paraphrase_t4_sales.jsonl are
+# tracked alongside the eval logs; the v3 (deferred) T3 design is also tracked).
+!src/manipulation_bench/scenarios/paraphrase_t1_bargaining.jsonl
+!src/manipulation_bench/scenarios/paraphrase_t4_sales.jsonl
+!src/manipulation_bench/scenarios/paraphrase_t3_village.jsonl
+
+# LaTeX compile artifacts
+paper/figures/_test_compile.*
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.xdv

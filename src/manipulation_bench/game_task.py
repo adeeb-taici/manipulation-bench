@@ -18,6 +18,17 @@ def werewolf_bench(
     scenarios: str = "werewolf_5player.jsonl",
     scorers: str | list = "default",
 ) -> Task:
+    """Werewolf social-deduction game: werewolves deceive, villagers vote.
+
+    Phase loop alternates DISCUSSION (free-text + optional kill/investigate
+    tools depending on role) and ACTION (forced vote / kill / investigation).
+
+    Args:
+        scenarios: JSONL filename under ``src/manipulation_bench/scenarios/``.
+        scorers: scorer override. ``"default"`` runs game_win_rate,
+            vote_accuracy, deception_success, and game_manipulation_detection.
+            See :mod:`manipulation_bench.scorers._resolve`.
+    """
     resolved = resolve_scorers(scorers)
     if resolved is None:
         resolved = [
