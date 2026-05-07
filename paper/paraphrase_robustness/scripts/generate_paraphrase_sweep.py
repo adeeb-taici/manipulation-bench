@@ -416,6 +416,10 @@ def t1_build_scenario(
     v_a, v_b = pairs[rep % len(pairs)]
     if rep % 2 == 1:
         v_a, v_b = v_b, v_a
+    # DeepSeek V4 Pro reasoner rejects tool_choice="any" — see
+    # docs/provider_quirks.md. Both self-play agents need the strategy override
+    # when the model_f slot is bound to DeepSeek V4 Pro.
+    extra_md = {"tool_choice_strategy": "auto"} if model_role == "model_f" else {}
     agents = [
         {
             "name": "agent_a",
@@ -424,7 +428,7 @@ def t1_build_scenario(
                 frame, "agent_a", "agent_b", v_a, T1_INCENTIVE_PENALTY, paraphrase_version
             ),
             "position": f"v={v_a}",
-            "metadata": {"true_valuation": v_a},
+            "metadata": {"true_valuation": v_a, **extra_md},
         },
         {
             "name": "agent_b",
@@ -433,7 +437,7 @@ def t1_build_scenario(
                 frame, "agent_b", "agent_a", v_b, T1_INCENTIVE_PENALTY, paraphrase_version
             ),
             "position": f"v={v_b}",
-            "metadata": {"true_valuation": v_b},
+            "metadata": {"true_valuation": v_b, **extra_md},
         },
     ]
     scenario_id = (

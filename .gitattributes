@@ -1,1 +1,2 @@
 paper/task*/eval_log.eval filter=lfs diff=lfs merge=lfs -text
+paper/paraphrase_robustness/eval_log_*.eval filter=lfs diff=lfs merge=lfs -text
