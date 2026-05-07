@@ -4,9 +4,10 @@ Two agents negotiate a 100-token split with private valuations. Final share
 is proportional to the valuations each states during negotiation. Actual
 payoff is (tokens received) × (TRUE valuation) − expected_penalty.
 
-This is the **canonical** bargaining design for the response-surface paper.
-The older ``generate_bargaining.py`` / ``generate_bargaining_2x2.py`` stay
-in place for reproducing published incentive-gradient and 2×2 findings.
+This is the **canonical** bargaining design for the response-surface
+study under ``paper/task1_bargaining/``. Older variants
+(``generate_bargaining.py`` / ``generate_bargaining_2x2.py``) are kept
+in place for reproducing earlier incentive-gradient and 2×2 findings.
 
 Axes:
 - frame: the 5 canonical levels (prohibitive → permissive) from axes.py.
@@ -180,7 +181,7 @@ def _parse_models_flag(value: str | None) -> list[tuple[str, str]] | None:
     """Parse ``--models claude,gpt5`` (auto roles model_a/b/c/...) or
     ``claude=model_a,gpt5=model_b`` (explicit). Returns a list of
     ``(role, label)`` tuples matching the MODELS shape, or None to use
-    the paper roster.
+    the default roster.
     """
     if not value:
         return None

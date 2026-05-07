@@ -7,8 +7,7 @@ around, and the levers exposed for handling them.
 
 ## DeepSeek V4 Pro reasoner
 
-Used as `model_f` in the paper's roster (Amendment A3 swap from
-DeepSeek-v3.2).
+Bound as `model_f` in the canonical 6-model frontier roster.
 
 **Symptoms**:
 - OpenRouter: rejects with "no endpoints available matching your guardrail
@@ -19,7 +18,7 @@ DeepSeek-v3.2).
   reasoner. Specific-function selection (`{"type": "function", ...}`) is
   also rejected.
 
-**Workaround used in the paper**:
+**Workaround**:
 1. Configure DeepSeek's official API directly. Add to `.env`:
    ```
    DEEPSEEK_API_KEY=...
@@ -36,8 +35,8 @@ DeepSeek-v3.2).
    handles the case where the reasoner doesn't call a tool on the first
    attempt.
 
-This is the only place the paper's evaluation diverges from the framework's
-default tool-choice handling.
+This is the only place the framework diverges from its default
+tool-choice handling.
 
 ## OpenAI / Azure GPT-5 strict-mode tool schemas
 
@@ -67,8 +66,8 @@ If you discover a provider that needs framework-side handling:
 
 1. Add the symptom + workaround here.
 2. Prefer per-agent metadata (like `tool_choice_strategy`) over global
-   provider switches so paper scenarios remain reproducible across
-   provider changes.
+   provider switches so scenarios remain reproducible across provider
+   changes.
 3. Reference this file from any new comment in
    `src/manipulation_bench/game_solver.py` so future readers can find the
    full context without code archaeology.

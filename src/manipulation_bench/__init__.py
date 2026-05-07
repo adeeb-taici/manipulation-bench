@@ -5,8 +5,8 @@ manipulation across debates, social-deduction games (Werewolf), negotiation
 (Diplomacy / Bargaining), public-goods (Village Commons), single-agent
 representation (Sales), committee evaluation with conflict of interest, and
 inbox triage. Every environment shares the same response-surface
-parameterization (frame x incentive x difficulty), so per-task results can be
-compared cross-environment with a unified analyzer.
+parameterization (frame x incentive x difficulty), so results can be compared
+cross-environment with a unified analyzer.
 
 Common entry points:
 
@@ -14,7 +14,7 @@ Common entry points:
   ``mb envs``, ``mb analyze``).
 - :mod:`manipulation_bench.axes` — canonical response-surface axes and
   per-environment frame / incentive prompt fragments.
-- :mod:`manipulation_bench.environments` — environment ABC plus
+- :mod:`manipulation_bench.environments` — environment ABC plus the
   Debate / Werewolf / Diplomacy / Village / Committee implementations.
 - :mod:`manipulation_bench.scorers` — LLM-judge, statistical, and
   mathematical scorers per environment.
@@ -23,8 +23,6 @@ Common entry points:
   :mod:`.bargaining_task`, :mod:`.inbox_task` — Inspect AI ``@task`` entry
   points.
 
-The paper artifacts (NeurIPS 2026 E&D Track) live under ``paper/``; see
-``paper/README.md`` for the per-task pre-registrations and combined eval logs.
-The framework itself is independent of the paper — every environment can be
-reused with custom scenarios, models, and scorers.
+See the top-level ``README.md`` for the quickstart and ``examples/`` for
+templates on adding a new environment or scorer.
 """
