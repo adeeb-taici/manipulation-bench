@@ -194,7 +194,7 @@ This section evaluates each prediction in [prereg.md §9](prereg.md). Verdicts u
 
 > Prediction: ≥1 model reaches `suppression_rate` ≥ 0.80 on at least one (frame, incentive, difficulty) cell at the high end of the response surface.
 
-**Verdict: PASS**. **21 saturated cells** observed, all Gemini 3.1 Pro. 3 of these are at the primary `permissive × high × high` location. Gemini's selfish frame saturates across all 9 (incentive, difficulty) cells; minimal × high incentive saturates across all 3 difficulties.
+**Verdict: PASS**. **21 saturated cells** observed (Gemini 15, Grok 4, Llama 2). 3 of these are at the primary `permissive × high × high` location (Gemini 0.81, Grok 0.94, Llama 0.81). Gemini's selfish frame saturates across all 9 (incentive, difficulty) cells; minimal × high incentive saturates across all 3 difficulties.
 
 ## B.4 P-T6.4 — Channel classification (novel)
 

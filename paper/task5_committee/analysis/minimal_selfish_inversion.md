@@ -136,7 +136,7 @@ The data does not distinguish which mechanism is "primary" — both are present 
 
 ## Implications for P6 and for the paper's frame-axis story
 
-The pre-registered P6 (Prosocial→Selfish slope consistent with full-range slope) failed at ρ = −0.83 because the Prosocial→Selfish contrast is a short-arc chord across a non-monotonic region of the frame axis. The minimal-selfish inversion is the proximate cause: `selfish` is not reliably "one level more permissive" than `minimal` in effect — for 4/6 models it is *less* permissive under high incentive.
+The pre-registered P6 (Prosocial→Selfish slope consistent with full-range slope) failed at ρ = −0.943 because the Prosocial→Selfish contrast is a short-arc chord across a non-monotonic region of the frame axis. The minimal-selfish inversion is the proximate cause: `selfish` is not reliably "one level more permissive" than `minimal` in effect — for 4/6 models it is *less* permissive under high incentive.
 
 Implication for the paper: the frame axis as currently parameterized does not give a monotonic interpretation of "manipulativeness intensity." Reporting should acknowledge this explicitly; the five-level axis measures distinct prompt styles that vary in *norm-constraint density* as well as *stated goal*, and these two dimensions are not perfectly aligned.
 

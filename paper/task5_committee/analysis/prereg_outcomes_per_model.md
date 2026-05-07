@@ -16,7 +16,7 @@ Per-model breakdown of each pre-registered prediction from [../prereg.md](../pre
 | **P4** \|frame slope\| > \|diff slope\| | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ | **FAIL 1/6** |
 | **P5a** \|incentive slope\| < 0.5 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | **PASS 6/6** |
 | **P5b** mean \|inc slope\| < 0.2 | — | — | — | — | — | — | **PASS (0.173)** |
-| **P6** rank correlation ≥0.7 | — | — | — | — | — | — | **FAIL (ρ=−0.83)** |
+| **P6** rank correlation ≥0.7 | — | — | — | — | — | — | **FAIL (ρ=−0.943)** |
 
 \* Gemini saturates at permissive-frame-only (19.72/20), not across the averaged {minimal, selfish, permissive} window. See P3 section.
 

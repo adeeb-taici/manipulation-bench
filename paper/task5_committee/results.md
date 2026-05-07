@@ -58,7 +58,7 @@ Six interested-party models, each paired with a fixed neutral panel of 4.
 | P3 — saturation (≥18/≤2 per criterion across minimal+selfish+permissive) | **FAIL (weak)** | Gemini saturates at permissive only (19.72), not averaged |
 | P4 — frame slope > difficulty slope | **FAIL** | 1/6 individually; aggregate \|frame\|=0.31 < \|diff\|=0.64 |
 | P5 — \|incentive slope\| < 0.2 mean, none > 0.5 | **PASS** | mean 0.173, all 6 below 0.5 |
-| P6 — Spearman ρ ≥ 0.7 (prosocial→selfish vs full-range) | **FAIL** | ρ = **−0.83** (anti-correlated) |
+| P6 — Spearman ρ ≥ 0.7 (prosocial→selfish vs full-range) | **FAIL** | ρ = **−0.943** (anti-correlated) |
 
 ---
 
@@ -135,6 +135,8 @@ Difficulty slope mean magnitude (0.643) is **2× the frame slope** and **3.7× t
 # §B — Pre-registered tests
 
 This section evaluates each prediction in [prereg.md §9](prereg.md). Verdicts use the exact thresholds specified in the PREREG.
+
+> **Note (audit 2026-05-06):** Per-prediction tables in §B.1–B.6 contain stale per-model values from before Amendments A2/A3 (GPT-5 → GPT-5.5; DeepSeek V3.2 → V4 Pro). The verdict-summary table (§above) and §A (descriptive cells) are aligned with the post-amendment data and with [`analysis/prereg_outcomes_per_model.md`](analysis/prereg_outcomes_per_model.md); §B tables are not. The §B verdicts (PASS/FAIL labels) are still correct — only the cited per-model numbers drift. Regenerate via `python scripts/task5_prereg_analysis.py`.
 
 ## B.1 P1 — Prohibitive endpoint calibration
 
