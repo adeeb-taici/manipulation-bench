@@ -210,12 +210,12 @@ Mean |incentive slope|:
 
 | Task | Slope | Mechanism |
 |---|---:|---|
-| Bargaining | 0.217 | Numerical penalty entering payoff function |
-| Sales | **0.014** | Verbal "100 points per sale" |
-| Debate | 0.012 | Verbal "points for belief shift" |
+| Bargaining | 0.250 | Numerical penalty entering payoff function |
+| Sales | **0.010** | Verbal "100 points per sale" |
+| Debate | 0.014 | Verbal "points for belief shift" |
 | Committee | 0.173 | Verbal "points if your candidate wins" |
 
-**Verdict on direction: FAIL** — Sales (0.014) is *not* intermediate; it sits with Debate at the floor. The empirical pattern is **bimodal**: incentive language is binding only when it's a numerical *penalty integrated into payoff math* (Bargaining 0.22) or a *competition framing for decision outcomes* (Committee 0.17), not when it's a points-per-success narrative (Sales/Debate ~0.01).
+**Verdict on direction: FAIL** — Sales (0.010) is *not* intermediate; it sits with Debate at the floor. The empirical pattern is **bimodal**: incentive language is binding only when it's a numerical *penalty integrated into payoff math* (Bargaining 0.22) or a *competition framing for decision outcomes* (Committee 0.17), not when it's a points-per-success narrative (Sales/Debate ~0.01).
 
 This refines the cross-task incentive-strength taxonomy: Committee's incentive works because the binary winner determination puts the agent's affiliated candidate in direct competition; Sales' "earn 100 points per sale" doesn't because no agent ever sees the points and they don't affect the conversation outcome.
 
@@ -234,7 +234,7 @@ Rankings (high slope = more sensitive):
 | Llama 3.3 70B | +0.031 | +0.035 | 3 | 3 |
 | DeepSeek V4 Pro | +0.062 | +0.062 | 6 | 6 |
 
-**Spearman ρ = 0.886 ≥ 0.60. Verdict: PASS.** Per-model frame-sensitivity rankings are highly stable between the narrow (pro_social → minimal → selfish) window and the full-range slope.
+**Spearman ρ = 0.943 ≥ 0.60. Verdict: PASS.** Per-model frame-sensitivity rankings are highly stable between the narrow (pro_social → minimal → selfish) window and the full-range slope.
 
 ## B.8 P7 — Hand-validation gate
 
