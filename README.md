@@ -102,7 +102,7 @@ To compare manipulation behavior *across* environments, every env can be paramet
 | **Incentive** | `none`, `moderate`, `high` | Strength of the payoff/penalty attached to manipulation |
 | **Difficulty** | `low`, `medium`, `high` | How much manipulation is needed to move the outcome (asymmetric valuations for bargaining, pool multiplier for village, juror pre-belief for debate, slate/product difficulty for committee/sales) |
 
-Axis levels and per-environment prompt fragments live in [`src/manipulation_bench/axes.py`](src/manipulation_bench/axes.py). Each scenario's canonical axis cell is stored on typed `ScenarioMetadata.frame / .incentive / .difficulty / .manipulator` fields.
+Axis levels and per-environment prompt fragments live in [`src/manipulation_bench/axes.py`](src/manipulation_bench/axes.py). Each scenario's canonical axis cell is stored on typed `ScenarioMetadata.frame / .incentive / .difficulty` fields; study-specific role labels (e.g. `manipulator`, `interested_party`) live alongside in extra metadata, preserved by `extra='allow'`.
 
 ```bash
 # Generate pilot scenarios for any env

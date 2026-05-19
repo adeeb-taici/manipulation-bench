@@ -12,14 +12,22 @@ dependencies = [
     # breaking, so we cap at <0.4 (current verified: 0.3.205).
     "inspect-ai>=0.3.80,<0.4",
     "pyyaml>=6.0,<7.0",
-    "diplomacy>=1.1.0,<2.0",
 ]
 
 [project.optional-dependencies]
+# The Diplomacy environment wraps the third-party `diplomacy` package. Users
+# who don't run that env don't need it — install via
+# ``pip install 'manipulation-bench[diplomacy]'``.
+diplomacy = [
+    "diplomacy>=1.1.0,<2.0",
+]
 dev = [
     "pytest>=7.0,<9.0",
     # ruff is pre-1.0; breaking changes can happen in minor releases.
     "ruff>=0.1,<1.0",
+    # Keep diplomacy in dev so the full test suite (which exercises Diplomacy)
+    # runs out of the box.
+    "diplomacy>=1.1.0,<2.0",
 ]
 
 [project.entry-points.inspect_ai]

@@ -499,19 +499,16 @@ def frame_prompt(env: str, frame: str, paraphrase_version: int = 1) -> str:
     version.
 
     Version 1 (default) returns the canonical ``FRAME_PROMPTS[env][frame]``
-    text — bit-identical to pre-addendum behavior. Versions 2/3 are
-    paraphrases used by the paraphrase-robustness addendum sweep
-    (paper/paraphrase_robustness/). Tasks without paraphrases (anything
-    other than village/sales) raise on version != 1 since the addendum
-    only authored paraphrases for T3 and T4.
+    text. Versions 2/3 are alternate wordings stored in ``FRAME_PARAPHRASES``
+    for robustness sweeps. Only envs present in ``FRAME_PARAPHRASES`` support
+    version != 1; others raise.
     """
     if paraphrase_version == 1 or paraphrase_version is None:
         return FRAME_PROMPTS[env][frame]
     if env not in FRAME_PARAPHRASES:
         raise ValueError(
             f"frame_prompt: paraphrase_version={paraphrase_version} requested for "
-            f"env={env!r} but only {list(FRAME_PARAPHRASES)} have authored paraphrases. "
-            f"See paper/paraphrase_robustness/PREREG_paraphrase_robustness.md."
+            f"env={env!r} but only {list(FRAME_PARAPHRASES)} have authored paraphrases."
         )
     if frame not in FRAME_PARAPHRASES[env]:
         raise ValueError(

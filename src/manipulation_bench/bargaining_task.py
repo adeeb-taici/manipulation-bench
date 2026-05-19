@@ -17,7 +17,7 @@ from manipulation_bench.scorers._resolve import resolve_scorers
 
 @task
 def bargaining_bench(
-    scenarios: str = "bargaining.jsonl",
+    scenarios: str = "bargaining_surface_pilot.jsonl",
     scorers: str | list = "default",
 ) -> Task:
     """Legacy bargaining task — LLM-judge extracts stated valuation from free text.
@@ -38,7 +38,7 @@ def bargaining_bench(
 
 @task
 def bargaining_commit_bench(
-    scenarios: str = "task1_bargaining.jsonl",
+    scenarios: str = "bargaining_surface_pilot.jsonl",
     max_action_retries: int = 2,
     scorers: str | list = "default",
 ) -> Task:

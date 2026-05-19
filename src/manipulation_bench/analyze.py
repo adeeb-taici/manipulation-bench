@@ -27,12 +27,24 @@ _WEREWOLF_SCORERS = {
 }
 _DIPLOMACY_SCORERS = {"territorial_success", "agreement_compliance", "negotiation_manipulation"}
 _DEBATE_SCORERS = {"manipulation_detection", "argument_quality", "belief_shift"}
+_VILLAGE_SCORERS = {"exploitation_rate", "promise_action_gap", "village_fairness"}
+_COMMITTEE_SCORERS = {
+    "initial_rating_bias",
+    "post_discussion_rating_change",
+    "discussion_polarity",
+    "decision_outcome",
+}
+_SALES_SCORERS = {"sales_classifier"}
+_BARGAINING_SCORERS = {"bargaining_commit", "bargaining_manipulation"}
+_INBOX_SCORERS = {"inbox_triage"}
+_NAMING_SCORERS = {"vocabulary_convergence"}
 
 
 def detect_environment(log: EvalLog) -> str:
     """Detect the environment type from scorer names present in the eval log.
 
-    Returns one of ``"werewolf"``, ``"diplomacy"``, ``"debate"``, or ``"unknown"``.
+    Returns one of the known env labels, or ``"generic"`` when no scorer-name
+    set matches (recognized scorers still print under the generic summary).
     """
     scorer_names: set[str] = set()
 
@@ -46,7 +58,19 @@ def detect_environment(log: EvalLog) -> str:
         return "diplomacy"
     if scorer_names & _DEBATE_SCORERS:
         return "debate"
-    return "unknown"
+    if scorer_names & _VILLAGE_SCORERS:
+        return "village"
+    if scorer_names & _COMMITTEE_SCORERS:
+        return "committee"
+    if scorer_names & _SALES_SCORERS:
+        return "sales"
+    if scorer_names & _BARGAINING_SCORERS:
+        return "bargaining"
+    if scorer_names & _INBOX_SCORERS:
+        return "inbox"
+    if scorer_names & _NAMING_SCORERS:
+        return "naming"
+    return "generic"
 
 
 def find_manipulator(sample: Any) -> str | None:
@@ -391,6 +415,60 @@ def analyze_diplomacy(log: EvalLog) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Generic per-scorer summary (fallback for envs without a dedicated analyzer)
+# ---------------------------------------------------------------------------
+
+
+def analyze_generic(log: EvalLog) -> None:
+    """Print a per-scorer summary: mean (and per-agent breakdown for dict scores).
+
+    Used for envs that don't have a dedicated analyzer above. Handles both
+    scalar-valued scores (one number per sample) and dict-valued scores
+    (one number per agent per sample). Falls back gracefully when a sample is
+    missing a scorer.
+    """
+    samples = log.samples or []
+    if not samples:
+        print("No samples found in log.")
+        return
+
+    # Collect: scorer_name -> list of (sample_id, value)
+    scalar_vals: dict[str, list[float]] = defaultdict(list)
+    dict_vals: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+    for sample in samples:
+        for scorer_name, score_obj in sample.scores.items():
+            val = score_obj.value
+            if isinstance(val, dict):
+                for k, v in val.items():
+                    if isinstance(v, (int, float)):
+                        dict_vals[scorer_name][k].append(float(v))
+            elif isinstance(val, (int, float)):
+                scalar_vals[scorer_name].append(float(val))
+
+    _avg = lambda vals: sum(vals) / len(vals) if vals else 0.0
+
+    if scalar_vals:
+        print(f"\n{'=' * 60}")
+        print("  SCORER MEANS (scalar)")
+        print(f"{'=' * 60}")
+        print(f"{'Scorer':<36} {'Mean':>10} {'N':>8}")
+        print("-" * 56)
+        for name in sorted(scalar_vals):
+            vals = scalar_vals[name]
+            print(f"{name:<36} {_avg(vals):>10.3f} {len(vals):>8}")
+
+    for scorer_name in sorted(dict_vals):
+        print(f"\n{'=' * 60}")
+        print(f"  {scorer_name.upper().replace('_', ' ')} (per key)")
+        print(f"{'=' * 60}")
+        print(f"{'Key':<36} {'Mean':>10} {'N':>8}")
+        print("-" * 56)
+        for key in sorted(dict_vals[scorer_name]):
+            vals = dict_vals[scorer_name][key]
+            print(f"{key:<36} {_avg(vals):>10.3f} {len(vals):>8}")
+
+
+# ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
 
@@ -419,11 +497,14 @@ def main() -> None:
         analyze_werewolf(log)
     elif env == "diplomacy":
         analyze_diplomacy(log)
-    else:
-        # Default to debate analysis for "debate" and "unknown"
+    elif env == "debate":
         results = analyze_rotation(log)
         print_tables(results)
         print_susceptibility(results)
+    else:
+        # village / committee / sales / bargaining / inbox / naming / generic
+        # — print per-scorer summaries.
+        analyze_generic(log)
 
 
 if __name__ == "__main__":

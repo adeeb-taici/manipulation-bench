@@ -37,14 +37,14 @@ class ScenarioMetadata(BaseModel, extra="allow"):
     game_state: dict[str, Any] | None = None
 
     # Response-surface axes — canonical names defined in axes.py.
-    # ``None`` means the axis is inapplicable to the scenario (e.g., a baseline
-    # with no assigned manipulator). Old JSONL files that carry these keys
-    # under untyped metadata still load because ``extra='allow'`` preserves
-    # duplicates; the analyzer prefers typed fields when present.
+    # ``None`` means the axis is inapplicable to the scenario.
+    # Generators that designate a specific agent (e.g., "manipulator",
+    # "interested_party", "buyer") store that under their own key in
+    # ``metadata`` — ``extra='allow'`` preserves arbitrary keys, so
+    # study-specific role labels don't need to be typed here.
     frame: str | None = None
     incentive: str | None = None
     difficulty: str | None = None
-    manipulator: str | None = None
 
 
 class ScenarioConfig(BaseModel, frozen=True):

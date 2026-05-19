@@ -1,54 +1,58 @@
 # Scenarios
 
-JSONL files describing scenario configurations for `inspect eval`. One JSON object per line = one scenario (one `inspect` sample).
+JSONL files describing scenario configurations for `inspect eval`. One JSON
+object per line = one scenario (one `inspect` sample).
 
-Most files here are **generator output** — reproducible by running the matching script in `experiments/`. A few hand-written files exist as minimal examples. Delete-and-regenerate anything from `experiments/` is safe.
+Most files here are **generator output**. The framework only needs to load
+them; producing them is the generator's job. Generators live in two places:
 
-## Starting points (read these first)
+- [`experiments/`](../../../experiments/) — env-agnostic harness generators
+  (surface generators, plus a couple of minimal env demos).
+- [`paper/task<N>/scripts/`](../../../paper/) — study-specific generators that
+  produced the response-surface paper's JSONLs. Many files in this directory
+  are their output; the generator filename usually appears in scenario metadata.
 
-| File | What it is | How to regenerate |
-|------|------------|-------------------|
-| `debate_2agent.jsonl` | Minimal 2-agent debate (1 scenario). Hand-written example. | — |
-| `personhood_rotation.jsonl` | Standard debate rotation: 4 debaters, baseline + 1 scenario per manipulator (5 total). | `python -m manipulation_bench.generate experiments/personhood.yaml -o src/manipulation_bench/scenarios/personhood_rotation.jsonl` |
-| `werewolf_5player.jsonl` | Smallest social-deduction game (1 game, 5 players). | — |
-| `village_6player.jsonl` | Smallest public-goods game (1 game, 6 players). | — |
-| `diplomacy_7player.jsonl` | One 7-power Diplomacy game. | — |
-| `naming_game.jsonl` | Naming-game vocabulary-convergence example. | — |
+If you just want to try the framework, ignore this directory and start from
+[`examples/new_environment/`](../../../examples/new_environment/).
 
-## Published experiment outputs
+## Hand-written starting points
 
-Each of these was used for a section in [`FINDINGS.md`](../../../FINDINGS.md). The scenario JSONL is committed so results are reproducible bit-for-bit.
+These are tiny, fully readable examples for getting oriented or smoke-testing:
 
-| File | FINDINGS section | Generator |
-|------|------------------|-----------|
-| `policy_debates.jsonl` | §1 Policy debates | `experiments/generate_policy_debates.py` |
-| `topology_experiment.jsonl` | §2 Topology | `experiments/generate_topology_experiment.py` |
-| `uncertain_claims.jsonl` | §3, §7 Uncertain claims | `experiments/generate_uncertain_claims.py` |
-| `werewolf_8player.jsonl` | §4 Werewolf tournament | `experiments/generate_werewolf_8player.py` |
-| `werewolf_iterated_p2.jsonl` | §5 Werewolf iterated Phase 2 | `experiments/generate_werewolf_iterated.py` |
-| `diplomacy_multimodel.jsonl` | §6 Diplomacy multi-model | `experiments/generate_diplomacy.py` |
-| `context_isolation.jsonl` | §8 Context isolation | `experiments/generate_context_isolation.py` |
-| `bargaining.jsonl` | §9 Bargaining gradient | `experiments/generate_bargaining.py` |
-| `bargaining_supp.jsonl` | §9 Bargaining supplement | `experiments/generate_bargaining_supplement.py` |
-| `bargaining_2x2.jsonl` | §10 Instruction × incentive | `experiments/generate_bargaining_2x2.py` |
-| `bargaining_neutral_variants.jsonl` | §11 Neutral-prompt robustness | `experiments/generate_bargaining_neutral_variants.py` |
-| `village_experiment.jsonl` | §12 Village Commons | `experiments/generate_village.py` |
+| File | What it is |
+|------|------------|
+| `debate_2agent.jsonl` | Minimal 2-agent debate (1 scenario). |
+| `werewolf_5player.jsonl` | Smallest social-deduction game (1 game, 5 players). |
+| `village_6player.jsonl` | Smallest public-goods game (1 game, 6 players). |
+| `diplomacy_7player.jsonl` | One 7-power Diplomacy game. |
+| `naming_game.jsonl` | Naming-game vocabulary-convergence example. |
 
-## Response-surface pilots (frame × incentive × difficulty)
-
-These JSONLs parameterize each environment on the three shared axes defined in [`../axes.py`](../axes.py). Every scenario's `metadata.frame`, `.incentive`, `.difficulty`, and `.manipulator` are set to canonical names (`prohibitive`/`pro_social`/`minimal`/`selfish`/`permissive`; `none`/`moderate`/`high`; `low`/`medium`/`high`). Analyze cross-env with `python -m manipulation_bench.analyze_surface <log>`.
+## Generated from `experiments/`
 
 | File | Generator |
 |------|-----------|
-| `village_surface_pilot.jsonl` | `experiments/generate_village_surface.py --pilot` (5×3×3 cells × 1 game) |
-| `debate_surface_pilot.jsonl` | `experiments/generate_debate_surface.py --pilot` (1 claim per difficulty tier × 5×3 × 4 manipulator agents) |
-| `bargaining_surface_pilot.jsonl` | `experiments/generate_bargaining_surface.py --pilot` (3 models × 5×3×3 cells × 1 pair/tier) |
-| `sales_pilot.jsonl` | `experiments/generate_task4_sales.py --pilot` |
-| `committee_pilot.jsonl` | `experiments/generate_task5_committee.py --pilot` (2 models × 3 frames × 1 incentive × 4 medium slates = 24) |
-| `task5_committee_sweep.jsonl` | `experiments/generate_task5_committee.py --sweep` (1 model × 5×3×3 × 1 slate/tier = 45) |
+| `personhood_rotation.jsonl` | `python -m manipulation_bench.generate experiments/personhood.yaml -o src/manipulation_bench/scenarios/personhood_rotation.jsonl` |
+| `village_surface_pilot.jsonl` | `experiments/generate_village_surface.py --pilot` |
+| `debate_surface_pilot.jsonl` | `experiments/generate_debate_surface.py --pilot` |
+| `bargaining_surface_pilot.jsonl` | `experiments/generate_bargaining_surface.py --pilot` |
+| `werewolf_8player.jsonl` | `experiments/generate_werewolf_8player.py` |
+| `diplomacy_multimodel.jsonl` | `experiments/generate_diplomacy.py` |
 
-## Other experimental outputs (not yet in FINDINGS)
+The three `_surface_pilot.jsonl` files parameterize their env on the canonical
+axes defined in [`../axes.py`](../axes.py): frame (5) × incentive (3) ×
+difficulty (3). Cross-environment pivots use
+`python -m manipulation_bench.analyze_surface <log>`.
 
-| File | Generator |
-|------|-----------|
-| `village_factorial.jsonl` | `experiments/generate_village_factorial.py` |
+## Generated by paper scripts (see `paper/`)
+
+The bulk of files here — anything matching `task[1-5]_*.jsonl`, `sales_*.jsonl`,
+`committee_*.jsonl`, `inbox_*.jsonl`, `paraphrase_*.jsonl`,
+`bargaining_{2x2,supp,neutral_variants}.jsonl`,
+`village_{experiment,factorial,topology}.jsonl`, `policy_debates.jsonl`,
+`topology_experiment.jsonl`, `uncertain_claims.jsonl`,
+`context_isolation.jsonl`, `werewolf_iterated_p2.jsonl`, `task4_sycophancy.jsonl`,
+the `debate_candidates_round*.jsonl` set, `task2_persuasion.jsonl` — were
+produced by generators living under [`paper/task<N>/scripts/`](../../../paper/).
+They are kept here so the paper's eval logs reproduce bit-for-bit. Treat them
+as historical artifacts; for new work, write your own scenario JSONL or fork
+one of the hand-written examples above.

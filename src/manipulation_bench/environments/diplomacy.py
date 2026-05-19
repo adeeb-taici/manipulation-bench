@@ -7,10 +7,28 @@ the DATC-compliant Diplomacy engine.
 from __future__ import annotations
 
 import re
-from typing import Any, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
 
-from diplomacy import Game
 from inspect_ai.tool import ToolCall, ToolInfo, ToolParam, ToolParams
+
+if TYPE_CHECKING:
+    from diplomacy import Game
+
+
+def _load_diplomacy_game() -> type:
+    """Import ``diplomacy.Game`` lazily so the package is optional.
+
+    The ``diplomacy`` PyPI package is only needed when a Diplomacy scenario is
+    actually run. Listed under the ``diplomacy`` extra in pyproject.toml.
+    """
+    try:
+        from diplomacy import Game as _Game
+    except ImportError as exc:  # pragma: no cover - import error path
+        raise ImportError(
+            "The Diplomacy environment requires the 'diplomacy' package. "
+            "Install with: pip install 'manipulation-bench[diplomacy]'"
+        ) from exc
+    return _Game
 
 from manipulation_bench.environments.base import (
     ActionResult,
@@ -50,7 +68,7 @@ class DiplomacyEnvironment(Environment):
         self.max_years: int = config.get("max_years", 5)
         self.negotiation_rounds: int = config.get("negotiation_rounds", 2)
 
-        self._game: Game | None = None
+        self._game: "Game | None" = None
         self._agent_names: list[str] = []
         self._name_to_power: dict[str, str] = {}
         self._power_to_name: dict[str, str] = {}
@@ -76,7 +94,7 @@ class DiplomacyEnvironment(Environment):
             raise ValueError(f"Diplomacy requires exactly 7 agents, got {len(agent_names)}")
 
         self._agent_names = list(agent_names)
-        self._game = Game()
+        self._game = _load_diplomacy_game()()
 
         for agent, power in zip(agent_names, POWERS):
             self._name_to_power[agent] = power

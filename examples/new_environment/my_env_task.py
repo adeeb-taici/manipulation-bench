@@ -60,10 +60,9 @@ def guess_accuracy() -> Scorer:
 
     async def score(state: TaskState, target: Target) -> Score:
         interaction = state.store_as(InteractionState)
-        env = interaction.instance
-        if env is None:
-            return Score(value=0.0, explanation="no environment instance")
-        gs = env.get_game_state_for_scoring()
+        gs = interaction.scenario.metadata.game_state if interaction.scenario else None
+        if not gs:
+            return Score(value=0.0, explanation="no game_state recorded")
         won = bool(gs.get("won"))
         return Score(
             value=1.0 if won else 0.0,

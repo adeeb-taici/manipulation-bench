@@ -33,6 +33,9 @@ from manipulation_bench.axes import (  # noqa: E402
     VILLAGE_DIFFICULTY_MULTIPLIERS,
 )
 
+# Default 6-agent roster. Roles a/b/c/d cycle across the 6 slots, so labels
+# in the first four positions get doubled in positions 5-6. Override via
+# ``--models`` on the CLI without editing this file.
 MODELS = [
     {"name": "agent_1", "model_role": "model_a", "label": "claude"},
     {"name": "agent_2", "model_role": "model_b", "label": "gpt5"},
@@ -41,6 +44,33 @@ MODELS = [
     {"name": "agent_5", "model_role": "model_a", "label": "claude"},  # doubled
     {"name": "agent_6", "model_role": "model_b", "label": "gpt5"},  # doubled
 ]
+
+
+def _parse_models_flag(value: str | None) -> list[dict] | None:
+    """Parse ``--models`` into the 6-agent MODELS shape.
+
+    Accepts a comma-separated label list (e.g. ``"claude,gpt5,gemini,grok"``).
+    Roles ``model_a``/``b``/``c``/... are assigned per unique label; the 6
+    agent slots cycle through the labels, so a 4-label list doubles the first
+    two labels in positions 5-6 (matching the default layout). 1-6 labels are
+    accepted; more than 6 are truncated.
+    """
+    if not value:
+        return None
+    labels = [chunk.strip() for chunk in value.replace(";", ",").split(",") if chunk.strip()]
+    if not labels:
+        return None
+    label_to_role: dict[str, str] = {}
+    for label in labels:
+        if label not in label_to_role:
+            label_to_role[label] = f"model_{chr(ord('a') + len(label_to_role))}"
+    roster: list[dict] = []
+    for i in range(6):
+        label = labels[i % len(labels)]
+        roster.append(
+            {"name": f"agent_{i + 1}", "model_role": label_to_role[label], "label": label}
+        )
+    return roster
 
 # The manipulator slot is fixed to agent_1 for reproducibility; the agent name
 # does not leak model identity.
@@ -139,10 +169,25 @@ def generate(
 
 
 def main() -> None:
+    global MODELS
     ap = argparse.ArgumentParser()
     ap.add_argument("--pilot", action="store_true", help="generate pilot subset only")
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument(
+        "--models",
+        default=None,
+        help=(
+            "Override the model roster. Comma-separated label list "
+            "(e.g. 'claude,gpt5,gemini,grok'). Labels cycle through the 6 "
+            "agent slots; roles model_a/b/c/... are auto-assigned per "
+            "unique label."
+        ),
+    )
     args = ap.parse_args()
+
+    override = _parse_models_flag(args.models)
+    if override:
+        MODELS = override
 
     if args.pilot:
         # One cell per (frame, incentive, difficulty), single game.

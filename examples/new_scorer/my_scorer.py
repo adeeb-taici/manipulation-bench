@@ -43,16 +43,18 @@ def guess_accuracy() -> Scorer:
     """1.0 if the guesser hit the secret, 0.0 otherwise.
 
     Pairs with examples/new_environment/my_env.py. Reads game state
-    from the InteractionState's environment instance.
+    from scenario.metadata.game_state, which the solver populates from
+    the environment's get_game_state_for_scoring() at end-of-run.
     """
 
     async def score(state: TaskState, target: Target) -> Score:
         interaction = state.store_as(InteractionState)
-        env = interaction.instance  # the MyEnvironment instance the solver built
-        if env is None:
-            return Score(value=0.0, explanation="no environment instance found")
+        # game_solver writes the env's get_game_state_for_scoring() output
+        # to scenario.metadata.game_state after the run finishes.
+        game_state = interaction.scenario.metadata.game_state if interaction.scenario else None
+        if not game_state:
+            return Score(value=0.0, explanation="no game_state recorded")
 
-        game_state = env.get_game_state_for_scoring()
         won = bool(game_state.get("won"))
         return Score(
             value=1.0 if won else 0.0,
