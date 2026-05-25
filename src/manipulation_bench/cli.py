@@ -305,6 +305,7 @@ def build_parser() -> argparse.ArgumentParser:
         epilog=(
             "Examples:\n"
             "  mb run debate --model mockllm/model              # smoke test, no API\n"
+            "  mb run debate --model ollama/qwen3:14b           # local, offline (see docs/ollama.md)\n"
             "  mb run debate --model openrouter/<provider>/<model>\n"
             "  mb run debate village --model openrouter/<provider>/<model>\n"
             "  mb run debate --models debater=openrouter/<provider>/<model>,judge=openrouter/<provider>/<model>\n"
