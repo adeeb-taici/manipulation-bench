@@ -191,6 +191,8 @@ The framework is model-agnostic — bind any provider/model via `--model-role`. 
 
 Cheap-tier alternatives for jurors / bystander panels / smoke runs: `openrouter/openai/gpt-5-mini`, `openrouter/google/gemini-3-flash-preview`, `openrouter/anthropic/claude-haiku-4.5`, `openrouter/deepseek/deepseek-chat`. [`FINDINGS.md`](FINDINGS.md) examples use earlier-generation models (Claude Opus 4.6, GPT-5, Gemini 2.5 Pro, Grok 3) preserved at the versions they were originally published at.
 
+**Local / offline runs** are supported via [Ollama](https://ollama.com/) using Inspect AI's native `ollama` provider — see [`docs/ollama.md`](docs/ollama.md). Example: `mb run debate --model ollama/qwen3:14b --limit 1`.
+
 ## Communication topologies
 
 Control what each agent can see via the `visibility` field on a scenario:

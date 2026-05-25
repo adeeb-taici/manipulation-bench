@@ -60,6 +60,44 @@ re-run sequentially almost always succeed.
 **Workaround**: Drop concurrency to `--max-connections 3` or use the
 `task_retry` script in `experiments/`. No solver change needed.
 
+## Ollama (local models)
+
+Inspect AI ships a native `ollama` provider that wraps Ollama's
+OpenAI-compatible `/v1/chat/completions` endpoint. Model IDs follow the
+form `ollama/<model>[:tag]`, e.g. `ollama/qwen3:14b`. Setup, model
+selection, and remote-daemon configuration are documented in
+[`ollama.md`](ollama.md). The compatibility notes below cover the
+framework-side gotchas that go beyond plain "use the provider".
+
+**Tool calling depends on the model**. The framework's game
+environments (Werewolf, Diplomacy, Village, Committee, Bargaining,
+Inbox) require structured tool calls in ACTION phases. Open-weights
+models vary widely in tool-call quality:
+
+- Known-good for tool calls: `qwen3:14b`, `qwen3:4b-instruct`,
+  `llama3.1:8b`, `llama3.1:70b`, `gemma2:27b`.
+- Models that don't support tool calls will exhaust the solver's
+  `max_action_retries` budget on every ACTION phase and the sample will
+  fail cleanly. Swap to a tool-capable model rather than raising the
+  retry budget — the failure mode is correct and silencing it would hide
+  a real capability gap.
+
+**No API key needed for localhost**. Inspect's `ollama` provider
+defaults the API key to a dummy `"ollama"` string and the base URL to
+`http://localhost:11434/v1`. Nothing in `.env` is required for the
+common case.
+
+**Remote daemons** via `OLLAMA_BASE_URL` (mirrors how `DEEPSEEK_BASE_URL`
+works for that provider):
+
+```bash
+export OLLAMA_BASE_URL=http://gpu-box.local:11434/v1
+mb run debate --model ollama/qwen3:14b --limit 1
+```
+
+The `/v1` suffix matters — pointing at the bare host without it gives
+`HTTP 404`.
+
 ## Adding a new quirk
 
 If you discover a provider that needs framework-side handling:
