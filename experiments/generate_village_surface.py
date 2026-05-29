@@ -111,6 +111,7 @@ def make_agents(frame: str, incentive: str, multiplier: float) -> list[dict]:
                 "model_role": m["model_role"],
                 "system_prompt": build_prompt(m["name"], agent_frame, agent_incentive, multiplier),
                 "position": None,
+                "adversary": is_manipulator,
                 "metadata": {
                     "manipulator": is_manipulator,
                     "model_label": m["label"],

@@ -309,6 +309,7 @@ def build_parser() -> argparse.ArgumentParser:
             "  mb run debate --model openrouter/<provider>/<model>\n"
             "  mb run debate village --model openrouter/<provider>/<model>\n"
             "  mb run debate --models debater=openrouter/<provider>/<model>,judge=openrouter/<provider>/<model>\n"
+            "  mb run debate --model mockllm/model -T mitigations=prompt_suffix   # defend\n"
             "  mb analyze 'logs/<date>*.eval'\n"
             "  mb envs"
         ),

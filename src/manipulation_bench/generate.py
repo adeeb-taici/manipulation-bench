@@ -94,6 +94,7 @@ def generate_debate_rotation(
             "model_role": agent["model_role"],
             "system_prompt": prompt,
             "position": agent["position"],
+            "adversary": manipulative,
             "metadata": {"manipulative": manipulative},
         }
 
@@ -200,6 +201,7 @@ def generate_debate_surface(
             "model_role": agent["model_role"],
             "system_prompt": prompt,
             "position": agent["position"],
+            "adversary": is_manipulator,
             "metadata": {"manipulator": is_manipulator},
         }
 

@@ -10,6 +10,7 @@ from manipulation_bench.scorers import (
     game_win_rate,
     vote_accuracy,
 )
+from manipulation_bench.mitigations._resolve import resolve_mitigations
 from manipulation_bench.scorers._resolve import resolve_scorers
 
 
@@ -17,6 +18,7 @@ from manipulation_bench.scorers._resolve import resolve_scorers
 def werewolf_bench(
     scenarios: str = "werewolf_5player.jsonl",
     scorers: str | list = "default",
+    mitigations: str | list = "default",
 ) -> Task:
     """Werewolf social-deduction game: werewolves deceive, villagers vote.
 
@@ -39,6 +41,6 @@ def werewolf_bench(
         ]
     return Task(
         dataset=load_scenarios(scenarios),
-        solver=game_interaction(),
+        solver=game_interaction(mitigations=resolve_mitigations(mitigations)),
         scorer=resolved,
     )

@@ -55,6 +55,7 @@ def make_agent(power_name, manipulative=False):
         "model_role": POWER_MODEL_ROLES[power_name],
         "system_prompt": prompt,
         "position": None,
+        "adversary": manipulative,
         "metadata": {"manipulative": manipulative},
     }
 

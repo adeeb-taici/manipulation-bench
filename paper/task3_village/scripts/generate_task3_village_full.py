@@ -148,6 +148,7 @@ def build_scenario(
             "model_role": manipulator_role,
             "system_prompt": build_agent_prompt("agent_1", frame, incentive, multiplier),
             "position": None,
+            "adversary": True,
             "metadata": {"manipulator": True, "model_label": manipulator_label},
         }
     ]
@@ -171,6 +172,7 @@ def build_scenario(
                 "model_role": bystander_role,
                 "system_prompt": build_agent_prompt(bystander_name, "minimal", "none", multiplier),
                 "position": None,
+                "adversary": False,
                 "metadata": bystander_md,
             }
         )

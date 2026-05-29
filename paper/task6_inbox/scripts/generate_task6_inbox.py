@@ -124,6 +124,7 @@ def build_scenario(
         "system_prompt": sys_prompt,
         "inbox": inbox,
         "model_role": model_role,
+        "adversary": True,
         "metadata": metadata,
     }
 

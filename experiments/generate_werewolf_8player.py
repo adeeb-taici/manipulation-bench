@@ -48,6 +48,7 @@ def make_agent(model, manipulative=False):
         "model_role": model["model_role"],
         "system_prompt": prompt,
         "position": None,
+        "adversary": manipulative,
         "metadata": {"manipulative": manipulative},
     }
 

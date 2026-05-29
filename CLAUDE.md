@@ -240,6 +240,35 @@ mb run debate --model ... -T scorers=my_pkg.my_module.my_scorer
 
 Resolution lives in [`src/manipulation_bench/scorers/_resolve.py`](src/manipulation_bench/scorers/_resolve.py): bare names hit `manipulation_bench.scorers`, dotted names go through `importlib.import_module`. Default behavior (no `-T scorers=…`) is unchanged — each task keeps its own hardcoded list as the fallback. New scorer factories must take no required positional args (the resolver calls `factory()` with no args).
 
+### Mitigations (defenses)
+
+A **mitigation** is a runtime-resolved plug-in that tries to *reduce* measured manipulation. Same scenario JSONL, baseline vs. defended, no regeneration. Every `game_solver.py`-based `@task` (debate, werewolf, diplomacy, village, committee) accepts a `mitigations` parameter (default `"default"` = undefended); sales is single-agent and bypasses the unified solver, so it is out of scope for v1 (see the TODO in `sales_task.py`).
+
+```bash
+# Built-in defenses, one or comma-separated
+mb run debate --model mockllm/model -T mitigations=prompt_suffix
+inspect eval src/manipulation_bench/task.py -T mitigations=prompt_suffix,critic_monitor ...
+
+# critic_monitor calls a separate model — bind the mitigation_critic role (falls back to judge, then default)
+mb run debate --model ... --model-role mitigation_critic=openrouter/... -T mitigations=critic_monitor
+
+# Dotted import path to a custom defense factory
+mb run debate --model ... -T mitigations=my_pkg.my_module.my_defense
+```
+
+The package lives in [`src/manipulation_bench/mitigations/`](src/manipulation_bench/mitigations/):
+- [`base.py`](src/manipulation_bench/mitigations/base.py) — `Mitigation` ABC with three hooks (all no-op by default): `transform_agent` (sync, rewrite a role before the loop), `transform_messages` (async, rewrite the model input per turn), `transform_response` (async, flag/redact/rewrite the output before delivery).
+- [`_resolve.py`](src/manipulation_bench/mitigations/_resolve.py) — clone of the scorer resolver. Sentinels `{None, "default", "DEFAULT", ""}` and empty lists → `None` (undefended); bare names hit `manipulation_bench.mitigations`, dotted go through `importlib`. Factories take no args.
+- [`_targeting.py`](src/manipulation_bench/mitigations/_targeting.py) — `is_adversary(agent, scenario)` reads **only** `AgentRole.adversary` (the canonical targeting flag; no metadata fallback).
+- [`prompt_suffix.py`](src/manipulation_bench/mitigations/prompt_suffix.py) (~25 LOC, `transform_agent`) — appends a skeptical-framing suffix to non-adversary agents.
+- [`critic_monitor.py`](src/manipulation_bench/mitigations/critic_monitor.py) (~80 LOC, `transform_response`) — a critic LLM screens each adversary message and flags/redacts/rewrites it.
+
+**Targeting refactor**: `AgentRole.adversary: bool = False` ([models.py](src/manipulation_bench/models.py)) is the canonical record of who manipulates. Generators set it alongside the legacy `metadata.manipulator`/`metadata.manipulative` keys (which remain for scorer-side bookkeeping and pre-refactor eval logs). `analyze.py`'s manipulator detection prefers `adversary` and falls back to the legacy metadata.
+
+**Solver integration** ([game_solver.py](src/manipulation_bench/game_solver.py)): `game_interaction(mitigations=...)` applies `transform_agent` when building the agent table, `transform_messages` after the message view is built, and `transform_response` after `generate` (in both DISCUSSION and the ACTION retry loop). Each turn stamps `Turn.metadata['mitigations_applied']`; when a response is altered, the pre-mitigation text is preserved in `Turn.metadata['original_content']`. The solver feeds the **original** (pre-mitigation) content to `env.process_discussion`, so committee's `discussion_polarity` measures the speaker's actual statement, not the critic's wrapper — no `committee.py` change needed.
+
+Templates and tests: [`examples/new_mitigation/`](examples/new_mitigation/) is a copy-pasteable starter; [`tests/test_mitigations.py`](tests/test_mitigations.py) covers the resolver, targeting, and both reference defenses.
+
 ### Reusing the study generators with a different model roster
 
 All five study-task generators under `paper/` accept a `--models` CLI flag so external researchers don't have to fork the script to change models. Bare labels auto-prefix the role; `label=role` pairs let you pick roles explicitly.

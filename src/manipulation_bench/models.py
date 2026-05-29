@@ -14,6 +14,12 @@ class AgentRole(BaseModel, frozen=True):
     system_prompt: str
     position: str | None = None
     prior_context: str | None = None
+    # Canonical targeting flag for the mitigation/defense system: True marks
+    # the manipulator / interested party. Mitigations read this (via
+    # ``mitigations._targeting.is_adversary``) to decide who to harden vs.
+    # protect. Generators set it; ``ScenarioConfig.metadata.manipulator`` /
+    # committee ``interested_party_name`` remain the *scorer*-side record.
+    adversary: bool = False
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 

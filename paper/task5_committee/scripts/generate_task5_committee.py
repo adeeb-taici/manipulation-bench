@@ -173,6 +173,7 @@ def _scenario(
                 incentive_key=incentive_key,
             ),
             "position": None,
+            "adversary": True,
             "metadata": {
                 "role": "interested",
                 "model_label": interested_model["label"],
@@ -195,6 +196,7 @@ def _scenario(
                     incentive_key=incentive_key,
                 ),
                 "position": None,
+                "adversary": False,
                 "metadata": {
                     "role": "neutral",
                     "model_label": neutral["label"],

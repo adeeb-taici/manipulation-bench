@@ -8,18 +8,31 @@ from inspect_ai.model import (
     ChatMessageTool,
     ChatMessageUser,
     GenerateConfig,
+    ModelOutput,
     get_model,
 )
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 from inspect_ai.tool import ToolCallError, ToolFunction
 
 from manipulation_bench.environments import Observation, PhaseType, create_environment
+from manipulation_bench.mitigations.base import Mitigation
 from manipulation_bench.models import AgentRole, InteractionState, ScenarioConfig, Turn
 
 
 @solver
-def game_interaction(max_action_retries: int = 2) -> Solver:
-    """Orchestrate a game environment interaction using tool calls."""
+def game_interaction(
+    max_action_retries: int = 2, mitigations: list[Mitigation] | None = None
+) -> Solver:
+    """Orchestrate a game environment interaction using tool calls.
+
+    ``mitigations`` (optional) are defenses applied at three points each turn:
+    ``transform_agent`` (rewrite the role before the loop), ``transform_messages``
+    (rewrite the model input), and ``transform_response`` (flag/redact/rewrite the
+    model output before it is delivered to other agents). See
+    :mod:`manipulation_bench.mitigations`. A ``transform_response`` that drops
+    ACTION tool calls counts as a missing-tool retry (handled below).
+    """
+    mits: list[Mitigation] = mitigations or []
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         scenario = ScenarioConfig(**state.metadata["scenario"])
@@ -37,7 +50,14 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
         env = create_environment(env_config)
         env.setup(interaction.agent_names)
 
-        agents_by_name = {a.name: a for a in scenario.agents}
+        # Apply mitigation agent-rewrites (e.g. skeptical-framing suffix on
+        # protected agents) once, before the interaction loop.
+        agents_by_name = {}
+        for a in scenario.agents:
+            transformed = a
+            for mit in mits:
+                transformed = mit.transform_agent(transformed, scenario)
+            agents_by_name[a.name] = transformed
         turn_index = 0
 
         while not env.is_terminal():
@@ -51,6 +71,8 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                 model = get_model(role=agent_config.model_role)
                 obs = env.get_observation(actor_name)
                 messages = _build_game_messages(agent_config, obs, interaction, scenario)
+                for mit in mits:
+                    messages = await mit.transform_messages(agent_config, messages, scenario)
 
                 tools = env.get_tools(actor_name, phase)
                 tool_choice = env.get_tool_choice(phase) if tools else None
@@ -89,21 +111,38 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                         tool_choice=tool_choice,
                         config=GenerateConfig(max_tokens=agent_max_tokens),
                     )
+                    original_content = output.completion or ""
+                    for mit in mits:
+                        output = await mit.transform_response(
+                            agent_config, messages, output, scenario
+                        )
                     content = output.completion or ""
 
                     # Process tool calls (e.g., Diplomacy message routing)
                     if output.message.tool_calls:
                         env.process_tool_calls(actor_name, output.message.tool_calls, phase)
 
-                    # Non-tool processing (e.g., Debate tracks first-speaker)
-                    env.process_discussion(actor_name, content, phase)
+                    # Non-tool processing (e.g., Debate tracks first-speaker).
+                    # Feed the *original* (pre-mitigation) text so text-based
+                    # scorers (e.g. committee discussion_polarity) measure what
+                    # the agent actually said, not a critic flag/redaction. Other
+                    # agents still receive ``content`` (delivered text) via the
+                    # transcript built from ``Turn.content``.
+                    env.process_discussion(actor_name, original_content, phase)
 
+                    turn_meta = {
+                        "phase": phase.name,
+                        "phase_type": "discussion",
+                        "mitigations_applied": [m.name for m in mits],
+                    }
+                    if content != original_content:
+                        turn_meta["original_content"] = original_content
                     turn = Turn(
                         speaker=actor_name,
                         content=content,
                         round=phase.round,
                         turn_index=turn_index,
-                        metadata={"phase": phase.name, "phase_type": "discussion"},
+                        metadata=turn_meta,
                     )
                     interaction.turns = [*interaction.turns, turn]
                     turn_index += 1
@@ -111,6 +150,7 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                 elif phase.phase_type == PhaseType.ACTION:
                     action = None
                     raw_content = ""
+                    original_raw = ""
                     result = None
                     for attempt in range(max_action_retries + 1):
                         output = await model.generate(
@@ -119,6 +159,14 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                             tool_choice=tool_choice,
                             config=GenerateConfig(max_tokens=agent_max_tokens),
                         )
+                        original_raw = output.completion or ""
+                        # Mitigations run inside the retry loop so a critic that
+                        # rewrites/redacts a turn still gets parsed by
+                        # ``tool_calls_to_action`` below.
+                        for mit in mits:
+                            output = await mit.transform_response(
+                                agent_config, messages, output, scenario
+                            )
                         raw_content = output.completion or ""
 
                         if not output.message.tool_calls:
@@ -149,18 +197,22 @@ def game_interaction(max_action_retries: int = 2) -> Solver:
                             break
                         _append_tool_errors(messages, output.message, result.error)
 
+                    turn_meta = {
+                        "phase": phase.name,
+                        "phase_type": "action",
+                        "action": action,
+                        "action_valid": result.valid,
+                        "action_narrative": result.narrative,
+                        "mitigations_applied": [m.name for m in mits],
+                    }
+                    if raw_content != original_raw:
+                        turn_meta["original_content"] = original_raw
                     turn = Turn(
                         speaker=actor_name,
                         content=raw_content,
                         round=phase.round,
                         turn_index=turn_index,
-                        metadata={
-                            "phase": phase.name,
-                            "phase_type": "action",
-                            "action": action,
-                            "action_valid": result.valid,
-                            "action_narrative": result.narrative,
-                        },
+                        metadata=turn_meta,
                     )
                     interaction.turns = [*interaction.turns, turn]
                     turn_index += 1

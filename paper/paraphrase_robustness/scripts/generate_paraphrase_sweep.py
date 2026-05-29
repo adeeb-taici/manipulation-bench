@@ -145,6 +145,7 @@ def t3_build_scenario(
                 "agent_1", frame, T3_INCENTIVE, multiplier, paraphrase_version
             ),
             "position": None,
+            "adversary": True,
             "metadata": {"manipulator": True, "model_label": manipulator_label},
         }
     ]
@@ -166,6 +167,7 @@ def t3_build_scenario(
                     bystander_name, "minimal", "none", multiplier, paraphrase_version=1
                 ),
                 "position": None,
+                "adversary": False,
                 "metadata": bystander_md,
             }
         )

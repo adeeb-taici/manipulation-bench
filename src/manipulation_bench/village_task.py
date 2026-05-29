@@ -4,6 +4,7 @@ from inspect_ai import Task, task
 
 from manipulation_bench.dataset import load_scenarios
 from manipulation_bench.game_solver import game_interaction
+from manipulation_bench.mitigations._resolve import resolve_mitigations
 from manipulation_bench.scorers._resolve import resolve_scorers
 from manipulation_bench.scorers.village import (
     exploitation_rate,
@@ -16,6 +17,7 @@ from manipulation_bench.scorers.village import (
 def village_bench(
     scenarios: str = "village_6player.jsonl",
     scorers: str | list = "default",
+    mitigations: str | list = "default",
 ) -> Task:
     """Village Commons public-goods game (6 agents): contribute / inspect / accuse.
 
@@ -40,6 +42,6 @@ def village_bench(
         ]
     return Task(
         dataset=load_scenarios(scenarios),
-        solver=game_interaction(),
+        solver=game_interaction(mitigations=resolve_mitigations(mitigations)),
         scorer=resolved,
     )

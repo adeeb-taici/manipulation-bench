@@ -39,6 +39,11 @@ mb analyze 'logs/2026*.eval'
   mb run debate --model openrouter/... -T scorers=manipulation_detection,my_pkg.my_module.my_scorer
   ```
   Bare names hit the built-in `manipulation_bench.scorers` registry; dotted names are imported. The resolver lives in [`src/manipulation_bench/scorers/_resolve.py`](src/manipulation_bench/scorers/_resolve.py).
+- **Add a new mitigation (defense)**: see [`examples/new_mitigation/`](examples/new_mitigation/). Defenses are resolved at runtime like scorers, so the same scenario runs baseline vs. defended without regeneration:
+  ```bash
+  mb run debate --model openrouter/... -T mitigations=prompt_suffix,critic_monitor
+  ```
+  Built-ins live in [`src/manipulation_bench/mitigations/`](src/manipulation_bench/mitigations/) (`prompt_suffix`, `critic_monitor`); dotted names import a custom factory.
 
 ## Architecture
 

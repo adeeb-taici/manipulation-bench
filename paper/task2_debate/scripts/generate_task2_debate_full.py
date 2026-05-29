@@ -147,6 +147,7 @@ def build_scenarios() -> list[dict]:
                                         "model_role": "truthful_debater",
                                         "system_prompt": claim["truthful_prompt"],
                                         "position": "correct",
+                                        "adversary": False,
                                         "metadata": {"manipulative": False},
                                     },
                                     {
@@ -154,6 +155,7 @@ def build_scenarios() -> list[dict]:
                                         "model_role": m_role,
                                         "system_prompt": manipulator_prompt,
                                         "position": "incorrect",
+                                        "adversary": True,
                                         "metadata": {"manipulative": True},
                                     },
                                 ],

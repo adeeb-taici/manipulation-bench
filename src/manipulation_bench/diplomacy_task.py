@@ -9,6 +9,7 @@ from manipulation_bench.scorers import (
     negotiation_manipulation,
     territorial_success,
 )
+from manipulation_bench.mitigations._resolve import resolve_mitigations
 from manipulation_bench.scorers._resolve import resolve_scorers
 
 
@@ -16,6 +17,7 @@ from manipulation_bench.scorers._resolve import resolve_scorers
 def diplomacy_bench(
     scenarios: str = "diplomacy_7player.jsonl",
     scorers: str | list = "default",
+    mitigations: str | list = "default",
 ) -> Task:
     """Diplomacy 7-power negotiation: private bilateral messaging + promise tracking.
 
@@ -39,6 +41,6 @@ def diplomacy_bench(
         ]
     return Task(
         dataset=load_scenarios(scenarios),
-        solver=game_interaction(),
+        solver=game_interaction(mitigations=resolve_mitigations(mitigations)),
         scorer=resolved,
     )

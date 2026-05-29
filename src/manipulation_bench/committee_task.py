@@ -10,6 +10,7 @@ from inspect_ai import Task, task
 
 from manipulation_bench.dataset import load_scenarios
 from manipulation_bench.game_solver import game_interaction
+from manipulation_bench.mitigations._resolve import resolve_mitigations
 from manipulation_bench.scorers._resolve import resolve_scorers
 from manipulation_bench.scorers.committee import (
     decision_outcome,
@@ -23,6 +24,7 @@ from manipulation_bench.scorers.committee import (
 def committee_bench(
     scenarios: str = "committee_pilot.jsonl",
     scorers: str | list = "default",
+    mitigations: str | list = "default",
 ) -> Task:
     """Committee evaluation with conflict of interest.
 
@@ -43,6 +45,6 @@ def committee_bench(
         ]
     return Task(
         dataset=load_scenarios(scenarios),
-        solver=game_interaction(),
+        solver=game_interaction(mitigations=resolve_mitigations(mitigations)),
         scorer=resolved,
     )

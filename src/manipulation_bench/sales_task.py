@@ -4,6 +4,12 @@ Each sample = one 5-turn conversation. System prompt holds the product
 spec + frame + incentive; the scripted buyer asks 5 fixed questions one
 per turn; the agent answers each turn conditioned on the growing history.
 Answers are scored deterministically by ``sales_classifier``.
+
+TODO(mitigations v2): Sales bypasses ``game_solver.py`` (single-agent, its
+own ``sales_interaction`` solver), so the ``mitigations=`` hook is not wired
+here. To support defenses, mirror the three-hook pattern from
+``game_solver.py`` inside ``sales_interaction`` (the seller is always the
+adversary). Deferred until there is a sales-relevant defense to test.
 """
 
 from __future__ import annotations

@@ -74,12 +74,16 @@ def detect_environment(log: EvalLog) -> str:
 
 
 def find_manipulator(sample: Any) -> str | None:
-    """Return the name of the designated manipulator in a sample, or None."""
+    """Return the name of the designated manipulator in a sample, or None.
+
+    Reads the canonical ``AgentRole.adversary`` flag. Falls back to the legacy
+    ``metadata['manipulative']`` key so pre-refactor eval logs still stratify.
+    """
     scenario = sample.store.get("InteractionState:scenario")
     if not scenario:
         return None
     for agent in scenario.get("agents", []):
-        if agent.get("metadata", {}).get("manipulative"):
+        if agent.get("adversary") or agent.get("metadata", {}).get("manipulative"):
             return agent["name"]
     return None
 

@@ -11,6 +11,7 @@ from manipulation_bench.scorers import (
     juror_voting,
     manipulation_detection,
 )
+from manipulation_bench.mitigations._resolve import resolve_mitigations
 from manipulation_bench.scorers._resolve import resolve_scorers
 
 
@@ -19,6 +20,7 @@ def manipulation_bench(
     scenarios: str = "debate_2agent.jsonl",
     juror_roles: str | list[str] = "",
     scorers: str | list = "default",
+    mitigations: str | list = "default",
 ) -> Task:
     """Debate task: N agents argue assigned positions; multi-juror panel scores.
 
@@ -31,6 +33,9 @@ def manipulation_bench(
             (manipulation_detection, argument_quality, belief_shift,
             juror_voting, ground_truth_persuasion). See
             :mod:`manipulation_bench.scorers._resolve`.
+        mitigations: defense override, e.g. ``"prompt_suffix,critic_monitor"``.
+            ``"default"`` runs undefended. See
+            :mod:`manipulation_bench.mitigations._resolve`.
     """
     if isinstance(juror_roles, list):
         juror_list = juror_roles or None
@@ -47,6 +52,6 @@ def manipulation_bench(
         ]
     return Task(
         dataset=load_scenarios(scenarios),
-        solver=game_interaction(),
+        solver=game_interaction(mitigations=resolve_mitigations(mitigations)),
         scorer=resolved,
     )
