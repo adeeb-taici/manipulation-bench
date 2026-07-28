@@ -1,0 +1,1681 @@
+{
+  "prespecified": true,
+  "spec": {
+    "regression": "Delta_D ~ 1 + assertive",
+    "cluster_unit": "environment (G=6)",
+    "wild_bootstrap": {
+      "weights": "Webb 6-point",
+      "B": 9999,
+      "null_imposed": true,
+      "seed": 20260728
+    },
+    "randomization_inference": "exact over all C(6,3)=20 partitions",
+    "power_ceiling": "RI attainable minimum one-sided p = 1/20 = 0.05"
+  },
+  "structural_note": "assertive is a deterministic function of environment and does not vary within cluster. The contrast is cluster-level with G=6 and a 3-vs-3 split; effective n = 6, not 36. Additional models add rows but no clusters and cannot lower the RI floor below 0.05.",
+  "results": {
+    "(full roster)": {
+      "n_rows": 36,
+      "coef": 0.4395985148107119,
+      "se_cr1": 0.22342133171017287,
+      "t": 1.967576289362418,
+      "p_cr1_sandwich": 0.1062529268847836,
+      "p_wild_cluster_webb_two_sided": 0.0786,
+      "p_wild_cluster_webb_one_sided": 0.0401,
+      "wild_detail": {
+        "t_observed": 1.967576289362418,
+        "B_valid": 9999,
+        "p_two_sided": 0.0786,
+        "p_one_sided": 0.0401,
+        "t_star_q": {
+          "2.5": -2.1438186391260454,
+          "25": -0.899563777810204,
+          "50": -0.002235075216658492,
+          "75": 0.87436293010891,
+          "97.5": 2.1300702693995963
+        },
+        "weights": "Webb 6-point",
+        "null_imposed": true,
+        "seed": 20260728
+      },
+      "randomization_inference": {
+        "n_assignments": 20,
+        "observed_assertive_set": [
+          "committee",
+          "debate",
+          "sales"
+        ],
+        "observed_coef": 0.439598514810712,
+        "rank_of_observed_desc": 1,
+        "p_one_sided_exact": 0.05,
+        "p_two_sided_exact": 0.1,
+        "attainable_minimum_p": 0.05,
+        "is_most_extreme": true,
+        "env_cluster_means": {
+          "bargaining": -0.2258796296296294,
+          "debate": 0.02374511480451635,
+          "village": -0.14532477455643736,
+          "sales": 0.06066666666666667,
+          "committee": 0.7708568279106887,
+          "inbox": -0.09232253086419752
+        },
+        "all_assignments": [
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "sales"
+            ],
+            "coef": 0.439598514810712,
+            "is_observed": true
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.3622200843649027,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "inbox"
+            ],
+            "coef": 0.33760571645680254,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "sales",
+              "village"
+            ],
+            "coef": 0.32688525523674283,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "village"
+            ],
+            "coef": 0.30227088732864266,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "sales"
+            ],
+            "coef": 0.2731820185212815,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "debate"
+            ],
+            "coef": 0.24856765061318126,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "village"
+            ],
+            "coef": 0.22489245688283338,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "inbox"
+            ],
+            "coef": 0.17118922016737204,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "village"
+            ],
+            "coef": 0.13585439103921215,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.13585439103921212,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "sales",
+              "village"
+            ],
+            "coef": -0.17118922016737204,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "sales"
+            ],
+            "coef": -0.22489245688283338,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "inbox",
+              "sales",
+              "village"
+            ],
+            "coef": -0.24856765061318128,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.2731820185212815,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.30227088732864266,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "inbox"
+            ],
+            "coef": -0.32688525523674283,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "sales",
+              "village"
+            ],
+            "coef": -0.33760571645680254,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "village"
+            ],
+            "coef": -0.3622200843649027,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.439598514810712,
+            "is_observed": false
+          }
+        ]
+      }
+    },
+    "Claude Opus 4.7": {
+      "n_rows": 30,
+      "coef": 0.32460906347341484,
+      "se_cr1": 0.10597280865618001,
+      "t": 3.063135417374678,
+      "p_cr1_sandwich": 0.02800180441249256,
+      "p_wild_cluster_webb_two_sided": 0.016,
+      "p_wild_cluster_webb_one_sided": 0.0078,
+      "wild_detail": {
+        "t_observed": 3.063135417374678,
+        "B_valid": 9999,
+        "p_two_sided": 0.016,
+        "p_one_sided": 0.0078,
+        "t_star_q": {
+          "2.5": -2.4893910678578166,
+          "25": -0.8296580805337521,
+          "50": -0.023465991162608977,
+          "75": 0.8115341421254634,
+          "97.5": 2.485987752703479
+        },
+        "weights": "Webb 6-point",
+        "null_imposed": true,
+        "seed": 20260728
+      },
+      "randomization_inference": {
+        "n_assignments": 20,
+        "observed_assertive_set": [
+          "committee",
+          "debate",
+          "sales"
+        ],
+        "observed_coef": 0.3246090634734149,
+        "rank_of_observed_desc": 1,
+        "p_one_sided_exact": 0.05,
+        "p_two_sided_exact": 0.1,
+        "attainable_minimum_p": 0.05,
+        "is_most_extreme": true,
+        "env_cluster_means": {
+          "bargaining": -0.2420555555555553,
+          "debate": 0.02732700733063701,
+          "village": -0.15410539613439148,
+          "sales": 0.06586666666666666,
+          "committee": 0.37424108325151273,
+          "inbox": -0.11023148148148147
+        },
+        "all_assignments": [
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "sales"
+            ],
+            "coef": 0.3246090634734149,
+            "is_observed": true
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.2329034042653359,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "inbox"
+            ],
+            "coef": 0.20721029804131616,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "sales",
+              "village"
+            ],
+            "coef": 0.20365412783006254,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "village"
+            ],
+            "coef": 0.1779610216060428,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "sales"
+            ],
+            "coef": 0.14502068821595335,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "debate"
+            ],
+            "coef": 0.11932758199193358,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "village"
+            ],
+            "coef": 0.0862553623979638,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "inbox"
+            ],
+            "coef": 0.027621922783854592,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.0016273536514187599,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "village"
+            ],
+            "coef": -0.0016273536514187451,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "sales",
+              "village"
+            ],
+            "coef": -0.027621922783854592,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "sales"
+            ],
+            "coef": -0.0862553623979638,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "inbox",
+              "sales",
+              "village"
+            ],
+            "coef": -0.11932758199193358,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.14502068821595332,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.1779610216060428,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "inbox"
+            ],
+            "coef": -0.20365412783006254,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "sales",
+              "village"
+            ],
+            "coef": -0.20721029804131613,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "village"
+            ],
+            "coef": -0.23290340426533587,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.3246090634734149,
+            "is_observed": false
+          }
+        ]
+      }
+    },
+    "GPT-5.5": {
+      "n_rows": 30,
+      "coef": 0.40063883532666145,
+      "se_cr1": 0.18055151573504533,
+      "t": 2.218972428426403,
+      "p_cr1_sandwich": 0.07722796330357151,
+      "p_wild_cluster_webb_two_sided": 0.0498,
+      "p_wild_cluster_webb_one_sided": 0.0254,
+      "wild_detail": {
+        "t_observed": 2.218972428426403,
+        "B_valid": 9999,
+        "p_two_sided": 0.0498,
+        "p_one_sided": 0.0254,
+        "t_star_q": {
+          "2.5": -2.209079055790342,
+          "25": -0.8785261939801594,
+          "50": -0.014181788281218981,
+          "75": 0.8455476347031571,
+          "97.5": 2.2246228939700847
+        },
+        "weights": "Webb 6-point",
+        "null_imposed": true,
+        "seed": 20260728
+      },
+      "randomization_inference": {
+        "n_assignments": 20,
+        "observed_assertive_set": [
+          "committee",
+          "debate",
+          "sales"
+        ],
+        "observed_coef": 0.40063883532666134,
+        "rank_of_observed_desc": 1,
+        "p_one_sided_exact": 0.05,
+        "p_two_sided_exact": 0.1,
+        "attainable_minimum_p": 0.05,
+        "is_most_extreme": true,
+        "env_cluster_means": {
+          "bargaining": -0.21355555555555536,
+          "debate": 0.026574346477923828,
+          "village": -0.14800306085174036,
+          "sales": 0.0688,
+          "committee": 0.6346826171688388,
+          "inbox": -0.11030092592592591
+        },
+        "all_assignments": [
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "sales"
+            ],
+            "coef": 0.40063883532666134,
+            "is_observed": true
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.3093886537240949,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "sales",
+              "village"
+            ],
+            "coef": 0.2842538971068853,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "inbox"
+            ],
+            "coef": 0.28123821804271076,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "village"
+            ],
+            "coef": 0.25610346142550117,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "sales"
+            ],
+            "coef": 0.2405522339710086,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "debate"
+            ],
+            "coef": 0.2124017982896245,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "village"
+            ],
+            "coef": 0.16485327982293468,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "inbox"
+            ],
+            "coef": 0.12115161668705803,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "village"
+            ],
+            "coef": 0.09601686006984837,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.09601686006984839,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "sales",
+              "village"
+            ],
+            "coef": -0.12115161668705803,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "sales"
+            ],
+            "coef": -0.16485327982293466,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "inbox",
+              "sales",
+              "village"
+            ],
+            "coef": -0.21240179828962452,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.2405522339710086,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.25610346142550117,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "sales",
+              "village"
+            ],
+            "coef": -0.28123821804271076,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "inbox"
+            ],
+            "coef": -0.2842538971068853,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "village"
+            ],
+            "coef": -0.3093886537240949,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.40063883532666145,
+            "is_observed": false
+          }
+        ]
+      }
+    },
+    "Gemini 3.1 Pro": {
+      "n_rows": 30,
+      "coef": 0.7083754968407356,
+      "se_cr1": 0.48576522895580243,
+      "t": 1.4582671929060356,
+      "p_cr1_sandwich": 0.20456951124234735,
+      "p_wild_cluster_webb_two_sided": 0.182,
+      "p_wild_cluster_webb_one_sided": 0.0906,
+      "wild_detail": {
+        "t_observed": 1.4582671929060356,
+        "B_valid": 9999,
+        "p_two_sided": 0.182,
+        "p_one_sided": 0.0906,
+        "t_star_q": {
+          "2.5": -1.9527833809307118,
+          "25": -0.9641020620625206,
+          "50": -0.017931647500826497,
+          "75": 0.9431767731145136,
+          "97.5": 1.9856287315787884
+        },
+        "weights": "Webb 6-point",
+        "null_imposed": true,
+        "seed": 20260728
+      },
+      "randomization_inference": {
+        "n_assignments": 20,
+        "observed_assertive_set": [
+          "committee",
+          "debate",
+          "sales"
+        ],
+        "observed_coef": 0.7083754968407355,
+        "rank_of_observed_desc": 1,
+        "p_one_sided_exact": 0.05,
+        "p_two_sided_exact": 0.1,
+        "attainable_minimum_p": 0.05,
+        "is_most_extreme": true,
+        "env_cluster_means": {
+          "bargaining": -0.19822222222222205,
+          "debate": 0.026310823474890464,
+          "village": -0.13288339613439146,
+          "sales": 0.052622222222222216,
+          "committee": 1.6368856659746533,
+          "inbox": -0.07820216049382715
+        },
+        "all_assignments": [
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "sales"
+            ],
+            "coef": 0.7083754968407355,
+            "is_observed": true
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.6387001741949238,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "inbox"
+            ],
+            "coef": 0.6211592416967027,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "sales",
+              "village"
+            ],
+            "coef": 0.6022460171012143,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "village"
+            ],
+            "coef": 0.5847050846029931,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "sales"
+            ],
+            "coef": 0.5586867997093272,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "debate"
+            ],
+            "coef": 0.541145867211106,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "village"
+            ],
+            "coef": 0.5150297619571814,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "inbox"
+            ],
+            "coef": 0.47147054456529425,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "village"
+            ],
+            "coef": 0.43501638747158483,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.43501638747158483,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "sales",
+              "village"
+            ],
+            "coef": -0.47147054456529425,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "sales"
+            ],
+            "coef": -0.5150297619571814,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "inbox",
+              "sales",
+              "village"
+            ],
+            "coef": -0.541145867211106,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.5586867997093272,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.5847050846029931,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "inbox"
+            ],
+            "coef": -0.6022460171012143,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "sales",
+              "village"
+            ],
+            "coef": -0.6211592416967027,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "village"
+            ],
+            "coef": -0.6387001741949238,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.7083754968407355,
+            "is_observed": false
+          }
+        ]
+      }
+    },
+    "Grok 4": {
+      "n_rows": 30,
+      "coef": 0.4410698277887031,
+      "se_cr1": 0.2309276163373627,
+      "t": 1.9099916882368158,
+      "p_cr1_sandwich": 0.11438748570409052,
+      "p_wild_cluster_webb_two_sided": 0.0821,
+      "p_wild_cluster_webb_one_sided": 0.0419,
+      "wild_detail": {
+        "t_observed": 1.9099916882368158,
+        "B_valid": 9999,
+        "p_two_sided": 0.0821,
+        "p_one_sided": 0.0419,
+        "t_star_q": {
+          "2.5": -2.1035707201800076,
+          "25": -0.9002274842434398,
+          "50": -0.007114338644403473,
+          "75": 0.8726600660579278,
+          "97.5": 2.0933021105004714
+        },
+        "weights": "Webb 6-point",
+        "null_imposed": true,
+        "seed": 20260728
+      },
+      "randomization_inference": {
+        "n_assignments": 20,
+        "observed_assertive_set": [
+          "committee",
+          "debate",
+          "sales"
+        ],
+        "observed_coef": 0.4410698277887031,
+        "rank_of_observed_desc": 1,
+        "p_one_sided_exact": 0.05,
+        "p_two_sided_exact": 0.1,
+        "attainable_minimum_p": 0.05,
+        "is_most_extreme": true,
+        "env_cluster_means": {
+          "bargaining": -0.23805555555555538,
+          "debate": 0.020944486855409512,
+          "village": -0.13242439613439147,
+          "sales": 0.06222222222222222,
+          "committee": 0.7890072670429751,
+          "inbox": -0.08055555555555555
+        },
+        "all_assignments": [
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "sales"
+            ],
+            "coef": 0.4410698277887031,
+            "is_observed": true
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.3734031328480597,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "inbox"
+            ],
+            "coef": 0.34588464260351787,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "sales",
+              "village"
+            ],
+            "coef": 0.3388239057955024,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "village"
+            ],
+            "coef": 0.3113054155509606,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "sales"
+            ],
+            "coef": 0.26840313284805983,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "village"
+            ],
+            "coef": 0.24363872061031724,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "debate"
+            ],
+            "coef": 0.24088464260351802,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "inbox"
+            ],
+            "coef": 0.17321794766287463,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "village"
+            ],
+            "coef": 0.13863872061031735,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.13863872061031735,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "sales",
+              "village"
+            ],
+            "coef": -0.17321794766287463,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "inbox",
+              "sales",
+              "village"
+            ],
+            "coef": -0.24088464260351802,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "sales"
+            ],
+            "coef": -0.24363872061031722,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.26840313284805983,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.3113054155509606,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "inbox"
+            ],
+            "coef": -0.3388239057955024,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "sales",
+              "village"
+            ],
+            "coef": -0.34588464260351787,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "village"
+            ],
+            "coef": -0.3734031328480597,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.44106982778870313,
+            "is_observed": false
+          }
+        ]
+      }
+    },
+    "Llama 3.3 70B": {
+      "n_rows": 30,
+      "coef": 0.42010661668655913,
+      "se_cr1": 0.2048513859793061,
+      "t": 2.0507872801456073,
+      "p_cr1_sandwich": 0.09554703267102815,
+      "p_wild_cluster_webb_two_sided": 0.0661,
+      "p_wild_cluster_webb_one_sided": 0.0338,
+      "wild_detail": {
+        "t_observed": 2.0507872801456073,
+        "B_valid": 9999,
+        "p_two_sided": 0.0661,
+        "p_one_sided": 0.0338,
+        "t_star_q": {
+          "2.5": -2.135642842996614,
+          "25": -0.8832888629158853,
+          "50": -0.006739952401201746,
+          "75": 0.84994911193833,
+          "97.5": 2.137232892067064
+        },
+        "weights": "Webb 6-point",
+        "null_imposed": true,
+        "seed": 20260728
+      },
+      "randomization_inference": {
+        "n_assignments": 20,
+        "observed_assertive_set": [
+          "committee",
+          "debate",
+          "sales"
+        ],
+        "observed_coef": 0.42010661668655913,
+        "rank_of_observed_desc": 1,
+        "p_one_sided_exact": 0.05,
+        "p_two_sided_exact": 0.1,
+        "attainable_minimum_p": 0.05,
+        "is_most_extreme": true,
+        "env_cluster_means": {
+          "bargaining": -0.2556666666666664,
+          "debate": 0.017800049966295924,
+          "village": -0.1551628371301504,
+          "sales": 0.05706666666666667,
+          "committee": 0.6942764074076757,
+          "inbox": -0.08034722222222221
+        },
+        "all_assignments": [
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "sales"
+            ],
+            "coef": 0.42010661668655913,
+            "is_observed": true
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.3546751018942137,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "inbox"
+            ],
+            "coef": 0.32849735742729985,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "sales",
+              "village"
+            ],
+            "coef": 0.30479802528892824,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "village"
+            ],
+            "coef": 0.27862028082201434,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "sales"
+            ],
+            "coef": 0.23779547226458425,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "village"
+            ],
+            "coef": 0.21318876602966896,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "debate"
+            ],
+            "coef": 0.21161772779767038,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "inbox"
+            ],
+            "coef": 0.14618621300532497,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "village"
+            ],
+            "coef": 0.09630913640003952,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.09630913640003953,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "sales",
+              "village"
+            ],
+            "coef": -0.14618621300532497,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "inbox",
+              "sales",
+              "village"
+            ],
+            "coef": -0.21161772779767038,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "sales"
+            ],
+            "coef": -0.213188766029669,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.23779547226458425,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.2786202808220144,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "inbox"
+            ],
+            "coef": -0.30479802528892824,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "sales",
+              "village"
+            ],
+            "coef": -0.32849735742729985,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "village"
+            ],
+            "coef": -0.3546751018942137,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.42010661668655913,
+            "is_observed": false
+          }
+        ]
+      }
+    },
+    "DeepSeek V4 Pro": {
+      "n_rows": 30,
+      "coef": 0.3427912487481975,
+      "se_cr1": 0.14168977581034822,
+      "t": 2.4193082866262956,
+      "p_cr1_sandwich": 0.060168736914154586,
+      "p_wild_cluster_webb_two_sided": 0.0324,
+      "p_wild_cluster_webb_one_sided": 0.0159,
+      "wild_detail": {
+        "t_observed": 2.4193082866262956,
+        "B_valid": 9999,
+        "p_two_sided": 0.0324,
+        "p_one_sided": 0.0159,
+        "t_star_q": {
+          "2.5": -2.2792475911724686,
+          "25": -0.8575952071171763,
+          "50": -0.008789192717205277,
+          "75": 0.8319823120718912,
+          "97.5": 2.272116083818521
+        },
+        "weights": "Webb 6-point",
+        "null_imposed": true,
+        "seed": 20260728
+      },
+      "randomization_inference": {
+        "n_assignments": 20,
+        "observed_assertive_set": [
+          "committee",
+          "debate",
+          "sales"
+        ],
+        "observed_coef": 0.34279124874819755,
+        "rank_of_observed_desc": 1,
+        "p_one_sided_exact": 0.05,
+        "p_two_sided_exact": 0.1,
+        "attainable_minimum_p": 0.05,
+        "is_most_extreme": true,
+        "env_cluster_means": {
+          "bargaining": -0.207722222222222,
+          "debate": 0.023513974721941354,
+          "village": -0.14936956095355886,
+          "sales": 0.05742222222222222,
+          "committee": 0.49604792661847535,
+          "inbox": -0.09429783950617283
+        },
+        "all_assignments": [
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "sales"
+            ],
+            "coef": 0.34279124874819755,
+            "is_observed": true
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "sales"
+            ],
+            "coef": 0.26425003926278806,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "inbox"
+            ],
+            "coef": 0.24164454092926752,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "sales",
+              "village"
+            ],
+            "coef": 0.22753555829786404,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "debate",
+              "village"
+            ],
+            "coef": 0.20493005996434346,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "sales"
+            ],
+            "coef": 0.1886337841187553,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "debate"
+            ],
+            "coef": 0.16602828578523474,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "committee",
+              "inbox",
+              "village"
+            ],
+            "coef": 0.12638885047893403,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "inbox"
+            ],
+            "coef": 0.08748707629982529,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "committee",
+              "village"
+            ],
+            "coef": 0.05077259533490126,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.05077259533490126,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "sales",
+              "village"
+            ],
+            "coef": -0.08748707629982529,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "sales"
+            ],
+            "coef": -0.12638885047893403,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "inbox",
+              "sales",
+              "village"
+            ],
+            "coef": -0.16602828578523474,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "debate",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.1886337841187553,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "sales"
+            ],
+            "coef": -0.20493005996434352,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "inbox"
+            ],
+            "coef": -0.22753555829786404,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "sales",
+              "village"
+            ],
+            "coef": -0.24164454092926752,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "debate",
+              "village"
+            ],
+            "coef": -0.26425003926278806,
+            "is_observed": false
+          },
+          {
+            "assertive_set": [
+              "bargaining",
+              "inbox",
+              "village"
+            ],
+            "coef": -0.34279124874819755,
+            "is_observed": false
+          }
+        ]
+      }
+    }
+  },
+  "diagnostics_full_roster": {
+    "cluster_leverage_trace": {
+      "bargaining": 0.33333333333333337,
+      "debate": 0.33333333333333337,
+      "village": 0.33333333333333337,
+      "sales": 0.33333333333333337,
+      "committee": 0.33333333333333337,
+      "inbox": 0.33333333333333337
+    },
+    "leverage_note": "assertive does not vary within cluster, so every environment contributes identical leverage 1.0; the contrast is identified purely between clusters.",
+    "leave_one_environment_out": {
+      "bargaining": {
+        "beta": 0.4039131891709412,
+        "p_cluster": 0.14961559420562232,
+        "delta_beta": -0.03568532563977067
+      },
+      "debate": {
+        "beta": 0.5702707256387658,
+        "p_cluster": 0.11875390515506634,
+        "delta_beta": 0.13067221082805391
+      },
+      "village": {
+        "beta": 0.44419061670753723,
+        "p_cluster": 0.12826470994230776,
+        "delta_beta": 0.004592101896825351
+      },
+      "sales": {
+        "beta": 0.5518099497076906,
+        "p_cluster": 0.1423927579495463,
+        "delta_beta": 0.11221143489697871
+      },
+      "committee": {
+        "beta": 0.1967148690856796,
+        "p_cluster": 0.00726822616776146,
+        "delta_beta": -0.2428836457250323
+      },
+      "inbox": {
+        "beta": 0.4706917385536572,
+        "p_cluster": 0.10810322599922606,
+        "delta_beta": 0.03109322374294532
+      }
+    },
+    "variance_decomposition": {
+      "ss_total": 29.221642642360646,
+      "ss_between_cluster": 3.9213116862602,
+      "ss_within_cluster": 25.300330956100446,
+      "share_between": 0.134192034796009,
+      "share_within": 0.8658079652039911
+    },
+    "env_cluster_means": {
+      "bargaining": -0.2258796296296294,
+      "debate": 0.02374511480451635,
+      "village": -0.14532477455643736,
+      "sales": 0.06066666666666667,
+      "committee": 0.7708568279106887,
+      "inbox": -0.09232253086419752
+    },
+    "effective_n_for_contrast": 6,
+    "rows": 36
+  }
+}
