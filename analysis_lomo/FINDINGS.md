@@ -300,6 +300,91 @@ scale-contaminated. Even so, the RI floor of 0.05 means no version of this test
 can produce strong significance at G = 6 — that limitation should be stated
 rather than implied.
 
+## Follow-up 4 — P4 pre-registration audit
+
+Verbatim P4 text pulled from each prereg's registering commit and compared to
+current content.
+
+**Text integrity.** T2, T3, T4, T5 and T6's P4/P-T6.4 lines are **byte-identical**
+to their registering commits. T1's was rewritten — legitimately, and the
+chronology proves it:
+
+| commit | timestamp | event |
+|---|---|---|
+| `78bacb4` | 2026-04-22 18:45:16 | T1 prereg added, P4 in original "frame > difficulty, ≥4/6" form, containing an explicit unresolved `[AUTHOR DECISION A5]` listing A5.a vs A5.b with "**Recommended default**: A5.b" and "[AUTHOR to resolve A5.a vs A5.b.]" |
+| `5df12fb` | 2026-04-22 18:52:34 | "Lock Task 1 Bargaining pre-registration" — resolves A5 → A5.b, rewrites P4 to the conditional form |
+| `2a074e7` | 2026-04-24 21:14:47 | first T1 results |
+
+The rewrite resolved a pre-declared open choice to its pre-stated default seven
+minutes after registration and **two days before any T1 data existed**. Design
+resolution, not outcome tuning.
+
+**P4 is not one prediction.** Comparators and thresholds differ by task:
+
+| Task | Comparator | Threshold | Observed | Verdict |
+|---|---|---|---|---|
+| T1 | frame vs **difficulty**, at I∈{none,moderate} (+ part b: ≥30pp drop at I=high) | ≥4/6 | (a) 6/6, (b) 5/6 | PASS |
+| T2 | frame vs **incentive** | ≥4/6 | 3/6; 0.007 vs 0.014 | FAIL |
+| T3 | frame vs **difficulty** | ≥4/6 | 6/6; 0.168 vs 0.023 | PASS |
+| T4 | frame vs **incentive** | ≥4/6 | 5/6; 0.026 vs 0.010 | PASS |
+| T5 | frame vs **difficulty** | **≥3/6** | 1/6; 0.31 vs 0.64 | FAIL |
+| T6 | frame vs **difficulty**, ratio ≥2× | ≥4/6 | 5/6; 6.14× | PASS |
+
+All six verdicts follow from their own registered text. Three caveats:
+
+- **The P4 column of any cross-task verdict matrix is not comparable row-to-row.**
+  T2 and T4 test frame against *incentive*; T1/T3/T5/T6 against *difficulty*.
+  T5's individual bar is 3/6 where everyone else's is 4/6.
+- **T4's PASS does not mean frame dominance.** T4's P4 compared frame vs
+  incentive only; T4 is difficulty-dominant, and its own `results.md` §C.1 is
+  titled "Difficulty dominates frame in Sales". Both statements are correct, but
+  a ✓ in the P4 column will be misread.
+- **T1's part (b) has no registered pass threshold.** The text requires a ≥30pp
+  drop without saying how many models must satisfy it, so recording "(b) 5/6 ✓"
+  applies an unregistered decision rule. The PASS does not depend on it (part (a)
+  cleared its explicit ≥4/6 at 6/6), but the 5/6 figure does.
+
+**Every P4 predicted frame dominance; none predicted difficulty dominance.** The
+difficulty-dominance finding emerged from P4 *failures* (T2, T5) plus a T4 P4
+that never examined difficulty. That is precisely why T6 as a held-out test
+carries the argument, and why the withdrawn "~0.011 ex-ante Fisher" (Amendment
+A1 in T6's prereg) was indefensible.
+
+**Taxonomy chronology — the abstract's claim checks out.** The cluster split
+first appears at `46cc1b5`, 2026-04-26 11:33:30 ("Prompt-dominant" /
+"State-dominant"); relabelled behavioral/informational-channel at `31c2f6e`
+(2026-04-29); the term "cluster-split" first appears in T6's own prereg
+(`d0d0dfa`, 2026-05-01).
+
+| Prereg | Registered | vs taxonomy (2026-04-26) |
+|---|---|---|
+| T1, T5 | 2026-04-22 | predates by 4 days |
+| T2 | 2026-04-23 | predates by 3 days |
+| T3 | 2026-04-24 | predates by 2 days |
+| T4 | 2026-04-25 | predates by 1 day |
+| **T6** | **2026-05-01** | **post-dates by 5 days** |
+
+So "identified on five environments, confirmed on a held-out sixth" is supported
+by the commit record. **Qualification**: the T1–T5 registrations are not mutually
+independent — they were written sequentially and cite each other's outcomes. T3's
+P4 rationale (registered 04-24) states "Committee's P4 failed (averaged-over-
+difficulty analysis showed difficulty dominating…)"; T1's cites "as Task 5
+suggested". Only T6 is a clean out-of-sample confirmation, so "pre-registered on
+five environments" should not be read as five independent a-priori tests.
+
+## Follow-up 5 — rho authoritative call: v1
+
+**v1 (ρ = 0.055) is authoritative.** T2's prereg resolves decision **A4** to
+`manipulation_occurred` **primary**, `belief_shift` **secondary**, and all T2
+predictions P1–P3 are stated on `manipulation_occurred`. Table 2 names
+`manipulation_occurred` for T2 as well. v1 ranks every environment by its
+pre-registered primary metric; **v2 substitutes T2's secondary metric**, and its
+docstring's claim to "match each task's stated primary metric" is wrong for T2.
+`ANALYSIS_INVENTORY.md`'s "v1 deprecated / v2 core §4.1" is therefore backwards.
+The abstract's 0.055 needs no correction; quote its LOMO range as
+**−0.130 … +0.199** (straddles zero under every exclusion). Report v2 as a
+robustness check, citing A4's headroom rationale.
+
 ## Outputs
 
 - `lomo_dominance.csv` — 42 rows: 7 rosters (full + 6 exclusions) × 6
