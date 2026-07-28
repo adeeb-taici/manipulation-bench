@@ -1,0 +1,15 @@
+family,test,p_raw,p_holm_global,p_bh_global,survives_holm_0.05,survives_bh_0.05,p_holm_family,p_bh_family,survives_holm_family_0.05,survives_bh_family_0.05
+ELO_per_task,village β=-0.062,0.0001,0.0014,0.0002,True,True,0.0006000000000000001,0.0002,True,True
+ELO_per_task,sales β=-0.020,0.0001,0.0014,0.0002,True,True,0.0006000000000000001,0.0002,True,True
+tier_x_frame,bargaining,0.0001,0.0014,0.0002,True,True,0.0007,0.00017500000000000003,True,True
+ELO_per_task,committee β=+1.55,0.0001,0.0014,0.0002,True,True,0.0006000000000000001,0.0002,True,True
+tier_x_frame,committee,0.0001,0.0014,0.0002,True,True,0.0007,0.00017500000000000003,True,True
+tier_x_frame,pooled,0.0001,0.0014,0.0002,True,True,0.0007,0.00017500000000000003,True,True
+tier_x_frame,village,0.0001,0.0014,0.0002,True,True,0.0007,0.00017500000000000003,True,True
+tier_x_frame,inbox,0.003,0.021,0.00525,True,True,0.009000000000000001,0.0042,True,True
+ELO_per_task,debate β=-0.008,0.005,0.03,0.0077777777777777776,True,True,0.015,0.007500000000000001,True,True
+ELO_per_task,inbox β=+0.029,0.015,0.075,0.020999999999999998,False,True,0.03,0.018,True,True
+ELO_per_task,bargaining β=-0.004,0.43,1.0,0.5472727272727272,False,False,0.43,0.43,False,False
+tier_x_frame,sales,0.54,1.0,0.6300000000000001,False,False,1.0,0.6300000000000001,False,False
+tier_x_incentive,pooled,0.8,1.0,0.8615384615384616,False,False,0.8,0.8,False,False
+tier_x_frame,debate,0.98,1.0,0.98,False,False,1.0,0.98,False,False

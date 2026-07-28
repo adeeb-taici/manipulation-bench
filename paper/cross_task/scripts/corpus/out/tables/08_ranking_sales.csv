@@ -1,0 +1,16 @@
+,model,wins_minus_losses,n_significant_pairs,task
+0,haiku35,11,11,sales
+1,Llama-3.3-70B,9,9,sales
+2,Gemini-3.1-Pro,9,9,sales
+3,sonnet46,9,9,sales
+4,sonnet37,8,10,sales
+5,gpt41nano,7,9,sales
+6,DeepSeek-V4-Pro,3,13,sales
+7,Grok-4,-4,10,sales
+8,haiku45,-5,9,sales
+9,gpt41mini,-5,9,sales
+10,gpt54mini,-7,7,sales
+11,gpt41,-7,7,sales
+12,Claude-Opus-4.7,-8,8,sales
+13,GPT-5.5,-10,10,sales
+14,gpt54nano,-10,10,sales

@@ -1,0 +1,16 @@
+Mean off-diagonal Spearman ρ across T1-T5 task-pairs (canonical-6).
+B = 2000, cluster-resample where cluster_id populated, row-resample otherwise.
+
+All-rows pooled:
+  point:   +0.194
+  bootstrap mean: +0.231
+  bootstrap 95% CI: [+0.067, +0.440]
+
+Permissive-frame only:
+  point:   -0.225
+  bootstrap 95% CI: [-0.279, +0.105]
+
+Permutation null (shuffle model labels within each task):
+  null mean:   +0.004
+  null 95% CI: [-0.200, +0.349]
+  two-sided p: 0.144

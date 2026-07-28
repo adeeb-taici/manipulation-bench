@@ -1,0 +1,11 @@
+,model,wins_minus_losses,n_significant_pairs,task
+0,GPT-5.5,8,8,debate
+1,Claude-Opus-4.7,5,5,debate
+2,Gemini-3.1-Pro,2,4,debate
+3,DeepSeek-V4-Pro,2,4,debate
+4,gpt54mini,1,5,debate
+5,Grok-4,0,4,debate
+6,gpt41,-1,1,debate
+7,gpt54nano,-5,5,debate
+8,Llama-3.3-70B,-6,6,debate
+9,gpt41nano,-6,6,debate

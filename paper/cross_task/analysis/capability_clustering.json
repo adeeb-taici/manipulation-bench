@@ -1,0 +1,54 @@
+{
+  "n_models": 15,
+  "n_features": 30,
+  "explained_variance_pc1_pc2": [
+    0.34948093953151427,
+    0.1919348827989509
+  ],
+  "cluster_assignments": {
+    "Claude-Opus-4.7": 1,
+    "DeepSeek-V4-Pro": 1,
+    "GPT-5.5": 1,
+    "Gemini-3.1-Pro": 2,
+    "Grok-4": 1,
+    "Llama-3.3-70B": 0,
+    "gpt41": 0,
+    "gpt41mini": 0,
+    "gpt41nano": 0,
+    "gpt54mini": 0,
+    "gpt54nano": 0,
+    "haiku35": 2,
+    "haiku45": 0,
+    "sonnet37": 0,
+    "sonnet46": 0
+  },
+  "tier_by_cluster": {
+    "average": {
+      "0": 4,
+      "1": 0,
+      "2": 0
+    },
+    "flagship": {
+      "0": 1,
+      "1": 4,
+      "2": 1
+    },
+    "small": {
+      "0": 4,
+      "1": 0,
+      "2": 1
+    }
+  },
+  "gen_by_cluster": {
+    "current": {
+      "0": 4,
+      "1": 4,
+      "2": 1
+    },
+    "prev": {
+      "0": 5,
+      "1": 0,
+      "2": 1
+    }
+  }
+}

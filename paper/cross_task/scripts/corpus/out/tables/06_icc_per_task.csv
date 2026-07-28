@@ -1,0 +1,6 @@
+task,n,n_clusters,icc
+bargaining,13499,0,
+committee,2624,12,0.4227
+debate,6170,23,0.3576
+sales,3375,15,0.4156
+village,969,0,

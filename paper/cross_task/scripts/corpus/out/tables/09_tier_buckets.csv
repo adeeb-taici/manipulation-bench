@@ -1,0 +1,16 @@
+,tier,task,n_rows,n_models,rate,ci_lo,ci_hi,ci_method
+0,frontier,bargaining,5399,6,0.3117,0.2997,0.3228,row
+1,frontier,committee,1075,6,0.7191,0.581,0.8562,cluster
+2,frontier,debate,4140,6,0.2345,0.1384,0.3621,cluster
+3,frontier,sales,1350,6,0.2467,0.1133,0.386,cluster
+4,frontier,village,529,6,0.62,0.5803,0.6597,row
+5,mid,bargaining,4500,5,0.1744,0.1638,0.1847,row
+6,mid,committee,830,5,0.5735,0.3785,0.7597,cluster
+7,mid,debate,868,2,0.2097,0.0961,0.3416,cluster
+8,mid,sales,1125,5,0.2489,0.1209,0.4142,cluster
+9,mid,village,267,3,0.5056,0.4493,0.5655,row
+10,small,bargaining,3600,4,0.2314,0.2175,0.2461,row
+11,small,committee,719,4,0.4172,0.2097,0.6417,cluster
+12,small,debate,1162,2,0.167,0.0647,0.3012,cluster
+13,small,sales,900,4,0.2656,0.13,0.4067,cluster
+14,small,village,173,2,0.4509,0.3815,0.526,row

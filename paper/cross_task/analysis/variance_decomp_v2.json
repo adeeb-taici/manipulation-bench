@@ -1,0 +1,69 @@
+{
+  "n_boot": 1000,
+  "elapsed_seconds": 28.288321256637573,
+  "n_rows": 12493,
+  "point_eta_squared": {
+    "C(model)": 0.03150083189674349,
+    "C(task)": 3.5220992849904584e-05,
+    "C(frame)": 0.06636277536968233,
+    "C(incentive)": 0.03879180314374409,
+    "C(difficulty)": 0.021985767537276706,
+    "C(model):C(task)": 0.044826316651559096,
+    "Residual": 0.7964972844081443
+  },
+  "headline_difference": {
+    "point": 0.013325484754815604,
+    "boot_median": 0.014059934886988715,
+    "ci_lo": 0.004159427735910883,
+    "ci_hi": 0.02286348804869121,
+    "n_valid_reps": 1000,
+    "ci_excludes_zero": true
+  },
+  "descriptive_ratio_point": 1.4230200903422228,
+  "per_term_bootstrap": {
+    "C(difficulty)": {
+      "boot_median": 0.022176690189201695,
+      "ci_lo": 0.017749792182454423,
+      "ci_hi": 0.026559000026336762,
+      "n_valid_reps": 1000
+    },
+    "C(frame)": {
+      "boot_median": 0.06637472736014337,
+      "ci_lo": 0.05893806606678683,
+      "ci_hi": 0.07401741985287118,
+      "n_valid_reps": 1000
+    },
+    "C(incentive)": {
+      "boot_median": 0.039022556258322974,
+      "ci_lo": 0.03329451317724165,
+      "ci_hi": 0.045355978548209185,
+      "n_valid_reps": 1000
+    },
+    "C(model)": {
+      "boot_median": 0.03176332030551446,
+      "ci_lo": 0.02628993743134082,
+      "ci_hi": 0.03759728871788403,
+      "n_valid_reps": 1000
+    },
+    "C(model):C(task)": {
+      "boot_median": 0.045836091157615985,
+      "ci_lo": 0.03947817374754553,
+      "ci_hi": 0.05240536206531736,
+      "n_valid_reps": 1000
+    },
+    "C(task)": {
+      "boot_median": 7.492821443677464e-05,
+      "ci_lo": 1.0198980949278225e-05,
+      "ci_hi": 0.00021865317129054617,
+      "n_valid_reps": 1000
+    },
+    "Residual": {
+      "boot_median": 0.7947643156562905,
+      "ci_lo": 0.7830221435542438,
+      "ci_hi": 0.8065496075428669,
+      "n_valid_reps": 1000
+    }
+  },
+  "master_seed": 20260430,
+  "note": "Outcome z-scored within task before pooling, so absolute eta^2 values are interpretable only relative to each other (task main effect is forced to ~0 by construction). Headline: difference between eta^2(model:task) and eta^2(model)."
+}

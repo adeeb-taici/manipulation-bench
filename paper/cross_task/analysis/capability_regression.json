@@ -1,0 +1,109 @@
+{
+  "per_task": {
+    "bargaining": {
+      "n": 13499,
+      "elo_coef_per_100elo": -0.003520619459225302,
+      "elo_se": 0.004435012229688101,
+      "elo_p": 0.42729785789966046,
+      "elo_ci95": [
+        -0.012213083700408661,
+        0.005171844781958058
+      ],
+      "r_squared": 0.18631710298523219,
+      "formula": "manipulation_metric ~ elo_centered_per100 + C(frame) + C(incentive) + C(difficulty)"
+    },
+    "debate": {
+      "n": 6170,
+      "elo_coef_per_100elo": -0.00811879344155178,
+      "elo_se": 0.002920207252022834,
+      "elo_p": 0.00543235247199803,
+      "elo_ci95": [
+        -0.013842294482909218,
+        -0.002395292400194344
+      ],
+      "r_squared": 0.1041032705640833,
+      "formula": "manipulation_metric ~ elo_centered_per100 + C(frame) + C(incentive) + C(difficulty)"
+    },
+    "village": {
+      "n": 969,
+      "elo_coef_per_100elo": -0.06172492292392549,
+      "elo_se": 0.009758511950966813,
+      "elo_p": 2.5284050449347166e-10,
+      "elo_ci95": [
+        -0.08085125489052414,
+        -0.04259859095732684
+      ],
+      "r_squared": 0.3905789426143036,
+      "formula": "manipulation_metric ~ elo_centered_per100 + C(frame) + C(incentive) + C(difficulty)"
+    },
+    "sales": {
+      "n": 3375,
+      "elo_coef_per_100elo": -0.020181730483967614,
+      "elo_se": 0.0031074839295784796,
+      "elo_p": 8.327827789147707e-11,
+      "elo_ci95": [
+        -0.026272287068478437,
+        -0.014091173899456792
+      ],
+      "r_squared": 0.2810185218671821,
+      "formula": "manipulation_metric ~ elo_centered_per100 + C(frame) + C(incentive) + C(difficulty)"
+    },
+    "committee": {
+      "n": 2624,
+      "elo_coef_per_100elo": 1.5517823112941882,
+      "elo_se": 0.09835588854572369,
+      "elo_p": 4.464345292970142e-56,
+      "elo_ci95": [
+        1.3590083120771341,
+        1.7445563105112423
+      ],
+      "r_squared": 0.3823354468036999,
+      "formula": "manipulation_metric ~ elo_centered_per100 + C(frame) + C(incentive) + C(difficulty)"
+    },
+    "inbox": {
+      "n": 2715,
+      "elo_coef_per_100elo": 0.028991980760918773,
+      "elo_se": 0.011891023449489774,
+      "elo_p": 0.014763052298620818,
+      "elo_ci95": [
+        0.0056860030605975775,
+        0.05229795846123997
+      ],
+      "r_squared": 0.1529279268827194,
+      "formula": "manipulation_metric ~ elo_centered_per100 + C(frame) + C(incentive) + C(difficulty)"
+    }
+  },
+  "pooled_with_task_fe": {
+    "n": 29352,
+    "elo_coef_per_100elo": 0.1325437821689209,
+    "elo_se": 0.011109728904364059,
+    "elo_p": 8.215346174033164e-33,
+    "elo_ci95": [
+      0.11076911363836371,
+      0.15431845069947808
+    ],
+    "r_squared": 0.12514141561181025,
+    "formula": "manipulation_metric ~ elo_centered_per100 + C(task) + C(frame) + C(incentive) + C(difficulty)"
+  },
+  "pooled_with_elo_x_task_interaction": {
+    "n": 29352,
+    "r_squared": 0.17031932628256374,
+    "elo_main_effect": -0.003547415499927197,
+    "elo_main_p": 0.48247062927473083,
+    "interaction_coefs": {
+      "elo_centered_per100:C(task)[T.debate]": -0.019016815150646457,
+      "elo_centered_per100:C(task)[T.village]": -0.05958478031129559,
+      "elo_centered_per100:C(task)[T.sales]": -0.016634314984039656,
+      "elo_centered_per100:C(task)[T.committee]": 1.5345114205803474,
+      "elo_centered_per100:C(task)[T.inbox]": 0.03295528237123967
+    },
+    "interaction_pvalues": {
+      "elo_centered_per100:C(task)[T.debate]": 0.01627069336411982,
+      "elo_centered_per100:C(task)[T.village]": 5.934565126770327e-05,
+      "elo_centered_per100:C(task)[T.sales]": 0.08893647213470043,
+      "elo_centered_per100:C(task)[T.committee]": 1.1138343654043553e-43,
+      "elo_centered_per100:C(task)[T.inbox]": 0.024600037476114726
+    }
+  },
+  "elo_unit": "per +100 ELO points; ELO centered at 1400"
+}

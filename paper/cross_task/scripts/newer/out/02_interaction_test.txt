@@ -1,0 +1,9 @@
+Model comparison: M0 (additive) vs M1 (with interaction)
+M0: manipulation_occurred ~ C(model) + C(task)   | R² = 0.1032, AIC = 16514.9
+M1: manipulation_occurred ~ C(model) * C(task)   | R² = 0.1416, AIC = 15970.1
+
+   df_resid          ssr  df_diff     ss_diff          F         Pr(>F)
+0   13562.0  2678.707672      0.0         NaN        NaN            NaN
+1   13537.0  2563.851389     25.0  114.856283  24.257404  2.427289e-109
+
+Incremental R² from interaction: 0.0385

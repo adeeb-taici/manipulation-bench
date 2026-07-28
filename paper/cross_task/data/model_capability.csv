@@ -1,0 +1,16 @@
+model,family,elo,elo_source,elo_date,generation,tier
+Claude-Opus-4.7,anthropic,1491,lmarena_text,2026-05-03,current,flagship
+GPT-5.5,openai,1488,lmarena_text,2026-05-03,current,flagship
+Gemini-3.1-Pro,google,1493,lmarena_text,2026-05-03,current,flagship
+Grok-4,xai,1480,lmarena_text,2026-05-03,current,flagship
+Llama-3.3-70B,meta,1276,lmarena_text_openlm_mirror,2026-05-03,prev,small
+DeepSeek-V4-Pro,deepseek,1463,lmarena_text,2026-05-03,current,flagship
+gpt41,openai,1413,lmarena_text,2026-05-03,prev,flagship
+gpt41mini,openai,1382,lmarena_text,2026-05-03,prev,average
+gpt41nano,openai,1287,lmarena_text_openlm_mirror,2026-05-03,prev,small
+gpt54mini,openai,1456,lmarena_text,2026-05-03,current,average
+gpt54nano,openai,1406,lmarena_text,2026-05-03,current,small
+haiku35,anthropic,1256,lmarena_text_openlm_mirror,2026-05-03,prev,small
+haiku45,anthropic,1408,lmarena_text,2026-05-03,current,small
+sonnet37,anthropic,1371,lmarena_text,2026-05-03,prev,average
+sonnet46,anthropic,1463,lmarena_text,2026-05-03,current,average
