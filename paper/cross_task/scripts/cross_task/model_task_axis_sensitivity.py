@@ -67,7 +67,14 @@ def load_rows() -> dict[tuple[str, str], list[dict[str, float]]]:
             task = r.get("task")
             if model not in PAPER_MODELS or task not in TASKS:
                 continue
-            if r.get("variant", "").endswith("_pilot"):
+            # `endswith("_pilot")` alone never matched: results.csv spells the
+            # variant plainly as "pilot", not "<task>_pilot". Harmless to date
+            # (no pilot row carries a PAPER_MODELS label on a TASKS
+            # environment, so the published numbers are unaffected -- verified
+            # identical before/after this fix), but it failed open, so a pilot
+            # re-run of a cohort model would have silently entered the fit.
+            variant = r.get("variant", "")
+            if variant == "pilot" or variant.endswith("_pilot"):
                 continue
 
             y = r.get("manipulation_metric", "")

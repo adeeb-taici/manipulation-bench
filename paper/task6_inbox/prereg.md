@@ -134,3 +134,49 @@ The combination (P-T6.4 ∧ P-T6.5 ∧ P-T6.6) is the paper-level held-out test 
 ## 10. Amendments
 
 (None at lock time. Format: `### Amendment AN — short title (YYYY-MM-DD)` with rationale + scope + which cells are affected.)
+
+### Amendment A1 — Withdraw the "~0.011 Fisher-exact" partition p-value from §9 (2026-07-28)
+
+**Scope**: inferential reporting only. No scenario, roster, config, prompt, or
+metric changes. No cell is re-run, and no pre-registered prediction (P-T6.1
+through P-T6.7) is altered, added, or removed. The §9 text is left **as
+written** — it is the locked record, and this amendment does not edit it.
+
+**Rationale**: the closing sentence of §9 states that passing
+(P-T6.4 ∧ P-T6.5 ∧ P-T6.6) "lowers the cluster-split partition's p-value to
+~0.011 (rough Fisher-exact estimate on the 6-task channel-classification
+2×2)". That estimate is withdrawn, for three independent reasons:
+
+1. **It treats a post-hoc partition as ex ante.** The assertive/commissive
+   split was derived by inspecting T1–T5 outcomes. Computing a Fisher-exact
+   p-value over all six environments as though the partition had been fixed in
+   advance inflates the apparent significance. T6 alone was pre-registered;
+   the partition itself was not.
+2. **The value is not reachable by the stated test.** A perfect 3/3-vs-3/3
+   2×2 has one-sided Fisher p = 1/C(6,3) = **0.05** exactly, and that is its
+   floor for any roster. 0.011 cannot be produced by a Fisher-exact test on a
+   6-environment 2×2, so the figure was arithmetically unattainable as
+   described.
+3. **A defensible replacement exists.** `scripts/t6_permutation_test.py`
+   (output: [`../figures/t6_permutation_test.md`](../figures/t6_permutation_test.md))
+   computes a permutation p-value over T6 alone — the only part of the claim
+   that was genuinely held out — by permuting axis labels within each model
+   row and re-evaluating the same three pre-registered conditions jointly:
+   **p = 0.088** (N = 100,000, seed 42), marginals 0.117 / 0.343 / 0.938.
+
+**Replacement reporting**: cite the permutation p = 0.088 for the T6-only
+held-out test. For the cross-environment between-group comparison, cite §4.3's
+`Delta_D ~ 1 + assertive` OLS with environment-clustered SEs: p = 0.106 on the
+full six-model roster, 0.028–0.205 under leave-one-model-out
+([`../../analysis_lomo/FINDINGS.md`](../../analysis_lomo/FINDINGS.md)). Neither
+figure reaches conventional significance, and both should be reported as such.
+
+**What survives unchanged**: the *directional* partition. Assertive
+environments remain difficulty-dominant and commissive environments
+frame-or-incentive-dominant in **6/6 environments under every single-model
+exclusion**, with zero dominant-axis flips. P-T6.4's verdict (PASS, 5/6 models
+individually, aggregate frame/difficulty ratio 6.14×) is unaffected — it is a
+descriptive threshold test, not the Fisher calculation withdrawn here.
+
+**Affected text elsewhere**: the same withdrawn figure appeared in §C.1 of
+[`results.md`](results.md), corrected in the same commit.

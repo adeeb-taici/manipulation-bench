@@ -98,10 +98,16 @@ TASK_DIR = {
 # reported here for T6 dominance is our extension of the same estimator.
 T6_IS_AN_EXTENSION = True
 
-# aggregate.py's T4_MODEL_MAP (= load.MODEL_REMAP) has no 'gpt5' key; T6's
-# prereg_results.json uses 'gpt5' where T4 uses 'gpt55'. Confirmed by the user
-# as a naming inconsistency, not a different model (T6 prereg.md:30 locks the
-# same six models). Flagged for camera-ready.
+# T6's prereg_results.json keys GPT-5.5 as 'gpt5' where T4 uses 'gpt55' -- a
+# naming inconsistency, not a different model (T6 prereg.md:30 locks the same
+# six models).
+#
+# REDUNDANT, kept as an explicit assertion: aggregate.py's T4_MODEL_MAP is
+# load.MODEL_REMAP, which already contains 'gpt5' -> 'GPT-5.5'. Verified that
+# aggregate.load_task_slopes("task6_inbox") returns all six canonical models
+# without this map. It resolves to the same value either way and changes no
+# number. (An earlier revision of this file claimed the remap lacked the key;
+# that was true only of the pre-consolidation cross_task_analysis.py.)
 T6_KEY_FIX = {"gpt5": "GPT-5.5"}
 
 

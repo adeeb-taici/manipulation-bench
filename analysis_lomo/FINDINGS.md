@@ -114,10 +114,17 @@ the ratio's magnitude by ~2.3×, never the conclusion.
 - **T5's per-model slopes are hardcoded to 3 dp** in `aggregate.py:T5_SLOPES`,
   transcribed from `results.md` §A.4; T5 has no `prereg_results.json`. LOMO on
   T5 inherits that rounding. Not regenerated, per instruction.
-- **T6's `prereg_results.json` keys GPT-5.5 as `gpt5`** where T4 uses `gpt55`;
-  the shared remap has no `gpt5` entry, so `aggregate.load_task_slopes` would
-  silently drop that model. Patched locally via `T6_KEY_FIX`. Worth fixing at
-  camera-ready.
+- **T6's `prereg_results.json` keys GPT-5.5 as `gpt5`** where T4 uses `gpt55`.
+  An earlier version of this note claimed the shared remap lacks a `gpt5` entry
+  and would silently drop the model; **that was wrong**, and is corrected here.
+  `load.py:MODEL_REMAP` already maps `gpt5 -> GPT-5.5`, and
+  `aggregate.load_task_slopes("task6_inbox")` returns all six canonical models
+  unaided (verified). The claim came from the older hardcoded `T4_MODEL_MAP` in
+  the pre-consolidation `cross_task_analysis.py`, which did lack the key.
+  `T6_KEY_FIX` in `lomo_robustness.py` is therefore redundant — it maps to the
+  same value the shared remap already produces, so it is retained only as an
+  explicit assertion and changes no number. The key naming remains
+  *inconsistent* across tasks, which is a tidiness issue, not a correctness one.
 - **Fisher is a reconstruction, not a reproduction.** No committed code computes
   it. The "~0.011" in `task6_inbox/prereg.md:132` / `results.md:276` is
   explicitly retracted by `paper/figures/t6_permutation_test.md`.

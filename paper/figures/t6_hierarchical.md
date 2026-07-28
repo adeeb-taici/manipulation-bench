@@ -51,6 +51,17 @@ Partition contrasts:
 
 ## Approach 2b — OLS, Full Model×Axis Interactions, Cluster-Robust SEs
 
+> **Do not cite the numbers in this subsection.** The saturated
+> model×axis interaction specification has as many slope parameters as the
+> cluster structure can support, so the Liang–Zeger meat matrix is
+> rank-deficient and the contrast SEs collapse to 0.0000. The reported
+> z-statistics (order 10¹⁴–10¹⁵) and the resulting p = 0.0000 are numerical
+> artifacts of dividing by ~0, not evidence. The point estimates (Δ = +0.1584,
+> +0.0640, +0.0828) are correct and match the other approaches — it is only the
+> standard errors and p-values that are degenerate. Use Approach 2a (pooled
+> slopes, cluster-robust) or Approach 1 (mixed-effects) for inference, and note
+> that with G = 6 clusters even those are low-powered.
+
 Each model gets its own per-axis slope (saturated interaction model). Population-level slopes are recovered as the unweighted cross-model average via linear contrasts. Cluster-robust SEs by model.
 
 Partition contrasts (cross-model averages):
