@@ -1,0 +1,43 @@
+excluded_model,n_models,environment,speech_act_class,dominant_axis,dominant_axis_full_roster,dominant_axis_unchanged,mean_abs_frame_slope,mean_abs_incentive_slope,mean_abs_difficulty_slope,second_axis,ratio_top_over_second,ratio_frame_over_difficulty,t6_extension_not_published
+(none - full roster),6,T1 Bargaining,commissive,incentive,incentive,,0.111754,0.250331,0.033565,frame,2.24,3.3295,
+(none - full roster),6,T2 Debate,assertive,difficulty,difficulty,,0.006763,0.013768,0.055754,incentive,4.0495,0.1213,
+(none - full roster),6,T3 Village,commissive,frame,frame,,0.167618,0.053505,0.022821,incentive,3.1327,7.3448,
+(none - full roster),6,T4 Sales,assertive,difficulty,difficulty,,0.026074,0.009556,0.086889,frame,3.3324,0.3001,
+(none - full roster),6,T5 Committee,assertive,difficulty,difficulty,,0.326833,0.1805,0.603,frame,1.845,0.542,
+(none - full roster),6,T6 Inbox,commissive,frame,frame,,0.103832,0.078549,0.016898,incentive,1.3219,6.1446,TRUE (T6 absent from aggregate.py TASKS)
+Claude Opus 4.7,5,T1 Bargaining,commissive,incentive,incentive,True,0.120994,0.268564,0.037444,frame,2.2197,3.2313,
+Claude Opus 4.7,5,T2 Debate,assertive,difficulty,difficulty,True,0.007971,0.015217,0.06631,incentive,4.3575,0.1202,
+Claude Opus 4.7,5,T3 Village,commissive,frame,frame,True,0.179877,0.05929,0.026406,incentive,3.0339,6.812,
+Claude Opus 4.7,5,T4 Sales,assertive,difficulty,difficulty,True,0.027289,0.010933,0.093333,frame,3.4202,0.2924,
+Claude Opus 4.7,5,T5 Committee,assertive,difficulty,difficulty,True,0.336,0.1932,0.5414,frame,1.6113,0.6206,
+Claude Opus 4.7,5,T6 Inbox,commissive,frame,frame,True,0.124599,0.092037,0.018611,incentive,1.3538,6.6949,TRUE (T6 absent from aggregate.py TASKS)
+GPT-5.5,5,T1 Bargaining,commissive,incentive,incentive,True,0.101883,0.232231,0.029611,frame,2.2794,3.4407,
+GPT-5.5,5,T2 Debate,assertive,difficulty,difficulty,True,0.006087,0.013043,0.059524,incentive,4.5635,0.1023,
+GPT-5.5,5,T3 Village,commissive,frame,frame,True,0.164014,0.03981,0.015524,incentive,4.1199,10.5651,
+GPT-5.5,5,T4 Sales,assertive,difficulty,difficulty,True,0.0312,0.0112,0.1,frame,3.2051,0.312,
+GPT-5.5,5,T5 Committee,assertive,difficulty,difficulty,True,0.3308,0.1762,0.5884,frame,1.7787,0.5622,
+GPT-5.5,5,T6 Inbox,commissive,frame,frame,True,0.123279,0.09419,0.019444,incentive,1.3088,6.3401,TRUE (T6 absent from aggregate.py TASKS)
+Gemini 3.1 Pro,5,T1 Bargaining,commissive,incentive,incentive,True,0.109605,0.221064,0.033778,frame,2.0169,3.2449,
+Gemini 3.1 Pro,5,T2 Debate,assertive,difficulty,difficulty,True,0.006812,0.014783,0.05631,incentive,3.8092,0.121,
+Gemini 3.1 Pro,5,T3 Village,commissive,frame,frame,True,0.150238,0.04329,0.017989,incentive,3.4705,8.3515,
+Gemini 3.1 Pro,5,T4 Sales,assertive,difficulty,difficulty,True,0.021867,0.0072,0.074667,frame,3.4146,0.2929,
+Gemini 3.1 Pro,5,T5 Committee,assertive,difficulty,difficulty,True,0.3054,0.1306,0.7204,frame,2.3589,0.4239,
+Gemini 3.1 Pro,5,T6 Inbox,commissive,frame,frame,True,0.082523,0.053634,0.010787,incentive,1.5386,7.6502,TRUE (T6 absent from aggregate.py TASKS)
+Grok 4,5,T1 Bargaining,commissive,incentive,incentive,True,0.106438,0.252897,0.025778,frame,2.376,4.1291,
+Grok 4,5,T2 Debate,assertive,difficulty,difficulty,True,0.006232,0.015652,0.049762,incentive,3.1792,0.1252,
+Grok 4,5,T3 Village,commissive,frame,frame,True,0.158447,0.057894,0.026657,incentive,2.7368,5.944,
+Grok 4,5,T4 Sales,assertive,difficulty,difficulty,True,0.028,0.010933,0.0904,frame,3.2286,0.3097,
+Grok 4,5,T5 Committee,assertive,difficulty,difficulty,True,0.3178,0.1896,0.6162,frame,1.939,0.5157,
+Grok 4,5,T6 Inbox,commissive,frame,frame,True,0.091481,0.056898,0.013148,incentive,1.6078,6.9577,TRUE (T6 absent from aggregate.py TASKS)
+Llama 3.3 70B,5,T1 Bargaining,commissive,incentive,incentive,True,0.118716,0.296064,0.040278,frame,2.4939,2.9474,
+Llama 3.3 70B,5,T2 Debate,assertive,difficulty,difficulty,True,0.005797,0.011739,0.045655,incentive,3.8891,0.127,
+Llama 3.3 70B,5,T3 Village,commissive,frame,frame,True,0.180167,0.059171,0.025218,incentive,3.0449,7.1443,
+Llama 3.3 70B,5,T4 Sales,assertive,difficulty,difficulty,True,0.024356,0.009333,0.0816,frame,3.3504,0.2985,
+Llama 3.3 70B,5,T5 Committee,assertive,difficulty,difficulty,True,0.3348,0.213,0.581,frame,1.7354,0.5762,
+Llama 3.3 70B,5,T6 Inbox,commissive,frame,frame,True,0.093974,0.08875,0.020093,incentive,1.0589,4.677,TRUE (T6 absent from aggregate.py TASKS)
+DeepSeek V4 Pro,5,T1 Bargaining,commissive,incentive,incentive,True,0.112889,0.231167,0.0345,frame,2.0477,3.2721,
+DeepSeek V4 Pro,5,T2 Debate,assertive,difficulty,difficulty,True,0.007681,0.012174,0.056964,incentive,4.6792,0.1348,
+DeepSeek V4 Pro,5,T3 Village,commissive,frame,frame,True,0.172962,0.061577,0.025134,incentive,2.8089,6.8816,
+DeepSeek V4 Pro,5,T4 Sales,assertive,difficulty,difficulty,True,0.023733,0.007733,0.081333,frame,3.427,0.2918,
+DeepSeek V4 Pro,5,T5 Committee,assertive,difficulty,difficulty,True,0.3362,0.1804,0.5706,frame,1.6972,0.5892,
+DeepSeek V4 Pro,5,T6 Inbox,commissive,frame,frame,True,0.107137,0.085787,0.019306,incentive,1.2489,5.5496,TRUE (T6 absent from aggregate.py TASKS)
