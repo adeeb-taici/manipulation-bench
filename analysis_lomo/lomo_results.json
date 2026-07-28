@@ -1,0 +1,1180 @@
+{
+  "provenance": {
+    "section_4_3_script": "paper/cross_task/scripts/cross_task/model_task_axis_sensitivity.py",
+    "section_4_3_input": "paper/cross_task/data/results.csv",
+    "dominance_script": "paper/cross_task/scripts/cross_task/aggregate.py",
+    "dominance_input": "paper/task<N>/analysis/prereg_results.json (+ hardcoded T5_SLOPES)",
+    "rank_stability_script": "paper/cross_task/scripts/cross_task/ranking_stability_v2.py",
+    "t6_dominance_is_an_extension": true,
+    "t5_slopes_hardcoded_3dp": true,
+    "fisher_is_reconstruction": true
+  },
+  "partition_full": {
+    "n_rows": 36,
+    "n_clusters": 6,
+    "assertive_gt0": 17,
+    "assertive_n": 18,
+    "assertive_mean": 0.28508953646062385,
+    "commissive_lt0": 18,
+    "commissive_n": 18,
+    "commissive_mean": -0.1545089783500881,
+    "coef": 0.4395985148107119,
+    "se_iid": 0.29968622454850874,
+    "p_iid": 0.151602899421857,
+    "se_cluster": 0.22342133171017287,
+    "t_cluster": 1.967576289362418,
+    "p_cluster": 0.1062529268847836,
+    "directional_holds": true
+  },
+  "partition_lomo": {
+    "Claude Opus 4.7": {
+      "n_rows": 30,
+      "n_clusters": 6,
+      "assertive_gt0": 14,
+      "assertive_n": 15,
+      "assertive_mean": 0.1558115857496055,
+      "commissive_lt0": 15,
+      "commissive_n": 15,
+      "commissive_mean": -0.16879747772380937,
+      "coef": 0.32460906347341484,
+      "se_iid": 0.3159780031323802,
+      "p_iid": 0.31306547108494587,
+      "se_cluster": 0.10597280865618001,
+      "t_cluster": 3.063135417374678,
+      "p_cluster": 0.02800180441249256,
+      "directional_holds": true
+    },
+    "GPT-5.5": {
+      "n_rows": 30,
+      "n_clusters": 6,
+      "assertive_gt0": 14,
+      "assertive_n": 15,
+      "assertive_mean": 0.24335232121558756,
+      "commissive_lt0": 15,
+      "commissive_n": 15,
+      "commissive_mean": -0.15728651411107386,
+      "coef": 0.40063883532666145,
+      "se_iid": 0.35124024228765766,
+      "p_iid": 0.2636823249547211,
+      "se_cluster": 0.18055151573504533,
+      "t_cluster": 2.218972428426403,
+      "p_cluster": 0.07722796330357151,
+      "directional_holds": true
+    },
+    "Gemini 3.1 Pro": {
+      "n_rows": 30,
+      "n_clusters": 6,
+      "assertive_gt0": 15,
+      "assertive_n": 15,
+      "assertive_mean": 0.5719395705572554,
+      "commissive_lt0": 15,
+      "commissive_n": 15,
+      "commissive_mean": -0.13643592628348022,
+      "coef": 0.7083754968407356,
+      "se_iid": 0.23205196760552596,
+      "p_iid": 0.0049292002516772015,
+      "se_cluster": 0.48576522895580243,
+      "t_cluster": 1.4582671929060356,
+      "p_cluster": 0.20456951124234735,
+      "directional_holds": true
+    },
+    "Grok 4": {
+      "n_rows": 30,
+      "n_clusters": 6,
+      "assertive_gt0": 14,
+      "assertive_n": 15,
+      "assertive_mean": 0.2907246587068689,
+      "commissive_lt0": 15,
+      "commissive_n": 15,
+      "commissive_mean": -0.1503451690818341,
+      "coef": 0.4410698277887031,
+      "se_iid": 0.3599429284002089,
+      "p_iid": 0.2306370205253272,
+      "se_cluster": 0.2309276163373627,
+      "t_cluster": 1.9099916882368158,
+      "p_cluster": 0.11438748570409052,
+      "directional_holds": true
+    },
+    "Llama 3.3 70B": {
+      "n_rows": 30,
+      "n_clusters": 6,
+      "assertive_gt0": 14,
+      "assertive_n": 15,
+      "assertive_mean": 0.2563810413468794,
+      "commissive_lt0": 15,
+      "commissive_n": 15,
+      "commissive_mean": -0.16372557533967966,
+      "coef": 0.42010661668655913,
+      "se_iid": 0.3559595389246247,
+      "p_iid": 0.24784687169365527,
+      "se_cluster": 0.2048513859793061,
+      "t_cluster": 2.0507872801456073,
+      "p_cluster": 0.09554703267102815,
+      "directional_holds": true
+    },
+    "DeepSeek V4 Pro": {
+      "n_rows": 30,
+      "n_clusters": 6,
+      "assertive_gt0": 14,
+      "assertive_n": 15,
+      "assertive_mean": 0.1923280411875463,
+      "commissive_lt0": 15,
+      "commissive_n": 15,
+      "commissive_mean": -0.1504632075606512,
+      "coef": 0.3427912487481975,
+      "se_iid": 0.3363020635737264,
+      "p_iid": 0.3167894719879325,
+      "se_cluster": 0.14168977581034822,
+      "t_cluster": 2.4193082866262956,
+      "p_cluster": 0.060168736914154586,
+      "directional_holds": true
+    }
+  },
+  "dominance_full": {
+    "T1 Bargaining": {
+      "mean_abs_frame": 0.11175408648872337,
+      "mean_abs_incentive": 0.25033119658119657,
+      "mean_abs_difficulty": 0.03356465997770345,
+      "dominant_axis": "incentive",
+      "dominant_value": 0.25033119658119657,
+      "second_axis": "frame",
+      "second_value": 0.11175408648872337,
+      "ratio_top_second": 2.2400182798367414,
+      "ratio_frame_difficulty": 3.3295164188453006
+    },
+    "T2 Debate": {
+      "mean_abs_frame": 0.0067632850241545915,
+      "mean_abs_incentive": 0.01376811594202898,
+      "mean_abs_difficulty": 0.05575396825396826,
+      "dominant_axis": "difficulty",
+      "dominant_value": 0.05575396825396826,
+      "second_axis": "incentive",
+      "second_value": 0.01376811594202898,
+      "ratio_top_second": 4.04949874686717,
+      "ratio_frame_difficulty": 0.12130589509515707
+    },
+    "T3 Village": {
+      "mean_abs_frame": 0.16761762105119826,
+      "mean_abs_incentive": 0.05350523356911289,
+      "mean_abs_difficulty": 0.022821400519978118,
+      "dominant_axis": "frame",
+      "dominant_value": 0.16761762105119826,
+      "second_axis": "incentive",
+      "second_value": 0.05350523356911289,
+      "ratio_top_second": 3.132733190196918,
+      "ratio_frame_difficulty": 7.344756116280587
+    },
+    "T4 Sales": {
+      "mean_abs_frame": 0.026074074074074072,
+      "mean_abs_incentive": 0.009555555555555555,
+      "mean_abs_difficulty": 0.08688888888888889,
+      "dominant_axis": "difficulty",
+      "dominant_value": 0.08688888888888889,
+      "second_axis": "frame",
+      "second_value": 0.026074074074074072,
+      "ratio_top_second": 3.3323863636363638,
+      "ratio_frame_difficulty": 0.3000852514919011
+    },
+    "T5 Committee": {
+      "mean_abs_frame": 0.32683333333333336,
+      "mean_abs_incentive": 0.1805,
+      "mean_abs_difficulty": 0.603,
+      "dominant_axis": "difficulty",
+      "dominant_value": 0.603,
+      "second_axis": "frame",
+      "second_value": 0.32683333333333336,
+      "ratio_top_second": 1.8449770525242222,
+      "ratio_frame_difficulty": 0.5420121614151465
+    },
+    "T6 Inbox": {
+      "mean_abs_frame": 0.10383230452674896,
+      "mean_abs_incentive": 0.07854938271604937,
+      "mean_abs_difficulty": 0.01689814814814815,
+      "dominant_axis": "frame",
+      "dominant_value": 0.10383230452674896,
+      "second_axis": "incentive",
+      "second_value": 0.07854938271604937,
+      "ratio_top_second": 1.3218729535036018,
+      "ratio_frame_difficulty": 6.144596651445965
+    }
+  },
+  "dominance_lomo": {
+    "Claude Opus 4.7": {
+      "T1 Bargaining": {
+        "mean_abs_frame": 0.12099379267535693,
+        "mean_abs_incentive": 0.26856410256410257,
+        "mean_abs_difficulty": 0.03744425863991081,
+        "dominant_axis": "incentive",
+        "dominant_value": 0.26856410256410257,
+        "second_axis": "frame",
+        "second_value": 0.12099379267535693,
+        "ratio_top_second": 2.219651906314708,
+        "ratio_frame_difficulty": 3.231304265866622
+      },
+      "T2 Debate": {
+        "mean_abs_frame": 0.007971014492753625,
+        "mean_abs_incentive": 0.015217391304347822,
+        "mean_abs_difficulty": 0.06630952380952382,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.06630952380952382,
+        "second_axis": "incentive",
+        "second_value": 0.015217391304347822,
+        "ratio_top_second": 4.357482993197281,
+        "ratio_frame_difficulty": 0.12020919522285536
+      },
+      "T3 Village": {
+        "mean_abs_frame": 0.17987681192810456,
+        "mean_abs_incentive": 0.05928994694960212,
+        "mean_abs_difficulty": 0.026405680623973738,
+        "dominant_axis": "frame",
+        "dominant_value": 0.17987681192810456,
+        "second_axis": "incentive",
+        "second_value": 0.05928994694960212,
+        "ratio_top_second": 3.0338501075233575,
+        "ratio_frame_difficulty": 6.8120498194920325
+      },
+      "T4 Sales": {
+        "mean_abs_frame": 0.027288888888888883,
+        "mean_abs_incentive": 0.010933333333333333,
+        "mean_abs_difficulty": 0.09333333333333334,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.09333333333333334,
+        "second_axis": "frame",
+        "second_value": 0.027288888888888883,
+        "ratio_top_second": 3.4201954397394143,
+        "ratio_frame_difficulty": 0.2923809523809523
+      },
+      "T5 Committee": {
+        "mean_abs_frame": 0.33599999999999997,
+        "mean_abs_incentive": 0.19319999999999998,
+        "mean_abs_difficulty": 0.5414,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.5414,
+        "second_axis": "frame",
+        "second_value": 0.33599999999999997,
+        "ratio_top_second": 1.6113095238095239,
+        "ratio_frame_difficulty": 0.620613224972294
+      },
+      "T6 Inbox": {
+        "mean_abs_frame": 0.12459876543209876,
+        "mean_abs_incentive": 0.09203703703703703,
+        "mean_abs_difficulty": 0.018611111111111113,
+        "dominant_axis": "frame",
+        "dominant_value": 0.12459876543209876,
+        "second_axis": "incentive",
+        "second_value": 0.09203703703703703,
+        "ratio_top_second": 1.3537894030851778,
+        "ratio_frame_difficulty": 6.694859038142619
+      }
+    },
+    "GPT-5.5": {
+      "T1 Bargaining": {
+        "mean_abs_frame": 0.10188268156424582,
+        "mean_abs_incentive": 0.23223076923076924,
+        "mean_abs_difficulty": 0.029610925306577475,
+        "dominant_axis": "incentive",
+        "dominant_value": 0.23223076923076924,
+        "second_axis": "frame",
+        "second_value": 0.10188268156424582,
+        "ratio_top_second": 2.279393962401036,
+        "ratio_frame_difficulty": 3.440712524495633
+      },
+      "T2 Debate": {
+        "mean_abs_frame": 0.00608695652173913,
+        "mean_abs_incentive": 0.013043478260869563,
+        "mean_abs_difficulty": 0.05952380952380952,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.05952380952380952,
+        "second_axis": "incentive",
+        "second_value": 0.013043478260869563,
+        "ratio_top_second": 4.563492063492064,
+        "ratio_frame_difficulty": 0.10226086956521739
+      },
+      "T3 Village": {
+        "mean_abs_frame": 0.16401415833333333,
+        "mean_abs_incentive": 0.039810280282935456,
+        "mean_abs_difficulty": 0.015524163382594427,
+        "dominant_axis": "frame",
+        "dominant_value": 0.16401415833333333,
+        "second_axis": "incentive",
+        "second_value": 0.039810280282935456,
+        "ratio_top_second": 4.119894589228437,
+        "ratio_frame_difficulty": 10.565088390993408
+      },
+      "T4 Sales": {
+        "mean_abs_frame": 0.0312,
+        "mean_abs_incentive": 0.0112,
+        "mean_abs_difficulty": 0.1,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.1,
+        "second_axis": "frame",
+        "second_value": 0.0312,
+        "ratio_top_second": 3.2051282051282053,
+        "ratio_frame_difficulty": 0.31199999999999994
+      },
+      "T5 Committee": {
+        "mean_abs_frame": 0.3308,
+        "mean_abs_incentive": 0.1762,
+        "mean_abs_difficulty": 0.5884,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.5884,
+        "second_axis": "frame",
+        "second_value": 0.3308,
+        "ratio_top_second": 1.7787182587666266,
+        "ratio_frame_difficulty": 0.5622025832766825
+      },
+      "T6 Inbox": {
+        "mean_abs_frame": 0.12327932098765433,
+        "mean_abs_incentive": 0.09418981481481481,
+        "mean_abs_difficulty": 0.019444444444444448,
+        "dominant_axis": "frame",
+        "dominant_value": 0.12327932098765433,
+        "second_axis": "incentive",
+        "second_value": 0.09418981481481481,
+        "ratio_top_second": 1.308839190628328,
+        "ratio_frame_difficulty": 6.340079365079364
+      }
+    },
+    "Gemini 3.1 Pro": {
+      "T1 Bargaining": {
+        "mean_abs_frame": 0.10960490378646803,
+        "mean_abs_incentive": 0.22106410256410255,
+        "mean_abs_difficulty": 0.03377759197324415,
+        "dominant_axis": "incentive",
+        "dominant_value": 0.22106410256410255,
+        "second_axis": "frame",
+        "second_value": 0.10960490378646803,
+        "ratio_top_second": 2.016917992964795,
+        "ratio_frame_difficulty": 3.2448998695137323
+      },
+      "T2 Debate": {
+        "mean_abs_frame": 0.006811594202898552,
+        "mean_abs_incentive": 0.014782608695652167,
+        "mean_abs_difficulty": 0.05630952380952381,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.05630952380952381,
+        "second_axis": "incentive",
+        "second_value": 0.014782608695652167,
+        "ratio_top_second": 3.8091736694677887,
+        "ratio_frame_difficulty": 0.12096700064344151
+      },
+      "T3 Village": {
+        "mean_abs_frame": 0.15023847859477124,
+        "mean_abs_incentive": 0.0432896136162688,
+        "mean_abs_difficulty": 0.017989347290640396,
+        "dominant_axis": "frame",
+        "dominant_value": 0.15023847859477124,
+        "second_axis": "incentive",
+        "second_value": 0.0432896136162688,
+        "ratio_top_second": 3.470543302292485,
+        "ratio_frame_difficulty": 8.351524720017952
+      },
+      "T4 Sales": {
+        "mean_abs_frame": 0.021866666666666666,
+        "mean_abs_incentive": 0.0072,
+        "mean_abs_difficulty": 0.07466666666666667,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.07466666666666667,
+        "second_axis": "frame",
+        "second_value": 0.021866666666666666,
+        "ratio_top_second": 3.414634146341464,
+        "ratio_frame_difficulty": 0.2928571428571428
+      },
+      "T5 Committee": {
+        "mean_abs_frame": 0.3054,
+        "mean_abs_incentive": 0.1306,
+        "mean_abs_difficulty": 0.7204,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.7204,
+        "second_axis": "frame",
+        "second_value": 0.3054,
+        "ratio_top_second": 2.3588736083824493,
+        "ratio_frame_difficulty": 0.4239311493614658
+      },
+      "T6 Inbox": {
+        "mean_abs_frame": 0.08252314814814815,
+        "mean_abs_incentive": 0.053634259259259257,
+        "mean_abs_difficulty": 0.010787037037037036,
+        "dominant_axis": "frame",
+        "dominant_value": 0.08252314814814815,
+        "second_axis": "incentive",
+        "second_value": 0.053634259259259257,
+        "ratio_top_second": 1.5386275356063877,
+        "ratio_frame_difficulty": 7.650214592274679
+      }
+    },
+    "Grok 4": {
+      "T1 Bargaining": {
+        "mean_abs_frame": 0.10643823711980138,
+        "mean_abs_incentive": 0.2528974358974359,
+        "mean_abs_difficulty": 0.025777591973244147,
+        "dominant_axis": "incentive",
+        "dominant_value": 0.2528974358974359,
+        "second_axis": "frame",
+        "second_value": 0.10643823711980138,
+        "ratio_top_second": 2.3760017334070236,
+        "ratio_frame_difficulty": 4.129099305717887
+      },
+      "T2 Debate": {
+        "mean_abs_frame": 0.006231884057971016,
+        "mean_abs_incentive": 0.015652173913043473,
+        "mean_abs_difficulty": 0.049761904761904764,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.049761904761904764,
+        "second_axis": "incentive",
+        "second_value": 0.015652173913043473,
+        "ratio_top_second": 3.1792328042328055,
+        "ratio_frame_difficulty": 0.12523403370085295
+      },
+      "T3 Village": {
+        "mean_abs_frame": 0.15844681192810456,
+        "mean_abs_incentive": 0.05789394694960213,
+        "mean_abs_difficulty": 0.02665668062397374,
+        "dominant_axis": "frame",
+        "dominant_value": 0.15844681192810456,
+        "second_axis": "incentive",
+        "second_value": 0.05789394694960213,
+        "ratio_top_second": 2.7368459100920477,
+        "ratio_frame_difficulty": 5.943981329228407
+      },
+      "T4 Sales": {
+        "mean_abs_frame": 0.027999999999999997,
+        "mean_abs_incentive": 0.010933333333333333,
+        "mean_abs_difficulty": 0.09040000000000001,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.09040000000000001,
+        "second_axis": "frame",
+        "second_value": 0.027999999999999997,
+        "ratio_top_second": 3.228571428571429,
+        "ratio_frame_difficulty": 0.3097345132743362
+      },
+      "T5 Committee": {
+        "mean_abs_frame": 0.31779999999999997,
+        "mean_abs_incentive": 0.1896,
+        "mean_abs_difficulty": 0.6162,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.6162,
+        "second_axis": "frame",
+        "second_value": 0.31779999999999997,
+        "ratio_top_second": 1.9389553178099435,
+        "ratio_frame_difficulty": 0.5157416423239208
+      },
+      "T6 Inbox": {
+        "mean_abs_frame": 0.09148148148148148,
+        "mean_abs_incentive": 0.05689814814814814,
+        "mean_abs_difficulty": 0.01314814814814815,
+        "dominant_axis": "frame",
+        "dominant_value": 0.09148148148148148,
+        "second_axis": "incentive",
+        "second_value": 0.05689814814814814,
+        "ratio_top_second": 1.6078112286411719,
+        "ratio_frame_difficulty": 6.957746478873238
+      }
+    },
+    "Llama 3.3 70B": {
+      "T1 Bargaining": {
+        "mean_abs_frame": 0.11871601489757914,
+        "mean_abs_incentive": 0.29606410256410254,
+        "mean_abs_difficulty": 0.04027759197324414,
+        "dominant_axis": "incentive",
+        "dominant_value": 0.29606410256410254,
+        "second_axis": "frame",
+        "second_value": 0.11871601489757914,
+        "ratio_top_second": 2.4938851158331787,
+        "ratio_frame_difficulty": 2.9474456908059596
+      },
+      "T2 Debate": {
+        "mean_abs_frame": 0.005797101449275364,
+        "mean_abs_incentive": 0.011739130434782603,
+        "mean_abs_difficulty": 0.045654761904761906,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.045654761904761906,
+        "second_axis": "incentive",
+        "second_value": 0.011739130434782603,
+        "ratio_top_second": 3.889109347442683,
+        "ratio_frame_difficulty": 0.126976928745536
+      },
+      "T3 Village": {
+        "mean_abs_frame": 0.18016727189542484,
+        "mean_abs_incentive": 0.059171107869142356,
+        "mean_abs_difficulty": 0.025218365353037776,
+        "dominant_axis": "frame",
+        "dominant_value": 0.18016727189542484,
+        "second_axis": "incentive",
+        "second_value": 0.059171107869142356,
+        "ratio_top_second": 3.044852097308487,
+        "ratio_frame_difficulty": 7.144288274565825
+      },
+      "T4 Sales": {
+        "mean_abs_frame": 0.024355555555555554,
+        "mean_abs_incentive": 0.009333333333333334,
+        "mean_abs_difficulty": 0.0816,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.0816,
+        "second_axis": "frame",
+        "second_value": 0.024355555555555554,
+        "ratio_top_second": 3.35036496350365,
+        "ratio_frame_difficulty": 0.298474945533769
+      },
+      "T5 Committee": {
+        "mean_abs_frame": 0.3348,
+        "mean_abs_incentive": 0.213,
+        "mean_abs_difficulty": 0.5810000000000001,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.5810000000000001,
+        "second_axis": "frame",
+        "second_value": 0.3348,
+        "ratio_top_second": 1.7353643966547194,
+        "ratio_frame_difficulty": 0.5762478485370051
+      },
+      "T6 Inbox": {
+        "mean_abs_frame": 0.09397376543209876,
+        "mean_abs_incentive": 0.08875,
+        "mean_abs_difficulty": 0.0200925925925926,
+        "dominant_axis": "frame",
+        "dominant_value": 0.09397376543209876,
+        "second_axis": "incentive",
+        "second_value": 0.08875,
+        "ratio_top_second": 1.0588593288123804,
+        "ratio_frame_difficulty": 4.677035330261135
+      }
+    },
+    "DeepSeek V4 Pro": {
+      "T1 Bargaining": {
+        "mean_abs_frame": 0.1128888888888889,
+        "mean_abs_incentive": 0.23116666666666666,
+        "mean_abs_difficulty": 0.034499999999999996,
+        "dominant_axis": "incentive",
+        "dominant_value": 0.23116666666666666,
+        "second_axis": "frame",
+        "second_value": 0.1128888888888889,
+        "ratio_top_second": 2.0477362204724407,
+        "ratio_frame_difficulty": 3.2721417069243164
+      },
+      "T2 Debate": {
+        "mean_abs_frame": 0.007681159420289856,
+        "mean_abs_incentive": 0.012173913043478254,
+        "mean_abs_difficulty": 0.05696428571428571,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.05696428571428571,
+        "second_axis": "incentive",
+        "second_value": 0.012173913043478254,
+        "ratio_top_second": 4.679209183673472,
+        "ratio_frame_difficulty": 0.1348416700740539
+      },
+      "T3 Village": {
+        "mean_abs_frame": 0.17296219362745097,
+        "mean_abs_incentive": 0.06157650574712644,
+        "mean_abs_difficulty": 0.025134165845648614,
+        "dominant_axis": "frame",
+        "dominant_value": 0.17296219362745097,
+        "second_axis": "incentive",
+        "second_value": 0.06157650574712644,
+        "ratio_top_second": 2.80889913334393,
+        "ratio_frame_difficulty": 6.881556948801437
+      },
+      "T4 Sales": {
+        "mean_abs_frame": 0.023733333333333332,
+        "mean_abs_incentive": 0.007733333333333333,
+        "mean_abs_difficulty": 0.08133333333333334,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.08133333333333334,
+        "second_axis": "frame",
+        "second_value": 0.023733333333333332,
+        "ratio_top_second": 3.426966292134832,
+        "ratio_frame_difficulty": 0.29180327868852457
+      },
+      "T5 Committee": {
+        "mean_abs_frame": 0.3362,
+        "mean_abs_incentive": 0.1804,
+        "mean_abs_difficulty": 0.5706,
+        "dominant_axis": "difficulty",
+        "dominant_value": 0.5706,
+        "second_axis": "frame",
+        "second_value": 0.3362,
+        "ratio_top_second": 1.6972040452111838,
+        "ratio_frame_difficulty": 0.5892043463021381
+      },
+      "T6 Inbox": {
+        "mean_abs_frame": 0.10713734567901234,
+        "mean_abs_incentive": 0.08578703703703702,
+        "mean_abs_difficulty": 0.019305555555555555,
+        "dominant_axis": "frame",
+        "dominant_value": 0.10713734567901234,
+        "second_axis": "incentive",
+        "second_value": 0.08578703703703702,
+        "ratio_top_second": 1.248875697067818,
+        "ratio_frame_difficulty": 5.549560351718625
+      }
+    }
+  },
+  "t3_incentive_sensitivity": {
+    "full": {
+      "with_incentive": {
+        "mean_abs_frame": 0.16761762105119826,
+        "mean_abs_incentive": 0.05350523356911289,
+        "mean_abs_difficulty": 0.022821400519978118,
+        "dominant_axis": "frame",
+        "dominant_value": 0.16761762105119826,
+        "second_axis": "incentive",
+        "second_value": 0.05350523356911289,
+        "ratio_top_second": 3.132733190196918,
+        "ratio_frame_difficulty": 7.344756116280587
+      },
+      "without_incentive": {
+        "mean_abs_frame": 0.16761762105119826,
+        "mean_abs_incentive": 0.05350523356911289,
+        "mean_abs_difficulty": 0.022821400519978118,
+        "dominant_axis": "frame",
+        "dominant_value": 0.16761762105119826,
+        "second_axis": "difficulty",
+        "second_value": 0.022821400519978118,
+        "ratio_top_second": 7.344756116280587,
+        "ratio_frame_difficulty": 7.344756116280587
+      }
+    },
+    "Claude Opus 4.7": {
+      "with_incentive": {
+        "mean_abs_frame": 0.17987681192810456,
+        "mean_abs_incentive": 0.05928994694960212,
+        "mean_abs_difficulty": 0.026405680623973738,
+        "dominant_axis": "frame",
+        "dominant_value": 0.17987681192810456,
+        "second_axis": "incentive",
+        "second_value": 0.05928994694960212,
+        "ratio_top_second": 3.0338501075233575,
+        "ratio_frame_difficulty": 6.8120498194920325
+      },
+      "without_incentive": {
+        "mean_abs_frame": 0.17987681192810456,
+        "mean_abs_incentive": 0.05928994694960212,
+        "mean_abs_difficulty": 0.026405680623973738,
+        "dominant_axis": "frame",
+        "dominant_value": 0.17987681192810456,
+        "second_axis": "difficulty",
+        "second_value": 0.026405680623973738,
+        "ratio_top_second": 6.8120498194920325,
+        "ratio_frame_difficulty": 6.8120498194920325
+      }
+    },
+    "GPT-5.5": {
+      "with_incentive": {
+        "mean_abs_frame": 0.16401415833333333,
+        "mean_abs_incentive": 0.039810280282935456,
+        "mean_abs_difficulty": 0.015524163382594427,
+        "dominant_axis": "frame",
+        "dominant_value": 0.16401415833333333,
+        "second_axis": "incentive",
+        "second_value": 0.039810280282935456,
+        "ratio_top_second": 4.119894589228437,
+        "ratio_frame_difficulty": 10.565088390993408
+      },
+      "without_incentive": {
+        "mean_abs_frame": 0.16401415833333333,
+        "mean_abs_incentive": 0.039810280282935456,
+        "mean_abs_difficulty": 0.015524163382594427,
+        "dominant_axis": "frame",
+        "dominant_value": 0.16401415833333333,
+        "second_axis": "difficulty",
+        "second_value": 0.015524163382594427,
+        "ratio_top_second": 10.565088390993408,
+        "ratio_frame_difficulty": 10.565088390993408
+      }
+    },
+    "Gemini 3.1 Pro": {
+      "with_incentive": {
+        "mean_abs_frame": 0.15023847859477124,
+        "mean_abs_incentive": 0.0432896136162688,
+        "mean_abs_difficulty": 0.017989347290640396,
+        "dominant_axis": "frame",
+        "dominant_value": 0.15023847859477124,
+        "second_axis": "incentive",
+        "second_value": 0.0432896136162688,
+        "ratio_top_second": 3.470543302292485,
+        "ratio_frame_difficulty": 8.351524720017952
+      },
+      "without_incentive": {
+        "mean_abs_frame": 0.15023847859477124,
+        "mean_abs_incentive": 0.0432896136162688,
+        "mean_abs_difficulty": 0.017989347290640396,
+        "dominant_axis": "frame",
+        "dominant_value": 0.15023847859477124,
+        "second_axis": "difficulty",
+        "second_value": 0.017989347290640396,
+        "ratio_top_second": 8.351524720017952,
+        "ratio_frame_difficulty": 8.351524720017952
+      }
+    },
+    "Grok 4": {
+      "with_incentive": {
+        "mean_abs_frame": 0.15844681192810456,
+        "mean_abs_incentive": 0.05789394694960213,
+        "mean_abs_difficulty": 0.02665668062397374,
+        "dominant_axis": "frame",
+        "dominant_value": 0.15844681192810456,
+        "second_axis": "incentive",
+        "second_value": 0.05789394694960213,
+        "ratio_top_second": 2.7368459100920477,
+        "ratio_frame_difficulty": 5.943981329228407
+      },
+      "without_incentive": {
+        "mean_abs_frame": 0.15844681192810456,
+        "mean_abs_incentive": 0.05789394694960213,
+        "mean_abs_difficulty": 0.02665668062397374,
+        "dominant_axis": "frame",
+        "dominant_value": 0.15844681192810456,
+        "second_axis": "difficulty",
+        "second_value": 0.02665668062397374,
+        "ratio_top_second": 5.943981329228407,
+        "ratio_frame_difficulty": 5.943981329228407
+      }
+    },
+    "Llama 3.3 70B": {
+      "with_incentive": {
+        "mean_abs_frame": 0.18016727189542484,
+        "mean_abs_incentive": 0.059171107869142356,
+        "mean_abs_difficulty": 0.025218365353037776,
+        "dominant_axis": "frame",
+        "dominant_value": 0.18016727189542484,
+        "second_axis": "incentive",
+        "second_value": 0.059171107869142356,
+        "ratio_top_second": 3.044852097308487,
+        "ratio_frame_difficulty": 7.144288274565825
+      },
+      "without_incentive": {
+        "mean_abs_frame": 0.18016727189542484,
+        "mean_abs_incentive": 0.059171107869142356,
+        "mean_abs_difficulty": 0.025218365353037776,
+        "dominant_axis": "frame",
+        "dominant_value": 0.18016727189542484,
+        "second_axis": "difficulty",
+        "second_value": 0.025218365353037776,
+        "ratio_top_second": 7.144288274565825,
+        "ratio_frame_difficulty": 7.144288274565825
+      }
+    },
+    "DeepSeek V4 Pro": {
+      "with_incentive": {
+        "mean_abs_frame": 0.17296219362745097,
+        "mean_abs_incentive": 0.06157650574712644,
+        "mean_abs_difficulty": 0.025134165845648614,
+        "dominant_axis": "frame",
+        "dominant_value": 0.17296219362745097,
+        "second_axis": "incentive",
+        "second_value": 0.06157650574712644,
+        "ratio_top_second": 2.80889913334393,
+        "ratio_frame_difficulty": 6.881556948801437
+      },
+      "without_incentive": {
+        "mean_abs_frame": 0.17296219362745097,
+        "mean_abs_incentive": 0.06157650574712644,
+        "mean_abs_difficulty": 0.025134165845648614,
+        "dominant_axis": "frame",
+        "dominant_value": 0.17296219362745097,
+        "second_axis": "difficulty",
+        "second_value": 0.025134165845648614,
+        "ratio_top_second": 6.881556948801437,
+        "ratio_frame_difficulty": 6.881556948801437
+      }
+    }
+  },
+  "rank_stability": {
+    "tasks": [
+      "bargaining",
+      "debate",
+      "village",
+      "sales",
+      "committee"
+    ],
+    "definition": "v2: permissive-frame mean of each task's primary metric (T2 = belief_shift), point-estimate Spearman, no bootstrap",
+    "full_roster_mean_offdiag": 0.3289468394615031,
+    "matrix_full": [
+      [
+        1.0,
+        -0.17393131069573453,
+        0.5217939320872036,
+        -0.3768511731740915,
+        0.28988551782622424
+      ],
+      [
+        -0.17393131069573456,
+        1.0,
+        0.6,
+        0.942857142857143,
+        0.3714285714285715
+      ],
+      [
+        0.5217939320872036,
+        0.6,
+        1.0,
+        0.3714285714285715,
+        0.48571428571428577
+      ],
+      [
+        -0.3768511731740915,
+        0.942857142857143,
+        0.3714285714285715,
+        1.0,
+        0.2571428571428572
+      ],
+      [
+        0.2898855178262242,
+        0.3714285714285715,
+        0.48571428571428577,
+        0.2571428571428572,
+        1.0
+      ]
+    ],
+    "lomo_mean_offdiag": {
+      "Claude Opus 4.7": 0.2584412988748907,
+      "GPT-5.5": 0.5408451292191596,
+      "Gemini 3.1 Pro": 0.03999999999999998,
+      "Grok 4": 0.38,
+      "Llama 3.3 70B": 0.3848701082395742,
+      "DeepSeek V4 Pro": 0.33461032471872265
+    },
+    "lomo_matrices": {
+      "Claude Opus 4.7": [
+        [
+          1.0,
+          -0.5642880936468347,
+          0.15389675281277312,
+          -0.5642880936468347,
+          0.35909242322980395
+        ],
+        [
+          -0.5642880936468347,
+          0.9999999999999999,
+          0.49999999999999994,
+          0.9999999999999999,
+          0.3
+        ],
+        [
+          0.15389675281277312,
+          0.49999999999999994,
+          0.9999999999999999,
+          0.49999999999999994,
+          0.6
+        ],
+        [
+          -0.5642880936468347,
+          0.9999999999999999,
+          0.49999999999999994,
+          0.9999999999999999,
+          0.3
+        ],
+        [
+          0.35909242322980395,
+          0.3,
+          0.6,
+          0.3,
+          0.9999999999999999
+        ]
+      ],
+      "GPT-5.5": [
+        [
+          1.0,
+          0.46169025843831935,
+          0.8720815992723809,
+          0.10259783520851543,
+          0.8720815992723809
+        ],
+        [
+          0.46169025843831935,
+          0.9999999999999999,
+          0.7,
+          0.8999999999999998,
+          0.3
+        ],
+        [
+          0.8720815992723809,
+          0.7,
+          0.9999999999999999,
+          0.39999999999999997,
+          0.7
+        ],
+        [
+          0.10259783520851541,
+          0.8999999999999998,
+          0.39999999999999997,
+          0.9999999999999999,
+          0.09999999999999999
+        ],
+        [
+          0.8720815992723809,
+          0.3,
+          0.7,
+          0.09999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "Gemini 3.1 Pro": [
+        [
+          0.9999999999999999,
+          -0.39999999999999997,
+          0.49999999999999994,
+          -0.7,
+          0.19999999999999998
+        ],
+        [
+          -0.39999999999999997,
+          0.9999999999999999,
+          0.3,
+          0.8999999999999998,
+          -0.09999999999999999
+        ],
+        [
+          0.49999999999999994,
+          0.3,
+          0.9999999999999999,
+          -0.09999999999999999,
+          0.09999999999999999
+        ],
+        [
+          -0.7,
+          0.8999999999999998,
+          -0.09999999999999999,
+          0.9999999999999999,
+          -0.3
+        ],
+        [
+          0.19999999999999998,
+          -0.09999999999999999,
+          0.09999999999999999,
+          -0.3,
+          0.9999999999999999
+        ]
+      ],
+      "Grok 4": [
+        [
+          0.9999999999999999,
+          -0.09999999999999999,
+          0.49999999999999994,
+          -0.09999999999999999,
+          0.19999999999999998
+        ],
+        [
+          -0.09999999999999999,
+          0.9999999999999999,
+          0.7,
+          0.9999999999999999,
+          0.39999999999999997
+        ],
+        [
+          0.49999999999999994,
+          0.7,
+          0.9999999999999999,
+          0.7,
+          0.09999999999999999
+        ],
+        [
+          -0.09999999999999999,
+          0.9999999999999999,
+          0.7,
+          0.9999999999999999,
+          0.39999999999999997
+        ],
+        [
+          0.19999999999999998,
+          0.39999999999999997,
+          0.09999999999999999,
+          0.39999999999999997,
+          0.9999999999999999
+        ]
+      ],
+      "Llama 3.3 70B": [
+        [
+          1.0,
+          -0.20519567041703085,
+          0.6668859288553503,
+          -0.46169025843831935,
+          -0.05129891760425771
+        ],
+        [
+          -0.20519567041703082,
+          0.9999999999999999,
+          0.49999999999999994,
+          0.8999999999999998,
+          0.8999999999999998
+        ],
+        [
+          0.6668859288553501,
+          0.49999999999999994,
+          0.9999999999999999,
+          0.19999999999999998,
+          0.7
+        ],
+        [
+          -0.46169025843831935,
+          0.8999999999999998,
+          0.19999999999999998,
+          0.9999999999999999,
+          0.7
+        ],
+        [
+          -0.051298917604257706,
+          0.8999999999999998,
+          0.7,
+          0.7,
+          0.9999999999999999
+        ]
+      ],
+      "DeepSeek V4 Pro": [
+        [
+          1.0,
+          -0.20519567041703085,
+          0.35909242322980395,
+          -0.46169025843831935,
+          0.15389675281277312
+        ],
+        [
+          -0.20519567041703082,
+          0.9999999999999999,
+          0.7999999999999999,
+          0.8999999999999998,
+          0.39999999999999997
+        ],
+        [
+          0.35909242322980395,
+          0.7999999999999999,
+          0.9999999999999999,
+          0.49999999999999994,
+          0.6
+        ],
+        [
+          -0.46169025843831935,
+          0.8999999999999998,
+          0.49999999999999994,
+          0.9999999999999999,
+          0.3
+        ],
+        [
+          0.15389675281277312,
+          0.39999999999999997,
+          0.6,
+          0.3,
+          0.9999999999999999
+        ]
+      ]
+    }
+  },
+  "fisher_reconstruction": {
+    "full": {
+      "table": [
+        [
+          3,
+          0
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "p_one_sided": 0.05000000000000001,
+      "p_two_sided": 0.10000000000000002,
+      "perfect_split": true,
+      "floor_note": "A perfect 3/3-vs-3/3 split floors at 1/C(6,3) = 0.05 one-sided."
+    },
+    "lomo": {
+      "Claude Opus 4.7": {
+        "table": [
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "p_one_sided": 0.05000000000000001,
+        "p_two_sided": 0.10000000000000002,
+        "perfect_split": true,
+        "floor_note": "A perfect 3/3-vs-3/3 split floors at 1/C(6,3) = 0.05 one-sided."
+      },
+      "GPT-5.5": {
+        "table": [
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "p_one_sided": 0.05000000000000001,
+        "p_two_sided": 0.10000000000000002,
+        "perfect_split": true,
+        "floor_note": "A perfect 3/3-vs-3/3 split floors at 1/C(6,3) = 0.05 one-sided."
+      },
+      "Gemini 3.1 Pro": {
+        "table": [
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "p_one_sided": 0.05000000000000001,
+        "p_two_sided": 0.10000000000000002,
+        "perfect_split": true,
+        "floor_note": "A perfect 3/3-vs-3/3 split floors at 1/C(6,3) = 0.05 one-sided."
+      },
+      "Grok 4": {
+        "table": [
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "p_one_sided": 0.05000000000000001,
+        "p_two_sided": 0.10000000000000002,
+        "perfect_split": true,
+        "floor_note": "A perfect 3/3-vs-3/3 split floors at 1/C(6,3) = 0.05 one-sided."
+      },
+      "Llama 3.3 70B": {
+        "table": [
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "p_one_sided": 0.05000000000000001,
+        "p_two_sided": 0.10000000000000002,
+        "perfect_split": true,
+        "floor_note": "A perfect 3/3-vs-3/3 split floors at 1/C(6,3) = 0.05 one-sided."
+      },
+      "DeepSeek V4 Pro": {
+        "table": [
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "p_one_sided": 0.05000000000000001,
+        "p_two_sided": 0.10000000000000002,
+        "perfect_split": true,
+        "floor_note": "A perfect 3/3-vs-3/3 split floors at 1/C(6,3) = 0.05 one-sided."
+      }
+    }
+  },
+  "ci_gaps": [
+    "T6 Inbox: no bootstrap_cis.json committed -- CI unavailable"
+  ]
+}
