@@ -3,7 +3,7 @@
 #
 # Four configs x six environments x full factorial = 9,060 scenarios.
 #   luna_on / luna_off   openai/gpt-5.6-luna     provider OpenAI    (Azure excluded)
-#   hy3_on  / hy3_off    tencent/hy3             provider GMICloud  (bf16)
+#   hy3_on  / hy3_off    tencent/hy3             provider DeepInfra (fp8; Amendment A1)
 #
 # Provider routing is pinned with allow_fallbacks=false so quantization cannot
 # drift within a run or between the ON and OFF arms. Reasoning is toggled with
@@ -34,8 +34,8 @@ bind() {  # bind <slug> <reasoning_enabled> <provider>
 }
 LUNA_ON=$(bind  "openai/gpt-5.6-luna" true  OpenAI)
 LUNA_OFF=$(bind "openai/gpt-5.6-luna" false OpenAI)
-HY3_ON=$(bind   "tencent/hy3"          true  GMICloud)
-HY3_OFF=$(bind  "tencent/hy3"          false GMICloud)
+HY3_ON=$(bind   "tencent/hy3"          true  DeepInfra)   # Amendment A1: was GMICloud
+HY3_OFF=$(bind  "tencent/hy3"          false DeepInfra)   # Amendment A1: was GMICloud
 
 # Under-test roles, identical across every environment.
 UT=(
@@ -59,11 +59,15 @@ CHEAP='openrouter/tencent/hy3'
 COMMON=(--temperature 0.7 --max-connections 20 --no-fail-on-error --display plain)
 
 case "${1:?usage: launch_tier1.sh <t1|t2|t3|t4|t5|t6>}" in
-  t1)
+  t1|t1_hy3)
+    # t1_hy3 re-runs only the Hy3 arms (Amendment A1); Luna's 1,800 samples
+    # from the original GMICloud run are complete and are not re-collected.
+    SC="$SCEN/tier1_t1_bargaining.jsonl"
+    [ "$1" = "t1_hy3" ] && SC="$SCEN/tier1_t1_bargaining_hy3.jsonl"
     inspect eval "$WT/src/manipulation_bench/bargaining_task.py@bargaining_commit_bench" \
-      -T scenarios="$SCEN/tier1_t1_bargaining.jsonl" -T max_action_retries=4 \
+      -T scenarios="$SC" -T max_action_retries=4 \
       --model "$CHEAP" "${UT[@]}" --max-tokens 16384 \
-      --log-dir "$LOGROOT/t1_bargaining" "${COMMON[@]}"
+      --log-dir "$LOGROOT/${1}_bargaining" "${COMMON[@]}"
     ;;
   t2)
     inspect eval "$WT/src/manipulation_bench/task.py" \

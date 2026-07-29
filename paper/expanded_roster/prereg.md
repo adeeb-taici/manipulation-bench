@@ -186,4 +186,54 @@ expanded-roster analysis, rather than being held until all environments finish.
 
 ## Amendments
 
-*(none yet)*
+### A1 — Hy3 provider changed from GMICloud (bf16) to DeepInfra (fp8), 2026-07-29
+
+**What changed.** §1.1 pinned `tencent/hy3` to GMICloud/bf16 for both arms. Both arms are now
+pinned to **DeepInfra/fp8** instead.
+
+**Why.** GMICloud cannot execute tool calls for this model. On the first Bargaining run, Hy3 on
+GMICloud returned **0 scored / 722 errored** samples, against Luna's 900/900 + 900/900 in the
+same run. The failure is a provider gateway rejection, not a model behaviour:
+
+```
+"code":"400004","type":"gateway_error", "provider_name":"GMICloud", "provider_error_code":"400"
+```
+
+546 such rejections were logged. The earlier Sales smoke test passed on GMICloud, and Sales is
+the one environment with no tool calls — consistent with the rejection being specific to
+tool-call requests. Bargaining, Village, and Committee are all tool-based, so GMICloud would
+have failed three of six environments.
+
+**Provider selection evidence.** Alternatives were probed on Bargaining (the environment that
+failed) at n=1 then n=12, before committing:
+
+| Provider | Quantization | n=1 | n=12 | Chosen |
+|---|---|---|---|---|
+| GMICloud | bf16 | 0/1 | — | no — 400004 on every tool call |
+| Tencent | fp8 | **0/1** | — | no — spent 3,326 reasoning tokens but produced no valid commit |
+| Novita | unknown | 1/1 | 12/12 | no — quantization undisclosed |
+| **DeepInfra** | **fp8** | 1/1 | **12/12** | **yes** |
+
+DeepInfra is selected over Novita because its quantization is disclosed, which the reproducibility
+record in §1.1 depends on.
+
+**Consequences for interpretation, stated explicitly.**
+
+1. **The ON/OFF contrast is unaffected.** Both arms move to the same provider and the same fp8
+   quantization, so the toggle comparison — the entire purpose of Tier 1 — remains
+   within-model, within-provider, within-quantization.
+2. **Hy3-vs-Luna absolute-level comparison now spans quantization regimes** (Hy3 fp8 vs Luna
+   undisclosed first-party). This is a cross-model caveat, not a toggle caveat, and is reported
+   wherever Hy3 and Luna absolute levels are compared.
+3. **The 0/722 GMICloud result is NOT recorded as a competence failure under §2.** The §2 gates
+   exist to stop a model that cannot execute an environment from being scored as honest; the
+   mirror-image error would be to record a provider outage as model incapacity. Hy3's GMICloud
+   run is discarded as an infrastructure failure and is excluded from all competence accounting.
+   Its numbers are reported here for transparency only.
+4. **Luna's Bargaining data is retained.** Luna completed 1,800/1,800 with zero errors on the
+   original run and is not re-collected; only the Hy3 arms are re-run
+   (`tier1_t1_bargaining_hy3.jsonl`, 1,800 scenarios). The two halves of Bargaining therefore
+   come from different wall-clock runs, which is recorded but has no bearing on either arm.
+
+**Cost impact.** Negligible. DeepInfra is $0.14/$0.58 per M vs GMICloud's $0.13/$0.53. The
+discarded GMICloud attempt consumed input tokens on ~722 failed requests, well under $5.
