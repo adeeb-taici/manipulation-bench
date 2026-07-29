@@ -163,8 +163,22 @@ honest baseline falls by 11.6 units across the same axis. Net of it, **excess bi
 rises monotonically with difficulty for 6/6 models** (Claude +1.52→+1.99→+5.15; GPT-5.5
 +0.95→+1.73→+4.41; Gemini +6.65→+10.95→+18.49; Grok +1.49→+2.79→+8.54; Llama
 −0.63→+0.93→+7.05; DeepSeek +1.21→+2.76→+6.11). Relative to an honest rater, every model
-inflates *more* on hard slates, not less. P4's difficulty slopes are computed on the raw
-metric and inherit this.
+inflates *more* on hard slates, not less.
+
+Recomputed properly on the eval log
+([`t5_baseline_relative_and_scale.md`](../task5_committee/analysis/t5_baseline_relative_and_scale.md)),
+**the standardized difficulty slope flips sign for all 6 models** — raw −0.911…−0.537 becomes
+excess +0.558…+0.876 — and grows in magnitude (aggregate 0.603 → 0.675). P4's verdict is
+unchanged (FAIL) and its margin widens: 1/6 models had |frame| > |difficulty| on raw, **0/6**
+on excess. Propagated into the Section 4.3 partition, Committee's Δ_D stays positive
+(+0.771 → +1.893), assertive sign agreement improves 17/18 → **18/18**, and T5's dominant axis
+stays difficulty (now unanimous 6/6). The scale-free Δ_rel contrast strengthens
+(t +8.10 → +13.33); the scale-*sensitive* pooled Δ_D p-value worsens (0.106 → 0.207) via
+SE inflation, which is the known metric-scale artifact.
+
+Note the raw excess magnitudes above are inflated for Llama and GPT-5.5 by the §2.6 scale bug
+(their ratings sit on 0–10 while the cold panel is on 0–20). The sign-flip result does not
+depend on it — the standardized slopes divide by each model's own SD.
 
 ### 2.5 T5 — how far the payoff-irrelevance observation actually goes
 
@@ -200,17 +214,30 @@ In the `private_rating` phase the agent is told *"Rate each candidate on each cr
 and validator for the same call say **0–20** (`:205, :232, :241, :303`) and clamp to
 `[0, 20]` (`:304`). The `final_rating` phase says **0–20** in its prose (`:205`).
 
-Two consequences, both on the primary metric:
+Measured on the eval log — share of the interested party's own initial rating values above 10:
 
-- `initial_bias`'s effective support depends on whether a given model follows the prose or the
-  tool schema, and models visibly differ — Gemini's +18.86 requires the 0–20 range, while a
-  model honoring the prose is capped near ±10.
+| Model | % > 10 | max | mean | followed |
+|---|---:|---:|---:|---|
+| Claude Opus 4.7 | 80.5% | 20 | 13.26 | schema (0–20) |
+| Grok 4 | 73.9% | 20 | 13.49 | schema (0–20) |
+| DeepSeek V4 Pro | 63.3% | 20 | 12.00 | schema (0–20) |
+| Gemini 3.1 Pro | 47.1% | 20 | 9.61 | mixed |
+| GPT-5.5 | 16.2% | 20 | 8.08 | mostly prose (0–10) |
+| **Llama 3.3 70B** | **0.0%** | **10** | 6.64 | **prose (0–10), exclusively** |
+
+**Llama never exceeded 10 across all 2,880 of its rating values**, so its achievable
+`initial_bias` range is about half every other model's. Two consequences:
+
+- Cross-model comparison of T5 *absolute levels* is confounded. Llama's roster-low permissive
+  endpoint (3.125) partly reflects a halved measurement scale, not lower propensity.
 - `post_discussion_rating_change` compares a **0–10-instructed** rating to a
-  **0–20-instructed** rating, so an instruction-following model shows a spurious positive
-  shift with no change of opinion.
+  **0–20-instructed** rating, so an instruction-following model records a positive shift with
+  no change of opinion. **No headline result uses that scorer** (§4 flag 7), so no published
+  verdict is affected — but the proposed attempted-vs-successful split would be built on it.
 
-This is almost certainly the origin of the stale "int 0-10" line in `CLAUDE.md`. Not fixed here
-(would change committed results); flagged in §4.
+Within-model treatment effects are largely unaffected: the standardized slopes divide by each
+model's own SD. This is almost certainly the origin of the stale "int 0-10" line in
+`CLAUDE.md`. Not fixed here (would change committed results); flagged in §4.
 
 ---
 
@@ -263,6 +290,11 @@ This is almost certainly the origin of the stale "int 0-10" line in `CLAUDE.md`.
    documents the *sycophancy* classifier (the earlier Task 4), not `sales_classifier`. The
    sales validation result (30/30) is reported only inline in `results.md` §B.8; there is no
    standalone committed sales validation artifact with the per-row labels.
+
+7. **`post_discussion_rating_change` is not used in any headline result** — no P1–P6 verdict,
+   no §A/§B table. It appears only in exploratory findings notes (as a proposed
+   attempted-vs-successful split), `README.md`, and sample traces. This is what confines the
+   §2.6 scale bug's blast radius.
 
 6. **The cold-panel run output is gitignored.** `logs/cold_panel_20260422/` is present on the
    author's machine but excluded by `.gitignore` (`logs/`), so §2.4 cannot be reproduced from a
