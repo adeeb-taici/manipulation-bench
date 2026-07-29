@@ -1,7 +1,7 @@
 """Analytic behavioral baselines for T1-T6.
 
 Derives, from the committed payoff/metric definitions only (no model calls,
-no eval-log reads), the reference points requested by Reviewer Cn6V:
+no eval-log reads), reference points for interpreting observed rates:
 
   - truthful-policy value of each task's primary metric
   - self-interested / game-theoretic reference where one is derivable

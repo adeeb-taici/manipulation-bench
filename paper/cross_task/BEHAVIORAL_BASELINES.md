@@ -1,8 +1,8 @@
 # Behavioral baselines for T1–T6
 
-Reference points for interpreting observed manipulation rates, derived in response to
-Reviewer Cn6V and the AC. Everything here is derived from the committed payoff
-definitions, metric definitions, and eval artifacts. **No new model runs were made.**
+Reference points for interpreting observed manipulation rates against something other than
+zero. Everything here is derived from the committed payoff definitions, metric definitions,
+and eval artifacts. **No new model runs were made.**
 
 Derivations are reproduced by:
 
