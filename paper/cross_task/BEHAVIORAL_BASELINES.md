@@ -160,10 +160,21 @@ The recomputation reproduces the committed high-tier −7.14 (SD 2.92) exactly.
 **This reverses the difficulty reading in `results.md` §A.3.** Raw bias falls with difficulty
 for 5/6 models, which §A.3 reads as models being unable to inflate weak candidates. But the
 honest baseline falls by 11.6 units across the same axis. Net of it, **excess bias over honest
-rises monotonically with difficulty for 6/6 models** (Claude +1.52→+1.99→+5.15; GPT-5.5
-+0.95→+1.73→+4.41; Gemini +6.65→+10.95→+18.49; Grok +1.49→+2.79→+8.54; Llama
-−0.63→+0.93→+7.05; DeepSeek +1.21→+2.76→+6.11). Relative to an honest rater, every model
-inflates *more* on hard slates, not less.
+rises with difficulty for 6/6 models**. Scale-corrected per-slate figures (0–20-equivalent
+units; only GPT-5.5 and Llama move — see §2.6):
+
+| Model | low | medium | high |
+|---|---:|---:|---:|
+| Claude Opus 4.7 | +1.52 | +2.01 | +5.15 |
+| GPT-5.5 | +1.56 | +2.42 | +4.45 |
+| Gemini 3.1 Pro | +6.65 | +10.94 | +18.49 |
+| Grok 4 | +1.53 | +2.79 | +8.60 |
+| Llama 3.3 70B | +3.18 | +2.45 | +6.97 |
+| DeepSeek V4 Pro | +1.43 | +2.92 | +6.16 |
+
+Relative to an honest rater, every model inflates *more* on hard slates, not less. **Strict
+monotonicity is 5/6, not 6/6** — Llama dips at medium once the scale correction is applied
+(its uncorrected numbers were monotone). The directional claim holds 6/6.
 
 Recomputed properly on the eval log
 ([`t5_baseline_relative_and_scale.md`](../task5_committee/analysis/t5_baseline_relative_and_scale.md)),
@@ -226,10 +237,18 @@ Measured on the eval log — share of the interested party's own initial rating 
 | **Llama 3.3 70B** | **0.0%** | **10** | 6.64 | **prose (0–10), exclusively** |
 
 **Llama never exceeded 10 across all 2,880 of its rating values**, so its achievable
-`initial_bias` range is about half every other model's. Two consequences:
+`initial_bias` range is about half every other model's.
 
-- Cross-model comparison of T5 *absolute levels* is confounded. Llama's roster-low permissive
-  endpoint (3.125) partly reflects a halved measurement scale, not lower propensity.
+The confound is **correctable**: per-sample max rating is perfectly bimodal (every sample tops
+out ≤10 or ≥15; the 11–14 band is empty across all 1,075 samples), so each sample's scale is
+unambiguous, and 0–10 samples can be rescaled ×2. Affected sample counts: Llama 180/180,
+GPT-5.5 141/180, DeepSeek 17/180, Grok 1/176, Claude and Gemini 0. Two consequences:
+
+- Cross-model comparison of T5 *absolute levels* is confounded, and the roster ordering
+  changes once corrected. On permissive-frame bias, **Llama moves from last (3.13) to third
+  (6.25) and Claude becomes the roster minimum (4.29)**. "Llama manipulates least on
+  Committee" is an artifact. Pre-registered verdicts are unaffected (P1 stays 6/6, GPT-5.5
+  closest at −1.82; P2 magnitude reading stays 6/6).
 - `post_discussion_rating_change` compares a **0–10-instructed** rating to a
   **0–20-instructed** rating, so an instruction-following model records a positive shift with
   no change of opinion. **No headline result uses that scorer** (§4 flag 7), so no published
