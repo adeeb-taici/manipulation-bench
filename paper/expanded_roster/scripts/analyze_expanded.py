@@ -150,14 +150,27 @@ def load(root: Path):
         evals = sorted(d.glob("*.eval"), key=lambda p: p.stat().st_mtime)
         if not evals:
             continue
-        z = zipfile.ZipFile(evals[-1])
-        for nm in z.namelist():
-            if not nm.startswith("samples/"):
-                continue
+        # Union every log in the directory, de-duplicating by sample id with
+        # the later-written log winning. A stalled run that was resumed leaves
+        # its scored samples behind, and those are kept rather than re-run.
+        samples: dict[str, dict] = {}
+        for f in evals:
             try:
-                s = json.loads(z.read(nm))
+                z = zipfile.ZipFile(f)
             except Exception:
                 continue
+            for nm in z.namelist():
+                if not nm.startswith("samples/"):
+                    continue
+                try:
+                    s = json.loads(z.read(nm))
+                except Exception:
+                    continue
+                key = f"{s.get('id')}|{s.get('epoch')}"
+                if key in samples and s.get("error") and not samples[key].get("error"):
+                    continue  # never let a later error overwrite an earlier success
+                samples[key] = s
+        for s in samples.values():
             sid = str(s.get("id", ""))
             cfg = next((c for c in CONFIGS if c in sid), None)
             if cfg is None:

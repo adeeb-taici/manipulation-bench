@@ -45,7 +45,16 @@ GPT5MINI='openrouter/openai/gpt-5-mini'
 GEMFLASH='openrouter/google/gemini-3-flash-preview'
 DSCHAT='openrouter/deepseek/deepseek-chat'
 
-COMMON=(--temperature 0.7 --max-connections "$CONNS" --no-fail-on-error --display plain)
+# --timeout defaults to NO TIMEOUT in inspect, so a request that hangs blocks
+# forever. Village and Inbox calls within a sample are sequential, so one hung
+# call freezes the whole sample and enough of them exhaust the concurrency pool
+# and freeze the run. This bit Tencent Hy3 three times (Inbox at 350/360,
+# Village at 40/180 and again at 0/140) because its reasoning-on calls emit up
+# to ~8,000 reasoning tokens and are the longest-running requests in the study.
+# attempt-timeout abandons a stuck attempt and retries instead of blocking.
+TIMEOUTS=(--timeout 900 --attempt-timeout 420 --max-retries 3 --retry-on-error=2)
+
+COMMON=(--temperature 0.7 --max-connections "$CONNS" --no-fail-on-error --display plain "${TIMEOUTS[@]}")
 
 # Short env key -> scenario-file stem written by split_scenarios_by_model.py
 stem_for() {

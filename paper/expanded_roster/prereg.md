@@ -293,3 +293,53 @@ rather than a different cause.
 
 **Alternatives rejected.** Swapping in larger-context bystanders, or reducing Village's round
 count, would both change the environment itself rather than only the support agents' budgets.
+
+### A3 — Hy3 routing widened from a single provider to the fp8 provider set, 2026-07-30
+
+**What changed.** A1 pinned `tencent/hy3` to DeepInfra alone with `allow_fallbacks: false`.
+Routing is now `[DeepInfra, AtlasCloud, Tencent]` with fallbacks enabled — **all three serve
+fp8**, so the quantization that A1 exists to control is unchanged. GMICloud (bf16) and Novita
+(undisclosed quantization) remain excluded.
+
+**Why.** Village-Hy3 could not complete against a single endpoint. Three attempts:
+
+| Attempt | Config | Outcome |
+|---|---|---|
+| 1 | DeepInfra, conc 60, no timeout | stalled at 40/180 after ~80 min of silence |
+| 2 | DeepInfra, conc 30, no timeout | stalled at 0/140 |
+| 3 | DeepInfra, conc 30, **with timeouts** | 140/140 failed in 12 min, all HTTP 429 |
+
+Attempt 3 diagnosed attempts 1 and 2. Inspect's `--timeout` **defaults to no timeout**, so
+throttled requests were held open indefinitely and presented as a silent hang with no errors
+and no retries. With timeouts set, the same condition surfaces immediately as 429:
+
+```
+'raw': 'tencent/hy3 is temporarily rate-limited upstream. Please retry shortly,
+        or add your own key to accumulate your rate limits'
+'provider_name': 'DeepInfra'
+'provider_error_code': 'engine_overloaded'
+'limit_source': 'upstream_provider_shared_pool'
+```
+
+The limit is **transient capacity pressure on OpenRouter's shared pool for that endpoint**, not
+an account quota and not a property of the model. Pinning to one endpoint with
+`allow_fallbacks: false` left nowhere to go when that pool saturated.
+
+**Why this preserves the A1 control.** A1 pinned a provider in order to hold *quantization*
+fixed, because Hy3 is served at bf16 on GMICloud and fp8 elsewhere, and a quantization change
+between the ON and OFF arms would confound the toggle. Restricting fallbacks to the fp8 set
+keeps that guarantee: both arms remain fp8 under every route. Only the serving host varies,
+which the frozen cohort's runs never controlled for either.
+
+**Ordering.** `[DeepInfra, AtlasCloud, Tencent]`. Tencent is last because it scored 0/1 in the
+A1 provider probe (emitted reasoning tokens but produced no valid tool call on Bargaining). If
+its samples are unusable the §2 gates will surface it.
+
+**Also adopted permanently:** `--timeout 900 --attempt-timeout 420 --max-retries 3`. The absence
+of a request timeout was a live defect in every run on this branch and is the reason the
+Inbox-Hy3 job hung at 350/360 and both earlier Village-Hy3 attempts stalled. It is now set in
+`scripts/launch_stream.sh` for all environments.
+
+**Scope.** Applies to Village-Hy3 only, the sole environment not already complete. The 40
+samples scored under A1 routing (39 `hy3_on`, 1 `hy3_off`) are retained and merged; the rerun
+covers the remaining 140. Retained and re-run samples are all fp8.
