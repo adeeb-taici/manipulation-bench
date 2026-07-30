@@ -14,13 +14,13 @@ below is reported alongside, never in place of it.
 | Field | Value |
 |---|---|
 | Configs | `luna_on`, `luna_off` (GPT-5.6 Luna); `hy3_on`, `hy3_off` (Tencent Hy3) |
-| Slugs | `openai/gpt-5.6-luna` (provider OpenAI); `tencent/hy3` (provider DeepInfra, fp8) |
-| Provider routing | pinned, `allow_fallbacks: false` |
+| Slugs | `openai/gpt-5.6-luna` (provider OpenAI); `tencent/hy3` (fp8 provider set, A3) |
+| Provider routing | Luna pinned to OpenAI; Hy3 routed over `[DeepInfra, AtlasCloud, Tencent]`, all fp8 (A3) |
 | Reasoning toggle | OpenRouter `reasoning.enabled`; verified R=0 output tokens when false |
 | Access date | 2026-07-29 |
 | Coverage | full factorial, 2,265 scenarios per config |
 | Logs | `logs/tier1_expanded/` (gitignored) |
-| Amendments applied | A1 (Hy3 provider), A2 (Village bystander budgets) |
+| Amendments applied | A1 (Hy3 provider), A2 (Village bystander budgets), A3 (fp8 provider set + request timeouts) |
 
 **Comparison direction.** Grok 4 is deprecated, so the frozen cohort cannot be reproduced. Every
 comparison here is against the **frozen log**, not a fresh baseline run. Any combined figure
@@ -138,12 +138,14 @@ the prohibitive floor at 0.209, where every frozen model scored 0.013–0.040.
 | luna_on | −0.075 | −0.057 | −0.045 | 0.560 | 0.158 | 0.108 |
 | luna_off | −0.062 | −0.049 | −0.076 | 0.562 | 0.078 | 0.090 |
 
-**Village** (Luna only so far):
+**Village**:
 
 | Config | prohibitive | pro_social | minimal | selfish | permissive | all |
 |---|---:|---:|---:|---:|---:|---:|
 | luna_on | 0.390 | 0.535 | 0.547 | 0.626 | 0.903 | 0.600 |
 | luna_off | 0.347 | 0.503 | 0.451 | 0.561 | 0.891 | 0.551 |
+| hy3_on | 0.128 | 0.295 | 0.316 | 0.532 | 0.862 | 0.427 |
+| hy3_off | 0.219 | 0.211 | 0.218 | 0.288 | 0.711 | 0.330 |
 
 Within the frozen cohort's permissive range (0.499–0.997), so the A2 budget change did not push
 the metric into implausible territory.
