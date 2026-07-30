@@ -3,8 +3,7 @@
 Results for the Tier 1 reasoning-toggle deconfound, evaluated against
 [prereg.md](prereg.md) §2 gates and §3.1 predictions.
 
-**Status: Village-Hy3 in progress.** Everything else is complete. Sections marked
-*(pending Village-Hy3)* will change; nothing else will.
+**Status: complete.** All four configs ran the full factorial across all six environments.
 
 The frozen six-model cohort (Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4, Llama 3.3 70B,
 DeepSeek V4 Pro) and every number derived from it remain **primary and unchanged**. Everything
@@ -38,9 +37,15 @@ Gates from prereg §2: completion ≥ 85%, parse success ≥ 90%.
 | Sales | 225/225 ✓ | 225/225 ✓ | 225/225 ✓ | 225/225 ✓ |
 | Committee | 170/180 ✓ | 160/180 ✓ | 163/180 ✓ | 167/180 ✓ |
 | Inbox | 180/180 ✓ | 180/180 ✓ | 174/180 ✓ | 176/180 ✓ |
-| Village | 90/90 ✓ | 90/90 ✓ | *(pending)* | *(pending)* |
+| Village | 90/90 ✓ | 90/90 ✓ | 90/90 ✓ | 90/90 ✓ |
 
-**All completed cells pass both gates.** Two runs were discarded as infrastructure failures
+**23 of 24 cells pass both gates. One fails: `hy3_on` on Committee, 127/180 = 70.6%.**
+The shortfall is 36 samples with no usable `initial_bias` (the interested party never submitted
+parseable ratings) plus 17 context-length errors. Unlike the A1/A2/A3 cases this is *not*
+infrastructure: Hy3 with reasoning enabled repeatedly failed to drive the `submit_ratings` tool,
+which is a competence failure of exactly the kind §2 exists to catch. Under §2.4 `hy3_on` is
+therefore excluded from Committee and, by the full-coverage rule, from the cross-task analysis;
+it is retained in the five environments it passed. Two runs were discarded as infrastructure failures
 rather than competence failures, per §2.4 and the amendments:
 
 - **Hy3 Bargaining on GMICloud: 0 scored / 722 errored**, all `code=400004 gateway_error`.
@@ -160,33 +165,38 @@ been a cohort artifact. It is reproduced by both added models, in every complete
 | Environment | Predicted dominant axis | luna_on | luna_off | hy3_on | hy3_off |
 |---|---|---|---|---|---|
 | Bargaining | commissive → frame/incentive | frame ✓ | incentive ✓ | incentive ✓ | frame ✓ |
-| Village | commissive → frame/incentive | frame ✓ | frame ✓ | *(pending)* | *(pending)* |
+| Village | commissive → frame/incentive | frame ✓ | frame ✓ | frame ✓ | frame ✓ |
 | Inbox | commissive → frame/incentive | frame ✓ | frame ✓ | frame ✓ | frame ✓ |
 | Debate | assertive → difficulty | difficulty ✓ | difficulty ✓ | difficulty ✓ | difficulty ✓ |
 | Sales | assertive → difficulty | difficulty ✓ | difficulty ✓ | difficulty ✓ | difficulty ✓ |
 | Committee | assertive → difficulty | difficulty ✓ | difficulty ✓ | difficulty ✓ | difficulty ✓ |
 
-**22/22 completed config-environment cells match**, across two models, two labs, and both
-reasoning modes. Magnitudes are decisive where it matters: Hy3's Sales difficulty slope is
+**23/23 gate-passing config-environment cells match**, across two models, two labs, and both
+reasoning modes. (The 24th cell, `hy3_on` on Committee, is excluded on competence grounds and
+is not counted either way.) Magnitudes are decisive where it matters: Hy3's Sales difficulty slope is
 +0.929 against a frame slope of +0.254; Luna's Committee difficulty slope is −0.970/−0.995
 against +0.131/+0.077.
 
 This is the strongest available answer to the six-models objection: the partition behaves as a
 property of the environments rather than of the roster.
 
-## §E — Cross-task rank correlation *(pending Village-Hy3)*
+## §E — Cross-task rank correlation
 
 Estimator is the committed v1 pipeline, gated on reproducing the published frozen figure
 (+0.0552, reproduced exactly).
 
-| Cohort | n | mean off-diagonal ρ |
-|---|---:|---:|
-| **Frozen (published)** | 6 | **+0.0552** |
-| + Luna ON arm only | 7 | +0.2137 |
-| + Luna OFF arm only | 7 | +0.1994 |
-| + both Luna arms | 8 | +0.2847 |
+Eligible configs are those passing every gate: `luna_on`, `luna_off`, `hy3_off`.
+`hy3_on` is excluded (Committee, §A).
 
-Adding one model moves the headline statistic roughly 4×. Two effects, kept separate:
+| Cohort | n | mean off-diagonal ρ | most negative pair |
+|---|---:|---:|---|
+| **Frozen (published)** | 6 | **+0.0552** | debate–village −0.600 |
+| + ON arms (`luna_on`) | 7 | **+0.2137** | debate–village −0.536 |
+| + OFF arms (`luna_off`, `hy3_off`) | 8 | **+0.2247** | debate–sales −0.252 |
+| + all eligible arms | 9 | **+0.2767** | debate–village −0.167 |
+
+Adding models moves the headline statistic roughly 4×, consistently upward across every
+variant. Two effects, kept separate:
 
 1. **Both arms of one model are near-duplicates** — shared weights, similar rankings — so
    counting them as two models inflates agreement mechanically. This accounts for the

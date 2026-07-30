@@ -32,7 +32,7 @@ import importlib.util
 import json
 import sys
 import zipfile
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -95,9 +95,27 @@ def metric_of(env: str, scores: dict):
     return None
 
 
+EXPECTED = {
+    "bargaining": 900,
+    "debate": 690,
+    "village": 90,
+    "sales": 225,
+    "committee": 180,
+    "inbox": 180,
+}
+GATE = 0.85
+
+
 def expanded_permissive_means():
-    """Per-config permissive-frame mean of each environment's primary metric."""
+    """Per-config permissive-frame mean of each environment's primary metric.
+
+    Also returns per-(env, config) scored counts so the section-2 completion
+    gate can be applied. A config that fails any environment's gate is barred
+    from the cross-task analysis by the full-coverage rule, even though its
+    permissive-frame mean exists.
+    """
     acc = defaultdict(list)
+    scored = Counter()
     for d in sorted(LOGS.glob("*")):
         if not d.is_dir() or d.name in SKIP_DIRS:
             continue
@@ -107,14 +125,26 @@ def expanded_permissive_means():
         evals = sorted(d.glob("*.eval"), key=lambda p: p.stat().st_mtime)
         if not evals:
             continue
-        z = zipfile.ZipFile(evals[-1])
-        for nm in z.namelist():
-            if not nm.startswith("samples/"):
-                continue
+        # Union every log in the directory, de-duplicating by sample id, so a
+        # resumed run's kept samples are counted alongside the rerun's.
+        merged: dict[str, dict] = {}
+        for f in evals:
             try:
-                s = json.loads(z.read(nm))
+                z = zipfile.ZipFile(f)
             except Exception:
                 continue
+            for nm in z.namelist():
+                if not nm.startswith("samples/"):
+                    continue
+                try:
+                    s = json.loads(z.read(nm))
+                except Exception:
+                    continue
+                key = f"{s.get('id')}|{s.get('epoch')}"
+                if key in merged and s.get("error") and not merged[key].get("error"):
+                    continue
+                merged[key] = s
+        for s in merged.values():
             sid = str(s.get("id", ""))
             cfg = next((c for c in CONFIGS if c in sid), None)
             if cfg is None or s.get("error"):
@@ -125,12 +155,14 @@ def expanded_permissive_means():
             md = (smeta.get("scenario") or {}).get("metadata") or {}
             if not md.get("frame"):
                 md = smeta
-            if md.get("frame") != "permissive":
-                continue
             m = metric_of(env, s.get("scores") or {})
-            if m is not None:
+            if m is None:
+                continue
+            scored[(env, cfg)] += 1
+            if md.get("frame") == "permissive":
                 acc[(env, cfg)].append(float(m))
-    return {k: float(np.mean(v)) for k, v in acc.items() if v}
+    means = {k: float(np.mean(v)) for k, v in acc.items() if v}
+    return means, scored
 
 
 def mean_offdiag(per_env, envs, keep):
@@ -185,7 +217,19 @@ def main() -> None:
         raise SystemExit("frozen reproduction failed — stopping")
     print("OK")
 
-    exp = expanded_permissive_means()
+    exp, scored = expanded_permissive_means()
+    gated_out = {}
+    for c in CONFIGS:
+        fails = [e for e in ENVS5 if scored.get((e, c), 0) / EXPECTED[e] < GATE]
+        if fails:
+            gated_out[c] = fails
+    if gated_out:
+        print("\n  EXCLUDED by the section-2 completion gate (full-coverage rule):")
+        for c, fails in gated_out.items():
+            detail = ", ".join(
+                f"{e} {100 * scored.get((e, c), 0) / EXPECTED[e]:.1f}%" for e in fails
+            )
+            print(f"    {c}: fails {detail}")
     have = {c for (_e, c) in exp}
     print("\n  expanded-config permissive means available:")
     for e in ENVS6:
@@ -193,7 +237,7 @@ def main() -> None:
         got = {c: f"{v:.3f}" for c, v in cells.items() if v is not None}
         print(f"    {e:<11} {got if got else 'NONE'}")
 
-    complete = [c for c in CONFIGS if all((e, c) in exp for e in ENVS5)]
+    complete = [c for c in CONFIGS if all((e, c) in exp for e in ENVS5) and c not in gated_out]
     missing = [c for c in CONFIGS if c not in complete]
     if missing:
         print(f"\n  NOT YET COMPLETE on the 5-env set (excluded): {missing}")
