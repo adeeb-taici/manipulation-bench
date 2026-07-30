@@ -70,11 +70,13 @@ run_env() {
           -T scenarios="$sc" -T max_action_retries=4 --max-tokens 16384 \
           --model "$PRIMARY" "${UT[@]}" --log-dir "$ld" "${COMMON[@]}" ;;
     t2) inspect eval "$WT/src/manipulation_bench/task.py@manipulation_bench" -T scenarios="$sc" \
+          --max-tokens 16384 \
           --model "$PRIMARY" "${UT[@]}" \
           --model-role "truthful_debater=$OPUS" --model-role "juror_a=$GEMFLASH" \
           --model-role "juror_b=$HAIKU" --model-role "juror_c=$GPT5MINI" \
           --model-role "judge=$HAIKU" --log-dir "$ld" "${COMMON[@]}" ;;
     t3) inspect eval "$WT/src/manipulation_bench/village_task.py@village_bench" -T scenarios="$sc" \
+          --max-tokens 16384 \
           --model "$PRIMARY" "${UT[@]}" \
           --model-role "bystander_haiku=$HAIKU" --model-role "bystander_gpt5mini=$GPT5MINI" \
           --model-role "bystander_gemflash=$GEMFLASH" --model-role "bystander_dschat=$DSCHAT" \
