@@ -167,6 +167,10 @@ def load(root: Path):
             # t1_hy3_bargaining log instead.
             if d.name == "t1_bargaining" and cfg.startswith("hy3"):
                 continue
+            # Village-Luna was re-run under Amendment A2; the pre-A2 log is
+            # superseded and excluded from all reporting.
+            if d.name == "t3_village_luna":
+                continue
             if s.get("error"):
                 errors[env][cfg] += 1
                 continue
