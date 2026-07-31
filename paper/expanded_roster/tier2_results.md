@@ -186,6 +186,60 @@ splits within a single config**, the failure mode Tier 1 first observed in Hy3 (
 absent from the frozen cohort, where every model was decisively one or the other. Ling's Committee
 numbers therefore require the **per-sample** scale correction, not a per-model adjustment.
 
+## §G — Cross-task rank correlation
+
+Estimator is the committed v1 pipeline, gated on reproducing the published frozen figure
+(**+0.0552, reproduced exactly**). Eligible configs are those passing every gate: both Tier 2
+configs, plus Tier 1's `luna_on`, `luna_off`, `hy3_off` (`hy3_on` remains excluded on Committee).
+
+| Cohort | n | mean off-diagonal ρ | most negative pair |
+|---|---:|---:|---|
+| **Frozen (published)** | 6 | **+0.0552** | debate–village −0.600 |
+| **+ Tier 2 only** | 8 | **+0.0262** | debate–sales −0.714 |
+| + Tier 1 ON arms + Tier 2 | 9 | +0.0968 | debate–sales −0.517 |
+| + Tier 1 OFF arms + Tier 2 | 10 | +0.1238 | debate–sales −0.529 |
+| + all eligible (both tiers) | 11 | +0.1507 | debate–sales −0.410 |
+
+**Tier 2 moves the statistic back toward zero, and this corrects the Tier 1 reading.**
+`results.md` §E reported that adding Tier 1 configs moved ρ "roughly 4×, consistently upward"
+(0.0552 → 0.2767) and concluded the point estimate was roster-sensitive. Tier 2 shows the movement
+is **not directional**: adding two independent models alone gives **+0.0262**, slightly *below* the
+frozen figure, and the full 11-model cohort sits at +0.1507 rather than Tier 1's +0.2767.
+
+The corrected reading is stronger than the Tier 1 one, not weaker:
+
+- **The qualitative claim survives everywhere.** Across every cohort from 6 to 11 models, ρ stays
+  in **+0.026 … +0.151** — at most ~2% of rank variance shared. "Cross-task rankings barely
+  correlate" holds under every roster tested.
+- **The point estimate is unstable in both directions** and should be reported as an interval over
+  rosters, never as ρ = 0.055.
+- **Tier 1's upward move was a roster artifact**, driven by Luna being a uniformly-compliant
+  outlier that ranked last in nearly every environment. Two models that are *not* uniform outliers
+  push the statistic straight back down.
+
+**The most negative pair changes identity and hardens.** The frozen cohort's debate–village
+(−0.600) is replaced by **debate–sales** in every expanded cohort, reaching −0.714 with Tier 2
+alone — close to the corpus pipeline's −0.7714, the figure the abstract quotes. Debate–sales
+anti-correlation is therefore robust across estimators and rosters, which the frozen 5-env v1
+matrix alone understated at −0.5429.
+
+Per-config permissive-frame means feeding the analysis:
+
+| Config | bargaining | debate | village | sales | committee |
+|---|---:|---:|---:|---:|---:|
+| luna_on | 0.094 | 0.167 | 0.903 | 0.049 | 0.514 |
+| luna_off | 0.003 | 0.174 | 0.891 | 0.080 | 0.196 |
+| hy3_on *(gated out)* | 0.456 | 0.196 | 0.862 | 0.569 | 3.033 |
+| hy3_off | 0.478 | 0.130 | 0.711 | 0.151 | 2.271 |
+| **mistral** | 0.514 | 0.116 | 0.586 | 0.178 | 1.292 |
+| **ling** | 0.631 | 0.101 | 0.730 | 0.231 | 0.241 |
+
+**Committee scale check.** Committee values above are raw, consistent with the frozen corpus,
+which is also raw. Applying the §4 per-sample correction moves Mistral **1.292 → 1.292** (it uses
+no 0–10 samples) and Ling **0.241 → 0.331** (13 of 36 permissive samples on 0–10). Ling's rank
+within Committee is unchanged — second-lowest either way — so **the cross-task result is
+unaffected by the scale correction**.
+
 ## §F — Reproduction
 
 ```bash
@@ -195,4 +249,5 @@ bash   paper/expanded_roster/scripts/launch_tier2.sh mistral 30 t1 t4 t6 t5 t2 t
 bash   paper/expanded_roster/scripts/launch_tier2.sh ling     8 t1 t4 t6 t5 t2 t3
 python paper/expanded_roster/scripts/build_tier2_remaining.py t1_bargaining ling   # A1/A2
 python paper/expanded_roster/scripts/analyze_tier2.py
+python paper/expanded_roster/scripts/cross_task_all.py
 ```
