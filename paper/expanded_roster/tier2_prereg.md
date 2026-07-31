@@ -273,3 +273,60 @@ samples the same way.
    produced shared-pool saturation in Tier 1's A3, and per §1.1 Ling has **no fallback provider
    set** to absorb it. If 20 induces sustained throttling the setting will be walked back and the
    reversal recorded as a further amendment.
+
+### A2 — A1 walked back for Bargaining and Sales; those two re-run at 8, 2026-07-31
+
+**What changed.** The A1 risk materialised. `t1_bargaining` and `t4_sales` are re-collected for
+Ling at `--max-connections 8`. The four environments that completed cleanly under A1
+(`t6_inbox`, `t5_committee`, `t2_debate`, `t3_village`, all 100% with zero errors) are **kept as
+run at 20** and are not re-collected.
+
+**What happened.** Ling's pass under A1 produced:
+
+| Env | Usable | Errored | Completion |
+|---|---:|---:|---:|
+| Bargaining | 315 | 585 | 35.0% |
+| Sales | 52 | 173 | 23.1% |
+| Inbox | 180 | 0 | 100% |
+| Committee | 180 | 0 | 100% |
+| Debate | 690 | 0 | 100% |
+| Village | 90 | 0 | 100% |
+
+Every one of the 758 failures is `RetryError(RateLimitError)` — the retry budget was exhausted
+rather than absorbing them, which is the failure mode A1 predicted and pre-committed to reversing.
+
+**Timing, and an honest limit on the diagnosis.** The concurrency-20 Bargaining run started 04:57
+and ran clean until **06:10**; errors then ran to 06:52. Sales started 07:00 clean, errored
+07:15–07:21. Every environment run after 07:25 completed with zero errors **at the same
+concurrency 20**. So the saturation was bursty and time-bounded rather than a clean concurrency
+threshold.
+
+Two explanations fit equally well and **cannot be separated from this run**, because environment
+order and wall-clock are perfectly confounded (t1 and t4 ran first, during the bad window):
+
+1. *Transient upstream congestion* on Novita's shared pool for this model, which cleared.
+2. *Environment structure*: Bargaining is self-play (both negotiating agents are the model under
+   test) and Sales is single-agent, so nearly every in-flight request hits Novita. Debate,
+   Village and Committee interleave pinned-model calls, which paces the under-test model's
+   request rate at the same nominal concurrency.
+
+The per-model request counts that would discriminate between these are not recorded in the logs
+(`model_usage` carries no `requests` field), so this is left as an open question rather than
+resolved. It does not affect the remedy: both explanations point to lowering concurrency for the
+two affected environments.
+
+**Why 8.** It is the only setting with direct evidence for this model on this environment: the
+original Bargaining run scored 290 samples at concurrency 8 with **zero** errors.
+
+**Consequences for interpretation.**
+
+1. **Not a competence failure, so not a §2 gate event.** As with Tier 1's A1/A2/A3, an upstream
+   rate limit is an infrastructure failure. Recording it as model incapacity would be the exact
+   mirror-image error §2 exists to prevent — Ling demonstrably drives these environments, having
+   already scored 315 Bargaining and 52 Sales samples plus four complete environments. Gates are
+   applied to the merged result once collection finishes.
+2. **Provenance:** Ling's Bargaining now spans three collection runs (290 at conc 8, 25 at conc
+   20, remainder at conc 8) and Sales two (52 at 20, remainder at 8). Concurrency changes no
+   prompt, model, provider, or scorer, so this is a scheduling record and not a validity note.
+3. **The four environments kept at concurrency 20 are unaffected**, having completed at 100% with
+   no errors.
