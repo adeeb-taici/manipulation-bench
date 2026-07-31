@@ -234,4 +234,42 @@ result that governs whether Tier 1's interpretation is claimable.
 
 ## Amendments
 
-*(none yet)*
+### A1 — Ling stream concurrency raised from 8 to 20, 2026-07-31
+
+**What changed.** `inclusionai/ling-2.6-1t` ran the first 290 Bargaining scenarios at
+`--max-connections 8` and runs the remaining 2,000 scenarios (all six environments) at **20**.
+Mistral is unchanged at 30. No scenario, prompt, model, provider, or scorer is affected.
+
+**Why.** The concurrency-8 setting came from a 15-scenario pilot in which Ling returned one
+`RateLimitError`, so it was chosen as a conservative floor from a very small sample. At scale the
+throughput implication was much worse than estimated: 290 scenarios in ~95 minutes (~3.2/min),
+which extrapolates over the remaining work — weighted by each environment's Tier 1 per-sample
+time, with Village alone about 21 h — to roughly **48 hours** for the config. The original
+estimate of 8–10 h had wrongly applied Tier 1's *observed* effective concurrency (16–25x) to a
+stream deliberately capped at 8.
+
+**Evidence that headroom exists.** Across those 290 scenarios Ling produced **zero errored
+samples**. Rate-limit responses occurred and were absorbed by the existing retry budget
+(`--max-retries 3 --retry-on-error=2`) rather than failing any sample. 290 samples is a far
+better basis for the setting than the 15-sample pilot that produced the value of 8.
+
+**Retained work.** The 290 scored Bargaining samples are kept, not re-run;
+`build_tier2_remaining.py` wrote a 610-scenario remainder and `launch_tier2.sh` now prefers a
+`_remaining` file when one exists. Both halves write to the same log directory and are unioned by
+sample id at analysis time. This follows Tier 1's Amendment A3, which retained 40 Village-Hy3
+samples the same way.
+
+**Consequences for interpretation.**
+
+1. **No validity consequence.** Concurrency is a client-side scheduling parameter. It does not
+   change what any agent is asked, what it sees, which model or provider answers, or how the
+   response is scored. The Bargaining halves differ only in wall-clock scheduling.
+2. **Recorded as provenance:** Ling's Bargaining data comes from two runs at different
+   concurrency settings (290 at 8, 610 at 20), as Tier 1's Bargaining came from two wall-clock
+   runs under A1.
+3. **This is not a competence-gate event.** No sample failed; the §2 gates are unaffected and are
+   still applied to the merged result.
+4. **Known risk, stated at the time of the change.** Raising concurrency is the same lever that
+   produced shared-pool saturation in Tier 1's A3, and per §1.1 Ling has **no fallback provider
+   set** to absorb it. If 20 induces sustained throttling the setting will be walked back and the
+   reversal recorded as a further amendment.

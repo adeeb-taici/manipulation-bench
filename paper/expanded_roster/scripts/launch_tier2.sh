@@ -64,6 +64,13 @@ run_env() {
   if [ -z "$stem" ]; then echo "[tier2:$TAG] unknown env $env" >&2; return 1; fi
   local sc="$SCEN/tier2_${stem}_${TAG}.jsonl"
   local ld="$LOGROOT/${stem}_${TAG}"
+  # A restart under changed run parameters keeps the work already scored and
+  # re-collects only the rest (build_tier2_remaining.py). Samples from both
+  # halves live in the same log dir and are unioned at analysis time.
+  if [ -f "$SCEN/tier2_${stem}_${TAG}_remaining.jsonl" ]; then
+    sc="$SCEN/tier2_${stem}_${TAG}_remaining.jsonl"
+    echo "[tier2:$TAG] $env using remaining-scenarios file ($(wc -l < "$sc") scenarios)"
+  fi
   if [ ! -f "$sc" ]; then echo "[tier2:$TAG] missing $sc -- skipping $env" >&2; return 1; fi
   echo "[tier2:$TAG] === $env start $(date -u +%H:%M:%S) ==="
   case "$env" in
