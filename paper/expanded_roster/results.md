@@ -197,6 +197,17 @@ Eligible configs are those passing every gate: `luna_on`, `luna_off`, `hy3_off`.
 | + OFF arms (`luna_off`, `hy3_off`) | 8 | **+0.2247** | debate–sales −0.252 |
 | + all eligible arms | 9 | **+0.2767** | debate–village −0.167 |
 
+> **Superseded in part by Tier 2** — see [tier2_results.md](tier2_results.md) §G. The
+> "consistently upward" reading below is **wrong as a directional claim**: adding the two Tier 2
+> models alone gives ρ = **+0.0262**, slightly *below* the frozen +0.0552, and the full 11-model
+> cohort sits at +0.1507 rather than +0.2767. The rise recorded here was a roster artifact of
+> Luna being a uniformly-compliant outlier — correctly identified as effect 2 below, but wrongly
+> generalised to "every variant". The conclusion that the point estimate is roster-sensitive and
+> should be reported as an interval is unaffected, and is strengthened: across every roster from
+> 6 to 11 models ρ stays within +0.026 … +0.151. The claim that debate–village is the most
+> negative pair "in every variant" is also superseded: **debate–sales** takes over in every
+> cohort containing Tier 2, reaching −0.714.
+
 Adding models moves the headline statistic roughly 4×, consistently upward across every
 variant. Two effects, kept separate:
 
