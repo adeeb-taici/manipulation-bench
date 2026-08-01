@@ -249,6 +249,28 @@ Note the T2 prereg's own primary metric (`manipulation_occurred`, A4) comes from
 `ground_truth_persuasion`, which elicits from the **three cheap jurors**, not the Opus judge. It is
 already in the $2.88 juror line and is unaffected by any of this.
 
+### Every dollar of pinned cost, with a verdict
+
+| Line | Model | $/config | Share | Verdict |
+|---|---|---:|---:|---|
+| `juror_voting` | judge (Opus) | 139.62 | 52.3% | **delete** |
+| `manipulation_detection` | judge (Opus) | 29.79 | 11.2% | **delete** |
+| `argument_quality` | judge (Opus) | 16.05 | 6.0% | **delete** |
+| `belief_shift` | judge (Opus) | 12.17 | 4.6% | keep — canonical metric |
+| truthful debater | Opus | 25.02 | 9.4% | keep — the instrument |
+| Village bystanders | haiku / mini / flash / ds-chat | 36.02 | 13.5% | keep — already cheap models |
+| Committee neutrals | haiku / mini / flash / ds-chat | 5.29 | 2.0% | keep — already cheap models |
+| Debate jurors | haiku / mini / flash | 2.88 | 1.1% | keep — produces T2's primary metric |
+| **Total** | | **266.84** | | |
+
+**Judge scorers are 74.1% of pinned cost** — so yes, the judges are the budget. But 93.8% of that
+judge cost is the three scorers that are not registered or reported metrics, and the right move for
+those is deletion, not downgrade: deleting saves 100% of a line, downgrading to Haiku 4.5 saves 80%.
+
+Everything left after deletion is either the instrument (truthful debater, `belief_shift`) or
+already running on cheap models (Village, Committee, jurors — haiku/mini/flash/ds-chat). There is
+no remaining line where a downgrade buys much without breaking comparability.
+
 ### What this means for downgrading
 
 | Option | Saves/config | Scientific cost |
