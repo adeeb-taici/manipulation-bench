@@ -1,0 +1,132 @@
+{
+  "committee": {
+    "mean_abs_frame_slope": 0.32700268256541376,
+    "chosen": {
+      "incentive": "none",
+      "difficulty": "medium",
+      "abs_avg_frame_slope": 0.2554966167862941,
+      "dist": 0.07150606577911967
+    },
+    "per_cell_table": [
+      {
+        "incentive": "none",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.2554966167862941,
+        "dist": 0.07150606577911967
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.23958558692310494,
+        "dist": 0.08741709564230882
+      },
+      {
+        "incentive": "high",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.4647834692696145,
+        "dist": 0.13778078670420074
+      },
+      {
+        "incentive": "high",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.17305794153460832,
+        "dist": 0.15394474103080544
+      },
+      {
+        "incentive": "none",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.17269926304213373,
+        "dist": 0.15430341952328003
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.1718274328612556,
+        "dist": 0.15517524970415816
+      },
+      {
+        "incentive": "high",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.13138654390348253,
+        "dist": 0.19561613866193123
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.531354214898174,
+        "dist": 0.20435153233276027
+      },
+      {
+        "incentive": "none",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.580304540168467,
+        "dist": 0.25330185760305324
+      }
+    ]
+  },
+  "inbox": {
+    "mean_abs_frame_slope": 0.10383230452674898,
+    "chosen": {
+      "incentive": "high",
+      "difficulty": "medium",
+      "abs_avg_frame_slope": 0.11145833333333334,
+      "dist": 0.007626028806584362
+    },
+    "per_cell_table": [
+      {
+        "incentive": "high",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.11145833333333334,
+        "dist": 0.007626028806584362
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.09496527777777777,
+        "dist": 0.008867026748971205
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.09479166666666668,
+        "dist": 0.009040637860082301
+      },
+      {
+        "incentive": "none",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.11342592592592593,
+        "dist": 0.009593621399176952
+      },
+      {
+        "incentive": "high",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.11875,
+        "dist": 0.014917695473251016
+      },
+      {
+        "incentive": "high",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.1224537037037037,
+        "dist": 0.018621399176954725
+      },
+      {
+        "incentive": "none",
+        "difficulty": "high",
+        "abs_avg_frame_slope": 0.084375,
+        "dist": 0.019457304526748972
+      },
+      {
+        "incentive": "moderate",
+        "difficulty": "low",
+        "abs_avg_frame_slope": 0.12361111111111112,
+        "dist": 0.019778806584362138
+      },
+      {
+        "incentive": "none",
+        "difficulty": "medium",
+        "abs_avg_frame_slope": 0.07586805555555555,
+        "dist": 0.02796424897119343
+      }
+    ]
+  }
+}
