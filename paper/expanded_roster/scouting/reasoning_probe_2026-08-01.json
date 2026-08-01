@@ -1,0 +1,17 @@
+{
+ "accessed_utc": "2026-08-01",
+ "method": "single chat/completions call per model, 'What is 17*23? Reply with only the number.', max_tokens=400, temperature=0. Run twice: once with reasoning={'enabled': false}, once with provider defaults. A config counts as OFF-ABLE when the disabled call returns usage.completion_tokens_details.reasoning_tokens == 0 AND choices[0].message.reasoning is absent, while the default call returns reasoning_tokens > 0 (proving the toggle moved something).",
+ "results": {
+  "qwen/qwen3.5-9b":            {"off": {"reasoning_tokens": 0, "reasoning_field": false, "completion_tokens": 4}, "default": {"reasoning_tokens": 218, "reasoning_field": true, "completion_tokens": 315}, "verdict": "off-able"},
+  "qwen/qwen3.5-27b":           {"off": {"reasoning_tokens": 0, "reasoning_field": false, "completion_tokens": 4}, "default": {"reasoning_tokens": 318, "reasoning_field": true, "completion_tokens": 326}, "verdict": "off-able"},
+  "qwen/qwen3.5-35b-a3b":       {"off": {"reasoning_tokens": 0, "reasoning_field": false, "completion_tokens": 4}, "default": {"reasoning_tokens": 272, "reasoning_field": true, "completion_tokens": 280}, "verdict": "off-able"},
+  "qwen/qwen3.5-122b-a10b":     {"off": {"reasoning_tokens": 0, "reasoning_field": false, "completion_tokens": 4}, "default": {"reasoning_tokens": 235, "reasoning_field": true, "completion_tokens": 348}, "verdict": "off-able"},
+  "qwen/qwen3.5-397b-a17b":     {"off": {"reasoning_tokens": 0, "reasoning_field": false, "completion_tokens": 3}, "default": {"reasoning_tokens": 1,   "reasoning_field": true, "completion_tokens": 358}, "verdict": "off-able (default call emitted only 1 reasoning token on this trivial prompt; the OFF call is unambiguous, but the default-side contrast is weak and should be re-probed on a harder prompt before the run)"},
+  "deepseek/deepseek-v4-flash-0731": {"off": {"reasoning_tokens": 0, "reasoning_field": false, "completion_tokens": 2}, "default": {"reasoning_tokens": 10, "reasoning_field": true, "completion_tokens": 16}, "verdict": "off-able"}
+ },
+ "not_probed": {
+  "meta-llama/*": "no 'reasoning' or 'include_reasoning' in supported_parameters on any endpoint -- no reasoning mode exists to pin",
+  "deepseek/deepseek-v4-pro": "already in the frozen corpus with reasoning ON; a non-reasoning V4 Pro would be a new config and needs its own probe",
+  "deepseek/deepseek-v3.2": "candidate only; probe before running"
+ }
+}
