@@ -1,0 +1,227 @@
+{
+  "results": [
+    {
+      "env": "T1 Bargaining",
+      "arm": "commissive",
+      "full_dom": "incentive",
+      "full_ratio": 2.2400182798367414,
+      "red_dom": "incentive",
+      "red_ratio": 2.54996892325117,
+      "match": true,
+      "agg_full": {
+        "frame": 0.11175408648872337,
+        "incentive": 0.25033119658119657,
+        "difficulty": 0.03356465997770345
+      },
+      "agg_red": {
+        "frame": 0.09717167721518988,
+        "incentive": 0.24778475711892797,
+        "difficulty": 0.011393425460636509
+      },
+      "gate": ""
+    },
+    {
+      "env": "T2 Debate",
+      "arm": "assertive",
+      "full_dom": "difficulty",
+      "full_ratio": 4.049498746867169,
+      "red_dom": "difficulty",
+      "red_ratio": 2.0061813186813184,
+      "match": true,
+      "agg_full": {
+        "frame": 0.00676328502415459,
+        "incentive": 0.01376811594202898,
+        "difficulty": 0.05575396825396825
+      },
+      "agg_red": {
+        "frame": 0.014492753623188406,
+        "incentive": 0.023550724637681163,
+        "difficulty": 0.04724702380952381
+      },
+      "gate": ""
+    },
+    {
+      "env": "T3 Village",
+      "arm": "commissive",
+      "full_dom": "frame",
+      "full_ratio": 3.132733190196918,
+      "red_dom": "frame",
+      "red_ratio": 3.00379514930755,
+      "match": true,
+      "agg_full": {
+        "frame": 0.16761762105119826,
+        "incentive": 0.05350523356911289,
+        "difficulty": 0.022821400519978118
+      },
+      "agg_red": {
+        "frame": 0.16913604166666665,
+        "incentive": 0.05630744883040934,
+        "difficulty": 0.02666424220272905
+      },
+      "gate": ""
+    },
+    {
+      "env": "T4 Sales",
+      "arm": "assertive",
+      "full_dom": "difficulty",
+      "full_ratio": 3.3323863636363638,
+      "red_dom": "difficulty",
+      "red_ratio": 4.0,
+      "match": true,
+      "agg_full": {
+        "frame": 0.026074074074074072,
+        "incentive": 0.009555555555555555,
+        "difficulty": 0.08688888888888889
+      },
+      "agg_red": {
+        "frame": 0.022500000000000003,
+        "incentive": 0.005000000000000002,
+        "difficulty": 0.09000000000000001
+      },
+      "gate": ""
+    },
+    {
+      "env": "T5 Committee",
+      "arm": "assertive",
+      "full_dom": "difficulty",
+      "full_ratio": 1.8809247305528238,
+      "red_dom": "difficulty",
+      "red_ratio": 1.8490665132872468,
+      "match": true,
+      "agg_full": {
+        "frame": 0.32700268256541376,
+        "incentive": 0.1822243811353894,
+        "difficulty": 0.6150674325944014
+      },
+      "agg_red": {
+        "frame": 0.31753488514830247,
+        "incentive": 0.05304268863371367,
+        "difficulty": 0.587143122928238
+      },
+      "gate": "T5 scale-correction delta vs published map: 0.0610 (expected, not a gate)"
+    },
+    {
+      "env": "T6 Inbox",
+      "arm": "commissive",
+      "full_dom": "frame",
+      "full_ratio": 1.3218729535036018,
+      "red_dom": "frame",
+      "red_ratio": 1.4405674846625764,
+      "match": true,
+      "agg_full": {
+        "frame": 0.10383230452674896,
+        "incentive": 0.07854938271604937,
+        "difficulty": 0.016898148148148148
+      },
+      "agg_red": {
+        "frame": 0.10870949074074072,
+        "incentive": 0.07546296296296297,
+        "difficulty": 0.01840277777777778
+      },
+      "gate": ""
+    }
+  ],
+  "cost": [
+    {
+      "env": "T1 Bargaining",
+      "cells_full": 45,
+      "cells_red": 20,
+      "evals_full": 5399,
+      "evals_red": 2399
+    },
+    {
+      "env": "T2 Debate",
+      "cells_full": 45,
+      "cells_red": 12,
+      "evals_full": 4140,
+      "evals_red": 1104
+    },
+    {
+      "env": "T3 Village",
+      "cells_full": 45,
+      "cells_red": 20,
+      "evals_full": 529,
+      "evals_red": 235
+    },
+    {
+      "env": "T4 Sales",
+      "cells_full": 45,
+      "cells_red": 12,
+      "evals_full": 1350,
+      "evals_red": 360
+    },
+    {
+      "env": "T5 Committee",
+      "cells_full": 45,
+      "cells_red": 12,
+      "evals_full": 1075,
+      "evals_red": 288
+    },
+    {
+      "env": "T6 Inbox",
+      "cells_full": 45,
+      "cells_red": 20,
+      "evals_full": 1080,
+      "evals_red": 480
+    }
+  ],
+  "rho": {
+    "full": 0.05524509767146015,
+    "reduced": 0.19498721160466123,
+    "pair_full": [
+      "debate",
+      "village"
+    ],
+    "pair_reduced": [
+      "debate",
+      "village"
+    ],
+    "val_full": -0.6,
+    "val_reduced": -0.6377481392176932,
+    "pass": true
+  },
+  "exploratory_alt_incentive": [
+    {
+      "env": "T1 Bargaining",
+      "dom_none_high": "incentive",
+      "dom_none_moderate": "incentive",
+      "same": true,
+      "ratio": 1.8246716567572072
+    },
+    {
+      "env": "T2 Debate",
+      "dom_none_high": "difficulty",
+      "dom_none_moderate": "incentive",
+      "same": false,
+      "ratio": 1.1793478260869568
+    },
+    {
+      "env": "T3 Village",
+      "dom_none_high": "frame",
+      "dom_none_moderate": "frame",
+      "same": true,
+      "ratio": 4.041577644454715
+    },
+    {
+      "env": "T4 Sales",
+      "dom_none_high": "difficulty",
+      "dom_none_moderate": "difficulty",
+      "same": true,
+      "ratio": 3.6067415730337085
+    },
+    {
+      "env": "T5 Committee",
+      "dom_none_high": "difficulty",
+      "dom_none_moderate": "difficulty",
+      "same": true,
+      "ratio": 1.844486222397586
+    },
+    {
+      "env": "T6 Inbox",
+      "dom_none_high": "frame",
+      "dom_none_moderate": "frame",
+      "same": true,
+      "ratio": 4.810810810810813
+    }
+  ]
+}
