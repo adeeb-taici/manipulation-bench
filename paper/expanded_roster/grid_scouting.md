@@ -40,6 +40,12 @@ indifferent to *which* configs. Trimming to save money means cutting rows, not p
 rows — so the roster should be chosen on coverage alone, and then the count checked against
 budget.
 
+**But most of that pinned cost is removable without downgrading anything.** See
+[Where the pinned cost actually goes](#where-the-pinned-cost-actually-goes) — 53.6% of it is a
+scorer the paper does not report. Dropping it takes the menu from $3,554 to **$1,729** with no
+effect on any reported metric, and the per-config figures in the table below are *before* that
+reduction.
+
 ---
 
 ## The menu
@@ -167,6 +173,82 @@ carry a harder flag:
 
 ---
 
+## Where the pinned cost actually goes
+
+Reproduce: `python paper/expanded_roster/scripts/pinned_cost_audit.py` (reads per-call events out
+of `paper/task2_debate/eval_log.eval`, 414 stratified samples of 4,140).
+
+The pinned bill is not spread across the support agents. It is one model in one environment:
+
+| Pinned agent | Env | $/config | Share |
+|---|---|---:|---:|
+| claude-opus-4.7 (judge + scorer stack) | T2 debate | 217.68 | **83.1%** |
+| claude-haiku-4.5 ×2 bystanders | T3 village | 23.94 | 9.1% |
+| everything else (9 agents) | T3/T5/T2 | 20.25 | 7.8% |
+
+So "downgrade the pinned support agents" comes down to that first row — the rest, taken together
+and reduced to zero, saves $44/config.
+
+**And that row is mislabelled.** `cost_model.py` attributed it to the *truthful debater*. The T2
+prereg (§3) pins the judge and the truthful debater to the same slug, so the aggregate cannot tell
+them apart — but a per-call audit can, and it shows the debate itself is cheap: **4 debate turns,
+~4.7k input tokens per scenario.** Essentially all Opus spend is the scorer stack. The label has
+been corrected in `cost_model.py`; the totals were right to within 3% and are unchanged.
+
+### 75.5% of Opus input is one unreported scorer
+
+Of 53,310 Opus input tokens per scenario, **40,271 sit in prompts sent verbatim seven times** — two
+repeat-groups of exactly 7, one per agent, in 414 of 414 samples audited. That is
+`juror_voting(n_jurors=7)` ([scorers/voting.py](../../src/manipulation_bench/scorers/voting.py)),
+which re-sends the full transcript once per vote and gets back ~6 tokens each time.
+
+The votes are real independent draws at temperature 0.7, issued sequentially. The scorer is working
+as designed. The problem is what it costs relative to what it is used for:
+
+| | $/config | |
+|---|---:|---|
+| Opus total | 223.54 | measured |
+| — `juror_voting` | **140.38** | **53.6% of the entire pinned bill** |
+| — everything else (belief_shift, manipulation_detection, argument_quality, 4 debate turns) | 83.15 | |
+
+**`juror_voting` appears nowhere in `paper/task2_debate/prereg.md` and nowhere in that task's
+`results.md`.** It is not a registered metric, not a reported one, and not read by any paper
+analysis script — the only consumer in the repo is the exploratory
+`paper/task2_debate/actions/extract_actions.py`. It runs because it sits in the default scorer list
+in `task.py`, and `-T scorers=…` already exists to override that.
+
+The metric the grid actually needs from T2 is `belief_shift`, which
+[`analyze_surface.py:223`](../../src/manipulation_bench/analyze_surface.py) names as debate's
+canonical surface metric. That one *does* use the Opus judge, via one short call per agent — it is
+in the cheap $83.15 remainder and must be left alone.
+
+### What this means for downgrading
+
+| Option | Saves/config | Scientific cost |
+|---|---:|---|
+| **Drop `juror_voting` for the grid** | **140.38** | none for anything reported |
+| Prompt-cache the repeated block | ~104 | none, but needs an OpenRouter/Inspect `cache_control` feasibility test, and Anthropic's 5-min TTL and 1,024-token minimum both have to hold |
+| Downgrade the judge model | up to ~200 | **breaks `belief_shift`**, the canonical T2 surface metric feeding cross-task rho and the partition |
+| Downgrade Village bystanders + Committee neutrals | ≤44 | breaks frozen-corpus comparability in two environments for little money |
+| Downgrade the truthful debater | ~0 | it was never the cost |
+
+Dropping the scorer strictly dominates caching: it saves more, needs no new infrastructure, and
+carries the same (nil) impact on reported numbers. Caching is the fallback if `juror_voting` is
+wanted on grid samples after all.
+
+Two caveats, stated rather than buried. Grid T2 samples would carry no `juror_voting` score, so
+`extract_actions.py` would not run on them — recoverable later by re-scoring the stored transcripts
+without re-running the debates. And although the scorer is absent from the T2 prereg, dropping it
+is a scorer-list change and belongs in the grid's own pre-registration, not in a silent config
+edit.
+
+### Revised totals
+
+| | Pinned/config | 13 configs | 12 (cut V4 Pro) |
+|---|---:|---:|---:|
+| As measured today | 261.87 | $3,554 | $3,268 |
+| Without `juror_voting` | **121.49** | **$1,729** | **$1,583** |
+
 ## Wall clock
 
 At `--max-connections 20`, scaled from the T5 sweep's observed rate: **8.8 h per config**, so 13
@@ -186,8 +268,13 @@ Village and Debate dominate: 4.33 h and 3.41 h of the 8.8 h.
 
 Two heuristics, the second inherited from the brief:
 
-**Cost trims by row count, not by row.** Any 10-config roster costs ~$2,730 and any 8-config roster
-~$2,180, near enough regardless of which rows. So pick on coverage first.
+**Cost trims by row count, not by row.** Every config costs ~$273 today, or ~$132 once
+`juror_voting` is dropped, near enough regardless of which row. A 10-config roster is ~$2,730 /
+~$1,320; an 8-config roster ~$2,180 / ~$1,060. So pick on coverage first.
+
+**And trim the scorer before trimming the roster.** Dropping `juror_voting` saves $1,685 across 12
+configs — more than cutting five whole candidates would, and unlike cutting candidates it costs no
+coverage at all.
 
 **Within a series, cut from the top or cut the whole series.** Dropping a ladder's top rung loses
 one point; dropping its bottom rung breaks the series where it is most informative; hollowing out
@@ -203,7 +290,8 @@ Applying both to this menu, in decreasing order of what a cut costs you:
 | Llama 4 pair | $546 | the only isolated total-parameter contrast |
 | Qwen3.5 top rung (397B) | $283 | one point off the only real size ladder |
 
-**Recommendation: cut DeepSeek V4 Pro only, and hold the other 12 (~$3,268).** V4 Pro is the
+**Recommendation: drop `juror_voting`, then cut DeepSeek V4 Pro only, and hold the other 12
+(~$1,583).** V4 Pro is the
 weakest row on this menu — it is the most expensive config, its size pairing with V4 Flash is
 uncontrolled, and the model is already in the frozen corpus, so what a reasoning-OFF run adds is a
 reasoning-mode toggle comparison, which is the question Tier 1 was built to answer and already did.
@@ -227,3 +315,6 @@ V3.1/V3.2 as a pure generational contrast), then **Llama 3.1**, which is the ser
 5. **Confirm the gate expectation is descriptive, not predictive.** The 8B/9B rows are the likeliest
    exclusions; the gates decide that, and no anticipated exclusion should appear in the results
    document.
+6. **Record the `juror_voting` drop in the grid's pre-registration**, with the scorer list the grid
+   runs, so the difference from the frozen T2 scorer set is on the record rather than inferred from
+   a missing column.

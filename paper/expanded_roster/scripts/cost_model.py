@@ -41,7 +41,15 @@ ENVS = {
         "under_in": 1_346,
         "under_out": 1_286,
         "pinned": [
-            ("claude-opus-4.7 (truthful debater)", 52_732, 2_073),
+            # LABEL CORRECTED. This line was "claude-opus-4.7 (truthful debater)".
+            # prereg.md sec.3 pins the judge and the truthful debater to the SAME
+            # slug, so the aggregate cannot separate them -- but per-call audit of
+            # the committed log shows the debate turns are only ~4.7k input tokens
+            # per scenario and essentially all of this is the scorer stack, of
+            # which ~75% is juror_voting(n_jurors=7) re-sending the transcript.
+            # The total is unchanged and still correct; only the attribution moved.
+            # See scripts/pinned_cost_audit.py.
+            ("claude-opus-4.7 (judge + scorer stack)", 52_732, 2_073),
             ("claude-haiku-4.5 (juror)", 1_478, 10),
             ("gemini-3-flash (juror)", 1_355, 4),
             ("gpt-5-mini (juror)", 1_314, 811),
@@ -85,7 +93,7 @@ ENVS = {
 
 # $/M tokens, OpenRouter catalogue accessed 2026-07-29.
 PRICES = {
-    "claude-opus-4.7 (truthful debater)": (5.00, 25.00),
+    "claude-opus-4.7 (judge + scorer stack)": (5.00, 25.00),
     "claude-haiku-4.5 (juror)": (1.00, 5.00),
     "claude-haiku-4.5 (2 bystanders)": (1.00, 5.00),
     "claude-haiku-4.5 (neutral)": (1.00, 5.00),
