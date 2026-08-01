@@ -1,0 +1,70 @@
+{
+  "inbox": {
+    "results": [
+      {
+        "version": 1,
+        "frame_slope": 0.11684027777777778,
+        "ratio": 1.4884111818825194,
+        "dominant": "frame",
+        "match": true,
+        "n_models": 6
+      },
+      {
+        "version": 2,
+        "frame_slope": 0.13645833333333335,
+        "ratio": 1.7383227176220808,
+        "dominant": "frame",
+        "match": true,
+        "n_models": 6
+      },
+      {
+        "version": 3,
+        "frame_slope": 0.15138888888888888,
+        "ratio": 1.9285208775654634,
+        "dominant": "frame",
+        "match": true,
+        "n_models": 6
+      }
+    ],
+    "attrition": {},
+    "usable_per_version": {
+      "1": 120,
+      "2": 120,
+      "3": 120
+    }
+  },
+  "committee": {
+    "results": [
+      {
+        "version": 1,
+        "frame_slope": 0.5456273942908911,
+        "ratio": 1.127326095493055,
+        "dominant": "difficulty",
+        "match": true,
+        "n_models": 6
+      },
+      {
+        "version": 2,
+        "frame_slope": 0.5288333730432425,
+        "ratio": 1.1631262914825602,
+        "dominant": "difficulty",
+        "match": true,
+        "n_models": 6
+      },
+      {
+        "version": 3,
+        "frame_slope": 0.4675564054834053,
+        "ratio": 1.3155631979077471,
+        "dominant": "difficulty",
+        "match": true,
+        "n_models": 6
+      }
+    ],
+    "attrition": {},
+    "usable_per_version": {
+      "1": 90,
+      "2": 90,
+      "3": 90
+    }
+  }
+}
